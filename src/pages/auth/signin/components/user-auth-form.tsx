@@ -1,70 +1,107 @@
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { useRouter } from '@/routes/hooks'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
+import { useState } from 'react'
+import axios from 'axios'
+import { useRouter } from '@/routes/hooks'
+import { ModeToggle } from '@/components/shared/theme-toggle'
 
+// Валидация через Zod
 const formSchema = z.object({
-    email: z.string().email({ message: 'Enter a valid email address' })
+    username: z.string().nonempty({ message: 'Введите логин' }),
+    password: z.string().nonempty({ message: 'Введите пароль' })
 })
 
 type UserFormValue = z.infer<typeof formSchema>
 
 export default function UserAuthForm() {
     const router = useRouter()
-    const [loading] = useState(false)
-    const defaultValues = {
-        email: 'demo@gmail.com'
-    }
+    const [loading, setLoading] = useState(false)
+
     const form = useForm<UserFormValue>({
         resolver: zodResolver(formSchema),
-        defaultValues
+        defaultValues: {
+            username: '',
+            password: ''
+        }
     })
 
     const onSubmit = async (data: UserFormValue) => {
-        console.log('data', data)
-        router.push('/')
+        try {
+            setLoading(true)
+            const params = new URLSearchParams()
+            params.append('username', data.username)
+            params.append('password', data.password)
+
+            // Отправляем запрос на получение токена
+            const response = await axios.post('https://portal.bgruz.com/api/v1/auth/token', params, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+
+            const token = response.data.access_token
+            if (token) {
+                localStorage.setItem('authToken', token)
+
+                // Получаем данные текущего пользователя
+                const userResponse = await axios.get('https://portal.bgruz.com/api/v1/auth/currentuser', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                console.log('User info:', userResponse.data)
+
+                // Перенаправление после входа
+                router.push('/')
+            }
+        } catch (error) {
+            console.error('Ошибка входа:', error)
+            alert('Неверный логин или пароль')
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
-        <>
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-2'>
-                    <FormField
-                        control={form.control}
-                        name='email'
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Email</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        type='email'
-                                        placeholder='Enter your email...'
-                                        disabled={loading}
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+        <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-2'>
+                <FormField
+                    control={form.control}
+                    name='username'
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Логин</FormLabel>
+                            <FormControl>
+                                <Input type='text' placeholder='Введите логин...' disabled={loading} {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
 
-                    <Button disabled={loading} className='ml-auto w-full' type='submit'>
-                        Вход
-                    </Button>
-                </form>
-            </Form>
-            <div className='relative'>
-                <div className='absolute inset-0 flex items-center'>
-                    <span className='w-full border-t' />
-                </div>
-                {/* <div className='relative flex justify-center text-xs uppercase'>
-                    <span className='bg-background px-2 text-muted-foreground'>Or continue with</span>
-                </div> */}
-            </div>
-        </>
+                <FormField
+                    control={form.control}
+                    name='password'
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Пароль</FormLabel>
+                            <FormControl>
+                                <Input type='password' placeholder='Введите пароль...' disabled={loading} {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <Button disabled={loading} className='ml-auto w-full' type='submit'>
+                    Вход
+                </Button>
+                <ModeToggle />
+            </form>
+        </Form>
     )
 }
