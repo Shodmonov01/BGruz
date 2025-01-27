@@ -1,7 +1,4 @@
 import PageHead from '@/components/shared/page-head.jsx'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs.js'
-import RecentSales from './components/recent-sales.js'
 
 export default function DashboardPage() {
     return (
