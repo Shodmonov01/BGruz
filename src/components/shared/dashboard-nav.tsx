@@ -42,10 +42,12 @@ export default function DashboardNav({ items, setOpen, isMobileNav = false }: Da
                                         )}
                                         onClick={() => {
                                             if (setOpen) setOpen(false)
+                                            if (item.href === '/login') {
+                                                localStorage.removeItem('authToken')
+                                            }
                                         }}
                                     >
                                         <Icon className={`ml-2.5 size-5`} />
-
                                         {isMobileNav || (!isMinimized && !isMobileNav) ? (
                                             <span className='mr-2 truncate'>{item.title}</span>
                                         ) : (

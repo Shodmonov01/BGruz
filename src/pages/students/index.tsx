@@ -1,85 +1,3 @@
-// // import PageHead from '@/components/shared/page-head'
-// // import { useGetStudents } from './queries/queries'
-// // import StudentsTable from './components/students-table'
-// // import { useSearchParams } from 'react-router-dom'
-// // import TableSearchInput from '@/components/shared/table-search-input'
-// // import PopupModal from '@/components/shared/popup-modal'
-// // import StudentCreateForm from './components/student-forms/student-create-form'
-// // // import { DataTableSkeleton } from '@/components/shared/data-table-skeleton'
-
-// // export default function StudentPage() {
-// //     const [searchParams] = useSearchParams()
-// //     const page = Number(searchParams.get('page') || 1)
-// //     const pageLimit = Number(searchParams.get('limit') || 10)
-// //     const country = searchParams.get('search') || null
-// //     const offset = (page - 1) * pageLimit
-// //     const { data, isLoading } = useGetStudents(offset, pageLimit, country)
-// //     const users = data?.users
-// //     const totalUsers = data?.total_users //1000
-// //     const pageCount = Math.ceil(totalUsers / pageLimit)
-
-// //     return (
-// //         <div className='p-4 md:p-8'>
-// //             <PageHead title='Заявки' />
-
-// //             <div>
-// //                 <div className='flex items-center justify-between gap-2 py-5'>
-// //                     <div className='flex flex-1 gap-4'>
-// //                         <TableSearchInput placeholder='Поиск' />
-// //                     </div>
-// // <div className='flex gap-3'>
-// //     <PopupModal renderModal={onClose => <StudentCreateForm modalClose={onClose} />} />
-// // </div>
-// //                 </div>
-// //                 <div>
-
-// //                 </div>
-// //             </div>
-// //         </div>
-// //     )
-// // }
-
-// import PageHead from '@/components/shared/page-head'
-// import { useSearchParams } from 'react-router-dom'
-// import TableSearchInput from '@/components/shared/table-search-input'
-// import PopupModal from '@/components/shared/popup-modal'
-// import { useGetBids } from '@/hooks/useGetBids'
-// import BidsTable from './components/BidsTable'
-// import StudentCreateForm from './components/student-forms/student-create-form'
-
-// export default function BidsPage() {
-//     const [searchParams] = useSearchParams()
-//     const page = Number(searchParams.get('page') || 1)
-//     const pageLimit = Number(searchParams.get('limit') || 10)
-//     const offset = (page - 1) * pageLimit
-//     const limit = 10 // пример значения
-//     const filters = {} // пример фильтров
-//     // const { data, isLoading } = useGetBids(offset, pageLimit, {})
-//     // const { data, isLoading, error } = useGetBids(offset, pageLimit, {});
-//     const { bids, loading, error } = useGetBids(offset, limit, filters)
-
-//     console.log(error) // Это поможет вам увидеть ошибку
-
-//     console.log(data)
-
-//     return (
-//         <div className='p-4 md:p-8'>
-//             <PageHead title='Заявки' />
-
-//             <div className='flex items-center justify-between gap-2 py-5'>
-//                 <div className='flex flex-1 gap-4'>
-//                     <TableSearchInput placeholder='Поиск' />
-//                 </div>
-//                 <div className='flex gap-3'>
-//                     <PopupModal renderModal={onClose => <StudentCreateForm modalClose={onClose} />} />
-//                 </div>
-//             </div>
-
-//             {isLoading ? <p>Загрузка...</p> : <BidsTable bids={bids || []} />}
-//         </div>
-//     )
-// }
-
 import PageHead from '@/components/shared/page-head'
 import { useSearchParams } from 'react-router-dom'
 import TableSearchInput from '@/components/shared/table-search-input'
@@ -110,7 +28,7 @@ export default function BidsPage() {
                 <div className='flex flex-1 gap-4'>
                     <TableSearchInput placeholder='Поиск' />
                 </div>
-                <div className='flex gap-3'>
+                <div className='flex gap-3 '>
                     <PopupModal renderModal={onClose => <StudentCreateForm modalClose={onClose} />} />
                 </div>
             </div>
