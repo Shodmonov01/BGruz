@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'https://portal.bgruz.com/docs'
+const API_URL = 'https://portal.bgruz.com'
 
 export const fetchPublicData = async endpoint => {
     try {
@@ -33,6 +33,23 @@ export const postData = async (endpoint, data, token = null) => {
         return response.data
     } catch (error) {
         console.error('Error posting data:', error)
+        throw error
+    }
+}
+
+export const postData2 = async <T>(endpoint: string, data: any, token: string | null = null): Promise<T> => {
+    try {
+        const headers = token ? { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } : {}
+        const response = await axios.post<T>(`${API_URL}/${endpoint}`, data, { headers })
+
+        return response.data
+    } catch (error: any) {
+        console.error('Ошибка запроса:', error)
+        if (error.response) {
+            console.error('Ответ сервера:', error.response.data)
+            console.error('Статус:', error.response.status)
+            console.error('Заголовки:', error.response.headers)
+        }
         throw error
     }
 }
