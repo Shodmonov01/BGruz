@@ -36,12 +36,12 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
     const [terminals, setTerminals] = useState<{ id: number; name: string; description: string }[]>([])
     const [warehouses, setWarehouses] = useState<{ id: number; name: string; description: string }[]>([])
     const [vehicleProfiles, setVehicleProfiles] = useState<{ id: number; name: string }[]>([])
-    const [extraServices, setExtraServices] = useState<{ id: number; name: string }[]>([])
+    const [extraServices, setExtraServices] = useState<{ id: number; name: string; description: string }[]>([])
     const [operationType, setOperationType] = useState('')
     const [transportType, setTransportType] = useState('')
 
-    const hideTerminal1 = operationType === 'Вагон' && transportType === 'Погрузка'
-    const hideTerminal2 = operationType === 'Вагон' && transportType === 'Выгрузка'
+    const hideTerminal1 = operationType === 'Погрузка' && transportType === 'Вагон'
+    const hideTerminal2 = operationType === 'Выгрузка' && transportType === 'Вагон'
 
     useEffect(() => {
         const loadClients = async () => {
@@ -94,10 +94,105 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
         }
     }
 
+    // const onSubmit = async (values: BidFormSchemaType) => {
+    //     const payload = {
+    //         ...values,
+    //         price: Number(values.price)
+    //     }
+
+    //     try {
+    //         await postData('/api/v1/bids', payload)
+    //         modalClose()
+    //     } catch (error) {
+    //         console.error('Error submitting form:', error)
+    //     }
+    // }
+
+    // const onSubmit = async (values: BidFormSchemaType) => {
+    //     // Получаем выбранные терминалы, склады и дополнительные услуги
+    //     const selectedTerminal1 = terminals.find(terminal => terminal.name === values.terminal1Name);
+    //     const selectedTerminal2 = terminals.find(terminal => terminal.name === values.terminal2Name);
+    //     const selectedWarehouse = warehouses.find(warehouse => warehouse.name === values.warehouseName);
+    //     const selectedVehicleProfile = vehicleProfiles.find(profile => profile.name === values.vehicleProfiles);
+
+    //     // Преобразуем данные формы в нужный формат
+    //     const payload = {
+    //         cargoType: values.transportType === 'container' ? 'container' : 'wagon',
+    //         loadingMode: values.loadingType === 'loading' ? 'loading' : 'unloading',
+    //         clientId: parseInt(values.client, 10),
+    //         startDate: values.startDate,
+    //         slideDayTotal: 0, // По умолчанию 0, можно изменить при необходимости
+    //         terminal1: {
+    //             cityId: selectedTerminal1?.cityId || 0, // Используем cityId из выбранного терминала
+    //             address: values.terminal1Address
+    //         },
+    //         terminal2: {
+    //             cityId: selectedTerminal2?.cityId || 0, // Используем cityId из выбранного терминала
+    //             address: values.terminal2Address
+    //         },
+    //         warehouses: [
+    //             {
+    //                 cityId: selectedWarehouse?.cityId || 0, // Используем cityId из выбранного склада
+    //                 address: values.warehouseAddress
+    //             }
+    //         ],
+    //         isPriceRequest: values.requestPrice,
+    //         price: values.price,
+    //         vehicleProfileId: selectedVehicleProfile?.id || 0, // Используем id из выбранного профиля транспорта
+    //         vehicleCount: 1, // По умолчанию 1, можно изменить при необходимости
+    //         cargoTitle: `Портал РЖД - заявка ${new Date().getTime()}`, // Пример названия заявки
+    //         filingTime: "16:00", // Пример времени подачи, можно изменить
+    //         extraServices: values.extraServices?.map(service => ({
+    //             id: service.id,
+    //             vehicleProfileId: selectedVehicleProfile?.id || 0, // Используем id из выбранного профиля транспорта
+    //             count: 1 // По умолчанию 1, можно изменить при необходимости
+    //         })) || [],
+    //         description: values.description
+    //     };
+
+    //     try {
+    //         await postData('/api/v1/bids', payload);
+    //         modalClose();
+    //     } catch (error) {
+    //         console.error('Error submitting form:', error);
+    //     }
+    // };
+
     const onSubmit = async (values: BidFormSchemaType) => {
+        // Преобразуем данные формы в нужный формат
         const payload = {
-            ...values,
-            price: Number(values.price)
+            cargoType: values.transportType === 'container' ? 'container' : 'wagon',
+            loadingMode: values.loadingType === 'loading' ? 'loading' : 'unloading',
+            clientId: parseInt(values.client, 10),
+            startDate: values.startDate,
+            slideDayTotal: 0, // По умолчанию 0, можно изменить при необходимости
+            terminal1: {
+                cityId: 1275, // Пример cityId, нужно заменить на реальный
+                address: values.terminal1Address
+            },
+            terminal2: {
+                cityId: 1280, // Пример cityId, нужно заменить на реальный
+                address: values.terminal2Address
+            },
+            warehouses: [
+                {
+                    cityId: 773, // Пример cityId, нужно заменить на реальный
+                    address: values.warehouseAddress
+                }
+            ],
+            isPriceRequest: values.requestPrice,
+            price: values.price,
+            vehicleProfileId: 169, // Пример vehicleProfileId, нужно заменить на реальный
+            vehicleCount: 1, // По умолчанию 1, можно изменить при необходимости
+            cargoTitle: `Портал РЖД - заявка ${new Date().getTime()}`, // Пример названия заявки
+            filingTime: '16:00', // Пример времени подачи, можно изменить
+            extraServices:
+                values.extraServices?.map(service => ({
+                    id: service.id,
+                    vehicleProfileId: 169, // Пример vehicleProfileId, нужно заменить на реальный
+                    count: 1 // По умолчанию 1, можно изменить при необходимости
+                })) || [],
+            description: values.description
         }
 
         try {
@@ -181,8 +276,8 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                                         <FormControl>
                                             <RadioGroup
                                                 onValueChange={value => {
-                                                    field.onChange(value) // Обновляем состояние формы
-                                                    setOperationType(value) // Обновляем локальное состояние
+                                                    field.onChange(value)
+                                                    setOperationType(value)
                                                 }}
                                                 defaultValue={field.value}
                                                 className='flex flex-col space-y-1'
@@ -216,8 +311,8 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                                             <RadioGroup
                                                 // onValueChange={field.onChange}
                                                 onValueChange={value => {
-                                                    field.onChange(value) // Обновляем состояние формы
-                                                    setTransportType(value) // Обновляем локальное состояние
+                                                    field.onChange(value)
+                                                    setTransportType(value)
                                                 }}
                                                 defaultValue={field.value}
                                                 className='flex flex-col space-y-1'
@@ -266,7 +361,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                                         </FormControl>
                                         <SelectContent>
                                             {vehicleProfiles.map(profile => (
-                                                <SelectItem key={profile.id} value={profile.name}>
+                                                <SelectItem key={profile.id} value={profile.id.toString()}>
                                                     {profile.name}
                                                 </SelectItem>
                                             ))}
@@ -346,7 +441,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                                                 </FormControl>
                                                 <SelectContent>
                                                     {terminals.map(terminal => (
-                                                        <SelectItem key={terminal.id} value={terminal.name}>
+                                                        <SelectItem key={terminal.id} value={terminal.id.toString()}>
                                                             {terminal.name}
                                                         </SelectItem>
                                                     ))}
@@ -391,7 +486,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                                                 const selectedWarehouse = warehouses.find(w => w.name === value)
                                                 form.setValue('warehouseAddress', selectedWarehouse?.description || '')
                                             }}
-                                            value={field.value}
+                                            value={warehouses.value}
                                         >
                                             <FormControl>
                                                 <SelectTrigger>
@@ -400,7 +495,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                                             </FormControl>
                                             <SelectContent>
                                                 {warehouses.map(warehouse => (
-                                                    <SelectItem key={warehouse.id} value={warehouse.name}>
+                                                    <SelectItem key={warehouse.id} value={warehouse.id.toString()}>
                                                         {warehouse.name}
                                                     </SelectItem>
                                                 ))}
@@ -460,7 +555,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                                                 </FormControl>
                                                 <SelectContent>
                                                     {terminals.map(terminal => (
-                                                        <SelectItem key={terminal.id} value={terminal.name}>
+                                                        <SelectItem key={terminal.id} value={terminal.id.toString()}>
                                                             {terminal.name}
                                                         </SelectItem>
                                                     ))}
@@ -516,7 +611,10 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                                             </FormControl>
                                             <SelectContent>
                                                 {extraServices.map(extraServices => (
-                                                    <SelectItem key={extraServices.id} value={extraServices.name}>
+                                                    <SelectItem
+                                                        key={extraServices.id}
+                                                        value={extraServices.id.toString()}
+                                                    >
                                                         {extraServices.name}
                                                     </SelectItem>
                                                 ))}
