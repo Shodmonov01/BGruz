@@ -26,7 +26,7 @@ export const fetchPrivateData = async (endpoint, token) => {
     }
 }
 
-export const postData = async (endpoint, data, token = null) => {
+export const postData = async (endpoint, data, token: string | null = null) => {
     try {
         const headers = token ? { Authorization: `Bearer ${token}` } : {}
         const response = await axios.post(`${API_URL}/${endpoint}/`, data, { headers })
