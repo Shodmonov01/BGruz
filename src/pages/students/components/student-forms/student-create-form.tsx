@@ -151,7 +151,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
 
     return (
         <FormProvider {...formMethods}>
-            <div className='px-2'>
+            <div className='px-0 md:px-2'>
                 <Heading title={'Создать новую заявку'} description={''} className='space-y-2 py-4 text-center' />
                 <form onSubmit={handleSubmit(onSubmit)} className='space-y-4' autoComplete='off'>
                     <div className='space-y-4'>
@@ -166,6 +166,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                         {!hideTerminal1 && <TerminalOne terminals={terminals} />}
                         <Warhouses warehouses={warehouses} />
                         {!hideTerminal2 && <TerminalTwo terminals={terminals} />}
+                        {/* @ts-ignore */}
                         <BidDescribe extraServices={extraServices} />
                     </div>
                     <div className='flex items-center justify-center gap-4'>

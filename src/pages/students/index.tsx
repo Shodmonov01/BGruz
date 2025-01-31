@@ -3,9 +3,10 @@ import { useSearchParams } from 'react-router-dom'
 import TableSearchInput from '@/components/shared/table-search-input'
 import PopupModal from '@/components/shared/popup-modal'
 import { useGetBids } from '@/hooks/useGetBids'
-import BidsTable from './components/BidsTable'
 import StudentCreateForm from './components/student-forms/student-create-form'
 import { useMemo } from 'react'
+import BidsTableMobile from './components/bidsTableMobile'
+import BidsTable from './components/bidsTable'
 
 export default function BidsPage() {
     const [searchParams] = useSearchParams()
@@ -32,8 +33,17 @@ export default function BidsPage() {
                     <PopupModal renderModal={onClose => <StudentCreateForm modalClose={onClose} />} />
                 </div>
             </div>
-            {/* @ts-ignore */}
-            <BidsTable bids={bids || []} />
+            <div>
+                <div className='hidden md:block'>
+                    <BidsTable bids={bids || []} />
+                </div>
+
+                <div>
+                    <div className='md:hidden'>
+                        <BidsTableMobile bids={bids || []} />
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }

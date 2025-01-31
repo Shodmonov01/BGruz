@@ -1,0 +1,107 @@
+{
+    "tableFields": [
+        {
+            "name": "ID",
+            "modelField": "id"
+        },
+        {
+            "name": "ЦМ ID",
+            "modelField": "persistentId"
+        },
+        {
+            "russian": "Операция",
+            "name": "Operation",
+            "modelField": "loading_mode"
+        },
+        {
+            "russian": "Дата погрузки",
+            "name": "Loading Date",
+            "modelField": "loadingDate"
+        },
+        {
+            "russian": "Терминал 1",
+            "name": "Terminal 1",
+            "modelField": "terminal1.cityName"
+        },
+        {
+            "russian": "Склад",
+            "name": "Warehouse",
+            "modelField": "warehouses.0.cityName"
+        },
+        {
+            "russian": "Терминал 2",
+            "name": "Terminal 2",
+            "modelField": "terminal2.cityName"
+        },
+        {
+            "russian": "Профиль ТС",
+            "name": "Vehicle Profile",
+            "modelField": "vehicleProfile.name"
+        },
+        {
+            "russian": "Статус",
+            "name": "Status",
+            "modelField": "status"
+        },
+        {
+            "russian": "Аукцион",
+            "name": "Auction",
+            "modelField": null // обратный отсчет до activationDate, поле будет добавлено
+        },
+        {
+            "russian": "Моя цена",
+            "name": "My Price",
+            "modelField": "price" // скрываем, если isPriceRequest == true
+        },
+        {
+            "russian": "Предложение",
+            "name": "Offer",
+            "modelField": "bestSalePrice" // поле будет добавлено
+        },
+        {
+            "russian": "Согласовано",
+            "name": "Approved",
+            "modelField": null // если isPriceRequest == false, то согласовано  и кнопку нажать уже нельзя
+        },
+        {
+            "russian": "Доп услуги",
+            "name": "Additional Services",
+            "modelField": "extraServicesPrice"
+        },
+        {
+            "russian": "Цена + доп усл",
+            "name": "Additional Services Price",
+            "modelField": "fullPrice"
+        },
+        {
+            "russian": "Комиссия",
+            "name": "Commission",
+            "modelField": "commission" // поле будет добавлено
+        },
+        {
+            "russian": "К оплате",
+            "name": "Payment",
+            "modelField": "fullPriceNDS"
+        },
+        {
+            "russian": "Создано",
+            "name": "Created",
+            "modelField": "createdAt"
+        },
+        {
+            "russian": "Создал",
+            "name": "Created By",
+            "modelField": "createdBy"
+        },
+        {
+            "russian": "Клиент",
+            "name": "Client",
+            "modelField": "client.name"
+        },
+        {
+            "russian": "Заказчик",
+            "name": "Customer",
+            "modelField": "customer.name" // будет добавлено
+        }
+    ]
+}
