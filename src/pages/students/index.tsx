@@ -6,7 +6,7 @@ import { useGetBids } from '@/hooks/useGetBids'
 import StudentCreateForm from './components/student-forms/student-create-form'
 import { useMemo } from 'react'
 import BidsTableMobile from './components/bidsTableMobile'
-import BidsTable from './components/BidsTable'
+import BidsTable from './components/bidsTable'
 
 export default function BidsPage() {
     const [searchParams] = useSearchParams()
