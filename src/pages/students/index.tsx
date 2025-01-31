@@ -13,7 +13,6 @@ export default function BidsPage() {
     const page = Number(searchParams.get('page') || 1)
     const pageLimit = Number(searchParams.get('limit') || 10)
     const offset = (page - 1) * pageLimit
-    //   const filters = {1}; // Пример фильтров
     const filters = useMemo(() => ({}), []) // Используем memo для фильтров
 
     const { bids, loading, error } = useGetBids(offset, pageLimit, filters)
