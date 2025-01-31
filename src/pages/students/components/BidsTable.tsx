@@ -17,7 +17,7 @@ interface Bid {
     createdAt: string
 }
 
-export default function BidsTable({ bids }) {
+function BidsTable({ bids }) {
     //@ts-ignore
     const [filters, setFilters] = useState<{ [key: string]: string }>({})
     const [selectedBid, setSelectedBid] = useState<Bid | null>(null)
@@ -206,3 +206,5 @@ export default function BidsTable({ bids }) {
         </div>
     )
 }
+
+export default BidsTable
