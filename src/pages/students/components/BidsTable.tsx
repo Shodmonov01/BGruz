@@ -213,7 +213,7 @@ import { useState } from 'react'
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Edit, Eye, Trash, SquareCheck } from 'lucide-react'
+import { Eye, Trash, SquareCheck } from 'lucide-react'
 import { Modal } from '@/components/ui/modal'
 
 interface Bid {
@@ -237,10 +237,6 @@ interface Bid {
     isPriceRequest
     fullPrice
     ownState
-}
-
-interface Props {
-    bids: Bid[]
 }
 
 const columnWidths: { [key: string]: string } = {
