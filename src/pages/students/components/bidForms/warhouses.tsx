@@ -162,7 +162,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useFormContext } from 'react-hook-form'
-// import { Trash } from 'lucide-react'
+import { Trash } from 'lucide-react'
 
 function Warhouses({ warehouses }) {
     const { control, setValue } = useFormContext()
@@ -172,11 +172,11 @@ function Warhouses({ warehouses }) {
         setWarehouseList([...warehouseList, { id: Date.now(), name: '', address: '' }])
     }
 
-    // const removeWarehouse = index => {
-    //     if (warehouseList.length > 1) {
-    //         setWarehouseList(warehouseList.filter((_, i) => i !== index))
-    //     }
-    // }
+    const removeWarehouse = index => {
+        if (warehouseList.length > 1) {
+            setWarehouseList(warehouseList.filter((_, i) => i !== index))
+        }
+    }
 
     return (
         <div>
@@ -218,32 +218,34 @@ function Warhouses({ warehouses }) {
                             )}
                         />
 
-                        <FormField
-                            control={control}
-                            name={`warehouseAddress-${warehouse.id}`}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormControl>
-                                        <Input
-                                            placeholder='Адрес'
-                                            {...field}
-                                            className='px-4 py-3 shadow-inner drop-shadow-xl'
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
+                        <div className='flex gap-4'>
+                            <FormField
+                                control={control}
+                                name={`warehouseAddress-${warehouse.id}`}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <Input
+                                                placeholder='Адрес'
+                                                {...field}
+                                                className='px-4 w-[310px] py-3 shadow-inner drop-shadow-xl'
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            {warehouseList.length > 1 && (
+                                <Button
+                                    type='button'
+                                    variant='destructive'
+                                    size='icon'
+                                    onClick={() => removeWarehouse(index)}
+                                >
+                                    <Trash size={16} />
+                                </Button>
                             )}
-                        />
-                        {/* {warehouseList.length > 1 && (
-                            <Button
-                                type='button'
-                                variant='destructive'
-                                size='icon'
-                                onClick={() => removeWarehouse(index)}
-                            >
-                                <Trash size={16} />
-                            </Button>
-                        )} */}
+                        </div>
                     </div>
                 </div>
             ))}

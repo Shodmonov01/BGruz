@@ -1,15 +1,25 @@
 import { FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { Separator } from '@/components/ui/separator'
 
 function TerminalTwo({ terminals }) {
     const { control, setValue } = useFormContext()
 
+    const loadingType = useWatch({ control, name: 'loadingType' })
+    const transportType = useWatch({ control, name: 'transportType' })
+
+    const getTerminalTitle = () => {
+        if (transportType === 'Контейнер') return 'Сдать контейнер'
+        if (transportType === 'Вагон' && loadingType === 'Погрузка') return 'Терминал погрузки'
+        return 'Терминал 2'
+    }
+
     return (
         <div>
-            <h1 className='font-bold mb-2'>Терминал 2</h1>
+            {/* <h1 className='font-bold mb-2'>Терминал 2</h1> */}
+            <h1 className='font-bold mb-2'>{getTerminalTitle()}</h1>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-4'>
                 <FormField
                     control={control}

@@ -1,4 +1,4 @@
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { FormControl, FormField, FormItem, FormMessage, FormLabel } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -24,6 +24,7 @@ interface BidDescribeProps {
 function BidDescribe({ extraServices }: BidDescribeProps) {
     const { control, setValue, watch } = useFormContext()
     const [services, setServices] = useState<Service[]>([])
+    const requestPrice = useWatch({ control, name: 'requestPrice' }) // Следим за чекбоксом
 
     // Обновляем services, когда extraServices загружается
     useEffect(() => {
@@ -75,10 +76,22 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
         )
     }
 
+    useEffect(() => {
+        if (requestPrice) {
+            setValue('price', '') // Очищаем цену
+        }
+    }, [requestPrice, setValue])
+
     // const totalSum = services.reduce((acc, service) => acc + (service.checked ? service.count * service.price : 0), 0)
     const totalSum =
         (watch('price') || 0) +
         services.reduce((acc, service) => acc + (service.checked ? service.count * service.price : 0), 0)
+
+    // Функция для форматирования числа с разрядностью
+    const formatNumber = (value: string) => {
+        const num = value.replace(/\D/g, '') // Убираем все нечисловые символы
+        return num ? new Intl.NumberFormat('ru-RU').format(Number(num)) : ''
+    }
 
     return (
         <div className='space-y-4'>
@@ -98,7 +111,6 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
                         </FormItem>
                     )}
                 />
-
                 <div className='flex items-center gap-4'>
                     <p>Цена</p>
 
@@ -107,15 +119,18 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
                         name='price'
                         render={({ field }) => (
                             <FormItem>
-                                {/* <FormLabel>Цена</FormLabel> */}
                                 <FormControl>
                                     <Input
-                                        type='number'
+                                        type='text' // Используем text, чтобы можно было форматировать ввод
                                         placeholder='Цена'
                                         {...field}
                                         className='px-4 py-4 shadow-inner drop-shadow-xl'
-                                        value={field.value || ''}
-                                        onChange={e => field.onChange(e.target.valueAsNumber)}
+                                        value={requestPrice ? '' : formatNumber(field.value?.toString() || '')}
+                                        onChange={e => {
+                                            const rawValue = e.target.value.replace(/\D/g, '') // Убираем все нечисловые символы
+                                            field.onChange(rawValue ? Number(rawValue) : '') // Записываем только число
+                                        }}
+                                        disabled={requestPrice} // Блокируем поле, если включен "Запрос цены"
                                     />
                                 </FormControl>
                                 <FormMessage />

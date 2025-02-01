@@ -41,7 +41,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
 
     return (
         <div>
-            <div className='flex items-center gap-16 my-6'>
+            <div className='flex flex-col md:flex-wrap items-center gap-16 my-6'>
                 <h1 className='font-bold'>Тип перевозки</h1>
                 <FormField
                     control={control}
@@ -193,10 +193,11 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                             </FormItem>
                         )}
                     />
-
                     <div className='mt-1'>
                         <h3>Контактное лицо:</h3>
-                        <h3>Иванов иван | +79988516060</h3>
+                        <h3>
+                            Иванов Иван | <a href='tel:+79988516060'>+79988516060</a>
+                        </h3>
                     </div>
                 </div>
             </div>
