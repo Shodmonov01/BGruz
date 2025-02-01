@@ -59,7 +59,7 @@ function BidDate() {
     }, [])
 
     return (
-        <div className='flex items-center gap-4 py-6'>
+        <div className='flex flex-col md:flex-row items-start md:items-center gap-4 py-6'>
             <h1 className='font-bold mr-11'>Дата Погрузки</h1>
             <FormField
                 control={control}

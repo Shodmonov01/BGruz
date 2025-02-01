@@ -65,7 +65,7 @@ export const putData = async (endpoint, data, token = null) => {
     }
 }
 
-export const deleteData = async (endpoint, token = null) => {
+export const deleteData = async (endpoint, token: string | null = null) => {
     try {
         const headers = token ? { Authorization: `Bearer ${token}` } : {}
         const response = await axios.delete(`${API_URL}/${endpoint}/`, { headers })

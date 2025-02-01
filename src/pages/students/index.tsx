@@ -1,12 +1,13 @@
 import PageHead from '@/components/shared/page-head'
 import { useSearchParams } from 'react-router-dom'
-import TableSearchInput from '@/components/shared/table-search-input'
 import PopupModal from '@/components/shared/popup-modal'
 import { useGetBids } from '@/hooks/useGetBids'
 import StudentCreateForm from './components/student-forms/student-create-form'
 import { useMemo } from 'react'
 import BidsTableMobile from './components/bidsTableMobile'
 import BidsTable from './components/BidsTable'
+import CurrentTime from '@/components/shared/сurrent-time'
+import { Button } from '@/components/ui/button'
 
 export default function BidsPage() {
     const [searchParams] = useSearchParams()
@@ -28,9 +29,18 @@ export default function BidsPage() {
                 {/* <div className='flex flex-1 gap-4'>
                     <TableSearchInput placeholder='Поиск' />
                 </div> */}
+                <div className=''>
+                    <CurrentTime />
+                </div>
                 <div className='flex gap-3 '>
                     <PopupModal renderModal={onClose => <StudentCreateForm modalClose={onClose} />} />
                 </div>
+            </div>
+            <div className='flex flex-wrap gap-5 mb-5'>
+                <Button>Создать</Button>
+                <Button>Загрузить</Button>
+                <Button>Отменить</Button>
+                <Button>Заявки</Button>
             </div>
             <div>
                 <div className='hidden md:block'>
