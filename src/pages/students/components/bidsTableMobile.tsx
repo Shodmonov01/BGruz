@@ -1,7 +1,38 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import BidsInfoModal from './bids-info-modal'
+import { useCallback, useState } from 'react'
+interface Bid {
+    _id: string
+    persistentId: string
+    cargoTitle: string
+    client: { organizationName: string }
+    price: number | null
+    status: string | null
+    filingTime: string
+    createdBy: string
+    createdAt: string
+    isPriceRequest?: boolean
+    customer?: { name: string }
+    terminal1?: { cityName: string }
+    terminal2?: { cityName: string }
+    warehouses?: { cityName: string }[]
+    vehicleProfile?: { name: string }
+    [key: string]: unknown 
+}
 
 function BidsTableMobile({ bids }) {
+    const [selectedBid, setSelectedBid] = useState<Partial<Bid> | null>(null)
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const handleCloseModal = useCallback(() => {
+        setIsModalOpen(false)
+        setSelectedBid(null)
+    }, [])
+
+    const handleOpenModal = useCallback((bid: Bid) => {
+        setSelectedBid(bid)
+        setIsModalOpen(true)
+    }, [])
     return (
         <div className='flex flex-col gap-4 p-4'>
             {bids.map(bid => (
@@ -23,10 +54,20 @@ function BidsTableMobile({ bids }) {
                             <span className='font-medium'>Статус:</span>
                             <span className='text-blue-500 font-semibold'>{bid.status || '—'}</span>
                         </div>
-                        <Button className='mt-2 w-full'>Подробнее</Button>
+                        <Button onClick={() => handleOpenModal( bid)} className='mt-2 w-full'>
+                            Подробнее
+                        </Button>
                     </CardContent>
                 </Card>
             ))}
+
+            {selectedBid && (
+                <BidsInfoModal
+                    handleCloseModal={handleCloseModal}
+                    selectedBid={selectedBid}
+                    isModalOpen={isModalOpen}
+                />
+            )}
         </div>
     )
 }

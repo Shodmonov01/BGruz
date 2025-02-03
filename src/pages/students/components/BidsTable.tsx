@@ -14,7 +14,7 @@
 //     cargoTitle: string
 //     price: number | null
 //     status: string | null
-    
+
 // }
 
 // function BidsTable({ bids }: { bids: Bid[] }) {
@@ -154,7 +154,6 @@
 
 // export default BidsTable
 
-
 import { useState, useCallback, useReducer } from 'react'
 import { useReactTable, getCoreRowModel, flexRender } from '@tanstack/react-table'
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table'
@@ -164,6 +163,7 @@ import { Modal } from '@/components/ui/modal'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { deleteData, postData2 } from '@/api/api'
 import { useBidsTableColumns } from './students-table/useBidsTableColumns'
+import BidsInfoModal from './bids-info-modal'
 
 interface Bid {
     _id: string
@@ -218,7 +218,7 @@ function BidsTable({ bids }) {
         onDelete: handleDelete,
         onOpenModal: handleOpenModal
     })
-// @ts-ignore
+    // @ts-ignore
     const table = useReactTable({ data: bids, columns, getCoreRowModel: getCoreRowModel() })
 
     return (
@@ -231,10 +231,18 @@ function BidsTable({ bids }) {
                 <div className='flex gap-10 mb-3'>
                     <div>
                         <ul>
-                            <li>Сумма заявок: <span>10 000 000</span></li>
-                            <li>Комиссия: <span>500 000</span></li>
-                            <li>К оплате: <span>9 500 000</span></li>
-                            <li>и НДС: <span>1 900 000</span></li>
+                            <li>
+                                Сумма заявок: <span>10 000 000</span>
+                            </li>
+                            <li>
+                                Комиссия: <span>500 000</span>
+                            </li>
+                            <li>
+                                К оплате: <span>9 500 000</span>
+                            </li>
+                            <li>
+                                и НДС: <span>1 900 000</span>
+                            </li>
                         </ul>
                     </div>
                     <div>
@@ -291,15 +299,20 @@ function BidsTable({ bids }) {
             </ScrollArea>
 
             {selectedBid && (
-                <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-                    <div className='p-6'>
-                        <h2 className='text-lg font-bold'>{selectedBid.cargoTitle || '—'}</h2>
-                        <p>Клиент: {selectedBid.client?.organizationName || '—'}</p>
-                        <p>Цена: {selectedBid.price ?? '—'}</p>
-                        <p>Статус: {selectedBid.status ?? '—'}</p>
-                        <Button onClick={handleCloseModal}>Закрыть</Button>
-                    </div>
-                </Modal>
+                // <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+                //     <div className='p-6'>
+                //         <h2 className='text-lg font-bold'>{selectedBid.cargoTitle || '—'}</h2>
+                //         <p>Клиент: {selectedBid.client?.organizationName || '—'}</p>
+                //         <p>Цена: {selectedBid.price ?? '—'}</p>
+                //         <p>Статус: {selectedBid.status ?? '—'}</p>
+                //         <Button onClick={handleCloseModal}>Закрыть</Button>
+                //     </div>
+                // </Modal>
+                <BidsInfoModal
+                    handleCloseModal={handleCloseModal}
+                    selectedBid={selectedBid}
+                    isModalOpen={isModalOpen}
+                />
             )}
         </div>
     )

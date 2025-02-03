@@ -230,7 +230,7 @@ interface Bid {
     terminal2?: { cityName: string }
     warehouses?: { cityName: string }[]
     vehicleProfile?: { name: string }
-    [key: string]: any
+    [key: string]: unknown 
 }
 
 interface ColumnsProps {
