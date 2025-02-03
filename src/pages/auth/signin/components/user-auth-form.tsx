@@ -56,7 +56,7 @@ export default function UserAuthForm() {
                 console.log('User info:', userResponse.data)
 
                 // Перенаправление после входа
-                router.push('/')
+                router.push('/bids')
             }
         } catch (error) {
             console.error('Ошибка входа:', error)

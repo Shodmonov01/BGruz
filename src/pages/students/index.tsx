@@ -37,7 +37,6 @@ export default function BidsPage() {
                 </div>
             </div>
             <div className='flex flex-wrap gap-5 mb-5'>
-                <Button>Создать</Button>
                 <Button>Загрузить</Button>
                 <Button>Отменить</Button>
                 <Button>Заявки</Button>

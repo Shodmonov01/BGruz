@@ -2,14 +2,14 @@ import { NavItem } from '@/types'
 
 export const navItems: NavItem[] = [
     {
-        title: 'Заказы',
-        href: '/',
+        title: 'Заявки',
+        href: '/bids',
         icon: 'dashboard',
         label: 'Dashboard'
     },
     {
-        title: 'Заявки',
-        href: '/student',
+        title: 'Заказы',
+        href: '/orders',
         icon: 'user',
         label: 'Student'
     },

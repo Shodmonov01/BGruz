@@ -27,12 +27,14 @@ export default function AppRouter() {
             ),
             children: [
                 {
-                    element: <DashboardPage />,
+                    path: 'bids',
+
+                    element:  <StudentPage />,
                     index: true
                 },
                 {
-                    path: 'student',
-                    element: <StudentPage />
+                    path: 'orders',
+                    element: <DashboardPage />
                 },
                 {
                     path: 'student/details',

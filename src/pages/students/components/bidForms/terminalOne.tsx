@@ -22,16 +22,16 @@ function TerminalOne({ terminals }) {
             <div className='grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-4'>
                 <FormField
                     control={control}
-                    name='terminal1Name'
+                    name='terminal1Name' // хранит ID терминала
                     render={({ field }) => (
                         <FormItem>
-                            {/* <FormLabel>Терминал 1</FormLabel> */}
                             <Select
                                 onValueChange={value => {
                                     field.onChange(value)
-                                    const selectedTerminal = terminals.find(terminal => terminal.name === value)
+                                    const selectedTerminal = terminals.find(terminal => terminal.id === Number(value))
                                     if (selectedTerminal) {
                                         setValue('terminal1Address', selectedTerminal.description || '')
+                                        setValue('terminal1Id', selectedTerminal.id) // сохраняем ID терминала
                                     }
                                 }}
                                 value={field.value}
@@ -59,7 +59,6 @@ function TerminalOne({ terminals }) {
                     name='terminal1Address'
                     render={({ field }) => (
                         <FormItem>
-                            {/* <FormLabel>Адрес</FormLabel> */}
                             <FormControl>
                                 <Input
                                     placeholder='Адрес'

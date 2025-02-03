@@ -20,16 +20,21 @@ interface BidFormData {
     transportType: string
     startDate: string
     endDate: string
+    terminal1Id: number | null
     terminal1Name: string
     terminal1Address: string
-    vehicleProfiles: string
+    terminal2Id: number | null
     terminal2Name: string
     terminal2Address: string
     warehouseName: string
     warehouseAddress: string
+    vehicleProfiles: string | number
     price: number
     description: string
     requestPrice: boolean
+    cargoTitle: string
+    vehicleCount: number
+    extraServices: Array<{ id: number; count: number }>
 }
 
 const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
@@ -43,8 +48,11 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
     const [operationType, setOperationType] = useState('')
     const [transportType, setTransportType] = useState('')
 
-    const hideTerminal1 = operationType === 'Погрузка' && transportType === 'Вагон'
-    const hideTerminal2 = operationType === 'Выгрузка' && transportType === 'Вагон'
+    // const hideTerminal1 = operationType === 'Погрузка' && transportType === 'Вагон'
+    // const hideTerminal2 = operationType === 'Выгрузка' && transportType === 'Вагон'
+
+    const hideTerminal1 = operationType === 'loading' && transportType === 'Вагон'
+    const hideTerminal2 = operationType === 'unloading' && transportType === 'Вагон'
 
     useEffect(() => {
         const loadClients = async () => {
@@ -75,11 +83,12 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
             warehouseAddress: '',
             price: 0,
             description: '',
-            requestPrice: false
+            requestPrice: false,
+            extraServices: []
         }
     })
 
-    const { handleSubmit, setValue } = formMethods
+    const { handleSubmit, setValue, getValues } = formMethods
 
     const handleClientChange = async (clientId: string) => {
         setValue('client', clientId)
@@ -99,23 +108,27 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
     const onSubmit: SubmitHandler<BidFormData> = async data => {
         try {
             const payload = {
-                // cargoType: data.transportType || 'container',
-                // loadingMode: data.loadingType || 'loading',
-                cargoType: 'container',
-                loadingMode: 'loading',
+                cargoType: data.transportType,
+                loadingMode: data.loadingType,
+
                 clientId: Number(data.client) || 4751,
-                startDate: data.startDate || '2025-02-06',
+                startDate: getValues('startDate'),
                 slideDayTotal: 0,
                 terminal1: {
-                    cityId: 1275,
+                    // cityId: data.terminal1Id || 1275, // Используем ID из формы
+                    cityId: 1275, // Используем ID из формы
                     cityName: data.terminal1Name || 'Не указан',
-                    address: data.terminal1Address || 'Московская область, г. Воскресенск, Адрес 1'
+                    // address: data.terminal1Address || 'Московская область, г. Воскресенск, Адрес 1'
+                    address: 'Московская область, г. Воскресенск, Адрес 1'
                 },
                 terminal2: {
+                    // cityId: data.terminal2Id || 1280,
                     cityId: 1280,
                     cityName: data.terminal2Name || 'Не указан',
-                    address: data.terminal2Address || 'Московская область, Ногинск Адрес 2'
+                    // address: data.terminal2Address || 'Московская область, Ногинск Адрес 2'
+                    address: 'Московская область, Ногинск Адрес 2'
                 },
+
                 warehouses: data.warehouseName || [
                     {
                         cityId: 773,
@@ -125,13 +138,18 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                 ],
                 isPriceRequest: data.requestPrice || false,
                 price: data.price || 0,
-                vehicleProfileId: Number(data.vehicleProfiles) || 169,
-                vehicleCount: 1,
-                cargoTitle: 'Груз',
+                vehicleProfileId: Number(data.vehicleProfiles) ,
+                vehicleCount: getValues('vehicleCount'),
+                cargoTitle: data.cargoTitle,
                 filingTime: '00:00',
-                extraServices: [{ id: 69, vehicleProfileId: 169, count: 1 }],
-                description: data.description || 'Создание заявки по Дефолту',
-                persistentId: Math.random().toString(36).substr(2, 10)
+                // extraServices: data.extraServices.map(service => ({
+                //     id: service.id,
+                //     vehicleProfileId: Number(data.vehicleProfiles), // Здесь нужно указать правильный vehicleProfileId
+                //     count: service.count
+                // })),
+                extraServices: data.extraServices || [],
+                description: data.description
+                // persistentId: Math.random().toString(36).substr(2, 10)
             }
 
             console.log('Отправка данных:', payload)

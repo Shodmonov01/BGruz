@@ -28,7 +28,6 @@
 // //     isShortVersion?: boolean
 // // }
 
-
 // // export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenModal }: ColumnsProps) => {
 // //     return useMemo<CustomColumnDef<Bid>[]>(() => {
 // //         const allColumns: ColumnDef<Bid>[] = [
@@ -87,7 +86,6 @@
 // //     }, [isShortTable, onApprove, onDelete, onOpenModal])
 // // }
 
-
 // import { useMemo } from 'react'
 // import { ColumnDef } from '@tanstack/react-table'
 // import { Button } from '@/components/ui/button'
@@ -131,28 +129,28 @@
 //             { accessorKey: 'persistentId', header: 'ЦМ ID', size: 100, isShortVersion: true },
 //             { accessorKey: 'loadingMode', header: 'Операция', size: 150, isShortVersion: true },
 //             { accessorKey: 'filingTime', header: 'Дата погрузки', size: 150, isShortVersion: true },
-//             { 
-//                 header: 'Терминал 1', 
-//                 size: 120, 
-//                 accessorFn: row => row.terminal1?.cityName ?? '—', 
-//                 isShortVersion: true 
+//             {
+//                 header: 'Терминал 1',
+//                 size: 120,
+//                 accessorFn: row => row.terminal1?.cityName ?? '—',
+//                 isShortVersion: true
 //             },
-//             { 
-//                 header: 'Склад', 
-//                 size: 120, 
-//                 accessorFn: row => row.warehouses?.[0]?.cityName ?? '—', 
-//                 isShortVersion: true 
+//             {
+//                 header: 'Склад',
+//                 size: 120,
+//                 accessorFn: row => row.warehouses?.[0]?.cityName ?? '—',
+//                 isShortVersion: true
 //             },
-//             { 
-//                 header: 'Терминал 2', 
-//                 size: 120, 
-//                 accessorFn: row => row.terminal2?.cityName ?? '—' 
+//             {
+//                 header: 'Терминал 2',
+//                 size: 120,
+//                 accessorFn: row => row.terminal2?.cityName ?? '—'
 //             },
-//             { 
-//                 header: 'Профиль ТС', 
-//                 size: 150, 
-//                 accessorFn: row => row.vehicleProfile?.name ?? '—', 
-//                 isShortVersion: true 
+//             {
+//                 header: 'Профиль ТС',
+//                 size: 150,
+//                 accessorFn: row => row.vehicleProfile?.name ?? '—',
+//                 isShortVersion: true
 //             },
 //             { accessorKey: 'status', header: 'Статус', size: 100 },
 //             { accessorKey: 'approvedStatus', header: 'Аукцион', size: 150, isShortVersion: true },
@@ -164,15 +162,15 @@
 //             { accessorKey: 'fullPriceNDS', header: 'К оплате', size: 150 },
 //             { accessorKey: 'createdAt', header: 'Создано', size: 150 },
 //             { accessorKey: 'createdBy', header: 'Создал', size: 150 },
-//             { 
-//                 header: 'Клиент', 
-//                 size: 150, 
-//                 accessorFn: row => row.client?.organizationName ?? '—' 
+//             {
+//                 header: 'Клиент',
+//                 size: 150,
+//                 accessorFn: row => row.client?.organizationName ?? '—'
 //             },
-//             { 
-//                 header: 'Заказчик', 
-//                 size: 150, 
-//                 accessorFn: row => row.customer?.name ?? '—' 
+//             {
+//                 header: 'Заказчик',
+//                 size: 150,
+//                 accessorFn: row => row.customer?.name ?? '—'
 //             },
 //             {
 //                 accessorKey: 'isPriceRequest',
@@ -208,11 +206,13 @@
 //     }, [isShortTable, onApprove, onDelete, onOpenModal])
 // }
 
-
 import { useMemo } from 'react'
 import { ColumnDef } from '@tanstack/react-table'
 import { Button } from '@/components/ui/button'
 import { Eye, Trash } from 'lucide-react'
+
+import { format } from 'date-fns'
+import { ru } from 'date-fns/locale'
 
 interface Bid {
     _id: string
@@ -245,30 +245,51 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
         const allColumns: (ColumnDef<Bid> & { isShortVersion?: boolean })[] = [
             { accessorKey: '_id', header: 'ID', size: 50, isShortVersion: true },
             { accessorKey: 'persistentId', header: 'ЦМ ID', size: 100, isShortVersion: true },
-            { accessorKey: 'loadingMode', header: 'Операция', size: 150, isShortVersion: true },
+            {
+                header: 'Операция',
+                size: 150,
+                accessorFn: row => {
+                    let loadingModeLabel = ''
+                    if (row.loadingMode === 'loading') {
+                        loadingModeLabel = 'Погрузка'
+                    } else if (row.loadingMode === 'unloading') {
+                        loadingModeLabel = 'Выгрузка'
+                    }
+
+                    let cargoTypeLabel = ''
+                    if (row.cargoType === 'wagon') {
+                        cargoTypeLabel = 'Вагон'
+                    } else if (row.cargoType === 'container') {
+                        cargoTypeLabel = 'Контейнер'
+                    }
+
+                    return `${loadingModeLabel} ${cargoTypeLabel}`
+                },
+                isShortVersion: true
+            },
             { accessorKey: 'filingTime', header: 'Дата погрузки', size: 150, isShortVersion: true },
-            { 
-                header: 'Терминал 1', 
-                size: 120, 
-                accessorFn: row => row.terminal1?.cityName ?? '—', 
-                isShortVersion: true 
+            {
+                header: 'Терминал 1',
+                size: 120,
+                accessorFn: row => row.terminal1?.cityName ?? '—',
+                isShortVersion: true
             },
-            { 
-                header: 'Склад', 
-                size: 120, 
-                accessorFn: row => row.warehouses?.[0]?.cityName ?? '—', 
-                isShortVersion: true 
+            {
+                header: 'Склад',
+                size: 120,
+                accessorFn: row => row.warehouses?.[0]?.cityName ?? '—',
+                isShortVersion: true
             },
-            { 
-                header: 'Терминал 2', 
-                size: 120, 
-                accessorFn: row => row.terminal2?.cityName ?? '—' 
+            {
+                header: 'Терминал 2',
+                size: 120,
+                accessorFn: row => row.terminal2?.cityName ?? '—'
             },
-            { 
-                header: 'Профиль ТС', 
-                size: 150, 
-                accessorFn: row => row.vehicleProfile?.name ?? '—', 
-                isShortVersion: true 
+            {
+                header: 'Профиль ТС',
+                size: 150,
+                accessorFn: row => row.vehicleProfile?.name ?? '—',
+                isShortVersion: true
             },
             { accessorKey: 'status', header: 'Статус', size: 100 },
             { accessorKey: 'approvedStatus', header: 'Аукцион', size: 150, isShortVersion: true },
@@ -278,17 +299,23 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
             { accessorKey: 'fullPrice', header: 'Цена + доп усл', size: 150 },
             { accessorKey: 'commission', header: 'Комиссия', size: 100 },
             { accessorKey: 'fullPriceNDS', header: 'К оплате', size: 150 },
-            { accessorKey: 'createdAt', header: 'Создано', size: 150 },
-            { accessorKey: 'createdBy', header: 'Создал', size: 150 },
-            { 
-                header: 'Клиент', 
-                size: 150, 
-                accessorFn: row => row.client?.organizationName ?? '—' 
+            {
+                accessorKey: 'createdAt',
+                header: 'Создано',
+                size: 150,
+                accessorFn: row => format(new Date(row.createdAt), 'dd.MM.yyyy HH:mm:ss', { locale: ru })
             },
-            { 
-                header: 'Заказчик', 
-                size: 150, 
-                accessorFn: row => row.customer?.name ?? '—' 
+
+            { accessorKey: 'createdBy', header: 'Создал', size: 150 },
+            {
+                header: 'Клиент',
+                size: 150,
+                accessorFn: row => row.client?.organizationName ?? '—'
+            },
+            {
+                header: 'Заказчик',
+                size: 150,
+                accessorFn: row => row.customer?.name ?? '—'
             },
             {
                 accessorKey: 'isPriceRequest',
@@ -314,7 +341,10 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 cell: ({ row }) => (
                     <div className='flex'>
                         <Eye className='mr-2 h-5 w-5 cursor-pointer' onClick={() => onOpenModal(row.original)} />
-                        <Trash className='mr-2 h-5 w-5 cursor-pointer text-red-500' onClick={() => onDelete(row.original._id)} />
+                        <Trash
+                            className='mr-2 h-5 w-5 cursor-pointer text-red-500'
+                            onClick={() => onDelete(row.original._id)}
+                        />
                     </div>
                 ),
                 isShortVersion: true

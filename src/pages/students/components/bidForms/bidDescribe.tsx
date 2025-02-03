@@ -48,7 +48,7 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
             setServices(
                 uniqueServices.map(service => ({
                     ...service,
-                    count: service.countIncluded || 1,
+                    count: 1, // Всегда начинаем с 1
                     checked: false
                 }))
             )
@@ -62,9 +62,17 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
         updateFormData(updatedServices)
     }
 
-    const handleCheckboxChange = index => {
+    // const handleCheckboxChange = index => {
+    //     const updatedServices = [...services]
+    //     updatedServices[index].checked = !updatedServices[index].checked
+    //     setServices(updatedServices)
+    //     updateFormData(updatedServices)
+    // }
+
+    const handleCheckboxChange = (index: number) => {
         const updatedServices = [...services]
         updatedServices[index].checked = !updatedServices[index].checked
+        updatedServices[index].count = updatedServices[index].checked ? 1 : 1 // Устанавливаем 1, если выбрана
         setServices(updatedServices)
         updateFormData(updatedServices)
     }
@@ -92,7 +100,7 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
         const num = value.replace(/\D/g, '') // Убираем все нечисловые символы
         return num ? new Intl.NumberFormat('ru-RU').format(Number(num)) : ''
     }
-
+ 
     return (
         <div className='space-y-4'>
             <h1 className='text-center text-red-600 font-bold'>Все цены указаны без НДС</h1>
@@ -166,8 +174,18 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
                                     value={service.count}
                                     onChange={e => handleCountChange(index, parseInt(e.target.value) || 1)}
                                     className='w-16 text-center'
-                                    disabled={!service.checked}
+                                    disabled={!service.checked} // Отключаем, если чекбокс не активен
                                 />
+
+                                {/* <Input
+                                    type='number'
+                                    min='1'
+                                    max={service.maxCount}
+                                    value={service.count}
+                                    onChange={e => handleCountChange(index, parseInt(e.target.value) || 1)}
+                                    className='w-16 text-center'
+                                    disabled={!service.checked}
+                                /> */}
                                 <Input
                                     type='text'
                                     readOnly
@@ -188,7 +206,7 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
             {/* Описание */}
             <FormField
                 control={control}
-                name='description'
+                name='cargoTitle'
                 render={({ field }) => (
                     <FormItem>
                         <FormLabel>Груз</FormLabel>
