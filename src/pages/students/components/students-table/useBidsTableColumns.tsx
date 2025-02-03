@@ -230,7 +230,7 @@ interface Bid {
     terminal2?: { cityName: string }
     warehouses?: { cityName: string }[]
     vehicleProfile?: { name: string }
-    [key: string]: unknown 
+    [key: string]: unknown
 }
 
 interface ColumnsProps {
@@ -240,9 +240,11 @@ interface ColumnsProps {
     onOpenModal: (bid: Bid) => void
 }
 
+
+
 export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenModal }: ColumnsProps) => {
     return useMemo<ColumnDef<Bid>[]>(() => {
-        const allColumns: (ColumnDef<Bid> & { isShortVersion?: boolean })[] = [
+        const allColumns: (ColumnDef<Bid> & { isShortVersion?: boolean; searchable?: boolean })[] = [
             { accessorKey: '_id', header: 'ID', size: 50, isShortVersion: true },
             { accessorKey: 'persistentId', header: 'ЦМ ID', size: 100, isShortVersion: true },
             {
@@ -265,7 +267,8 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
 
                     return `${loadingModeLabel} ${cargoTypeLabel}`
                 },
-                isShortVersion: true
+                isShortVersion: true,
+                searchable: true
             },
             { accessorKey: 'filingTime', header: 'Дата погрузки', size: 150, isShortVersion: true },
             {
