@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Modal } from '@/components/ui/modal'
-import { Card, CardContent, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'
+import { Card, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'
 
 function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
   console.log(selectedBid);

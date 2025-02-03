@@ -159,7 +159,7 @@ import { useReactTable, getCoreRowModel, flexRender } from '@tanstack/react-tabl
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Modal } from '@/components/ui/modal'
+// import { Modal } from '@/components/ui/modal'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { deleteData, postData2 } from '@/api/api'
 import { useBidsTableColumns } from './students-table/useBidsTableColumns'
