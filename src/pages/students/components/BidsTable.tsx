@@ -7,6 +7,7 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { deleteData, postData2 } from '@/api/api'
 import { useBidsTableColumns } from './students-table/useBidsTableColumns'
 import BidsInfoModal from './bids-info-modal'
+import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area'
 
 interface Bid {
     _id: string
@@ -97,13 +98,13 @@ function BidsTable({ bids }) {
                 </div>
             </div>
 
-            <ScrollArea className='max-h-[80vh] w-full overflow-auto rounded-md border'>
+            <ScrollArea className=''>
                 <Table>
-                    <TableHeader>
+                    <TableHeader className='sticky top-0 bg-white z-10 shadow-md'>
                         {table.getHeaderGroups().map(headerGroup => (
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map(header => (
-                                    <TableHead key={header.id}>
+                                    <TableHead key={header.id} className='bg-white'>
                                         <div style={{ width: header.column.columnDef.size }}>
                                             {flexRender(header.column.columnDef.header, header.getContext())}
                                             {/* @ts-expect-error Пока не знаю что делать */}
@@ -121,22 +122,29 @@ function BidsTable({ bids }) {
                             </TableRow>
                         ))}
                     </TableHeader>
-                    <TableBody>
-                        {table.getRowModel().rows.map(row => (
-                            <TableRow
-                                key={row.id}
-                                onDoubleClick={() => handleOpenModal(row.original)}
-                                className='cursor-pointer'
-                            >
-                                {row.getVisibleCells().map(cell => (
-                                    <TableCell key={cell.id}>
-                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        ))}
-                    </TableBody>
                 </Table>
+
+                {/* Ограниченная высота и прокрутка только для тела таблицы */}
+                <ScrollAreaPrimitive.Viewport className='h-[calc(65vh-50px)] overflow-y-auto'>
+                    <Table>
+                        <TableBody>
+                            {table.getRowModel().rows.map(row => (
+                                <TableRow
+                                    key={row.id}
+                                    onDoubleClick={() => handleOpenModal(row.original)}
+                                    className='cursor-pointer'
+                                >
+                                    {row.getVisibleCells().map(cell => (
+                                        <TableCell key={cell.id}>
+                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                    
+                </ScrollAreaPrimitive.Viewport>
                 <ScrollBar orientation='horizontal' />
             </ScrollArea>
 
