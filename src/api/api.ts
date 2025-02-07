@@ -13,11 +13,28 @@ API_URL.interceptors.response.use(
             localStorage.removeItem('authToken')
             setTimeout(() => {
                 window.location.href = '/login'
-            }, 100) // Даем браузеру время обработать очистку токена
+            }, 100)
         }
         return Promise.reject(error)
     }
 )
+
+export const postData2 = async <T>(endpoint: string, data: any, token: string | null = null): Promise<T> => {
+    try {
+        const headers = token ? { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } : {}
+        const response = await API_URL.post<T>(`/${endpoint}`, data, { headers })
+
+        return response.data
+    } catch (error: any) {
+        console.error('Ошибка запроса:', error)
+        if (error.response) {
+            console.error('Ответ сервера:', error.response.data)
+            console.error('Статус:', error.response.status)
+            console.error('Заголовки:', error.response.headers)
+        }
+        throw error
+    }
+}
 
 
 
@@ -57,22 +74,7 @@ export const postData = async (endpoint, data, token: string | null = null) => {
     }
 }
 
-export const postData2 = async <T>(endpoint: string, data: any, token: string | null = null): Promise<T> => {
-    try {
-        const headers = token ? { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } : {}
-        const response = await API_URL.post<T>(`/${endpoint}`, data, { headers })
 
-        return response.data
-    } catch (error: any) {
-        console.error('Ошибка запроса:', error)
-        if (error.response) {
-            console.error('Ответ сервера:', error.response.data)
-            console.error('Статус:', error.response.status)
-            console.error('Заголовки:', error.response.headers)
-        }
-        throw error
-    }
-}
 
 export const putData = async (endpoint, data, token = null) => {
     try {

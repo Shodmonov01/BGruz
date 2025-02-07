@@ -444,7 +444,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                     <FormControl>
                                         <SelectTrigger>
                                             <SelectValue
-                                                placeholder={`Выберите ${operationType === 'Погрузка' ? 'отправителя' : 'получателя'}`}
+                                                placeholder={`Выберите ${operationType === 'loading' ? 'отправителя' : 'получателя'}`}
                                             />
                                         </SelectTrigger>
                                     </FormControl>

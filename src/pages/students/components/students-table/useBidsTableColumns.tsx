@@ -240,13 +240,11 @@ interface ColumnsProps {
     onOpenModal: (bid: Bid) => void
 }
 
-
-
 export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenModal }: ColumnsProps) => {
     return useMemo<ColumnDef<Bid>[]>(() => {
         const allColumns: (ColumnDef<Bid> & { isShortVersion?: boolean; searchable?: boolean })[] = [
-            { accessorKey: '_id', header: 'ID', size: 50, isShortVersion: true },
-            { accessorKey: 'persistentId', header: 'ЦМ ID', size: 100, isShortVersion: true },
+            { accessorKey: '_id', header: 'ID', size: 230, isShortVersion: true, searchable: true },
+            { accessorKey: 'persistentId', header: 'ЦМ ID', size: 100, isShortVersion: true, searchable: true },
             {
                 header: 'Операция',
                 size: 150,
@@ -270,55 +268,68 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 isShortVersion: true,
                 searchable: true
             },
-            { accessorKey: 'filingTime', header: 'Дата погрузки', size: 150, isShortVersion: true },
+            { accessorKey: 'filingTime', header: 'Дата погрузки', size: 150, isShortVersion: true, searchable: true },
             {
                 header: 'Терминал 1',
                 size: 120,
                 accessorFn: row => row.terminal1?.cityName ?? '—',
-                isShortVersion: true
+                isShortVersion: true,
+                searchable: true
             },
             {
                 header: 'Склад',
                 size: 120,
                 accessorFn: row => row.warehouses?.[0]?.cityName ?? '—',
-                isShortVersion: true
+                isShortVersion: true,
+                searchable: true
             },
             {
                 header: 'Терминал 2',
                 size: 120,
-                accessorFn: row => row.terminal2?.cityName ?? '—'
+                accessorFn: row => row.terminal2?.cityName ?? '—',
+                searchable: true
             },
             {
                 header: 'Профиль ТС',
                 size: 150,
                 accessorFn: row => row.vehicleProfile?.name ?? '—',
-                isShortVersion: true
+                isShortVersion: true,
+                searchable: true
             },
-            { accessorKey: 'status', header: 'Статус', size: 100 },
-            { accessorKey: 'approvedStatus', header: 'Аукцион', size: 150, isShortVersion: true },
-            { accessorKey: 'myPrice', header: 'Моя цена', size: 100 },
-            { accessorKey: 'bestSalePrice', header: 'Предложение', size: 120 },
-            { accessorKey: 'extraServicesPrice', header: 'Доп услуги', size: 170 },
-            { accessorKey: 'fullPrice', header: 'Цена + доп усл', size: 150 },
-            { accessorKey: 'commission', header: 'Комиссия', size: 100 },
-            { accessorKey: 'fullPriceNDS', header: 'К оплате', size: 150 },
+            {
+                accessorKey: 'status',
+                header: 'Статус',
+                size: 100,
+                accessorFn: row => row.vehicleProfile?.name ?? '—',
+                searchable: true
+            },
+            { accessorKey: 'approvedStatus', header: 'Аукцион', size: 150, isShortVersion: true, searchable: true },
+            { accessorKey: 'myPrice', header: 'Моя цена', size: 100, searchable: true },
+            { accessorKey: 'bestSalePrice', header: 'Предложение', size: 120, searchable: true },
+            { accessorKey: 'extraServicesPrice', header: 'Доп услуги', size: 170, searchable: true },
+            { accessorKey: 'fullPrice', header: 'Цена + доп усл', size: 150, searchable: true },
+            { accessorKey: 'commission', header: 'Комиссия', size: 100, searchable: true },
+            { accessorKey: 'fullPriceNDS', header: 'К оплате', size: 150, searchable: true },
             {
                 accessorKey: 'createdAt',
                 header: 'Создано',
                 size: 150,
-                accessorFn: row => format(new Date(row.createdAt), 'dd.MM.yyyy HH:mm:ss', { locale: ru })
+                accessorFn: row => format(new Date(row.createdAt), 'dd.MM.yyyy HH:mm:ss', { locale: ru }),
+                searchable: true
             },
 
-            { accessorKey: 'createdBy', header: 'Создал', size: 150 },
+            { accessorKey: 'createdBy', header: 'Создал', size: 150, searchable: true },
             {
                 header: 'Клиент',
                 size: 150,
-                accessorFn: row => row.client?.organizationName ?? '—'
+                accessorFn: row => row.client?.organizationName ?? '—',
+                searchable: true
             },
             {
                 header: 'Заказчик',
                 size: 150,
-                accessorFn: row => row.customer?.name ?? '—'
+                accessorFn: row => row.customer?.name ?? '—',
+                searchable: true
             },
             {
                 accessorKey: 'isPriceRequest',
@@ -336,7 +347,8 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                         </Button>
                     )
                 },
-                isShortVersion: true
+                isShortVersion: true,
+                searchable: true
             },
             {
                 header: 'Действия',
@@ -350,7 +362,8 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                         />
                     </div>
                 ),
-                isShortVersion: true
+                isShortVersion: true,
+                searchable: true
             }
         ]
 

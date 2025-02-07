@@ -100,7 +100,7 @@ function BidsTable({ bids }) {
 
             <ScrollArea className=''>
                 <Table>
-                    <TableHeader className='sticky top-0 bg-white z-10 shadow-md'>
+                    <TableHeader className=''>
                         {table.getHeaderGroups().map(headerGroup => (
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map(header => (
