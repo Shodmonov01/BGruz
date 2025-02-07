@@ -27,6 +27,7 @@ interface BidFormData {
     terminal2Name: string
     terminal2Address: string
     warehouseName: string
+    warehouses
     warehouseAddress: string
     vehicleProfiles: string | number
     price: number
@@ -200,15 +201,14 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                     address: data.terminal2Address 
                 },
 
-                warehouses: data.warehouseName || [
-                    {
-                        cityId: 467,
-                        cityName: data.warehouseName || 'Балашиха',
-                        address: data.warehouseAddress || 'Балашиха, Склад 1'
-                    }
-                ],
-                isPriceRequest: data.requestPrice || false,
-                price: data.price || 0,
+                warehouses: data.warehouses.map(warehouse => ({
+                    cityId: warehouse.id || 467,
+                    cityName: warehouse.name || "Балашиха",
+                    address: warehouse.address || "Балашиха, Склад 1",
+                })),
+    
+                isPriceRequest: data.requestPrice ,
+                price: data.price || 0 ,
                 vehicleProfileId: Number(data.vehicleProfiles),
                 vehicleCount: getValues('vehicleCount'),
                 cargoTitle: data.cargoTitle,

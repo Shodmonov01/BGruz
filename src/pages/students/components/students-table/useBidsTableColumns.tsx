@@ -243,7 +243,7 @@ interface ColumnsProps {
 export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenModal }: ColumnsProps) => {
     return useMemo<ColumnDef<Bid>[]>(() => {
         const allColumns: (ColumnDef<Bid> & { isShortVersion?: boolean; searchable?: boolean })[] = [
-            // { accessorKey: '_id', header: 'ID', size: 220, isShortVersion: true, searchable: true },
+            { accessorKey: '_id', header: 'ID', size: 220, isShortVersion: true, searchable: true },
             { accessorKey: 'persistentId', header: 'ЦМ ID', size: 100, isShortVersion: true, searchable: true },
             {
                 header: 'Операция',
