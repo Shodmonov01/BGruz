@@ -46,8 +46,9 @@ function BidsTable({ bids }) {
 
     const handleApprove = useCallback(async (bidId: string) => {
         const token = localStorage.getItem('authToken')
-        await postData2(`/api/v1/bids/${bidId}/approve`, token)
+        await postData2(`api/v1/bids/${bidId}/approve`, {}, token) // Передаём пустой объект как data
     }, [])
+    
 
     const handleDelete = useCallback(async (bidId: string) => {
         if (window.confirm(`Удалить заявку ${bidId}?`)) {
@@ -71,9 +72,9 @@ function BidsTable({ bids }) {
                     {isShortTable ? 'Полная версия' : 'Краткая версия'}
                 </Button>
 
-                <div className='flex gap-10 mb-3'>
-                    <div>
-                        <ul>
+                <div className='flex flex-col-reverse gap-1 mb-3 text-[14px] text-gray-800 bg-gray-100 rounded-lg shadow-md p-2'>
+                    <div >
+                        <ul className='flex gap-4'>
                             <li>
                                 Сумма заявок: <span>10 000 000</span>
                             </li>
@@ -89,7 +90,7 @@ function BidsTable({ bids }) {
                         </ul>
                     </div>
                     <div>
-                        <ul>
+                        <ul className='flex gap-4'>
                             <li>Пользователь: Амир</li>
                             <li>Заказчик: Липовая Дирекция</li>
                             <li>Брокер: ЦМ</li>
@@ -106,6 +107,7 @@ function BidsTable({ bids }) {
                                 {headerGroup.headers.map(header => (
                                     <TableHead key={header.id} className='bg-white'>
                                         <div style={{ width: header.column.columnDef.size }}>
+                                            {/* {flexRender(header.column.columnDef.header, header.getContext())} */}
                                             {flexRender(header.column.columnDef.header, header.getContext())}
                                             {/* @ts-expect-error Пока не знаю что делать */}
                                             {header.column.columnDef.searchable && (
@@ -125,7 +127,7 @@ function BidsTable({ bids }) {
                 </Table>
 
                 {/* Ограниченная высота и прокрутка только для тела таблицы */}
-                <ScrollAreaPrimitive.Viewport className='h-[calc(65vh-50px)] overflow-y-auto'>
+                <ScrollAreaPrimitive.Viewport className='h-[calc(75vh-50px)] overflow-y-auto'>
                     <Table>
                         <TableBody>
                             {table.getRowModel().rows.map(row => (
@@ -135,7 +137,7 @@ function BidsTable({ bids }) {
                                     className='cursor-pointer'
                                 >
                                     {row.getVisibleCells().map(cell => (
-                                        <TableCell key={cell.id}>
+                                        <TableCell style={{ width: cell.column.columnDef.size }} key={cell.id}>
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}

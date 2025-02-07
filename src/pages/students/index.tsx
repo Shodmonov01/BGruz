@@ -25,22 +25,23 @@ export default function BidsPage() {
         <div className='p-4 md:p-8'>
             <PageHead title='Заявки' />
 
-            <div className='flex items-center justify-between gap-2 py-5'>
+            <div className='flex items-center justify-between gap-2 pb-5'>
                 {/* <div className='flex flex-1 gap-4'>
                     <TableSearchInput placeholder='Поиск' />
                 </div> */}
                 <div className=''>
                     <CurrentTime />
                 </div>
+                <div className='flex flex-wrap gap-5 '>
+                    <Button>Загрузить</Button>
+                    <Button>Отменить</Button>
+                    <Button>Заявки</Button>
+                </div>
                 <div className='flex gap-3 '>
                     <PopupModal renderModal={onClose => <StudentCreateForm modalClose={onClose} />} />
                 </div>
             </div>
-            <div className='flex flex-wrap gap-5 mb-5'>
-                <Button>Загрузить</Button>
-                <Button>Отменить</Button>
-                <Button>Заявки</Button>
-            </div>
+
             <div>
                 <div className='hidden md:block'>
                     <BidsTable bids={bids || []} />

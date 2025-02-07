@@ -184,7 +184,7 @@ function Warhouses({ warehouses }) {
             {warehouseList.map((warehouse, index) => (
                 <div>
                     <div key={warehouse.id} className='grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-4 mb-2'>
-                        <FormField
+                        {/* <FormField
                             control={control}
                             name={`warehouseName-${warehouse.id}`}
                             render={({ field }) => (
@@ -193,6 +193,40 @@ function Warhouses({ warehouses }) {
                                         onValueChange={value => {
                                             field.onChange(value)
                                             const selectedWarehouse = warehouses.find(w => w.name === value)
+                                            setValue(
+                                                `warehouseAddress-${warehouse.id}`,
+                                                selectedWarehouse?.description || ''
+                                            )
+                                        }}
+                                        value={field.value}
+                                    >
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder='Выберите склад' />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {warehouses.map(warehouse => (
+                                                <SelectItem key={warehouse.id} value={warehouse.id.toString()}>
+                                                    {warehouse.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        /> */}
+                        <FormField
+                            control={control}
+                            name={`warehouseId-${warehouse.id}`} // Сохраняем ID склада
+                            render={({ field }) => (
+                                <FormItem>
+                                    <Select
+                                        onValueChange={value => {
+                                            field.onChange(value)
+                                            const selectedWarehouse = warehouses.find(w => w.id.toString() === value)
+                                            setValue(`warehouseName-${warehouse.id}`, selectedWarehouse?.name || '')
                                             setValue(
                                                 `warehouseAddress-${warehouse.id}`,
                                                 selectedWarehouse?.description || ''

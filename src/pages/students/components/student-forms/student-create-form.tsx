@@ -43,6 +43,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
     const [warehouses, setWarehouses] = useState<{ id: number; name: string; description: string }[]>([])
     const [vehicleProfiles, setVehicleProfiles] = useState<{ id: number; name: string }[]>([])
     const [extraServices, setExtraServices] = useState<{ id: number; name: string; description: string }[]>([])
+    const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
     // Перемещаем состояния в родительский компонент
     const [operationType, setOperationType] = useState('')
@@ -88,8 +89,8 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
         }
     })
 
-    // const { handleSubmit, setValue, getValues } = formMethods
-    const { handleSubmit, setValue } = formMethods
+    const { handleSubmit, setValue, getValues } = formMethods
+    // const { handleSubmit, setValue } = formMethods
 
     const handleClientChange = async (clientId: string) => {
         setValue('client', clientId)
@@ -106,90 +107,121 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
         }
     }
 
+    // const onSubmit: SubmitHandler<BidFormData> = async data => {
+    //     try {
+    //         const payload = {
+    //             cargoType: data.transportType,
+    //             loadingMode: data.loadingType,
+
+    //             clientId: Number(data.client) || 4751,
+    //             startDate: getValues('startDate'),
+    //             slideDayTotal: 0,
+    //             customerId: Number(data.client) || 4751,
+    //             // terminal1: {
+    //             //     cityId: data.terminal1Id ,
+    //             //     cityName: data.terminal1Name ,
+    //             //     address: data.terminal1Address
+    //             // },
+
+    //             terminal1: {
+    //                 cityId: data.terminal1Id || 1283, // Используем ID из формы
+    //                 cityName: data.terminal1Name || 'Раменское.жд',
+    //                 address: data.terminal1Address || 'Московская область, Раменское'
+    //             },
+    //             terminal2: {
+    //                 cityId: data.terminal2Id || 1280,
+    //                 cityName: data.terminal2Name || 'Ногинск.жд',
+    //                 address: data.terminal2Address || 'Московская область, Ногинск Адрес 2'
+    //             },
+
+    //             warehouses: data.warehouseName || [
+    //                 {
+    //                     cityId: 467,
+    //                     cityName: data.warehouseName || 'Балашиха',
+    //                     address: data.warehouseAddress || 'Балашиха, Склад 1'
+    //                 }
+    //             ],
+    //             isPriceRequest: data.requestPrice || false,
+    //             price: data.price || 0,
+    //             vehicleProfileId: Number(data.vehicleProfiles),
+    //             vehicleCount: getValues('vehicleCount'),
+    //             cargoTitle: data.cargoTitle,
+    //             filingTime: '00:00',
+    //             // extraServices: data.extraServices.map(service => ({
+    //             //     id: service.id,
+    //             //     vehicleProfileId: Number(data.vehicleProfiles), // Здесь нужно указать правильный vehicleProfileId
+    //             //     count: service.count
+    //             // })),
+    //             extraServices: data.extraServices || [],
+    //             description: data.description
+    //             // persistentId: Math.random().toString(36).substr(2, 10)
+    //         }
+
+    //         console.log('Отправка данных:', payload)
+    //         const token = localStorage.getItem('authToken')
+    //         if (!token) {
+    //             console.error('Не найден токен авторизации')
+    //             return
+    //         }
+
+    //         await postData('api/v1/bids', payload, token)
+
+    //         modalClose()
+    //     } catch (error) {
+    //         console.error('Ошибка при создании заявки:', error)
+    //     }
+    // }
+
     const onSubmit: SubmitHandler<BidFormData> = async data => {
-        // try {
-        //     const payload = {
-        //         cargoType: data.transportType,
-        //         loadingMode: data.loadingType,
-
-        //         clientId: Number(data.client) || 4751,
-        //         startDate: getValues('startDate'),
-        //         slideDayTotal: 0,
-        //         terminal1: {
-        //             // cityId: data.terminal1Id || 1275, // Используем ID из формы
-        //             cityId: 1275, // Используем ID из формы
-        //             cityName: data.terminal1Name || 'Не указан',
-        //             // address: data.terminal1Address || 'Московская область, г. Воскресенск, Адрес 1'
-        //             address: 'Московская область, г. Воскресенск, Адрес 1'
-        //         },
-        //         terminal2: {
-        //             // cityId: data.terminal2Id || 1280,
-        //             cityId: 1280,
-        //             cityName: data.terminal2Name || 'Не указан',
-        //             // address: data.terminal2Address || 'Московская область, Ногинск Адрес 2'
-        //             address: 'Московская область, Ногинск Адрес 2'
-        //         },
-
-        //         warehouses: data.warehouseName || [
-        //             {
-        //                 cityId: 773,
-        //                 cityName: data.warehouseName,
-        //                 address: data.warehouseAddress || 'Электрогорск, Склад 1'
-        //             }
-        //         ],
-        //         isPriceRequest: data.requestPrice || false,
-        //         price: data.price || 0,
-        //         vehicleProfileId: Number(data.vehicleProfiles) ,
-        //         vehicleCount: getValues('vehicleCount'),
-        //         cargoTitle: data.cargoTitle,
-        //         filingTime: '00:00',
-        //         // extraServices: data.extraServices.map(service => ({
-        //         //     id: service.id,
-        //         //     vehicleProfileId: Number(data.vehicleProfiles), // Здесь нужно указать правильный vehicleProfileId
-        //         //     count: service.count
-        //         // })),
-        //         extraServices: data.extraServices || [],
-        //         description: data.description
-        //         // persistentId: Math.random().toString(36).substr(2, 10)
-        //     }
-
         try {
+            setErrorMessage(null) // Очистка ошибки перед отправкой
             const payload = {
-                cargoType: data.transportType || 'container',
-                loadingMode: data.loadingType || 'loading',
+                cargoType: data.transportType,
+                loadingMode: data.loadingType,
 
                 clientId: Number(data.client) || 4751,
-                startDate: data.startDate || '2025-02-06',
+                startDate: getValues('startDate'),
                 slideDayTotal: 0,
+                customerId: Number(data.client) || 4751,
+                // terminal1: {
+                //     cityId: data.terminal1Id ,
+                //     cityName: data.terminal1Name ,
+                //     address: data.terminal1Address
+                // },
+
                 terminal1: {
-                    cityId: 1275,
-                    cityName: data.terminal1Name || 'Не указан',
-                    address: data.terminal1Address || 'Московская область, г. Воскресенск, Адрес 1'
+                    cityId: data.terminal1Id , // Используем ID из формы
+                    cityName: data.terminal1Name ,
+                    address: data.terminal1Address 
                 },
                 terminal2: {
-                    cityId: 1280,
-                    cityName: data.terminal2Name || 'Не указан',
-                    address: data.terminal2Address || 'Московская область, Ногинск Адрес 2'
+                    cityId: data.terminal2Id ,
+                    cityName: data.terminal2Name ,
+                    address: data.terminal2Address 
                 },
+
                 warehouses: data.warehouseName || [
                     {
-                        cityId: 773,
-                        cityName: data.warehouseName,
-                        address: data.warehouseAddress || 'Электрогорск, Склад 1'
+                        cityId: 467,
+                        cityName: data.warehouseName || 'Балашиха',
+                        address: data.warehouseAddress || 'Балашиха, Склад 1'
                     }
                 ],
                 isPriceRequest: data.requestPrice || false,
                 price: data.price || 0,
-                vehicleProfileId: Number(data.vehicleProfiles) || 169,
-                vehicleCount: 1,
-                cargoTitle: 'Груз',
+                vehicleProfileId: Number(data.vehicleProfiles),
+                vehicleCount: getValues('vehicleCount'),
+                cargoTitle: data.cargoTitle,
                 filingTime: '00:00',
-                extraServices: [{ id: 69, vehicleProfileId: 169, count: 1 }],
-                description:
-                    (data.description || 'Создание заявки по Дефолту') + ' ' + Math.random().toString(36).substr(2, 10),
-                persistentId: Math.random().toString(36).substr(2, 10)
+                // extraServices: data.extraServices.map(service => ({
+                //     id: service.id,
+                //     vehicleProfileId: Number(data.vehicleProfiles), // Здесь нужно указать правильный vehicleProfileId
+                //     count: service.count
+                // })),
+                extraServices: data.extraServices || [],
+                description: data.description
+                // persistentId: Math.random().toString(36).substr(2, 10)
             }
-
             console.log('Отправка данных:', payload)
             const token = localStorage.getItem('authToken')
             if (!token) {
@@ -198,10 +230,16 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
             }
 
             await postData('api/v1/bids', payload, token)
-
             modalClose()
-        } catch (error) {
+        } catch (error: any) {
             console.error('Ошибка при создании заявки:', error)
+
+            if (error.response?.status === 404) {
+                const detailMessage = error.response.data?.detail
+                if (detailMessage?.includes('Destination')) {
+                    setErrorMessage(detailMessage)
+                }
+            }
         }
     }
 
@@ -209,6 +247,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
         <FormProvider {...formMethods}>
             <div className='px-0 md:px-2'>
                 <Heading title={'Создать новую заявку'} description={''} className='space-y-2 py-4 text-center' />
+                {errorMessage && <div className='text-red-500 text-center py-2'>{errorMessage}</div>}
                 <form onSubmit={handleSubmit(onSubmit)} className='space-y-4' autoComplete='off'>
                     <div className='space-y-4'>
                         <BidDetails

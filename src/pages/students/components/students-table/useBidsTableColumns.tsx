@@ -243,11 +243,11 @@ interface ColumnsProps {
 export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenModal }: ColumnsProps) => {
     return useMemo<ColumnDef<Bid>[]>(() => {
         const allColumns: (ColumnDef<Bid> & { isShortVersion?: boolean; searchable?: boolean })[] = [
-            { accessorKey: '_id', header: 'ID', size: 230, isShortVersion: true, searchable: true },
+            // { accessorKey: '_id', header: 'ID', size: 220, isShortVersion: true, searchable: true },
             { accessorKey: 'persistentId', header: 'ЦМ ID', size: 100, isShortVersion: true, searchable: true },
             {
                 header: 'Операция',
-                size: 150,
+                size: 200,
                 accessorFn: row => {
                     let loadingModeLabel = ''
                     if (row.loadingMode === 'loading') {
@@ -263,7 +263,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                         cargoTypeLabel = 'Контейнер'
                     }
 
-                    return `${loadingModeLabel} ${cargoTypeLabel}`
+                    return `${loadingModeLabel} | ${cargoTypeLabel}`
                 },
                 isShortVersion: true,
                 searchable: true
@@ -300,7 +300,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 accessorKey: 'status',
                 header: 'Статус',
                 size: 100,
-                accessorFn: row => row.vehicleProfile?.name ?? '—',
+                // accessorFn: row => row.vehicleProfile?.name ?? '—',
                 searchable: true
             },
             { accessorKey: 'approvedStatus', header: 'Аукцион', size: 150, isShortVersion: true, searchable: true },
