@@ -70,16 +70,15 @@ import { useGetBids } from '@/hooks/useGetBids'
 
 export default function BidsPage() {
     const [searchParams] = useSearchParams()
-    const [size, setSize] = useState(Number(searchParams.get('size')) || 5) // Начальный размер
-    const filters = useMemo(() => ({}), []) // Фильтры
+    const [size, setSize] = useState(Number(searchParams.get('size')) || 5) 
+    const filters = useMemo(() => ({}), []) 
     {/* @ts-expect-error Пока не знаю что делать */}
-
     const { bids, loading, error, hasMore } = useGetBids(size, filters)
 
-    // Функция увеличения `size` и перезапроса данных
+    
     const loadMore = () => {
         if (hasMore) {
-            setSize(prev => prev + 5) // Увеличиваем размер запроса
+            setSize(prev => prev + 5) 
         }
     }
 

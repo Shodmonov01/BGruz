@@ -18,51 +18,28 @@ interface Bid {
     status: string | null
 }
 
-function BidsTable({ bids, refreshTable  }) {
+function BidsTable( ) {
     const [selectedBid, setSelectedBid] = useState<Partial<Bid> | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isShortTable, setIsShortTable] = useState(false)
-
-    // const [filters, dispatch] = useReducer(
-    //     (state: Record<string, string>, { columnId, value }: { columnId: string; value: string }) => ({
-    //         ...state,
-    //         [columnId]: value
-    //     }),
-    //     {}
-    // )
-
-    // const { setFilters } = useGetBids(20)
-
-    // const handleFilterChange = (columnId: string, value: string) => {
-    //     setFilters({ description: value }) // Передаем в API только description
-    // }
-
-    // const handleFilterChange = (columnId: string, value: string) => {
-    //     dispatch({ columnId, value })
-    // }
-    const { setFilters } = useGetBids(20)
+    const { bids, setFilters, refreshTable } = useGetBids(20)
     const [localFilters, setLocalFilters] = useState<{ [key: string]: string }>({})
     const debounceRef = useRef<NodeJS.Timeout | null>(null) // Таймер для debounce
 
 
     const handleFilterChange = (columnId: string, value: string) => {
         const newFilters = { ...localFilters }
-
-        if (value) {
-            newFilters[columnId] = value
-        } else {
-            delete newFilters[columnId] // Убираем фильтр, если поле очищено
-        }
+        if (value) newFilters[columnId] = value
+        else delete newFilters[columnId]
 
         setLocalFilters(newFilters)
-        // Debounce перед отправкой запроса
-        if (debounceRef.current) {
-            clearTimeout(debounceRef.current)
-        }
+
+        if (debounceRef.current) clearTimeout(debounceRef.current)
         debounceRef.current = setTimeout(() => {
+            console.log('Обновляем фильтры:', newFilters)
             setFilters(newFilters)
-            refreshTable() // Принудительно обновляем таблицу
-        }, 500) // Задержка 500 мс
+            refreshTable()
+        }, 500)
     }
 
 
@@ -94,7 +71,7 @@ function BidsTable({ bids, refreshTable  }) {
         onDelete: handleDelete,
         onOpenModal: handleOpenModal
     })
-    const table = useReactTable({ data: bids, columns, getCoreRowModel: getCoreRowModel() })
+    const table = useReactTable({ data: bids || [], columns, getCoreRowModel: getCoreRowModel() })
 
     return (
         <div>
@@ -140,14 +117,7 @@ function BidsTable({ bids, refreshTable  }) {
                                         <div style={{ width: header.column.columnDef.size }}>
                                             {/* {flexRender(header.column.columnDef.header, header.getContext())} */}
                                             {flexRender(header.column.columnDef.header, header.getContext())}
-                                            {/* {header.column.columnDef.searchable && (
-                                                <Input
-                                                    value={filters[header.column.id] || ''}
-                                                    onChange={e => handleFilterChange(header.column.id, e.target.value)}
-                                                    placeholder='Поиск...'
-                                                    className='text-xs'
-                                                />
-                                            )} */}
+                                          
                                             {/* @ts-expect-error Пока не знаю что делать */}
                                             {header.column.columnDef.searchable && (
                                                 <Input
