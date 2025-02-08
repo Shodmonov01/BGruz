@@ -202,9 +202,9 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                 },
 
                 warehouses: data.warehouses.map(warehouse => ({
-                    cityId: warehouse.id || 467,
-                    cityName: warehouse.name || "Балашиха",
-                    address: warehouse.address || "Балашиха, Склад 1",
+                    cityId: warehouse.name ,
+                    // cityName: warehouse.name ,
+                    address: warehouse.address ,
                 })),
     
                 isPriceRequest: data.requestPrice ,
@@ -213,11 +213,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                 vehicleCount: getValues('vehicleCount'),
                 cargoTitle: data.cargoTitle,
                 filingTime: '00:00',
-                // extraServices: data.extraServices.map(service => ({
-                //     id: service.id,
-                //     vehicleProfileId: Number(data.vehicleProfiles), // Здесь нужно указать правильный vehicleProfileId
-                //     count: service.count
-                // })),
+            
                 extraServices: data.extraServices || [],
                 description: data.description
                 // persistentId: Math.random().toString(36).substr(2, 10)

@@ -19,6 +19,17 @@ API_URL.interceptors.response.use(
     }
 )
 
+export const deleteData = async (endpoint, token: string | null = null) => {
+    try {
+        const headers = token ? { Authorization: `Bearer ${token}` } : {}
+        const response = await API_URL.delete(`/${endpoint}`, { headers })
+        return response.data
+    } catch (error) {
+        console.error('Error deleting data:', error)
+        throw error
+    }
+}
+
 export const postData2 = async <T>(endpoint: string, data: any, token: string | null = null): Promise<T> => {
     try {
         const headers = token ? { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } : {}
@@ -87,15 +98,6 @@ export const putData = async (endpoint, data, token = null) => {
     }
 }
 
-export const deleteData = async (endpoint, token: string | null = null) => {
-    try {
-        const headers = token ? { Authorization: `Bearer ${token}` } : {}
-        const response = await API_URL.delete(`/${endpoint}/`, { headers })
-        return response.data
-    } catch (error) {
-        console.error('Error deleting data:', error)
-        throw error
-    }
-}
+
 
 

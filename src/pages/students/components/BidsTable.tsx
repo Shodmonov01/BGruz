@@ -1,4 +1,4 @@
-import { useState, useCallback, useReducer } from 'react'
+import { useState, useCallback,  useRef } from 'react'
 import { useReactTable, getCoreRowModel, flexRender } from '@tanstack/react-table'
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table'
 import { Input } from '@/components/ui/input'
@@ -8,6 +8,7 @@ import { deleteData, postData2 } from '@/api/api'
 import { useBidsTableColumns } from './students-table/useBidsTableColumns'
 import BidsInfoModal from './bids-info-modal'
 import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area'
+import { useGetBids } from '@/hooks/useGetBids'
 
 interface Bid {
     _id: string
@@ -17,22 +18,53 @@ interface Bid {
     status: string | null
 }
 
-function BidsTable({ bids }) {
+function BidsTable({ bids, refreshTable  }) {
     const [selectedBid, setSelectedBid] = useState<Partial<Bid> | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isShortTable, setIsShortTable] = useState(false)
 
-    const [filters, dispatch] = useReducer(
-        (state: Record<string, string>, { columnId, value }: { columnId: string; value: string }) => ({
-            ...state,
-            [columnId]: value
-        }),
-        {}
-    )
+    // const [filters, dispatch] = useReducer(
+    //     (state: Record<string, string>, { columnId, value }: { columnId: string; value: string }) => ({
+    //         ...state,
+    //         [columnId]: value
+    //     }),
+    //     {}
+    // )
+
+    // const { setFilters } = useGetBids(20)
+
+    // const handleFilterChange = (columnId: string, value: string) => {
+    //     setFilters({ description: value }) // Передаем в API только description
+    // }
+
+    // const handleFilterChange = (columnId: string, value: string) => {
+    //     dispatch({ columnId, value })
+    // }
+    const { setFilters } = useGetBids(20)
+    const [localFilters, setLocalFilters] = useState<{ [key: string]: string }>({})
+    const debounceRef = useRef<NodeJS.Timeout | null>(null) // Таймер для debounce
+
 
     const handleFilterChange = (columnId: string, value: string) => {
-        dispatch({ columnId, value })
+        const newFilters = { ...localFilters }
+
+        if (value) {
+            newFilters[columnId] = value
+        } else {
+            delete newFilters[columnId] // Убираем фильтр, если поле очищено
+        }
+
+        setLocalFilters(newFilters)
+        // Debounce перед отправкой запроса
+        if (debounceRef.current) {
+            clearTimeout(debounceRef.current)
+        }
+        debounceRef.current = setTimeout(() => {
+            setFilters(newFilters)
+            refreshTable() // Принудительно обновляем таблицу
+        }, 500) // Задержка 500 мс
     }
+
 
     const handleOpenModal = useCallback((bid: Bid) => {
         setSelectedBid(bid)
@@ -48,12 +80,11 @@ function BidsTable({ bids }) {
         const token = localStorage.getItem('authToken')
         await postData2(`api/v1/bids/${bidId}/approve`, {}, token) // Передаём пустой объект как data
     }, [])
-    
 
     const handleDelete = useCallback(async (bidId: string) => {
         if (window.confirm(`Удалить заявку ${bidId}?`)) {
             const token = localStorage.getItem('authToken')
-            await deleteData(`/api/v1/bids/${bidId}`, token)
+            await deleteData(`api/v1/bids/${bidId}`, token)
         }
     }, [])
 
@@ -73,7 +104,7 @@ function BidsTable({ bids }) {
                 </Button>
 
                 <div className='flex flex-col-reverse gap-1 mb-3 text-[14px] text-gray-800 bg-gray-100 rounded-lg shadow-md p-2'>
-                    <div >
+                    <div>
                         <ul className='flex gap-4'>
                             <li>
                                 Сумма заявок: <span>10 000 000</span>
@@ -109,10 +140,17 @@ function BidsTable({ bids }) {
                                         <div style={{ width: header.column.columnDef.size }}>
                                             {/* {flexRender(header.column.columnDef.header, header.getContext())} */}
                                             {flexRender(header.column.columnDef.header, header.getContext())}
+                                            {/* {header.column.columnDef.searchable && (
+                                                <Input
+                                                    value={filters[header.column.id] || ''}
+                                                    onChange={e => handleFilterChange(header.column.id, e.target.value)}
+                                                    placeholder='Поиск...'
+                                                    className='text-xs'
+                                                />
+                                            )} */}
                                             {/* @ts-expect-error Пока не знаю что делать */}
                                             {header.column.columnDef.searchable && (
                                                 <Input
-                                                    value={filters[header.column.id] || ''}
                                                     onChange={e => handleFilterChange(header.column.id, e.target.value)}
                                                     placeholder='Поиск...'
                                                     className='text-xs'
@@ -145,7 +183,6 @@ function BidsTable({ bids }) {
                             ))}
                         </TableBody>
                     </Table>
-                    
                 </ScrollAreaPrimitive.Viewport>
                 <ScrollBar orientation='horizontal' />
             </ScrollArea>

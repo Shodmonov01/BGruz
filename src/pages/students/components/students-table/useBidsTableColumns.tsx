@@ -210,6 +210,7 @@ import { useMemo } from 'react'
 import { ColumnDef } from '@tanstack/react-table'
 import { Button } from '@/components/ui/button'
 import { Eye, Trash } from 'lucide-react'
+import loading from '../../../../../public/gear-spinner.svg'
 
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
@@ -268,7 +269,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 isShortVersion: true,
                 searchable: true
             },
-            { accessorKey: 'filingTime', header: 'Дата погрузки', size: 150, isShortVersion: true, searchable: true },
+            { accessorKey: 'filingTime', header: 'Дата погрузки', size: 120, isShortVersion: true, searchable: true },
             {
                 header: 'Терминал 1',
                 size: 120,
@@ -296,15 +297,26 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 isShortVersion: true,
                 searchable: true
             },
+            // {
+            //     // accessorKey: 'status',
+            //     header: 'Статус',
+            //     size: 100,
+            //     accessorFn: row => row.status ?? <div> <img src={loading} alt="" /></div>,
+            //     searchable: true
+            // },
+
             {
-                accessorKey: 'status',
                 header: 'Статус',
                 size: 100,
-                // accessorFn: row => row.vehicleProfile?.name ?? '—',
+                accessorFn: row => row.status ?? null, // Оставляем только данные
+                cell: ({ row }) => 
+                    row.original.status 
+                        ? row.original.status 
+                        : <div><img src={loading} alt="Загрузка..." /></div>,
                 searchable: true
             },
             { accessorKey: 'approvedStatus', header: 'Аукцион', size: 150, isShortVersion: true, searchable: true },
-            { accessorKey: 'myPrice', header: 'Моя цена', size: 100, searchable: true },
+            { accessorKey: 'price', header: 'Моя цена', size: 100, searchable: true },
             { accessorKey: 'bestSalePrice', header: 'Предложение', size: 120, searchable: true },
             { accessorKey: 'extraServicesPrice', header: 'Доп услуги', size: 170, searchable: true },
             { accessorKey: 'fullPrice', header: 'Цена + доп усл', size: 150, searchable: true },
