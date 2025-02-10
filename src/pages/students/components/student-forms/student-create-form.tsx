@@ -47,10 +47,9 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
     const [operationType, setOperationType] = useState('')
     const [transportType, setTransportType] = useState('')
+    const [isClientSelected, setIsClientSelected] = useState(false)
     const hideTerminal1 = operationType === 'loading' && transportType === 'Вагон'
     const hideTerminal2 = operationType === 'unloading' && transportType === 'Вагон'
-
-
 
     useEffect(() => {
         const loadClients = async () => {
@@ -100,6 +99,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
             setWarehouses(data.warehouses || [])
             setVehicleProfiles(data.vehicleProfiles || [])
             setExtraServices(data.extraServices || [])
+            setIsClientSelected(true)
         } catch (error) {
             console.error('Ошибка при загрузке данных организации:', error)
         }
@@ -177,14 +177,14 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                             setOperationType={setOperationType}
                             setTransportType={setTransportType}
                         />
-                            <>
-                                <BidDate />
-                                {!hideTerminal1 && <TerminalOne terminals={terminals} />}
-                                <Warhouses warehouses={warehouses} />
-                                {!hideTerminal2 && <TerminalTwo terminals={terminals} />}
-                                {/* @ts-expect-error что нибудь придумаем */}
-                                <BidDescribe extraServices={extraServices} />
-                            </>
+                        <div className={isClientSelected ? '' : 'opacity-50 pointer-events-none'}>
+                            <BidDate />
+                            {!hideTerminal1 && <TerminalOne terminals={terminals} />}
+                            <Warhouses warehouses={warehouses} />
+                            {!hideTerminal2 && <TerminalTwo terminals={terminals} />}
+                            {/* @ts-expect-error что нибудь придумаем */}
+                            <BidDescribe extraServices={extraServices} />
+                        </div>
                     </div>
                     {errorMessage && <div className='text-red-500 text-center py-2'>{errorMessage}</div>}
                     <div className='flex items-center justify-center gap-4'>
@@ -197,7 +197,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                         >
                             Отмена
                         </Button>
-                        <Button type='submit' className='rounded-full' size='lg'>
+                        <Button type='submit' className='rounded-full' size='lg' disabled={!isClientSelected}>
                             Создать заявку
                         </Button>
                     </div>

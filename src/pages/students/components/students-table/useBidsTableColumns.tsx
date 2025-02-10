@@ -34,10 +34,14 @@ interface ColumnsProps {
 }
 
 export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenModal }: ColumnsProps) => {
+    const formatNumber = (value: string) => {
+        const num = value.replace(/\D/g, '') // Убираем все нечисловые символы
+        return num ? new Intl.NumberFormat('ru-RU').format(Number(num)) : ''
+    }
     return useMemo<ColumnDef<Bid>[]>(() => {
         const allColumns: (ColumnDef<Bid> & { isShortVersion?: boolean; searchable?: boolean })[] = [
-            { accessorKey: 'number', header: 'ID', size: 100, isShortVersion: true, searchable: true },
-            { accessorKey: 'persistentId', header: 'ЦМ ID', size: 100, isShortVersion: true, searchable: true },
+            { accessorKey: 'number', header: 'ID', size: 100, isShortVersion: false, searchable: true },
+            { accessorKey: 'persistentId', header: 'ЦМ ID', size: 100, isShortVersion: false, searchable: true },
             {
                 header: 'Операция',
                 size: 200,
@@ -63,6 +67,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
             },
             { accessorKey: 'filingTime', header: 'Дата погрузки', size: 120, isShortVersion: true, searchable: true },
             {
+                accessorKey: 'terminal1',
                 header: 'Терминал 1',
                 size: 120,
                 accessorFn: row => row.terminal1?.cityName ?? '—',
@@ -70,6 +75,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 searchable: true
             },
             {
+                accessorKey: 'warehouses',
                 header: 'Склад',
                 size: 120,
                 accessorFn: row => row.warehouses?.[0]?.cityName ?? '—',
@@ -77,12 +83,14 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 searchable: true
             },
             {
+                accessorKey: 'terminal2',
                 header: 'Терминал 2',
                 size: 120,
                 accessorFn: row => row.terminal2?.cityName ?? '—',
                 searchable: true
             },
             {
+                accessorKey: 'vehicleProfile',
                 header: 'Профиль ТС',
                 size: 150,
                 accessorFn: row => row.vehicleProfile?.name ?? '—',
@@ -91,14 +99,12 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
             },
 
             {
-                header: 'Время активации',
+                header: 'Аукцион',
                 size: 140,
                 accessorKey: 'activationDelay',
                 cell: ({ row }) => {
-                                            {/* @ts-expect-error Пока не знаю что делать */}
-
+                    {/* @ts-expect-error Пока не знаю что делать */}
                     const [timeLeft, setTimeLeft] = useState(row.original.activationDelay ? row.original.activationDelay * 60 : 0)
-                    //@ts-ignore
                     useEffect(() => {
                         if (timeLeft <= 0) return
                         const interval = setInterval(() => {
@@ -115,22 +121,71 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 searchable: true
             },
             {
+                accessorKey: 'status',
                 header: 'Статус',
                 size: 100,
                 accessorFn: row => row.status ?? null, // Оставляем только данные
-                cell: ({ row }) => 
-                    row.original.status 
-                        ? row.original.status 
-                        : <div><img src={loading} alt="Загрузка..." /></div>,
+                cell: ({ row }) =>
+                    row.original.status ? (
+                        row.original.status
+                    ) : (
+                        <div>
+                            <img src={loading} alt='Загрузка...' />
+                        </div>
+                    ),
                 searchable: true
             },
-            { accessorKey: 'approvedStatus', header: 'Аукцион', size: 150, isShortVersion: true, searchable: true },
-            { accessorKey: 'price', header: 'Моя цена', size: 100, searchable: true },
-            { accessorKey: 'bestSalePrice', header: 'Предложение', size: 120, searchable: true },
-            { accessorKey: 'extraServicesPrice', header: 'Доп услуги', size: 170, searchable: true },
-            { accessorKey: 'fullPrice', header: 'Цена + доп усл', size: 150, searchable: true },
+            {
+                accessorKey: 'price',
+                header: 'Моя цена',
+                size: 100,
+                searchable: true,
+                cell: ({ getValue }) => {
+                    const value = getValue()
+                    return formatNumber(String(value)) // Приводим к строке перед вызовом replace
+                }
+            },
+            {
+                accessorKey: 'bestSalePrice',
+                header: 'Предложение',
+                size: 120,
+                searchable: true,
+                cell: ({ getValue }) => {
+                    const value = getValue()
+                    return formatNumber(String(value)) // Приводим к строке перед вызовом replace
+                }
+            },
+            {
+                accessorKey: 'extraServicesPrice',
+                header: 'Доп услуги',
+                size: 170,
+                searchable: true,
+                cell: ({ getValue }) => {
+                    const value = getValue()
+                    return formatNumber(String(value)) // Приводим к строке перед вызовом replace
+                }
+            },
+            {
+                accessorKey: 'fullPrice',
+                header: 'Цена + доп усл',
+                size: 150,
+                searchable: true,
+                cell: ({ getValue }) => {
+                    const value = getValue()
+                    return formatNumber(String(value)) // Приводим к строке перед вызовом replace
+                }
+            },
             { accessorKey: 'commission', header: 'Комиссия', size: 100, searchable: true },
-            { accessorKey: 'fullPriceNDS', header: 'К оплате', size: 150, searchable: true },
+            {
+                accessorKey: 'fullPriceNDS',
+                header: 'К оплате',
+                size: 150,
+                searchable: true,
+                cell: ({ getValue }) => {
+                    const value = getValue()
+                    return formatNumber(String(value)) // Приводим к строке перед вызовом replace
+                }
+            },
             {
                 accessorKey: 'createdAt',
                 header: 'Создано',
@@ -141,12 +196,14 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
 
             { accessorKey: 'createdBy', header: 'Создал', size: 150, searchable: true },
             {
+                accessorKey: 'client',
                 header: 'Клиент',
                 size: 150,
                 accessorFn: row => row.client?.organizationName ?? '—',
                 searchable: true
             },
             {
+                accessorKey: 'customer',
                 header: 'Заказчик',
                 size: 150,
                 accessorFn: row => row.customer?.name ?? '—',

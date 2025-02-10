@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { useReactTable, getCoreRowModel, flexRender } from '@tanstack/react-table'
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table'
 import { Input } from '@/components/ui/input'
@@ -8,7 +8,6 @@ import { deleteData, postData2 } from '@/api/api'
 import { useBidsTableColumns } from './students-table/useBidsTableColumns'
 import BidsInfoModal from './bids-info-modal'
 import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area'
-import { useGetBids } from '@/hooks/useGetBids'
 
 // https://chatgpt.com/c/67a77713-b440-8012-a299-a698ee7663c0
 
@@ -20,28 +19,42 @@ interface Bid {
     status: string | null
 }
 
-function BidsTable() {
+function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, loading }) {
     const [selectedBid, setSelectedBid] = useState<Partial<Bid> | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isShortTable, setIsShortTable] = useState(false)
-    const { bids, setFilters, refreshTable } = useGetBids(20)
-    const [localFilters, setLocalFilters] = useState<{ [key: string]: string }>({})
-    const debounceRef = useRef<NodeJS.Timeout | null>(null)
 
-    const handleFilterChange = (columnId: string, value: string) => {
-        const newFilters = { ...localFilters }
-        if (value) newFilters[columnId] = value
-        else delete newFilters[columnId]
+    const scrollRef = useRef<HTMLDivElement | null>(null)
 
-        setLocalFilters(newFilters)
+    useEffect(() => {
+        let isFetching = false
 
-        if (debounceRef.current) clearTimeout(debounceRef.current)
-        debounceRef.current = setTimeout(() => {
-            console.log('Обновляем фильтры:', newFilters)
-            setFilters(newFilters)
-            refreshTable()
-        }, 500)
-    }
+        const handleScroll = () => {
+            if (!scrollRef.current || isFetching) return
+
+            const { scrollTop, scrollHeight, clientHeight } = scrollRef.current
+            const isBottom = scrollTop + clientHeight >= scrollHeight - 50 // 50px запаса
+
+            if (isBottom && hasMore && !loading) {
+                isFetching = true
+                loadMore()
+                setTimeout(() => {
+                    isFetching = false
+                }, 500) // Задержка, чтобы избежать многократных вызовов
+            }
+        }
+
+        const currentScroll = scrollRef.current
+        if (currentScroll) {
+            currentScroll.addEventListener('scroll', handleScroll)
+        }
+
+        return () => {
+            if (currentScroll) {
+                currentScroll.removeEventListener('scroll', handleScroll)
+            }
+        }
+    }, [hasMore, loading, loadMore])
 
     const handleOpenModal = useCallback((bid: Bid) => {
         setSelectedBid(bid)
@@ -71,7 +84,6 @@ function BidsTable() {
         onDelete: handleDelete,
         onOpenModal: handleOpenModal
     })
-    {/* @ts-expect-error Пока не знаю что делать */}
     const table = useReactTable({ data: bids || [], columns, getCoreRowModel: getCoreRowModel() })
 
     return (
@@ -109,16 +121,15 @@ function BidsTable() {
             </div>
 
             <ScrollArea className=''>
-                <Table className="border-collapse border border-gray-300">
+                <Table className='border-collapse border border-gray-300'>
                     <TableHeader className=''>
                         {table.getHeaderGroups().map(headerGroup => (
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map(header => (
                                     <TableHead key={header.id} className='bg-white border border-gray-300'>
-                                        <div style={{ width: header.column.columnDef.size }}>
+                                        <div className='text-center' style={{ width: header.column.columnDef.size }}>
                                             {/* {flexRender(header.column.columnDef.header, header.getContext())} */}
                                             {flexRender(header.column.columnDef.header, header.getContext())}
-
                                             {/* @ts-expect-error Пока не знаю что делать */}
                                             {header.column.columnDef.searchable && (
                                                 <Input
@@ -135,9 +146,9 @@ function BidsTable() {
                     </TableHeader>
                 </Table>
 
-                <ScrollAreaPrimitive.Viewport className='h-[calc(75vh-50px)] overflow-y-auto'>
+                <ScrollAreaPrimitive.Viewport ref={scrollRef} className='h-[calc(15vh-50px)] overflow-y-auto'>
                     <Table>
-                        <TableBody >
+                        <TableBody>
                             {table.getRowModel().rows.map(row => (
                                 <TableRow
                                     key={row.id}
