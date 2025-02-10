@@ -18,7 +18,7 @@ function Warehouses({ warehouses }) {
     if (fields.length === 0) {
       append({ name: '', address: '' })
     }
-  }, [append, fields.length])
+  }, [])
 
   const addWarehouse = () => append({ name: '', address: '' })
   const removeWarehouse = (index) => remove(index)

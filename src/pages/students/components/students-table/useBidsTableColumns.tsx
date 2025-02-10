@@ -89,13 +89,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 isShortVersion: true,
                 searchable: true
             },
-            // {
-            //     header: 'Время активации',
-            //     size: 150,
-            //     accessorFn: row => row.activationDelay ?? '—',
-            //     isShortVersion: true,
-            //     searchable: true
-            // }
+
             {
                 header: 'Время активации',
                 size: 140,

@@ -27,7 +27,7 @@ interface BidFormData {
     terminal2Name: string
     terminal2Address: string
     warehouseName: string
-    warehouses
+    warehouses: any
     warehouseAddress: string
     vehicleProfiles: string | number
     price: number
@@ -45,16 +45,12 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
     const [vehicleProfiles, setVehicleProfiles] = useState<{ id: number; name: string }[]>([])
     const [extraServices, setExtraServices] = useState<{ id: number; name: string; description: string }[]>([])
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
-
-    // Перемещаем состояния в родительский компонент
     const [operationType, setOperationType] = useState('')
     const [transportType, setTransportType] = useState('')
-
-    // const hideTerminal1 = operationType === 'Погрузка' && transportType === 'Вагон'
-    // const hideTerminal2 = operationType === 'Выгрузка' && transportType === 'Вагон'
-
     const hideTerminal1 = operationType === 'loading' && transportType === 'Вагон'
     const hideTerminal2 = operationType === 'unloading' && transportType === 'Вагон'
+
+
 
     useEffect(() => {
         const loadClients = async () => {
@@ -86,7 +82,8 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
             price: 0,
             description: '',
             requestPrice: false,
-            extraServices: []
+            extraServices: [],
+            warehouses: [{ name: '', address: '' }]
         }
     })
 
@@ -120,28 +117,28 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                 slideDayTotal: 0,
                 customerId: Number(data.client) || 4751,
                 terminal1: {
-                    cityId: data.terminal1Id , 
-                    cityName: data.terminal1Name ,
-                    address: data.terminal1Address 
+                    cityId: data.terminal1Id,
+                    cityName: data.terminal1Name,
+                    address: data.terminal1Address
                 },
                 terminal2: {
-                    cityId: data.terminal2Id ,
-                    cityName: data.terminal2Name ,
-                    address: data.terminal2Address 
+                    cityId: data.terminal2Id,
+                    cityName: data.terminal2Name,
+                    address: data.terminal2Address
                 },
 
                 warehouses: data.warehouses.map(warehouse => ({
-                    cityId: warehouse.name ,
-                    address: warehouse.address ,
+                    cityId: warehouse.name,
+                    address: warehouse.address
                 })),
-    
-                isPriceRequest: data.requestPrice ,
-                price: data.price || 0 ,
+
+                isPriceRequest: data.requestPrice,
+                price: data.price || 0,
                 vehicleProfileId: Number(data.vehicleProfiles),
                 vehicleCount: getValues('vehicleCount'),
                 cargoTitle: data.cargoTitle,
                 filingTime: '00:00',
-            
+
                 extraServices: data.extraServices || [],
                 description: data.description
             }
@@ -180,12 +177,14 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                             setOperationType={setOperationType}
                             setTransportType={setTransportType}
                         />
-                        <BidDate />
-                        {!hideTerminal1 && <TerminalOne terminals={terminals} />}
-                        <Warhouses warehouses={warehouses} />
-                        {!hideTerminal2 && <TerminalTwo terminals={terminals} />}
-                        {/* @ts-expect-error что нибудь придумаем */}
-                        <BidDescribe extraServices={extraServices} />
+                            <>
+                                <BidDate />
+                                {!hideTerminal1 && <TerminalOne terminals={terminals} />}
+                                <Warhouses warehouses={warehouses} />
+                                {!hideTerminal2 && <TerminalTwo terminals={terminals} />}
+                                {/* @ts-expect-error что нибудь придумаем */}
+                                <BidDescribe extraServices={extraServices} />
+                            </>
                     </div>
                     {errorMessage && <div className='text-red-500 text-center py-2'>{errorMessage}</div>}
                     <div className='flex items-center justify-center gap-4'>
