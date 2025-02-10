@@ -3,14 +3,13 @@ import NotFound from '@/pages/not-found'
 import { Suspense, lazy } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 import PrivateRoute from './PrivateRoute'
+import BidsPage from '@/pages/bids'
 
 const DashboardLayout = lazy(() => import('@/components/layout/dashboard-layout'))
 const SignInPage = lazy(() => import('@/pages/auth/signin'))
 const DashboardPage = lazy(() => import('@/pages/dashboard'))
-const StudentPage = lazy(() => import('@/pages/students'))
-const StudentDetailPage = lazy(() => import('@/pages/students/StudentDetailPage'))
 
-// ----------------------------------------------------------------------
+
 
 export default function AppRouter() {
     const dashboardRoutes = [
@@ -28,18 +27,14 @@ export default function AppRouter() {
             children: [
                 {
                     path: 'bids',
-
-                    element:  <StudentPage />,
+                    element:  <BidsPage />,
                     index: true
                 },
                 {
                     path: 'orders',
                     element: <DashboardPage />
                 },
-                {
-                    path: 'student/details',
-                    element: <StudentDetailPage />
-                },
+        
                 {
                     path: 'form',
                     element: <FormPage />

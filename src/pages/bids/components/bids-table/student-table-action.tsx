@@ -1,6 +1,6 @@
 import PopupModal from '@/components/shared/popup-modal'
 import TableSearchInput from '@/components/shared/table-search-input'
-import StudentCreateForm from '../student-forms/student-create-form'
+import StudentCreateForm from '../bid-forms/bid-create-form'
 
 export default function StudentTableActions() {
     return (

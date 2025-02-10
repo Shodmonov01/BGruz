@@ -1,87 +1,3 @@
-// import { useFormContext, useWatch } from 'react-hook-form'
-// import { FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
-// import { Input } from '@/components/ui/input'
-// import { useEffect, useState } from 'react'
-
-// function BidDate() {
-//     const { control } = useFormContext()
-//     const startDate = useWatch({ control, name: 'startDate' })
-//     const [today, setToday] = useState('')
-
-//     useEffect(() => {
-//         const todayDate = new Date().toISOString().split('T')[0]
-//         setToday(todayDate)
-//     }, [])
-
-//     return (
-//         <div>
-//             <div className='flex flex-col md:flex-row items-start md:items-center gap-4 py-6'>
-//                 <h1 className='font-bold mr-11'>Дата Погрузки</h1>
-//                 <FormField
-//                     control={control}
-//                     name='startDate'
-//                     render={({ field }) => (
-//                         <FormItem>
-//                             <FormControl>
-//                                 <Input
-//                                     type='date'
-//                                     {...field}
-//                                     value={field.value || ''}
-//                                     min={today} // Запрещаем прошлые даты
-//                                     className='px-4 py-4 shadow-inner drop-shadow-xl'
-//                                 />
-//                             </FormControl>
-//                             <FormMessage />
-//                         </FormItem>
-//                     )}
-//                 />
-//                 <h3>ПО</h3>
-//                 <FormField
-//                     control={control}
-//                     name='endDate'
-//                     render={({ field }) => (
-//                         <FormItem>
-//                             <FormControl>
-//                                 <Input
-//                                     type='date'
-//                                     {...field}
-//                                     value={field.value || ''}
-//                                     min={startDate ? new Date(new Date(startDate).setDate(new Date(startDate).getDate() + 1)).toISOString().split('T')[0] : today} // Запрещаем выбирать тот же день
-//                                     className='px-4 py-4 shadow-inner drop-shadow-xl'
-//                                 />
-//                             </FormControl>
-//                             <FormMessage />
-//                         </FormItem>
-//                     )}
-//                 />
-//             </div>
-//             <div className='flex'>
-//                 <h1 className='font-bold mr-16'>Время подачи</h1>
-//                 <FormField
-//                     control={control}
-//                     name='submissionTime'
-//                     render={({ field }) => (
-//                         <FormItem>
-//                             <FormControl>
-//                                 <Input
-//                                     type='time'
-//                                     {...field}
-//                                     value={field.value || ''}
-//                                     className='px-4 py-4 shadow-inner drop-shadow-xl'
-//                                 />
-//                             </FormControl>
-//                             <FormMessage />
-//                         </FormItem>
-//                     )}
-//                 />
-//             </div>
-//         </div>
-//     )
-// }
-
-// export default BidDate
-
-
 import { useFormContext, useWatch } from 'react-hook-form'
 import { FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
@@ -91,7 +7,7 @@ import { useEffect, useState } from 'react'
 function BidDate() {
     const { control, setValue } = useFormContext()
     const startDate = useWatch({ control, name: 'startDate' })
-    const enableEndDate = useWatch({ control, name: 'enableEndDate' }) // Чекбокс
+    const enableEndDate = useWatch({ control, name: 'enableEndDate' }) 
     const [today, setToday] = useState('')
 
     useEffect(() => {
@@ -101,7 +17,7 @@ function BidDate() {
 
     useEffect(() => {
         if (!enableEndDate) {
-            setValue('endDate', '') // Очищаем endDate, если чекбокс выключен
+            setValue('endDate', '') 
         }
     }, [enableEndDate, setValue])
 
@@ -119,7 +35,7 @@ function BidDate() {
                                     type='date'
                                     {...field}
                                     value={field.value || ''}
-                                    min={today} // Запрещаем прошлые даты
+                                    min={today} 
                                     className='px-4 py-4 shadow-inner drop-shadow-xl'
                                 />
                             </FormControl>
@@ -154,7 +70,7 @@ function BidDate() {
                                     value={field.value || ''}
                                     min={startDate ? new Date(new Date(startDate).setDate(new Date(startDate).getDate() + 1)).toISOString().split('T')[0] : today} // Запрещаем выбирать тот же день
                                     className='px-4 py-4 shadow-inner drop-shadow-xl'
-                                    disabled={!enableEndDate} // Блокируем, если чекбокс выключен
+                                    disabled={!enableEndDate} 
                                 />
                             </FormControl>
                             <FormMessage />

@@ -1,8 +1,8 @@
 import PageHead from '@/components/shared/page-head'
 import { useSearchParams } from 'react-router-dom'
 import PopupModal from '@/components/shared/popup-modal'
-import StudentCreateForm from './components/student-forms/student-create-form'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import StudentCreateForm from './components/bid-forms/bid-create-form'
+import { useEffect, useRef, useState } from 'react'
 import BidsTableMobile from './components/bidsTableMobile'
 import BidsTable from './components/BidsTable'
 import CurrentTime from '@/components/shared/сurrent-time'
@@ -14,12 +14,9 @@ export default function BidsPage() {
     const [size, setSize] = useState(Number(searchParams.get('size')) || 5)
     const [localFilters, setLocalFilters] = useState<{ [key: string]: string }>({})
 
-    const filters = useMemo(() => ({}), [])
     const debounceRef = useRef<NodeJS.Timeout | null>(null)
 
-    // const { bids,  error, hasMore, setFilters, refreshTable } = useGetBids(size, filters)
-                                    {/* @ts-expect-error что нибудь придумаем */}
-    const { bids, hasMore, loading, setFilters, refreshTable } = useGetBids(size, filters)
+    const { bids, hasMore, loading, setFilters, refreshTable } = useGetBids(size)
 
     const handleFilterChange = (columnId: string, value: string) => {
         const newFilters = { ...localFilters }

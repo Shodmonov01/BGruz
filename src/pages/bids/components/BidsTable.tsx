@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { deleteData, postData2 } from '@/api/api'
-import { useBidsTableColumns } from './students-table/useBidsTableColumns'
+import { useBidsTableColumns } from './bids-table/useBidsTableColumns'
 import BidsInfoModal from './bids-info-modal'
 import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area'
 
