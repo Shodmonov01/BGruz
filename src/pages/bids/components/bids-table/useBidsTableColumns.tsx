@@ -241,7 +241,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                     </div>
                 ),
                 isShortVersion: true,
-                searchable: true
+                // searchable: true
             }
         ]
 

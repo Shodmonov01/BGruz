@@ -1,4 +1,3 @@
-import FormPage from '@/pages/form'
 import NotFound from '@/pages/not-found'
 import { Suspense, lazy } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
@@ -34,11 +33,6 @@ export default function AppRouter() {
                     path: 'orders',
                     element: <DashboardPage />
                 },
-        
-                {
-                    path: 'form',
-                    element: <FormPage />
-                }
             ]
         }
     ]

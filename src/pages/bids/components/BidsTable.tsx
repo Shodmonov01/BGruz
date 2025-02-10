@@ -9,7 +9,6 @@ import { useBidsTableColumns } from './bids-table/useBidsTableColumns'
 import BidsInfoModal from './bids-info-modal'
 import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area'
 
-// https://chatgpt.com/c/67a77713-b440-8012-a299-a698ee7663c0
 
 interface Bid {
     _id?: string
@@ -128,7 +127,6 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
                                 {headerGroup.headers.map(header => (
                                     <TableHead key={header.id} className='bg-white border border-gray-300'>
                                         <div className='text-center' style={{ width: header.column.columnDef.size }}>
-                                            {/* {flexRender(header.column.columnDef.header, header.getContext())} */}
                                             {flexRender(header.column.columnDef.header, header.getContext())}
                                             {/* @ts-expect-error Пока не знаю что делать */}
                                             {header.column.columnDef.searchable && (
