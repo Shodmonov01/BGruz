@@ -1,19 +1,15 @@
 import PageHead from '@/components/shared/page-head'
 import { useSearchParams } from 'react-router-dom'
-import PopupModal from '@/components/shared/popup-modal'
 import { useEffect, useRef, useState } from 'react'
 import BidsTableMobile from './components/bidsTableMobile'
 import BidsTable from './components/BidsTable'
 import CurrentTime from '@/components/shared/сurrent-time'
-import { Button } from '@/components/ui/button'
 import { useGetBids } from '@/hooks/useGetBids'
 import logo from '../../../public/logoRb.png'
-import StudentCreateForm from './components/bid-create-form'
 
 export default function BidsPage() {
     const [searchParams] = useSearchParams()
     const [size, setSize] = useState(Number(searchParams.get('size')) || 50)
-    const [isShortTable, setIsShortTable] = useState(false)
     const [localFilters, setLocalFilters] = useState<{ [key: string]: string }>({})
 
     const debounceRef = useRef<NodeJS.Timeout | null>(null)
@@ -61,7 +57,7 @@ export default function BidsPage() {
         <div className='py-4 md:px-8'>
             <PageHead title='Заявки' />
 
-            <div className='flex items-start justify-between gap-2 pb-5'>
+            <div className='hidden md:flex items-start justify-between gap-2 pb-5'>
                 <div className='flex gap-1 justify-center items-center'>
                     <img src={logo} alt='logo' className='h-10' />
                     <span className='text-[#03B4E0]'>Биржа</span>

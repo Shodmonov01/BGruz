@@ -127,6 +127,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 accessorKey: 'activationTime',
                 cell: ({ row }) => {
                     const [timeLeft, setTimeLeft] = useState(() => {
+                                                    {/* @ts-expect-error что нибудь придумаем */}
                         const activationTime = new Date(row.original.activationTime).getTime()
                         const now = Date.now()
                         return Math.max(0, Math.floor((activationTime - now) / 1000)) // Разница в секундах

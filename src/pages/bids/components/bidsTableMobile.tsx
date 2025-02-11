@@ -1,8 +1,10 @@
 import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import BidsInfoModal from './bids-info-modal'
 import { useCallback, useState } from 'react'
 import { ScrollArea } from '@radix-ui/react-scroll-area'
+import info from '../../../../public/info.svg'
+import PopupModal from '@/components/shared/popup-modal'
+import StudentCreateForm from './bid-create-form'
 interface Bid {
     _id: string
     persistentId: string
@@ -35,36 +37,58 @@ function BidsTableMobile({ bids }) {
         setIsModalOpen(true)
     }, [])
     return (
-        <div className='flex flex-col gap-4 p-4'>
-            <ScrollArea className='flex flex-col gap-4 max-h-[80vh] w-full overflow-auto rounded-md border'>
+        <div className='flex flex-col gap-4 '>
+            <ScrollArea className='flex flex-col gap-4 max-h-[87vh] w-full overflow-auto rounded-md border'>
                 {bids.map(bid => (
                     <Card key={bid.persistentId} className='p-4 shadow-md rounded-lg'>
-                        <CardContent className='flex flex-col gap-2'>
-                            <div className='flex justify-between items-center'>
-                                <span className='text-lg font-semibold'>
-                                    {bid.terminal1.cityName} → {bid.terminal2.cityName}
-                                </span>
-                                <span className='text-sm text-gray-500'>
-                                    {new Date(bid.filingTime).toLocaleDateString()}
-                                </span>
+                        <CardContent className='w-full !p-0 flex items-center gap-2 '>
+                            <div onClick={() => handleOpenModal(bid)}>
+                                <img src={info} alt='' className='h-14' />
                             </div>
-                            <div className='flex justify-between'>
-                                <span className='font-medium'>Сумма:</span>
+                            <div className='flex flex-col justify-center gap-[1px]'>
+                                <div className='flex items-center gap-2'>
+                                    <span className='w-2 h-2 bg-blue-500 rounded-full'></span>
+                                </div>
+                                <div className='ml-[2.5px] w-[2px] h-[70px] bg-gray-300'></div>
+                                <div className='flex items-center gap-2'>
+                                    <span className='w-2 h-2 bg-blue-500 rounded-full'></span>
+                                </div>
+                            </div>
+                            <div>
+                                <div className='flex justify-between items-center'>
+                                    <span className='text-lg font-semibold'>{bid.terminal1.cityName}</span>
+                                </div>
+                                <div className='flex justify-between'>
+                                    <span>Количество машин: 1</span>
+
+                                    {/* <span className='font-medium'>Сумма:</span>
+                                <span className='text-green-600 font-semibold'>
+                                    {bid.price ? `${bid.price} ₽` : '—'}
+                                </span> */}
+                                </div>
+                                <div className='flex justify-between'>
+                                    <span className='zfont-semibold'>{bid.vehicleProfile?.name || '—'}</span>
+                                </div>
+                                <div>
+                                    <span className='text-lg font-semibold'>{bid.terminal2.cityName}</span>
+                                </div>
+                                {/* <Button onClick={() => handleOpenModal(bid)} className='mt-2 w-full'>
+                                Подробнее
+                            </Button> */}
+                            </div>
+                            <div className='ml-auto'>
                                 <span className='text-green-600 font-semibold'>
                                     {bid.price ? `${bid.price} ₽` : '—'}
                                 </span>
                             </div>
-                            <div className='flex justify-between'>
-                                <span className='font-medium'>Статус:</span>
-                                <span className='text-blue-500 font-semibold'>{bid.status || '—'}</span>
-                            </div>
-                            <Button onClick={() => handleOpenModal(bid)} className='mt-2 w-full'>
-                                Подробнее
-                            </Button>
                         </CardContent>
                     </Card>
                 ))}
             </ScrollArea>
+
+            <div className='flex gap-3 fixed bottom-10 px-12 py-6 text-[24px] left-1/2 -translate-x-1/2'>
+                <PopupModal renderModal={onClose => <StudentCreateForm modalClose={onClose} />} />
+            </div>
 
             {selectedBid && (
                 <BidsInfoModal

@@ -1,4 +1,3 @@
-import React from 'react'
 import { useReactTable, getCoreRowModel, flexRender } from '@tanstack/react-table'
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table'
 
@@ -54,6 +53,7 @@ export default function OrderPage() {
                         {table.getHeaderGroups().map(headerGroup =>
                             headerGroup.headers.map(header => (
                                 <TableHead key={header.id} className='border border-gray-300 p-2'>
+                                                                {/* @ts-expect-error что нибудь придумаем */}
                                     {header.column.columnDef.accessorKey ? (
                                         <input
                                             type='text'
