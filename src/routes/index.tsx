@@ -3,10 +3,10 @@ import { Suspense, lazy } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 import PrivateRoute from './PrivateRoute'
 import BidsPage from '@/pages/bids'
+import OrderPage from '@/pages/orders'
 
 const DashboardLayout = lazy(() => import('@/components/layout/dashboard-layout'))
 const SignInPage = lazy(() => import('@/pages/auth/signin'))
-const DashboardPage = lazy(() => import('@/pages/dashboard'))
 
 
 
@@ -31,7 +31,7 @@ export default function AppRouter() {
                 },
                 {
                     path: 'orders',
-                    element: <DashboardPage />
+                    element: <OrderPage />
                 },
             ]
         }

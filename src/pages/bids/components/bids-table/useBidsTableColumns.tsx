@@ -45,7 +45,25 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
             { accessorKey: 'number', header: 'ID', size: 100, isShortVersion: false, searchable: true },
             { accessorKey: 'persistentId', header: 'ЦМ ID', size: 100, isShortVersion: false, searchable: true },
             {
-                header: 'Операция',
+                header: 'Вагон/Контейнер',
+                size: 200,
+                accessorFn: row => {
+               
+
+                    let cargoTypeLabel = ''
+                    if (row.cargoType === 'wagon') {
+                        cargoTypeLabel = 'Вагон'
+                    } else if (row.cargoType === 'container') {
+                        cargoTypeLabel = 'Контейнер'
+                    }
+
+                    return ` ${cargoTypeLabel}`
+                },
+                isShortVersion: true,
+                searchable: true
+            },
+            {
+                header: 'Погрузка/Выгрузка',
                 size: 200,
                 accessorFn: row => {
                     let loadingModeLabel = ''
@@ -55,14 +73,9 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                         loadingModeLabel = 'Выгрузка'
                     }
 
-                    let cargoTypeLabel = ''
-                    if (row.cargoType === 'wagon') {
-                        cargoTypeLabel = 'Вагон'
-                    } else if (row.cargoType === 'container') {
-                        cargoTypeLabel = 'Контейнер'
-                    }
+                   
 
-                    return `${loadingModeLabel} | ${cargoTypeLabel}`
+                    return `${loadingModeLabel}`
                 },
                 isShortVersion: true,
                 searchable: true
@@ -111,14 +124,14 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
             {
                 header: 'Аукцион',
                 size: 140,
-                accessorKey: 'activationDelay',
+                accessorKey: 'activationTime',
                 cell: ({ row }) => {
-                    {
-                        /* @ts-expect-error Пока не знаю что делать */
-                    }
-                    const [timeLeft, setTimeLeft] = useState(
-                        row.original.activationDelay ? row.original.activationDelay * 60 : 0
-                    )
+                    const [timeLeft, setTimeLeft] = useState(() => {
+                        const activationTime = new Date(row.original.activationTime).getTime()
+                        const now = Date.now()
+                        return Math.max(0, Math.floor((activationTime - now) / 1000)) // Разница в секундах
+                    })
+            
                     useEffect(() => {
                         if (timeLeft <= 0) return
                         const interval = setInterval(() => {
@@ -126,14 +139,15 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                         }, 1000)
                         return () => clearInterval(interval)
                     }, [timeLeft])
-
+            
                     const minutes = Math.floor(timeLeft / 60)
                     const seconds = timeLeft % 60
-                    return timeLeft > 0 ? `${minutes}:${seconds.toString().padStart(2, '0')}` : '—'
+                    return timeLeft > 0 ? `${minutes}:${seconds.toString().padStart(2, '0')}` : 'Время вышло'
                 },
                 isShortVersion: true,
                 searchable: true
             },
+            
             {
                 accessorKey: 'status',
                 header: 'Статус',
