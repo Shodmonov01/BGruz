@@ -23,6 +23,8 @@ interface Bid {
     terminal2?: { cityName: string }
     warehouses?: { cityName: string }[]
     vehicleProfile?: { name: string }
+    loadingDate: number
+
     [key: string]: unknown
 }
 
@@ -65,7 +67,15 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 isShortVersion: true,
                 searchable: true
             },
-            { accessorKey: 'filingTime', header: 'Дата погрузки', size: 120, isShortVersion: true, searchable: true },
+            {
+                accessorKey: 'loadingDate',
+                header: 'Дата погрузки',
+                size: 120,
+                isShortVersion: true,
+                searchable: true,
+                accessorFn: row =>
+                    row.loadingDate ? format(new Date(row.loadingDate), 'dd.MM.yyyy', { locale: ru }) : ''
+            },
             {
                 accessorKey: 'terminal1',
                 header: 'Терминал 1',
@@ -103,8 +113,12 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 size: 140,
                 accessorKey: 'activationDelay',
                 cell: ({ row }) => {
-                    {/* @ts-expect-error Пока не знаю что делать */}
-                    const [timeLeft, setTimeLeft] = useState(row.original.activationDelay ? row.original.activationDelay * 60 : 0)
+                    {
+                        /* @ts-expect-error Пока не знаю что делать */
+                    }
+                    const [timeLeft, setTimeLeft] = useState(
+                        row.original.activationDelay ? row.original.activationDelay * 60 : 0
+                    )
                     useEffect(() => {
                         if (timeLeft <= 0) return
                         const interval = setInterval(() => {
@@ -129,7 +143,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                     row.original.status ? (
                         row.original.status
                     ) : (
-                        <div>
+                        <div className='flex items-center justify-center'>
                             <img src={loading} alt='Загрузка...' />
                         </div>
                     ),
@@ -240,7 +254,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                         />
                     </div>
                 ),
-                isShortVersion: true,
+                isShortVersion: true
                 // searchable: true
             }
         ]

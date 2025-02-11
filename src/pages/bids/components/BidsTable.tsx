@@ -8,7 +8,9 @@ import { deleteData, postData2 } from '@/api/api'
 import { useBidsTableColumns } from './bids-table/useBidsTableColumns'
 import BidsInfoModal from './bids-info-modal'
 import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area'
-
+import PopupModal from '@/components/shared/popup-modal'
+import StudentCreateForm from './bid-create-form'
+import { Search } from 'lucide-react'
 
 interface Bid {
     _id?: string
@@ -87,53 +89,61 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
 
     return (
         <div>
-            <div className='flex justify-between'>
-                <Button className='mb-3' onClick={() => setIsShortTable(prev => !prev)}>
+            <div className='flex '>
+                {/* <Button className='mb-3' onClick={() => setIsShortTable(prev => !prev)}>
                     {isShortTable ? 'Полная версия' : 'Краткая версия'}
-                </Button>
-
-                <div className='flex flex-col-reverse gap-1 mb-3 text-[14px] text-gray-800 bg-gray-100 rounded-lg shadow-md p-2'>
-                    <div>
-                        <ul className='flex gap-4'>
-                            <li>
-                                Сумма заявок: <span>10 000 000</span>
-                            </li>
-                            <li>
-                                Комиссия: <span>500 000</span>
-                            </li>
-                            <li>
-                                К оплате: <span>9 500 000</span>
-                            </li>
-                            <li>
-                                и НДС: <span>1 900 000</span>
-                            </li>
-                        </ul>
+                </Button> */}
+                <div className='w-full flex flex-wrap gap-5 items-center justify-between'>
+                    <div className='flex gap-2 items-center'>
+                    <span className='text-[#03B4E0] text-[38px]'>Заявки <span className='text-primary'>|</span></span>
+                        <div className='flex gap-3 '>
+                            <PopupModal renderModal={onClose => <StudentCreateForm modalClose={onClose} />} />
+                        </div>
+                        <Button variant='outline'>Загрузить</Button>
+                        <Button variant='outline'>Отменить</Button>
                     </div>
-                    <div>
-                        <ul className='flex gap-4'>
-                            <li>Пользователь: Амир</li>
-                            <li>Заказчик: Липовая Дирекция</li>
-                            <li>Брокер: ЦМ</li>
-                        </ul>
+                    <div className='flex items-center gap-3'>
+                        <Button variant='secondary' onClick={() => setIsShortTable(prev => !prev)}>
+                            {isShortTable ? 'Полная версия' : 'Краткая версия'}
+                        </Button>
+                        <div className='relative flex items-center w-full max-w-md'>
+                            <Search className='absolute left-3 text-muted-foreground w-5 h-5' />
+                            <Input
+                                type='text'
+                                placeholder='Поиск заявки'
+                                className='pl-10 h-10 border border-border rounded-lg focus:ring-2 focus:ring-primary'
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
 
             <ScrollArea className=''>
-                <Table className='border-collapse border border-gray-300'>
+                <Table className=' border border-gray-300'>
                     <TableHeader className=''>
                         {table.getHeaderGroups().map(headerGroup => (
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map(header => (
                                     <TableHead key={header.id} className='bg-white border border-gray-300'>
-                                        <div className='text-center' style={{ width: header.column.columnDef.size }}>
+                                        <div className='text-center' >
                                             {flexRender(header.column.columnDef.header, header.getContext())}
+                                            
+                                        </div>
+                                    </TableHead>
+                                ))}
+                            </TableRow>
+                        ))}
+                        {table.getHeaderGroups().map(headerGroup => (
+                            <TableRow key={headerGroup.id}>
+                                {headerGroup.headers.map(header => (
+                                    <TableHead key={header.id} className='bg-white border border-gray-300'>
+                                        <div className='text-center' >
                                             {/* @ts-expect-error Пока не знаю что делать */}
                                             {header.column.columnDef.searchable && (
                                                 <Input
                                                     onChange={e => handleFilterChange(header.column.id, e.target.value)}
                                                     placeholder='Поиск...'
-                                                    className='text-xs'
+                                                    className='text-xs h-7'
                                                 />
                                             )}
                                         </div>
@@ -144,20 +154,20 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
                     </TableHeader>
                 </Table>
 
-                <ScrollAreaPrimitive.Viewport ref={scrollRef} className='h-[calc(15vh-50px)] overflow-y-auto'>
+                <ScrollAreaPrimitive.Viewport ref={scrollRef} className='h-[calc(75vh-50px)] overflow-y-auto'>
                     <Table>
                         <TableBody>
-                            {table.getRowModel().rows.map(row => (
+                            {table.getRowModel().rows.map((row, index) => (
                                 <TableRow
                                     key={row.id}
                                     onDoubleClick={() => handleOpenModal(row.original)}
-                                    className='cursor-pointer'
+                                    className={`cursor-pointer ${index % 2 === 0 ? 'bg-gray-100' : ''}`}
                                 >
                                     {row.getVisibleCells().map(cell => (
                                         <TableCell
-                                            style={{ width: cell.column.columnDef.size }}
+                                            // style={{ width: cell.column.columnDef.size }}
                                             key={cell.id}
-                                            className='text-center  border border-gray-300'
+                                            className='text-center !p-0 !px-1 border border-gray-300'
                                         >
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>

@@ -5,14 +5,15 @@ import { useForm, FormProvider, SubmitHandler } from 'react-hook-form'
 import Heading from '@/components/shared/heading'
 import { Button } from '@/components/ui/button'
 
-import BidDetails from '../bidForms/bidDetails'
-import BidDate from '../bidForms/bidDate'
-import TerminalOne from '../bidForms/terminalOne'
-import Warhouses from '../bidForms/warhouses'
-import TerminalTwo from '../bidForms/terminalTwo'
-import BidDescribe from '../bidForms/bidDescribe'
+
 
 import { fetchPrivateData, postData } from '@/api/api'
+import BidDetails from './bidForms/bidDetails'
+import BidDate from './bidForms/bidDate'
+import TerminalOne from './bidForms/terminalOne'
+import Warehouses from './bidForms/warhouses'
+import TerminalTwo from './bidForms/terminalTwo'
+import BidDescribe from './bidForms/bidDescribe'
 
 interface BidFormData {
     client: string
@@ -180,7 +181,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                         <div className={isClientSelected ? '' : 'opacity-50 pointer-events-none'}>
                             <BidDate />
                             {!hideTerminal1 && <TerminalOne terminals={terminals} />}
-                            <Warhouses warehouses={warehouses} />
+                            <Warehouses warehouses={warehouses} />
                             {!hideTerminal2 && <TerminalTwo terminals={terminals} />}
                             {/* @ts-expect-error что нибудь придумаем */}
                             <BidDescribe extraServices={extraServices} />

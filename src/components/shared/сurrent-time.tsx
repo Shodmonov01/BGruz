@@ -16,12 +16,12 @@ const CurrentTime = () => {
         const month = date.toLocaleString('default', { month: 'long' })
         const year = date.getFullYear()
         const time = date.toLocaleTimeString()
-        return `${day} ${month} ${year} ${time}`
+        return `Сегодня ${day} ${month} ${year}.г ${time}`
     }
 
     return (
-            <div className='text-center  px-5 py-3 bg-gray-100 rounded-lg shadow-md'>
-                <h1 className='text-[9px] md:text-[11px] font-bold text-gray-800'>{formatTime(time)}</h1>
+            <div className='text-center  px-5 py-3  '>
+                <h1 className='text-[9px] md:text-[16px] font-bold text-gray-800'>{formatTime(time)}</h1>
             </div>
     )
 }
