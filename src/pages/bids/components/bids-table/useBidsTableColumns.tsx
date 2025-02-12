@@ -1,7 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
+
 import { ColumnDef } from '@tanstack/react-table'
+
 import { Button } from '@/components/ui/button'
+
 import { Eye, Trash } from 'lucide-react'
+
 import loading from '../../../../../public/gear-spinner.svg'
 
 import { format } from 'date-fns'
@@ -24,7 +28,7 @@ interface Bid {
     warehouses?: { cityName: string }[]
     vehicleProfile?: { name: string }
     loadingDate: number
-
+    activationTime
     [key: string]: unknown
 }
 
@@ -33,6 +37,25 @@ interface ColumnsProps {
     onApprove: (bidId: string) => void
     onDelete: (bidId: string) => void
     onOpenModal: (bid: Bid) => void
+}
+
+const AuctionTimer = ({ activationTime }: { activationTime: string }) => {
+    const [timeLeft, setTimeLeft] = useState(() => {
+        const time = new Date(activationTime).getTime()
+        return Math.max(0, Math.floor((time - Date.now()) / 1000))
+    })
+
+    useEffect(() => {
+        if (timeLeft <= 0) return
+        const interval = setInterval(() => {
+            setTimeLeft(prev => Math.max(prev - 1, 0))
+        }, 1000)
+        return () => clearInterval(interval)
+    }, [timeLeft])
+
+    const minutes = Math.floor(timeLeft / 60)
+    const seconds = timeLeft % 60
+    return <>{timeLeft > 0 ? `${minutes}:${seconds.toString().padStart(2, '0')}` : 'Время вышло'}</>
 }
 
 export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenModal }: ColumnsProps) => {
@@ -48,8 +71,6 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 header: 'Вагон/Контейнер',
                 size: 200,
                 accessorFn: row => {
-               
-
                     let cargoTypeLabel = ''
                     if (row.cargoType === 'wagon') {
                         cargoTypeLabel = 'Вагон'
@@ -72,8 +93,6 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                     } else if (row.loadingMode === 'unloading') {
                         loadingModeLabel = 'Выгрузка'
                     }
-
-                   
 
                     return `${loadingModeLabel}`
                 },
@@ -125,30 +144,11 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 header: 'Аукцион',
                 size: 140,
                 accessorKey: 'activationTime',
-                cell: ({ row }) => {
-                    const [timeLeft, setTimeLeft] = useState(() => {
-                                                    {/* @ts-expect-error что нибудь придумаем */}
-                        const activationTime = new Date(row.original.activationTime).getTime()
-                        const now = Date.now()
-                        return Math.max(0, Math.floor((activationTime - now) / 1000)) // Разница в секундах
-                    })
-            
-                    useEffect(() => {
-                        if (timeLeft <= 0) return
-                        const interval = setInterval(() => {
-                            setTimeLeft(prev => Math.max(prev - 1, 0))
-                        }, 1000)
-                        return () => clearInterval(interval)
-                    }, [timeLeft])
-            
-                    const minutes = Math.floor(timeLeft / 60)
-                    const seconds = timeLeft % 60
-                    return timeLeft > 0 ? `${minutes}:${seconds.toString().padStart(2, '0')}` : 'Время вышло'
-                },
+                cell: ({ row }) => <AuctionTimer activationTime={row.original.activationTime} />,
                 isShortVersion: true,
                 searchable: true
             },
-            
+
             {
                 accessorKey: 'status',
                 header: 'Статус',
@@ -261,7 +261,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 header: 'Действия',
                 size: 80,
                 cell: ({ row }) => (
-                    <div className='flex'>
+                    <div className='flex justify-center'>
                         <Eye className='mr-2 h-5 w-5 cursor-pointer' onClick={() => onOpenModal(row.original)} />
                         <Trash
                             className='mr-2 h-5 w-5 cursor-pointer text-red-500'
@@ -270,7 +270,6 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                     </div>
                 ),
                 isShortVersion: true
-                // searchable: true
             }
         ]
 

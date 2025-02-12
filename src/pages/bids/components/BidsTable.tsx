@@ -1,15 +1,17 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
+
 import { useReactTable, getCoreRowModel, flexRender } from '@tanstack/react-table'
+
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import { deleteData, postData2 } from '@/api/api'
+import { Input } from '@/components/ui/input'
+
 import { useBidsTableColumns } from './bids-table/useBidsTableColumns'
 import BidsInfoModal from './bids-info-modal'
-import PopupModal from '@/components/shared/popup-modal'
-import StudentCreateForm from './bid-create-form'
-import { Search } from 'lucide-react'
+import BidHeader from './bids-header'
+
+import { deleteData, postData2 } from '@/api/api'
+
 import loader from '../../../../public/gear-spinner.svg'
 
 interface Bid {
@@ -34,14 +36,14 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
             if (!scrollRef.current || isFetching) return
 
             const { scrollTop, scrollHeight, clientHeight } = scrollRef.current
-            const isBottom = scrollTop + clientHeight >= scrollHeight - 50 // 50px запаса
+            const isBottom = scrollTop + clientHeight >= scrollHeight - 50
 
             if (isBottom && hasMore && !loading) {
                 isFetching = true
                 loadMore()
                 setTimeout(() => {
                     isFetching = false
-                }, 500) // Задержка, чтобы избежать многократных вызовов
+                }, 500)
             }
         }
 
@@ -89,41 +91,11 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
 
     return (
         <div>
-            <div className='flex '>
-                {/* <Button className='mb-3' onClick={() => setIsShortTable(prev => !prev)}>
-                    {isShortTable ? 'Полная версия' : 'Краткая версия'}
-                </Button> */}
-                <div className='w-full flex flex-wrap gap-5 items-center justify-between'>
-                    <div className='flex gap-2 items-center'>
-                        <span className='text-[#03B4E0] text-[38px]'>
-                            Заявки <span className='text-primary'>|</span>
-                        </span>
-                        <div className='flex gap-3 '>
-                            <PopupModal renderModal={onClose => <StudentCreateForm modalClose={onClose} />} />
-                        </div>
-                        <Button variant='outline'>Загрузить</Button>
-                        <Button variant='outline'>Отменить</Button>
-                    </div>
-                    <div className='flex items-center gap-3'>
-                        <Button variant='secondary' onClick={() => setIsShortTable(prev => !prev)}>
-                            {isShortTable ? 'Полная версия' : 'Краткая версия'}
-                        </Button>
-                        <div className='relative flex items-center w-full max-w-md'>
-                            <Search className='absolute left-3 text-muted-foreground w-5 h-5' />
-                            <Input
-                                type='text'
-                                placeholder='Поиск заявки'
-                                className='pl-10 h-10 border border-border rounded-lg focus:ring-2 focus:ring-primary'
-                            />
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <BidHeader setIsShortTable={setIsShortTable} isShortTable={isShortTable} />
 
             <ScrollArea>
                 <div className='h-[calc(98vh-200px)] overflow-auto !scrollbar-thin !scrollbar-thumb-gray-400 !scrollbar-track-gray-100'>
                     <Table className='min-w-[1000px] border border-gray-300'>
-                        {/* min-w делает горизонтальный скролл */}
                         <TableHeader className='sticky'>
                             {table.getHeaderGroups().map(headerGroup => (
                                 <TableRow key={headerGroup.id}>

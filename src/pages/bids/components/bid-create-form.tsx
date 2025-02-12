@@ -8,12 +8,13 @@ import { Button } from '@/components/ui/button'
 
 
 import { fetchPrivateData, postData } from '@/api/api'
-import BidDetails from './bidForms/bidDetails'
-import BidDate from './bidForms/bidDate'
-import TerminalOne from './bidForms/terminalOne'
-import Warehouses from './bidForms/warhouses'
-import TerminalTwo from './bidForms/terminalTwo'
-import BidDescribe from './bidForms/bidDescribe'
+
+import BidDetails from './bid-form-detail/bidDetails'
+import BidDate from './bid-form-detail/bidDate'
+import TerminalOne from './bid-form-detail/terminalOne'
+import Warehouses from './bid-form-detail/warhouses'
+import TerminalTwo from './bid-form-detail/terminalTwo'
+import BidDescribe from './bid-form-detail/bidDescribe'
 
 interface BidFormData {
     client: string
