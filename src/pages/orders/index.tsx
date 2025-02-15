@@ -114,40 +114,40 @@
 //     )
 // }
 
-import { useState, useMemo, useEffect, useRef } from 'react'
-import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table'
+import { useState, useEffect, useRef } from 'react'
+// import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table'
 import BgruzHeader from '@/components/shared/bgruz-header'
-import { Input } from '@/components/ui/input'
-import { useReactTable, getCoreRowModel, flexRender } from '@tanstack/react-table'
+// import { Input } from '@/components/ui/input'
+// import { useReactTable, getCoreRowModel, flexRender } from '@tanstack/react-table'
 import OrdersHeader from './components/orders-header'
 import { useGetOrders } from '@/hooks/useGetOrders'
 import OrdersTable from './components/orders-table'
 import { useSearchParams } from 'react-router-dom'
 
-const columns = [
-    {
-        header: 'ID',
-        accessorKey: 'persistentId'
-    },
-    {
-        header: 'Операция',
-        accessorKey: 'status'
-    },
-    {
-        header: 'Дата погрузки',
-        accessorKey: 'startDate',
-        cell: ({ getValue }) => getValue() ? new Date(getValue()).toLocaleDateString() : '—'
-    },
-    {
-        header: 'Терминал 1',
-        accessorKey: 'terminal1',
-        accessorFn: row => row.terminal1?.cityName ?? 'Не указано',
-        cell: ({ row }) => {
-            const { cityName = 'Не указано', address = 'Не указано' } = row.original.terminal1 || {}
-            return `${cityName}, ${address}`
-        }
-    }
-]
+// const columns = [
+//     {
+//         header: 'ID',
+//         accessorKey: 'persistentId'
+//     },
+//     {
+//         header: 'Операция',
+//         accessorKey: 'status'
+//     },
+//     {
+//         header: 'Дата погрузки',
+//         accessorKey: 'startDate',
+//         cell: ({ getValue }) => (getValue() ? new Date(getValue()).toLocaleDateString() : '—')
+//     },
+//     {
+//         header: 'Терминал 1',
+//         accessorKey: 'terminal1',
+//         accessorFn: row => row.terminal1?.cityName ?? 'Не указано',
+//         cell: ({ row }) => {
+//             const { cityName = 'Не указано', address = 'Не указано' } = row.original.terminal1 || {}
+//             return `${cityName}, ${address}`
+//         }
+//     }
+// ]
 
 export default function OrderPage() {
     const [isShortTable, setIsShortTable] = useState(false)
@@ -158,7 +158,6 @@ export default function OrderPage() {
     const debounceRef = useRef<NodeJS.Timeout | null>(null)
 
     const { orders, hasMore, loading, setFilters, refreshTable } = useGetOrders(size)
-
 
     const handleFilterChange = (columnId: string, value: string) => {
         const newFilters = { ...localFilters }
@@ -198,13 +197,14 @@ export default function OrderPage() {
         <div className='p-4'>
             <BgruzHeader />
             <OrdersHeader setIsShortTable={setIsShortTable} isShortTable={isShortTable} />
-            <OrdersTable    orders={orders || []}
-                        setFilters={setFilters}
-                        handleFilterChange={handleFilterChange}
-                        loadMore={loadMore}
-                        hasMore={hasMore}
-                        loading={loading} 
-                        />
+            <OrdersTable
+                orders={orders || []}
+                setFilters={setFilters}
+                handleFilterChange={handleFilterChange}
+                loadMore={loadMore}
+                hasMore={hasMore}
+                loading={loading}
+            />
             {/* <Table className='border rounded-lg border-gray-300 w-full'>
                 <TableHeader>
                     <TableRow className='border border-gray-300'>

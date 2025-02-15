@@ -189,6 +189,8 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
                     isModalOpen={isModalOpen}
                 />
             )}
+
+            {/* <BidsInfoModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} bid={{ persistentId: "123567" }} /> */}
         </div>
     )
 }
