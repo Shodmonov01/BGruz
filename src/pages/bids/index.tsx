@@ -34,6 +34,8 @@ export default function BidsPage() {
         }, 500)
     }
 
+
+    
     const loadMore = () => {
         if (hasMore) {
             setSize(prev => prev + 50)
