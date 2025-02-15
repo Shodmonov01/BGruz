@@ -54,7 +54,7 @@ export default function BidsPage() {
     }, [hasMore, loading])
 
     return (
-        <div className='py-4 md:px-8'>
+        <div className='py-4 md:px-4'>
             <PageHead title='Заявки' />
 
             <BgruzHeader />

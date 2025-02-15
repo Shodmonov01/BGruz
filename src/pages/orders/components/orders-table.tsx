@@ -6,13 +6,12 @@ import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Input } from '@/components/ui/input'
 
-import { useBidsTableColumns } from './bids-table/useBidsTableColumns'
-import BidsInfoModal from './bids-info-modal'
-import BidHeader from './bids-header'
+// import ordersInfoModal from './orders-info-modal'
 
 import { deleteData, postData2 } from '@/api/api'
 
 import loader from '../../../../public/gear-spinner.svg'
+import { useOrdersTableColumns } from './use-orders-table-columns'
 
 interface Bid {
     _id?: string
@@ -22,7 +21,7 @@ interface Bid {
     status: string | null
 }
 
-function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, loading }) {
+function OrdersTable({ orders, setFilters, handleFilterChange, loadMore, hasMore, loading }) {
     const [selectedBid, setSelectedBid] = useState<Partial<Bid> | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isShortTable, setIsShortTable] = useState(false)
@@ -71,27 +70,26 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
 
     const handleApprove = useCallback(async (bidId: string) => {
         const token = localStorage.getItem('authToken')
-        await postData2(`api/v1/bids/${bidId}/approve`, {}, token) // Передаём пустой объект как data
+        await postData2(`api/v1/orders/${bidId}/approve`, {}, token) // Передаём пустой объект как data
     }, [])
 
     const handleDelete = useCallback(async (bidId: string) => {
         if (window.confirm(`Удалить заявку ${bidId}?`)) {
             const token = localStorage.getItem('authToken')
-            await deleteData(`api/v1/bids/${bidId}`, token)
+            await deleteData(`api/v1/orders/${bidId}`, token)
         }
     }, [])
 
-    const columns = useBidsTableColumns({
+    const columns = useOrdersTableColumns({
         isShortTable,
         onApprove: handleApprove,
         onDelete: handleDelete,
         onOpenModal: handleOpenModal
     })
-    const table = useReactTable({ data: bids || [], columns, getCoreRowModel: getCoreRowModel() })
+    const table = useReactTable({ data: orders || [], columns, getCoreRowModel: getCoreRowModel() })
 
     return (
         <div>
-            <BidHeader setIsShortTable={setIsShortTable} isShortTable={isShortTable} />
 
             <ScrollArea>
                 <div className='h-[calc(98vh-200px)] overflow-auto !scrollbar-thin !scrollbar-thumb-gray-400 !scrollbar-track-gray-100'>
@@ -169,7 +167,7 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
                                     </TableCell>
                                 </TableRow>
                             )}
-                            {!loading && !bids.length && (
+                            {!loading && !orders.length && (
                                 <TableRow>
                                     <TableCell colSpan={columns.length} className='text-center p-4'>
                                         <span className='text-gray-500'>Нет данных для отображения</span>
@@ -182,15 +180,15 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
                 <ScrollBar orientation='horizontal' />
             </ScrollArea>
 
-            {selectedBid && (
-                <BidsInfoModal
+            {/* {selectedBid && (
+                <ordersInfoModal
                     handleCloseModal={handleCloseModal}
                     selectedBid={selectedBid}
                     isModalOpen={isModalOpen}
                 />
-            )}
+            )} */}
         </div>
     )
 }
 
-export default BidsTable
+export default OrdersTable

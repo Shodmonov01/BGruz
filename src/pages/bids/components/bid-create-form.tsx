@@ -181,9 +181,15 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                         />
                         <div className={isClientSelected ? '' : 'opacity-50 pointer-events-none'}>
                             <BidDate />
+                            <div className='bg-primary text-center text-[26px] text-white my-3 py-3'>
+                            <p>Маршрут</p>
+                            </div>
                             {!hideTerminal1 && <TerminalOne terminals={terminals} />}
                             <Warehouses warehouses={warehouses} />
                             {!hideTerminal2 && <TerminalTwo terminals={terminals} />}
+                            <div className='bg-primary text-center text-[26px] text-white my-3 py-3'>
+                            <p>Финансы</p>
+                            </div>
                             {/* @ts-expect-error что нибудь придумаем */}
                             <BidDescribe extraServices={extraServices} />
                         </div>
