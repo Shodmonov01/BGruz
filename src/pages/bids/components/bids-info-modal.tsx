@@ -212,12 +212,12 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                             </div>
 
                             <div>
-                                <div className='grid grid-cols-2 gap-4 mt-1'>
-                                    <Input value={formData.warehouses?.[0]?.cityName || ''} readOnly />
-                                </div>
                                 <div className='space-y-4 mt-3'>
                                     <Label>Склад клиента</Label>
-                                    <Input value={formData.warehouses?.[0]?.address || ''} readOnly />
+                                    <div className='grid grid-cols-2 gap-4 mt-1'>
+                                        <Input value={formData.warehouses?.[0]?.cityName || ''} readOnly />
+                                        <Input value={formData.warehouses?.[0]?.address || ''} readOnly />
+                                    </div>
                                     <Button size='sm' variant='outline'>
                                         <Plus className='h-4 w-4 mr-1' />
                                         Добавить склад
