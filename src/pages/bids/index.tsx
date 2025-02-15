@@ -35,12 +35,15 @@ export default function BidsPage() {
     }
 
 
-    
+
     const loadMore = () => {
         if (hasMore) {
             setSize(prev => prev + 50)
         }
     }
+
+
+
 
     useEffect(() => {
         const handleScroll = () => {
@@ -76,6 +79,7 @@ export default function BidsPage() {
                 <div className='md:hidden'>
                     <BidsTableMobile bids={bids || []} />
                 </div>
+                
             </div>
         </div>
     )
