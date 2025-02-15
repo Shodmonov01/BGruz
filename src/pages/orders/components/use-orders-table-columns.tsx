@@ -11,32 +11,45 @@ import loading from '../../../../public/gear-spinner.svg'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 
-interface Bid {
+interface Orders {
     _id: string
-    persistentId: string
-    cargoTitle: string
-    client: { organizationName: string }
-    price: number | null
-    status: string | null
-    filingTime: string
-    createdBy: string
+    buyBid: {
+        loadingMode: string
+        cargoType: string
+        loadingDate: string
+        terminal1: {
+            cityName: string
+        }
+        terminal2: {
+            cityName: string
+        }
+        warehouses: Array<{
+            cityName: string
+        }>
+        vehicleProfile: {
+            name: string
+        }
+    }
+    status: string
+    price: number
+    priceNds: number
+    fullPrice: number
+    fullPriceNds: number
+    commission: number
+    extraServicesPrice: number
+    extraServicesPriceNds: number
     createdAt: string
-    isPriceRequest?: boolean
-    customer?: { name: string }
-    terminal1?: { cityName: string }
-    terminal2?: { cityName: string }
-    warehouses?: { cityName: string }[]
-    vehicleProfile?: { name: string }
-    loadingDate: number
-    activationTime
-    [key: string]: unknown
+    customer: {
+        organizationName: string
+    }
+    ownState?: 'canceled' | string
 }
 
 interface ColumnsProps {
     isShortTable: boolean
     onApprove: (bidId: string) => void
     onDelete: (bidId: string) => void
-    onOpenModal: (bid: Bid) => void
+    onOpenModal: (bid: Orders) => void
 }
 
 const AuctionTimer = ({ activationTime }: { activationTime: string }) => {
@@ -63,157 +76,123 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
         const num = value.replace(/\D/g, '') // Убираем все нечисловые символы
         return num ? new Intl.NumberFormat('ru-RU').format(Number(num)) : ''
     }
-    return useMemo<ColumnDef<Bid>[]>(() => {
-        const allColumns: (ColumnDef<Bid> & { isShortVersion?: boolean; searchable?: boolean })[] = [
-            { accessorKey: 'number', header: 'ID', size: 100, isShortVersion: false, searchable: true },
-            { accessorKey: 'persistentId', header: 'ЦМ ID', size: 100, isShortVersion: false, searchable: true },
+    return useMemo<ColumnDef<Orders>[]>(() => {
+        const allColumns: (ColumnDef<Orders> & { isShortVersion?: boolean; searchable?: boolean })[] = [
             {
+                accessorKey: '_id',
+                header: 'ID',
+                size: 100,
+                searchable: true
+            },
+            {
+                accessorKey: 'buyBid.cargoType',
                 header: 'Вагон/Контейнер',
                 size: 200,
-                accessorFn: row => {
-                    let cargoTypeLabel = ''
-                    if (row.cargoType === 'wagon') {
-                        cargoTypeLabel = 'Вагон'
-                    } else if (row.cargoType === 'container') {
-                        cargoTypeLabel = 'Контейнер'
-                    }
-
-                    return ` ${cargoTypeLabel}`
+                cell: ({ getValue }) => {
+                    const value = getValue()
+                    return value === 'wagon' ? 'Вагон' : value === 'container' ? 'Контейнер' : '—'
                 },
-                isShortVersion: true,
                 searchable: true
             },
             {
+                accessorKey: 'buyBid.loadingMode',
                 header: 'Погрузка/Выгрузка',
                 size: 200,
-                accessorFn: row => {
-                    let loadingModeLabel = ''
-                    if (row.loadingMode === 'loading') {
-                        loadingModeLabel = 'Погрузка'
-                    } else if (row.loadingMode === 'unloading') {
-                        loadingModeLabel = 'Выгрузка'
-                    }
-
-                    return `${loadingModeLabel}`
+                cell: ({ getValue }) => {
+                    const value = getValue()
+                    return value === 'loading' ? 'Погрузка' : value === 'unloading' ? 'Выгрузка' : '—'
                 },
-                isShortVersion: true,
                 searchable: true
             },
             {
-                accessorKey: 'loadingDate',
+                accessorKey: 'buyBid.loadingDate',
                 header: 'Дата погрузки',
                 size: 120,
-                isShortVersion: true,
-                searchable: true,
-                accessorFn: row =>
-                    row.loadingDate ? format(new Date(row.loadingDate), 'dd.MM.yyyy', { locale: ru }) : ''
+                cell: ({ getValue }) => {
+                    const value = getValue()
+                    return value ? format(new Date(String(value)), 'dd.MM.yyyy HH:mm:ss', { locale: ru }) : '—'
+                },
+                searchable: true
             },
             {
-                accessorKey: 'terminal1',
+                accessorKey: 'buyBid.terminal1.cityName',
                 header: 'Терминал 1',
                 size: 120,
-                accessorFn: row => row.terminal1?.cityName ?? '—',
-                isShortVersion: true,
                 searchable: true
             },
             {
-                accessorKey: 'warehouses',
+                accessorKey: 'buyBid.warehouses.0.cityName',
                 header: 'Склад',
                 size: 120,
-                accessorFn: row => row.warehouses?.[0]?.cityName ?? '—',
-                isShortVersion: true,
                 searchable: true
             },
             {
-                accessorKey: 'terminal2',
+                accessorKey: 'buyBid.terminal2.cityName',
                 header: 'Терминал 2',
                 size: 120,
-                accessorFn: row => row.terminal2?.cityName ?? '—',
                 searchable: true
             },
             {
-                accessorKey: 'vehicleProfile',
+                accessorKey: 'buyBid.vehicleProfile.name',
                 header: 'Профиль ТС',
                 size: 150,
-                accessorFn: row => row.vehicleProfile?.name ?? '—',
-                isShortVersion: true,
                 searchable: true
             },
-
-            {
-                header: 'Аукцион',
-                size: 140,
-                accessorKey: 'activationTime',
-                cell: ({ row }) => <AuctionTimer activationTime={row.original.activationTime} />,
-                isShortVersion: true,
-                searchable: true
-            },
-
             {
                 accessorKey: 'status',
                 header: 'Статус',
                 size: 100,
-                accessorFn: row => row.status ?? null, // Оставляем только данные
-                cell: ({ row }) =>
-                    row.original.status ? (
-                        row.original.status
-                    ) : (
-                        <div className='flex items-center justify-center'>
-                            <img src={loading} alt='Загрузка...' />
-                        </div>
-                    ),
                 searchable: true
             },
             {
                 accessorKey: 'price',
                 header: 'Моя цена',
                 size: 100,
-                searchable: true,
                 cell: ({ getValue }) => {
                     const value = getValue()
                     return formatNumber(String(value)) // Приводим к строке перед вызовом replace
-                }
-            },
-            {
-                accessorKey: 'bestSalePrice',
-                header: 'Предложение',
-                size: 120,
-                searchable: true,
-                cell: ({ getValue }) => {
-                    const value = getValue()
-                    return formatNumber(String(value)) // Приводим к строке перед вызовом replace
-                }
+                },
+                searchable: true
             },
             {
                 accessorKey: 'extraServicesPrice',
                 header: 'Доп услуги',
                 size: 170,
-                searchable: true,
                 cell: ({ getValue }) => {
                     const value = getValue()
                     return formatNumber(String(value)) // Приводим к строке перед вызовом replace
-                }
+                },
+                searchable: true
             },
             {
                 accessorKey: 'fullPrice',
                 header: 'Цена + доп усл',
                 size: 150,
-                searchable: true,
                 cell: ({ getValue }) => {
                     const value = getValue()
                     return formatNumber(String(value)) // Приводим к строке перед вызовом replace
-                }
+                },
+                searchable: true
             },
-            { accessorKey: 'commission', header: 'Комиссия', size: 100, searchable: true },
             {
-                accessorKey: 'fullPriceNDS',
+                accessorKey: 'commission',
+                header: 'Комиссия',
+                size: 100,
+                cell: ({ getValue }) => {
+                    const value = getValue()
+                    return formatNumber(String(value)) // Приводим к строке перед вызовом replace
+                },
+                searchable: true
+            },
+            {
+                accessorKey: 'fullPriceNds',
                 header: 'К оплате',
                 size: 150,
-                searchable: true,
                 cell: ({ getValue }) => {
                     const value = getValue()
                     return formatNumber(String(value)) // Приводим к строке перед вызовом replace
-                }
+                },
+                searchable: true
             },
             {
                 accessorKey: 'createdAt',
@@ -222,41 +201,31 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 accessorFn: row => format(new Date(row.createdAt), 'dd.MM.yyyy HH:mm:ss', { locale: ru }),
                 searchable: true
             },
-
-            { accessorKey: 'createdBy', header: 'Создал', size: 150, searchable: true },
             {
-                accessorKey: 'client',
+                accessorKey: 'customer.organizationName',
                 header: 'Клиент',
                 size: 150,
-                accessorFn: row => row.client?.organizationName ?? '—',
                 searchable: true
             },
-            {
-                accessorKey: 'customer',
-                header: 'Заказчик',
-                size: 150,
-                accessorFn: row => row.customer?.name ?? '—',
-                searchable: true
-            },
-            {
-                accessorKey: 'isPriceRequest',
-                header: 'Согласовано',
-                size: 150,
-                cell: ({ row }) => {
-                    const isApproved = row.original.isPriceRequest
-                    return (
-                        <Button
-                            onClick={() => onApprove(row.original._id)}
-                            disabled={isApproved}
-                            variant={isApproved ? 'secondary' : 'default'}
-                        >
-                            {isApproved ? 'Согласовано' : 'Согласовать'}
-                        </Button>
-                    )
-                },
-                isShortVersion: true,
-                searchable: true
-            },
+            // {
+            //     accessorKey: 'isPriceRequest',
+            //     header: 'Согласовано',
+            //     size: 150,
+            //     cell: ({ row }) => {
+            //         const isApproved = row.original.isPriceRequest
+            //         return (
+            //             <Button
+            //                 onClick={() => onApprove(row.original._id)}
+            //                 disabled={isApproved}
+            //                 variant={isApproved ? 'secondary' : 'default'}
+            //             >
+            //                 {isApproved ? 'Согласовано' : 'Согласовать'}
+            //             </Button>
+            //         )
+            //     },
+            //     isShortVersion: true,
+            //     searchable: true
+            // },
             {
                 header: 'Действия',
                 size: 80,

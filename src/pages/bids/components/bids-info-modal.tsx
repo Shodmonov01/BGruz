@@ -107,13 +107,11 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
             console.error('Ошибка при обновлении заявки:', error)
         }
     }
-    console.log('formData', formData)
 
     return (
         <Dialog open={isModalOpen} onOpenChange={handleCloseModal}>
             <DialogContent className='max-w-2xl max-h-[90vh] overflow-y-auto p-0'>
                 <div className='relative bg-white rounded-lg'>
-                    {/* Header */}
                     <div className='p-6 text-center'>
                         <button
                             onClick={handleCloseModal}

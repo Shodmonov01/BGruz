@@ -13,16 +13,42 @@ import { deleteData, postData2 } from '@/api/api'
 import loader from '../../../../public/gear-spinner.svg'
 import { useOrdersTableColumns } from './use-orders-table-columns'
 
-interface Bid {
-    _id?: string
-    client: { organizationName: string }
-    cargoTitle: string
-    price: number | null
-    status: string | null
+interface Orders {
+    _id: string
+    buyBid: {
+        loadingMode: string
+        cargoType: string
+        loadingDate: string
+        terminal1: {
+            cityName: string
+        }
+        terminal2: {
+            cityName: string
+        }
+        warehouses: Array<{
+            cityName: string
+        }>
+        vehicleProfile: {
+            name: string
+        }
+    }
+    status: string
+    price: number
+    priceNds: number
+    fullPrice: number
+    fullPriceNds: number
+    commission: number
+    extraServicesPrice: number
+    extraServicesPriceNds: number
+    createdAt: string
+    customer: {
+        organizationName: string
+    }
+    ownState?: 'canceled' | string
 }
 
 function OrdersTable({ orders, setFilters, handleFilterChange, loadMore, hasMore, loading }) {
-    const [selectedBid, setSelectedBid] = useState<Partial<Bid> | null>(null)
+    const [selectedBid, setSelectedBid] = useState<Partial<Orders> | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isShortTable, setIsShortTable] = useState(false)
 
@@ -58,7 +84,7 @@ function OrdersTable({ orders, setFilters, handleFilterChange, loadMore, hasMore
         }
     }, [hasMore, loading, loadMore])
 
-    const handleOpenModal = useCallback((bid: Bid) => {
+    const handleOpenModal = useCallback((bid: Orders) => {
         setSelectedBid(bid)
         setIsModalOpen(true)
     }, [])
@@ -90,7 +116,7 @@ function OrdersTable({ orders, setFilters, handleFilterChange, loadMore, hasMore
 
     return (
         <div>
-
+            {/* <BidHeader setIsShortTable={setIsShortTable} isShortTable={isShortTable} /> */}
             <ScrollArea>
                 <div className='h-[calc(98vh-200px)] overflow-auto !scrollbar-thin !scrollbar-thumb-gray-400 !scrollbar-track-gray-100'>
                     <Table className='min-w-[1000px] border border-gray-300'>
@@ -139,7 +165,7 @@ function OrdersTable({ orders, setFilters, handleFilterChange, loadMore, hasMore
                                     onDoubleClick={() => handleOpenModal(row.original)}
                                     key={row.id}
                                     // className={`hover:bg-gray-100 cursor-pointer ${index % 2 === 0 ? 'bg-gray-100' : ''}`}
-                                    className={`cursor-pointer text-[16px] hover:bg-gray-100 ${
+                                    className={`cursor-pointer text-[16px] hover:bg-gray-100 !py-2 ${
                                         row.original.ownState === 'canceled'
                                             ? 'bg-gray-50 opacity-50 line-through'
                                             : index % 2 === 0
@@ -150,7 +176,7 @@ function OrdersTable({ orders, setFilters, handleFilterChange, loadMore, hasMore
                                     {row.getVisibleCells().map(cell => (
                                         <TableCell
                                             key={cell.id}
-                                            className='border border-gray-300 text-center whitespace-nowrap !p-0 !px-1'
+                                            className='border border-gray-300 text-center whitespace-nowrap  !px-1 '
                                         >
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>

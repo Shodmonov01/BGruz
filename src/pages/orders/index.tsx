@@ -124,31 +124,6 @@ import { useGetOrders } from '@/hooks/useGetOrders'
 import OrdersTable from './components/orders-table'
 import { useSearchParams } from 'react-router-dom'
 
-// const columns = [
-//     {
-//         header: 'ID',
-//         accessorKey: 'persistentId'
-//     },
-//     {
-//         header: 'Операция',
-//         accessorKey: 'status'
-//     },
-//     {
-//         header: 'Дата погрузки',
-//         accessorKey: 'startDate',
-//         cell: ({ getValue }) => (getValue() ? new Date(getValue()).toLocaleDateString() : '—')
-//     },
-//     {
-//         header: 'Терминал 1',
-//         accessorKey: 'terminal1',
-//         accessorFn: row => row.terminal1?.cityName ?? 'Не указано',
-//         cell: ({ row }) => {
-//             const { cityName = 'Не указано', address = 'Не указано' } = row.original.terminal1 || {}
-//             return `${cityName}, ${address}`
-//         }
-//     }
-// ]
-
 export default function OrderPage() {
     const [isShortTable, setIsShortTable] = useState(false)
     const [searchParams] = useSearchParams()
@@ -179,6 +154,7 @@ export default function OrderPage() {
             setSize(prev => prev + 50)
         }
     }
+    console.log('orders', orders)
 
     useEffect(() => {
         const handleScroll = () => {
