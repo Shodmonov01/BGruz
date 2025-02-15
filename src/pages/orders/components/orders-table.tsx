@@ -12,6 +12,7 @@ import { deleteData, postData2 } from '@/api/api'
 
 import loader from '../../../../public/gear-spinner.svg'
 import { useOrdersTableColumns } from './use-orders-table-columns'
+import OrderInfoModal from './ordersInfoModal'
 
 interface Orders {
     _id: string
@@ -206,13 +207,13 @@ function OrdersTable({ orders, setFilters, handleFilterChange, loadMore, hasMore
                 <ScrollBar orientation='horizontal' />
             </ScrollArea>
 
-            {/* {selectedBid && (
-                <ordersInfoModal
+            {selectedBid && (
+                <OrderInfoModal
                     handleCloseModal={handleCloseModal}
                     selectedBid={selectedBid}
                     isModalOpen={isModalOpen}
                 />
-            )} */}
+            )}
         </div>
     )
 }
