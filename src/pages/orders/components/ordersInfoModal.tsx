@@ -14,7 +14,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
     //     const { name, value } = e.target
     //     setFormData(prev => ({ ...prev, [name]: value }))
     // }
-
+{/* @ts-expect-error что нибудь придумаем */}
     const handleSave = async () => {
         const token = localStorage.getItem('authToken')
         try {

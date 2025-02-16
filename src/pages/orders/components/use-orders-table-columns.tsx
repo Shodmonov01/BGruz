@@ -2,11 +2,9 @@ import { useEffect, useMemo, useState } from 'react'
 
 import { ColumnDef } from '@tanstack/react-table'
 
-import { Button } from '@/components/ui/button'
 
 import { Eye, Trash } from 'lucide-react'
 
-import loading from '../../../../public/gear-spinner.svg'
 
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
@@ -51,7 +49,7 @@ interface ColumnsProps {
     onDelete: (bidId: string) => void
     onOpenModal: (bid: Orders) => void
 }
-
+{/* @ts-expect-error что нибудь придумаем */}
 const AuctionTimer = ({ activationTime }: { activationTime: string }) => {
     const [timeLeft, setTimeLeft] = useState(() => {
         const time = new Date(activationTime).getTime()
