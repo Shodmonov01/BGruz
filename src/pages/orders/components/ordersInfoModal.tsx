@@ -25,7 +25,6 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
             console.error('Ошибка при обновлении заявки:', error)
         }
     }
-    console.log('selectedBid11', selectedBid)
 
     return (
         <Dialog open={isModalOpen} onOpenChange={handleCloseModal}>

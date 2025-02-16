@@ -125,7 +125,7 @@ import OrdersTable from './components/orders-table'
 import { useSearchParams } from 'react-router-dom'
 
 export default function OrderPage() {
-    const [isShortTable, setIsShortTable] = useState(false)
+    // const [isShortTable, setIsShortTable] = useState(false)
     const [searchParams] = useSearchParams()
     const [size, setSize] = useState(Number(searchParams.get('size')) || 50)
     const [localFilters, setLocalFilters] = useState<{ [key: string]: string }>({})
@@ -172,7 +172,7 @@ export default function OrderPage() {
     return (
         <div className='p-4'>
             <BgruzHeader />
-            <OrdersHeader setIsShortTable={setIsShortTable} isShortTable={isShortTable} />
+            {/* <OrdersHeader setIsShortTable={setIsShortTable} isShortTable={isShortTable} /> */}
             <OrdersTable
                 orders={orders || []}
                 setFilters={setFilters}

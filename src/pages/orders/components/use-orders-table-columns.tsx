@@ -2,11 +2,11 @@ import { useEffect, useMemo, useState } from 'react'
 
 import { ColumnDef } from '@tanstack/react-table'
 
-import { Button } from '@/components/ui/button'
+// import { Button } from '@/components/ui/button'
 
 import { Eye, Trash } from 'lucide-react'
 
-import loading from '../../../../public/gear-spinner.svg'
+// import loading from '../../../../public/gear-spinner.svg'
 
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
@@ -76,33 +76,15 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
         const num = value.replace(/\D/g, '') // Убираем все нечисловые символы
         return num ? new Intl.NumberFormat('ru-RU').format(Number(num)) : ''
     }
+
     return useMemo<ColumnDef<Orders>[]>(() => {
         const allColumns: (ColumnDef<Orders> & { isShortVersion?: boolean; searchable?: boolean })[] = [
             {
                 accessorKey: '_id',
-                header: 'ID',
+                header: 'Операция',
                 size: 100,
-                searchable: true
-            },
-            {
-                accessorKey: 'buyBid.cargoType',
-                header: 'Вагон/Контейнер',
-                size: 200,
-                cell: ({ getValue }) => {
-                    const value = getValue()
-                    return value === 'wagon' ? 'Вагон' : value === 'container' ? 'Контейнер' : '—'
-                },
-                searchable: true
-            },
-            {
-                accessorKey: 'buyBid.loadingMode',
-                header: 'Погрузка/Выгрузка',
-                size: 200,
-                cell: ({ getValue }) => {
-                    const value = getValue()
-                    return value === 'loading' ? 'Погрузка' : value === 'unloading' ? 'Выгрузка' : '—'
-                },
-                searchable: true
+                searchable: true,
+                isShortVersion: true
             },
             {
                 accessorKey: 'buyBid.loadingDate',
@@ -112,65 +94,71 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                     const value = getValue()
                     return value ? format(new Date(String(value)), 'dd.MM.yyyy HH:mm:ss', { locale: ru }) : '—'
                 },
-                searchable: true
+                searchable: true,
+                isShortVersion: true
             },
             {
                 accessorKey: 'buyBid.terminal1.cityName',
                 header: 'Терминал 1',
                 size: 120,
-                searchable: true
+                searchable: true,
+                isShortVersion: true
             },
             {
-                accessorKey: 'buyBid.warehouses.0.cityName',
+                accessorKey: 'buyBid.warehouses[0].cityName',
                 header: 'Склад',
                 size: 120,
-                searchable: true
+                searchable: true,
+                isShortVersion: true
             },
             {
                 accessorKey: 'buyBid.terminal2.cityName',
                 header: 'Терминал 2',
                 size: 120,
-                searchable: true
+                searchable: true,
+                isShortVersion: true
             },
             {
                 accessorKey: 'buyBid.vehicleProfile.name',
                 header: 'Профиль ТС',
                 size: 150,
-                searchable: true
+                searchable: true,
+                isShortVersion: true
             },
             {
                 accessorKey: 'status',
                 header: 'Статус',
                 size: 100,
-                searchable: true
+                searchable: true,
+                isShortVersion: true
             },
             {
-                accessorKey: 'price',
-                header: 'Моя цена',
-                size: 100,
+                accessorKey: 'documentOrderItems',
+                header: 'Документы',
+                size: 150,
                 cell: ({ getValue }) => {
                     const value = getValue()
-                    return formatNumber(String(value)) // Приводим к строке перед вызовом replace
+                    return value.length > 0 ? 'Есть' : 'Нет'
                 },
                 searchable: true
             },
             {
-                accessorKey: 'extraServicesPrice',
-                header: 'Доп услуги',
-                size: 170,
+                accessorKey: 'price',
+                header: 'Цена перевозки',
+                size: 150,
                 cell: ({ getValue }) => {
                     const value = getValue()
-                    return formatNumber(String(value)) // Приводим к строке перед вызовом replace
+                    return formatNumber(String(value))
                 },
                 searchable: true
             },
             {
                 accessorKey: 'fullPrice',
-                header: 'Цена + доп усл',
+                header: 'Цена + услуги',
                 size: 150,
                 cell: ({ getValue }) => {
                     const value = getValue()
-                    return formatNumber(String(value)) // Приводим к строке перед вызовом replace
+                    return formatNumber(String(value))
                 },
                 searchable: true
             },
@@ -180,7 +168,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 size: 100,
                 cell: ({ getValue }) => {
                     const value = getValue()
-                    return formatNumber(String(value)) // Приводим к строке перед вызовом replace
+                    return formatNumber(String(value))
                 },
                 searchable: true
             },
@@ -190,42 +178,30 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 size: 150,
                 cell: ({ getValue }) => {
                     const value = getValue()
-                    return formatNumber(String(value)) // Приводим к строке перед вызовом replace
+                    return formatNumber(String(value))
                 },
+                searchable: true,
+                isShortVersion: true
+            },
+            {
+                accessorKey: 'assignedDriver.fio',
+                header: 'Водитель',
+                size: 120,
+                searchable: true,
+                isShortVersion: true
+            },
+            {
+                accessorKey: 'assignedVehicle.plateNum',
+                header: '№ машины',
+                size: 120,
                 searchable: true
             },
             {
-                accessorKey: 'createdAt',
-                header: 'Создано',
-                size: 150,
-                accessorFn: row => format(new Date(row.createdAt), 'dd.MM.yyyy HH:mm:ss', { locale: ru }),
+                accessorKey: 'assignedTrailer.plateNum',
+                header: '№ прицепа',
+                size: 120,
                 searchable: true
             },
-            {
-                accessorKey: 'customer.organizationName',
-                header: 'Клиент',
-                size: 150,
-                searchable: true
-            },
-            // {
-            //     accessorKey: 'isPriceRequest',
-            //     header: 'Согласовано',
-            //     size: 150,
-            //     cell: ({ row }) => {
-            //         const isApproved = row.original.isPriceRequest
-            //         return (
-            //             <Button
-            //                 onClick={() => onApprove(row.original._id)}
-            //                 disabled={isApproved}
-            //                 variant={isApproved ? 'secondary' : 'default'}
-            //             >
-            //                 {isApproved ? 'Согласовано' : 'Согласовать'}
-            //             </Button>
-            //         )
-            //     },
-            //     isShortVersion: true,
-            //     searchable: true
-            // },
             {
                 header: 'Действия',
                 size: 80,

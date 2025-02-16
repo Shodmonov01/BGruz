@@ -13,6 +13,7 @@ import { deleteData, postData2 } from '@/api/api'
 import loader from '../../../../public/gear-spinner.svg'
 import { useOrdersTableColumns } from './use-orders-table-columns'
 import OrderInfoModal from './ordersInfoModal'
+import OrdersHeader from './orders-header'
 
 interface Orders {
     _id: string
@@ -84,6 +85,7 @@ function OrdersTable({ orders, setFilters, handleFilterChange, loadMore, hasMore
             }
         }
     }, [hasMore, loading, loadMore])
+    console.log('orders', orders)
 
     const handleOpenModal = useCallback((bid: Orders) => {
         setSelectedBid(bid)
@@ -117,7 +119,7 @@ function OrdersTable({ orders, setFilters, handleFilterChange, loadMore, hasMore
 
     return (
         <div>
-            {/* <BidHeader setIsShortTable={setIsShortTable} isShortTable={isShortTable} /> */}
+            <OrdersHeader setIsShortTable={setIsShortTable} isShortTable={isShortTable} />
             <ScrollArea>
                 <div className='h-[calc(98vh-200px)] overflow-auto !scrollbar-thin !scrollbar-thumb-gray-400 !scrollbar-track-gray-100'>
                     <Table className='min-w-[1000px] border border-gray-300'>
