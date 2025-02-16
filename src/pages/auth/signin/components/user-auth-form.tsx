@@ -68,7 +68,7 @@ export default function UserAuthForm() {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-2'>
+            <form onSubmit={form.handleSubmit(onSubmit)} className='w-full space-y-6'>
                 <FormField
                     control={form.control}
                     name='username'
@@ -76,7 +76,7 @@ export default function UserAuthForm() {
                         <FormItem>
                             <FormLabel>Логин</FormLabel>
                             <FormControl>
-                                <Input type='text' placeholder='Введите логин...' disabled={loading} {...field} />
+                                <Input className='py-6' type='text' placeholder='Введите логин...' disabled={loading} {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -90,17 +90,17 @@ export default function UserAuthForm() {
                         <FormItem>
                             <FormLabel>Пароль</FormLabel>
                             <FormControl>
-                                <Input type='password' placeholder='Введите пароль...' disabled={loading} {...field} />
+                                <Input className='py-6' type='password' placeholder='Введите пароль...' disabled={loading} {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
 
-                <Button disabled={loading} className='ml-auto w-full' type='submit'>
+                <Button disabled={loading} className='ml-auto w-full p-6' type='submit'>
                     Вход
                 </Button>
-                <ModeToggle />
+              
             </form>
         </Form>
     )

@@ -17,27 +17,14 @@ export default function SignInPage() {
             >
                 Login
             </Link>
-            <div className='relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r  lg:flex'>
-                <div className='absolute inset-0 bg-primary dark:bg-secondary' />
-                <div className='relative z-20 flex items-center text-lg font-medium'>
-                    <img src={logo} alt='' className='h-12' />
-                    <span>
-                        <span className='text-[#03b4e0]'>Биржа</span> Грузоверевозок
-                    </span>
-                </div>
-                <div className='relative z-20 mt-auto'>
-                    <blockquote className='space-y-2'>
-                        <p className='text-lg'>
-                            &ldquo;Сюда можете добавить какую нибудь цитату или важное инфо &rdquo;
-                        </p>
-                        <footer className='text-sm'>Амир Шодмонов</footer>
-                    </blockquote>
-                </div>
+            <div className='relative hidden h-full  flex-col  p-10 text-white dark:border-r  lg:flex  lg:justify-center'>
+                <img src={logo} alt="" className='' />
             </div>
             <div className='flex h-full items-center p-4 lg:p-8'>
-                <div className='mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]'>
+                <div className='mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[370px]'>
                     <div className='flex flex-col space-y-2 text-center'>
-                        <h1 className='text-2xl font-semibold tracking-tight'>Войти</h1>
+                        <h1 className='text-2xl text-primary text-[39px] font-semibold tracking-tight'>Добро пожаловать!</h1>
+                        <p>Введите данные для входа</p>
                     </div>
                     <UserAuthForm />
                

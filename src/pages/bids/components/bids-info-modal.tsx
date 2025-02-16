@@ -285,14 +285,14 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                         <div className='flex justify-center gap-4 py-6'>
                             <Button
                                 onClick={handleSave}
-                                className='bg-orange-500 hover:bg-orange-600 text-white rounded-full'
+                                className='bg-orange-500 hover:bg-orange-600 text-white'
                             >
                                 Сохранить изменения
                             </Button>
-                            <Button className='bg-orange-500 hover:bg-orange-600 text-white rounded-full'>
+                            <Button className='bg-orange-500 hover:bg-orange-600 text-white'>
                                 Сохранить заявку как новую
                             </Button>
-                            <Button className='bg-orange-500 hover:bg-orange-600 text-white rounded-full'>
+                            <Button className='bg-orange-500 hover:bg-orange-600 text-white'>
                                 Редактировать
                             </Button>
                         </div>
