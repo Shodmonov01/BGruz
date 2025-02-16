@@ -5,8 +5,6 @@ import { useForm, FormProvider, SubmitHandler } from 'react-hook-form'
 import Heading from '@/components/shared/heading'
 import { Button } from '@/components/ui/button'
 
-
-
 import { fetchPrivateData, postData } from '@/api/api'
 
 import BidDetails from './bid-form-detail/bidDetails'
@@ -182,13 +180,13 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                         <div className={isClientSelected ? '' : 'opacity-50 pointer-events-none'}>
                             <BidDate />
                             <div className='bg-primary text-center text-[26px] text-white my-3 py-3'>
-                            <p>Маршрут</p>
+                                <p>Маршрут</p>
                             </div>
                             {!hideTerminal1 && <TerminalOne terminals={terminals} />}
                             <Warehouses warehouses={warehouses} />
                             {!hideTerminal2 && <TerminalTwo terminals={terminals} />}
                             <div className='bg-primary text-center text-[26px] text-white my-3 py-3'>
-                            <p>Финансы</p>
+                                <p>Финансы</p>
                             </div>
                             {/* @ts-expect-error что нибудь придумаем */}
                             <BidDescribe extraServices={extraServices} />
@@ -199,12 +197,13 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                         <Button
                             type='button'
                             variant='secondary'
+                            className='rounded-full'
                             size='lg'
                             onClick={modalClose}
                         >
                             Отмена
                         </Button>
-                        <Button variant='tertiary' type='submit'  size='lg' disabled={!isClientSelected}>
+                        <Button type='submit' className='rounded-full' size='lg' disabled={!isClientSelected}>
                             Создать заявку
                         </Button>
                     </div>

@@ -1,13 +1,10 @@
+'use client'
+
 import { useEffect, useMemo, useState } from 'react'
-
-import { ColumnDef } from '@tanstack/react-table'
-
+import type { ColumnDef } from '@tanstack/react-table'
 import { Button } from '@/components/ui/button'
-
 import { Eye, Trash } from 'lucide-react'
-
 import loading from '../../../../../public/gear-spinner.svg'
-
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 
@@ -28,7 +25,15 @@ interface Bid {
     warehouses?: { cityName: string }[]
     vehicleProfile?: { name: string }
     loadingDate: number
-    activationTime
+    activationTime: string
+    cargoType?: 'wagon' | 'container'
+    loadingMode?: 'loading' | 'unloading'
+    auction?: number
+    bestSalePrice?: number
+    extraServicesPrice?: number
+    fullPrice?: number
+    commission?: number
+    fullPriceNDS?: number
     [key: string]: unknown
 }
 
@@ -60,13 +65,33 @@ const AuctionTimer = ({ activationTime }: { activationTime: string }) => {
 
 export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenModal }: ColumnsProps) => {
     const formatNumber = (value: string) => {
-        const num = value.replace(/\D/g, '') // Убираем все нечисловые символы
+        const num = value.replace(/\D/g, '')
         return num ? new Intl.NumberFormat('ru-RU').format(Number(num)) : ''
     }
+
     return useMemo<ColumnDef<Bid>[]>(() => {
-        const allColumns: (ColumnDef<Bid> & { isShortVersion?: boolean; searchable?: boolean })[] = [
-            { accessorKey: 'number', header: 'ID', size: 100, isShortVersion: false, searchable: true },
-            { accessorKey: 'persistentId', header: 'ЦМ ID', size: 100, isShortVersion: false, searchable: true },
+        const allColumns: (ColumnDef<Bid> & {
+            isShortVersion?: boolean
+            searchable?: boolean
+            filterType?: string
+            filterOptions?: { value: string; label: string }[]
+        })[] = [
+            {
+                accessorKey: 'number',
+                header: 'ID',
+                size: 100,
+                isShortVersion: false,
+                searchable: true,
+                filterType: 'exact'
+            },
+            {
+                accessorKey: 'persistentId',
+                header: 'ЦМ ID',
+                size: 100,
+                isShortVersion: false,
+                searchable: true,
+                filterType: 'exact'
+            },
             {
                 header: 'Вагон/Контейнер',
                 size: 200,
@@ -77,11 +102,16 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                     } else if (row.cargoType === 'container') {
                         cargoTypeLabel = 'Контейнер'
                     }
-
                     return ` ${cargoTypeLabel}`
                 },
+
                 isShortVersion: true,
-                searchable: true
+                searchable: true,
+                filterType: 'select',
+                filterOptions: [
+                    { value: 'wagon', label: 'Вагон' },
+                    { value: 'container', label: 'Контейнер' }
+                ]
             },
             {
                 header: 'Погрузка/Выгрузка',
@@ -93,11 +123,15 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                     } else if (row.loadingMode === 'unloading') {
                         loadingModeLabel = 'Выгрузка'
                     }
-
                     return `${loadingModeLabel}`
                 },
                 isShortVersion: true,
-                searchable: true
+                searchable: true,
+                filterType: 'select',
+                filterOptions: [
+                    { value: 'loading', label: 'Погрузка' },
+                    { value: 'unloading', label: 'Выгрузка' }
+                ]
             },
             {
                 accessorKey: 'loadingDate',
@@ -106,7 +140,8 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 isShortVersion: true,
                 searchable: true,
                 accessorFn: row =>
-                    row.loadingDate ? format(new Date(row.loadingDate), 'dd.MM.yyyy', { locale: ru }) : ''
+                    row.loadingDate ? format(new Date(row.loadingDate), 'dd.MM.yyyy', { locale: ru }) : '',
+                filterType: 'dateRange'
             },
             {
                 accessorKey: 'terminal1',
@@ -114,7 +149,8 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 size: 120,
                 accessorFn: row => row.terminal1?.cityName ?? '—',
                 isShortVersion: true,
-                searchable: true
+                searchable: true,
+                filterType: 'fuzzy'
             },
             {
                 accessorKey: 'warehouses',
@@ -122,14 +158,16 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 size: 120,
                 accessorFn: row => row.warehouses?.[0]?.cityName ?? '—',
                 isShortVersion: true,
-                searchable: true
+                searchable: true,
+                filterType: 'fuzzy'
             },
             {
                 accessorKey: 'terminal2',
                 header: 'Терминал 2',
                 size: 120,
                 accessorFn: row => row.terminal2?.cityName ?? '—',
-                searchable: true
+                searchable: true,
+                filterType: 'fuzzy'
             },
             {
                 accessorKey: 'vehicleProfile',
@@ -137,32 +175,33 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 size: 150,
                 accessorFn: row => row.vehicleProfile?.name ?? '—',
                 isShortVersion: true,
-                searchable: true
+                searchable: true,
+                filterType: 'fuzzy'
             },
-
             {
                 header: 'Аукцион',
                 size: 140,
                 accessorKey: 'activationTime',
                 cell: ({ row }) => <AuctionTimer activationTime={row.original.activationTime} />,
                 isShortVersion: true,
-                searchable: true
+                searchable: true,
+                filterType: 'range'
             },
-
             {
                 accessorKey: 'status',
                 header: 'Статус',
                 size: 100,
-                accessorFn: row => row.status ?? null, // Оставляем только данные
+                accessorFn: row => row.status ?? null,
                 cell: ({ row }) =>
                     row.original.status ? (
                         row.original.status
                     ) : (
                         <div className='flex items-center justify-center'>
-                            <img src={loading} alt='Загрузка...' />
+                            <img src={loading || '/placeholder.svg'} alt='Загрузка...' />
                         </div>
                     ),
-                searchable: true
+                searchable: true,
+                filterType: 'select'
             },
             {
                 accessorKey: 'price',
@@ -171,8 +210,9 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 searchable: true,
                 cell: ({ getValue }) => {
                     const value = getValue()
-                    return formatNumber(String(value)) // Приводим к строке перед вызовом replace
-                }
+                    return formatNumber(String(value))
+                },
+                filterType: 'range'
             },
             {
                 accessorKey: 'bestSalePrice',
@@ -181,8 +221,9 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 searchable: true,
                 cell: ({ getValue }) => {
                     const value = getValue()
-                    return formatNumber(String(value)) // Приводим к строке перед вызовом replace
-                }
+                    return formatNumber(String(value))
+                },
+                filterType: 'range'
             },
             {
                 accessorKey: 'extraServicesPrice',
@@ -191,8 +232,9 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 searchable: true,
                 cell: ({ getValue }) => {
                     const value = getValue()
-                    return formatNumber(String(value)) // Приводим к строке перед вызовом replace
-                }
+                    return formatNumber(String(value))
+                },
+                filterType: 'range'
             },
             {
                 accessorKey: 'fullPrice',
@@ -201,10 +243,11 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 searchable: true,
                 cell: ({ getValue }) => {
                     const value = getValue()
-                    return formatNumber(String(value)) // Приводим к строке перед вызовом replace
-                }
+                    return formatNumber(String(value))
+                },
+                filterType: 'range'
             },
-            { accessorKey: 'commission', header: 'Комиссия', size: 100, searchable: true },
+            { accessorKey: 'commission', header: 'Комиссия', size: 100, searchable: true, filterType: 'range' },
             {
                 accessorKey: 'fullPriceNDS',
                 header: 'К оплате',
@@ -212,31 +255,34 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 searchable: true,
                 cell: ({ getValue }) => {
                     const value = getValue()
-                    return formatNumber(String(value)) // Приводим к строке перед вызовом replace
-                }
+                    return formatNumber(String(value))
+                },
+                filterType: 'range'
             },
             {
                 accessorKey: 'createdAt',
                 header: 'Создано',
                 size: 150,
                 accessorFn: row => format(new Date(row.createdAt), 'dd.MM.yyyy HH:mm:ss', { locale: ru }),
-                searchable: true
+                searchable: true,
+                filterType: 'dateRange'
             },
-
-            { accessorKey: 'createdBy', header: 'Создал', size: 150, searchable: true },
+            { accessorKey: 'createdBy', header: 'Создал', size: 150, searchable: true, filterType: 'fuzzy' },
             {
                 accessorKey: 'client',
                 header: 'Клиент',
                 size: 150,
                 accessorFn: row => row.client?.organizationName ?? '—',
-                searchable: true
+                searchable: true,
+                filterType: 'fuzzy'
             },
             {
                 accessorKey: 'customer',
                 header: 'Заказчик',
                 size: 150,
                 accessorFn: row => row.customer?.name ?? '—',
-                searchable: true
+                searchable: true,
+                filterType: 'fuzzy'
             },
             {
                 accessorKey: 'isPriceRequest',
@@ -254,8 +300,9 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                         </Button>
                     )
                 },
-                isShortVersion: true,
-                searchable: true
+                isShortVersion: true
+                // searchable: true,
+                // filterType: null,
             },
             {
                 header: 'Действия',
@@ -268,11 +315,12 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                             onClick={() => onDelete(row.original._id)}
                         />
                     </div>
-                ),
-                isShortVersion: true
+                )
+                // isShortVersion: true,
+                // filterType: null,
             }
         ]
 
         return allColumns.filter(col => (isShortTable ? col.isShortVersion : true))
-    }, [isShortTable, onApprove, onDelete, onOpenModal])
+    }, [isShortTable, onApprove, onDelete, onOpenModal]) // Removed formatNumber from dependencies
 }

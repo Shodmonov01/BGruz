@@ -1,18 +1,17 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
-
 import { useReactTable, getCoreRowModel, flexRender } from '@tanstack/react-table'
-
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Input } from '@/components/ui/input'
-
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import type { DateRange } from 'react-day-picker'
 import { useBidsTableColumns } from './bids-table/useBidsTableColumns'
 import BidsInfoModal from './bids-info-modal'
 import BidHeader from './bids-header'
-
 import { deleteData, postData2 } from '@/api/api'
-
 import loader from '../../../../public/gear-spinner.svg'
+import { DateRangePicker } from './bid-form-detail/rangePicker'
+import { Button } from '@/components/ui/button'
 
 interface Bid {
     _id?: string
@@ -26,7 +25,6 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
     const [selectedBid, setSelectedBid] = useState<Partial<Bid> | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isShortTable, setIsShortTable] = useState(false)
-
     const scrollRef = useRef<HTMLDivElement | null>(null)
 
     useEffect(() => {
@@ -71,7 +69,7 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
 
     const handleApprove = useCallback(async (bidId: string) => {
         const token = localStorage.getItem('authToken')
-        await postData2(`api/v1/bids/${bidId}/approve`, {}, token) // Передаём пустой объект как data
+        await postData2(`api/v1/bids/${bidId}/approve`, {}, token)
     }, [])
 
     const handleDelete = useCallback(async (bidId: string) => {
@@ -88,6 +86,7 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
         onOpenModal: handleOpenModal
     })
     const table = useReactTable({ data: bids || [], columns, getCoreRowModel: getCoreRowModel() })
+    console.log('columns', columns)
 
     return (
         <div>
@@ -119,15 +118,10 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
                                             className='bg-[#EDEDED] border border-gray-300 whitespace-nowrap'
                                         >
                                             <div className='text-center'>
-                                                {/* @ts-expect-error Пока не знаю что делать */}
                                                 {header.column.columnDef.searchable && (
-                                                    <Input
-                                                        onChange={e =>
-                                                            handleFilterChange(header.column.id, e.target.value)
-                                                        }
-                                                        placeholder='Поиск...'
-                                                        className='text-xs h-7 bg-white'
-                                                    />
+                                                    <div className='text-center'>
+                                                        {renderFilterInput(header.column, handleFilterChange)}
+                                                    </div>
                                                 )}
                                             </div>
                                         </TableHead>
@@ -140,7 +134,6 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
                                 <TableRow
                                     onDoubleClick={() => handleOpenModal(row.original)}
                                     key={row.id}
-                                    // className={`hover:bg-gray-100 cursor-pointer ${index % 2 === 0 ? 'bg-gray-100' : ''}`}
                                     className={`cursor-pointer text-[16px] hover:bg-gray-100 ${
                                         row.original.ownState === 'canceled'
                                             ? 'bg-gray-50 opacity-50 line-through'
@@ -163,7 +156,11 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
                                 <TableRow>
                                     <TableCell colSpan={columns.length} className='text-center p-4'>
                                         <div className='flex items-center justify-center'>
-                                            <img src={loader} alt='Загрузка...' className='h-8 w-8' />
+                                            <img
+                                                src={loader || '/placeholder.svg'}
+                                                alt='Загрузка...'
+                                                className='h-8 w-8'
+                                            />
                                             <span className='ml-2 text-gray-500'>Загрузка данных...</span>
                                         </div>
                                     </TableCell>
@@ -189,10 +186,68 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
                     isModalOpen={isModalOpen}
                 />
             )}
-
-            {/* <BidsInfoModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} bid={{ persistentId: "123567" }} /> */}
         </div>
     )
+}
+
+function renderFilterInput(column, handleFilterChange) {
+    const filterType = column.columnDef.filterType
+    const filterOptions = column.columnDef.filterOptions
+
+    switch (filterType) {
+        case 'exact':
+            return (
+                <Input
+                    onChange={e => handleFilterChange(column.id, e.target.value)}
+                    placeholder='Точное совпадение'
+                    className='text-xs h-7 bg-white'
+                />
+            )
+        case 'select':
+            return (
+                <Select onValueChange={value => handleFilterChange(column.id, value)} defaultValue='Все'>
+                    <SelectTrigger className='text-xs h-7 bg-white'>
+                        <SelectValue placeholder='Выберите' />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {filterOptions?.map(option => (
+                            <SelectItem key={option.value} value={option.value}>
+                                {option.label}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            )
+        case 'dateRange':
+            return (
+                <DateRangePicker
+                    onChange={range => handleFilterChange(column.id, range)}
+                    placeholder='Выберите даты'
+                    className='text-xs h-7 bg-white'
+                />
+            )
+        case 'fuzzy':
+            return (
+                <Input
+                    onChange={e => handleFilterChange(column.id, e.target.value)}
+                    placeholder='Поиск...'
+                    className='text-xs h-7 bg-white'
+                />
+            )
+        case 'range':
+            return (
+                <div className='flex gap-2 items-center'>
+                    <Button className='p-1' onClick={() => handleFilterChange(column.id, 'asc')}>
+                        Возраст
+                    </Button>
+                    <Button className='p-1' onClick={() => handleFilterChange(column.id, 'desc')}>
+                        Убыв
+                    </Button>
+                </div>
+            )
+        default:
+            return null
+    }
 }
 
 export default BidsTable

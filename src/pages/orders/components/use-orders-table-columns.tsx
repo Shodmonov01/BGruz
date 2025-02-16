@@ -50,6 +50,7 @@ interface ColumnsProps {
 {
     /* @ts-expect-error что нибудь придумаем */
 }
+
 const AuctionTimer = ({ activationTime }: { activationTime: string }) => {
     const [timeLeft, setTimeLeft] = useState(() => {
         const time = new Date(activationTime).getTime()

@@ -10,6 +10,11 @@ import { useGetBids } from '@/hooks/useGetBids'
 import BidsTableMobile from './components/bidsTableMobile'
 import BidsTable from './components/BidsTable'
 
+interface DateRange {
+    from: Date
+    to: Date
+}
+
 export default function BidsPage() {
     const [searchParams] = useSearchParams()
     const [size, setSize] = useState(Number(searchParams.get('size')) || 50)
@@ -19,10 +24,17 @@ export default function BidsPage() {
 
     const { bids, hasMore, loading, setFilters, refreshTable } = useGetBids(size)
 
-    const handleFilterChange = (columnId: string, value: string) => {
+    const handleFilterChange = (columnId: string, value: string | DateRange | null) => {
         const newFilters = { ...localFilters }
-        if (value) newFilters[columnId] = value
-        else delete newFilters[columnId]
+        if (value) {
+            if (typeof value === 'string') {
+                newFilters[columnId] = value
+            } else if (value.from && value.to) {
+                newFilters[columnId] = `${value.from.toISOString()},${value.to.toISOString()}`
+            }
+        } else {
+            delete newFilters[columnId]
+        }
 
         setLocalFilters(newFilters)
 
@@ -34,16 +46,11 @@ export default function BidsPage() {
         }, 500)
     }
 
-
-
     const loadMore = () => {
         if (hasMore) {
             setSize(prev => prev + 50)
         }
     }
-
-
-
 
     useEffect(() => {
         const handleScroll = () => {
@@ -79,7 +86,6 @@ export default function BidsPage() {
                 <div className='md:hidden'>
                     <BidsTableMobile bids={bids || []} />
                 </div>
-                
             </div>
         </div>
     )

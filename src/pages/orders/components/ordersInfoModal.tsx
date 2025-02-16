@@ -8,23 +8,59 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 
 function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
-    const [formData, _] = useState({ ...selectedBid })
+    const [formData, setFormData] = useState({
+        ...selectedBid
+    })
+    console.log('formData', formData)
 
-    // const handleChange = e => {
-    //     const { name, value } = e.target
-    //     setFormData(prev => ({ ...prev, [name]: value }))
+    const handleChange = e => {
+        const { name, value } = e.target
+        setFormData(prev => ({ ...prev, [name]: value }))
+    }
+    {
+        /* @ts-expect-error что нибудь придумаем */
+    }
+    // const handleSave = async () => {
+    //     const token = localStorage.getItem('authToken')
+    //     try {
+    //         await postData2(`api/v1/bids/${formData._id}`, formData, token)
+    //         alert('Заявка успешно обновлена!')
+    //         handleCloseModal()
+    //     } catch (error) {
+    //         console.error('Ошибка при обновлении заявки:', error)
+    //     }
     // }
-{/* @ts-expect-error что нибудь придумаем */}
+
     const handleSave = async () => {
         const token = localStorage.getItem('authToken')
         try {
-            await postData2(`api/v1/bids/${formData._id}`, formData, token)
+            const updatedData = {
+                ...formData
+            }
+            await postData2(`api/v1/orders/${formData._id}`, updatedData, token)
             alert('Заявка успешно обновлена!')
             handleCloseModal()
         } catch (error) {
             console.error('Ошибка при обновлении заявки:', error)
         }
     }
+
+    // const handleSave = async () => {
+    //     const token = localStorage.getItem('authToken')
+    //     try {
+    //         const updatedData = {
+    //             price: formData.price,
+    //             extraServices: formData.extraServices.map((service) => ({
+    //                 billableCount: service.count,
+    //               })),
+    //         }
+    //         await postData2(`api/v1/orders/${formData._id}`, updatedData, token)
+    //         alert('Заявка успешно обновлена!')
+    //         handleCloseModal()
+    //     } catch (error) {
+    //         console.error('Ошибка при обновлении заявки:', error)
+    //     }
+    // }
 
     return (
         <Dialog open={isModalOpen} onOpenChange={handleCloseModal}>
@@ -33,33 +69,49 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
             </DialogTrigger>
             <DialogContent className='max-h-[90vh] max-w-4xl overflow-y-auto'>
                 <DialogHeader>
-                    <div className='flex items-center justify-between'>
-                        <div className='flex items-center gap-4'>
-                            <span className='rounded bg-orange-500 px-2 py-1 text-sm text-white'>Груз сдан</span>
-                            <span>CM ID 47</span>
-                            <span className='text-xl font-semibold'>Заказ</span>
-                            <span>
+                    <div className=''>
+                        <div className='mb-6'>
+                            <span className='rounded bg-orange-500 px-4 py-2 text-sm text-white '>Груз сдан</span>
+                        </div>
+                        <div className='flex items-center justify-between gap-4 mb-4'>
+                            <span className='text-[#03B4E0] font-semibold'>CM ID 47</span>
+                            <span className='text-[30px] text-[#EE6F2D] border-x-2 px-14 border-[#EE6F2D] font-bold'>
+                                Заказ
+                            </span>
+                            <span className='text-[#03B4E0] font-semibold'>
                                 ID {formData._id} от {new Date(formData.createdAt).toLocaleDateString('ru-RU')}
                             </span>
                         </div>
                     </div>
                 </DialogHeader>
 
+                <div className='bg-cyan-500 flex py-2 px-4 text-white '>
+                    <div>
+                        <p className=' font-bold'>Статус заказа</p>
+                    </div>
+                </div>
+
                 <div className='grid gap-6'>
                     <div className='flex justify-between'>
                         <div className='flex justify-between items-center gap-4'>
-                            <p>Статус заказа:</p>
-                            <p>{formData.status}</p>
+                            <p className='font-bold'>Статус заказа:</p>
+                            <input
+                                type='text'
+                                name='status'
+                                value={formData.status}
+                                onChange={handleChange}
+                                className='border border-gray-300 rounded px-2 py-1'
+                            />
                         </div>
                         <div className='flex justify-between items-center gap-4'>
-                            <p>Изменено</p>
+                            <p className='font-bold'>Изменено</p>
                             <p>{new Date(formData.statusUpdated).toLocaleString('ru-RU')}</p>
                         </div>
                     </div>
 
                     <div className='flex justify-between items-center '>
                         <div className='flex justify-between items-center gap-4'>
-                            <p>Документы сданы:</p>
+                            <p className='font-bold'>Документы сданы:</p>
                             <p>
                                 {formData.docSubmissionDate
                                     ? new Date(formData.docSubmissionDate).toLocaleString('ru-RU')
@@ -67,7 +119,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                             </p>
                         </div>
                         <div className='flex justify-between items-center gap-4'>
-                            <p>Изменено</p>
+                            <p className='font-bold'>Изменено</p>
                             <p>
                                 {formData.docSubmissionUserId ? 'ID: ' + formData.docSubmissionUserId : 'Не изменено'}
                             </p>
@@ -88,18 +140,18 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                     </div>
 
                     <div className='flex  items-center gap-4'>
-                        <p>Тип перевозки</p>
+                        <p className='font-bold'>Тип перевозки</p>
                         <p>{formData.buyBid.cargoType}</p>
                         <p>{formData.buyBid.loadingMode}</p>
                     </div>
 
                     <div className='flex justify-between items-center '>
                         <div className='flex justify-between items-center gap-4'>
-                            <p>Время подачи</p>
+                            <p className=' font-bold'>Время подачи</p>
                             <p>09:00</p>
                         </div>
                         <div className='flex justify-between items-center gap-4'>
-                            <p>Профиль ТС</p>
+                            <p className=' font-bold'>Профиль ТС</p>
                             <p>{formData.buyBid.vehicleProfile.name}</p>
                         </div>
                     </div>
@@ -109,7 +161,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                     </div>
 
                     <div>
-                        <p className='text-[18px] text-bold'>Терминал 1</p>
+                        <p className='text-[18px] font-bold'>Терминал 1</p>
                         <div className='grid grid-cols-2 gap-4'>
                             <div>
                                 <Input value={formData.buyBid.terminal1.cityName || ''} className='mt-1' readOnly />
@@ -121,7 +173,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                     </div>
 
                     <div>
-                        <p className='text-[18px] text-bold'>Склад клиента</p>
+                        <p className='text-[18px] font-bold'>Склад клиента</p>
                         <div className='grid grid-cols-2 gap-4'>
                             <div>
                                 <Input value={formData.buyBid.warehouses[0].cityName || ''} className='mt-1' readOnly />
@@ -137,7 +189,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                     </div>
 
                     <div>
-                        <p className='text-[18px] text-bold'>Терминал 2</p>
+                        <p className='text-[18px] font-bold'>Терминал 2</p>
                         <div className='grid grid-cols-2 gap-4'>
                             <div>
                                 <Input value={formData.buyBid.terminal2.cityName || ''} className='mt-1' readOnly />
@@ -156,7 +208,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                     <div className='flex justify-between'>
                         <div className='space-y-2'>
                             <div className='flex items-center justify-between'>
-                                <p>Водитель</p>
+                                <p className='font-bold'>Водитель</p>
                                 <input
                                     type='text'
                                     value={formData.assignedVehicle.driverName}
@@ -165,7 +217,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                 />
                             </div>
                             <div className='flex items-center justify-between'>
-                                <p>Машина</p>
+                                <p className='font-bold'>Машина</p>
                                 <input
                                     type='text'
                                     value={formData.assignedVehicle.plateNum}
@@ -174,7 +226,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                 />
                             </div>
                             <div className='flex items-center justify-between'>
-                                <p>Прицеп</p>
+                                <p className='font-bold'>Прицеп</p>
                                 <input
                                     type='text'
                                     value={formData.assignedTrailer.plateNum}
@@ -186,7 +238,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
 
                         <div className='space-y-2'>
                             <div className='flex items-center justify-between'>
-                                <p>Файлы</p>
+                                <p className='font-bold'>Файлы</p>
                                 <input
                                     type='text'
                                     value='Ссылка на файл'
@@ -195,7 +247,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                 />
                             </div>
                             <div className='flex items-center justify-between'>
-                                <p>Файлы</p>
+                                <p className='font-bold'>Файлы</p>
                                 <input
                                     type='text'
                                     value='Ссылка на файл'
@@ -204,7 +256,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                 />
                             </div>
                             <div className='flex items-center justify-between'>
-                                <p>Файлы</p>
+                                <p className='font-bold'>Файлы</p>
                                 <input
                                     type='text'
                                     value='Ссылка на файл'
@@ -243,17 +295,42 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                             <div key={index} className='space-y-2'>
                                                 <div className='flex items-center gap-2'>
                                                     <Checkbox
+                                                        className='font-bold'
                                                         id={`service-${index}`}
-                                                        checked={service.billableCount > 0}
+                                                        checked={service.count > 0}
+                                                        onCheckedChange={checked => {
+                                                            const newExtraServices = [...formData.extraServices]
+                                                            newExtraServices[index] = {
+                                                                ...service,
+                                                                count: checked ? 1 : 0
+                                                            }
+                                                            setFormData(prev => ({
+                                                                ...prev,
+                                                                extraServices: newExtraServices
+                                                            }))
+                                                        }}
                                                     />
-                                                    <label className='w-full' htmlFor={`service-${index}`}>
+                                                    <label
+                                                        className='min-w-[220px] font-bold'
+                                                        htmlFor={`service-${index}`}
+                                                    >
                                                         {service.name}
                                                     </label>
                                                     <Input
                                                         type='number'
                                                         className='w-20'
                                                         value={service.count}
-                                                        readOnly
+                                                        onChange={e => {
+                                                            const newExtraServices = [...formData.extraServices]
+                                                            newExtraServices[index] = {
+                                                                ...service,
+                                                                count: Number.parseInt(e.target.value) || 0
+                                                            }
+                                                            setFormData(prev => ({
+                                                                ...prev,
+                                                                extraServices: newExtraServices
+                                                            }))
+                                                        }}
                                                     />
                                                     <Input value={service.priceNds.toFixed(2)} readOnly />
                                                     <Input value={service.price.toFixed(2)} readOnly />
@@ -268,7 +345,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
 
                     <div className='space-y-2'>
                         <div className='flex items-center gap-2'>
-                            <p className=' font-bold mb-3 w-full'>Полная стоимость рейса без НДС</p>
+                            <p className=' font-bold w-full min-w-[300px]'>Полная стоимость рейса без НДС</p>
                             <Input
                                 value={formData.fullPriceNds.toFixed(2)}
                                 placeholder='Полная стоимость с НДС'
@@ -284,21 +361,26 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                     <div>
                         <div className='grid grid-cols-2 gap-4'>
                             <div>
-                                <p className=' text-bold'>Груз</p>
-                                <Input value={formData.terminal1?.cityName || ''} className='mt-1' readOnly />
+                                <p className='font-bold'>Груз</p>
+                                <Input
+                                    placeholder='Название груза'
+                                    value={formData.terminal1?.cityName || ''}
+                                    className='mt-1'
+                                    readOnly
+                                />
                             </div>
                             <div>
-                                <p className=' text-bold'>Стоимость груза</p>
-                                <Input value={formData.terminal1?.address || ''} className='mt-1' readOnly />
+                                <p className=' font-bold'>Стоимость груза</p>
+                                <Input name='price' value={formData.price} onChange={handleChange} className='mt-1' />
                             </div>
                         </div>
                     </div>
 
                     <div>
                         <div className='pt-6'>
-                            <div className='grid gap-2'>
-                                <Label>Комментарии</Label>
-                                <Textarea placeholder='Комментарии к грузу' />
+                            <div className='grid gap-2 '>
+                                <Label className='font-bold'>Комментарии</Label>
+                                <Textarea className='h-[148px]' placeholder='Комментарии к грузу' />
                             </div>
                         </div>
                     </div>
@@ -310,7 +392,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                     <div className='flex justify-between'>
                         <div className='space-y-2'>
                             <div className='flex items-center justify-between'>
-                                <p>Заказчик</p>
+                                <p className='font-bold'>Заказчик</p>
                                 <input
                                     type='text'
                                     value={formData.customer.organizationName}
@@ -319,7 +401,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                 />
                             </div>
                             <div className='flex items-center justify-between'>
-                                <p>ИНН</p>
+                                <p className='font-bold'>ИНН</p>
                                 <input
                                     type='text'
                                     value={formData.customer.inn}
@@ -328,7 +410,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                 />
                             </div>
                             <div className='flex items-center justify-between'>
-                                <p>Раб телефон</p>
+                                <p className='font-bold'>Раб телефон</p>
                                 <input
                                     type='text'
                                     value={formData.customer.organizationPhone}
@@ -340,7 +422,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
 
                         <div className='space-y-2'>
                             <div className='flex items-center justify-between'>
-                                <p>Отвественный</p>
+                                <p className='font-bold'>Отвественный</p>
                                 <input
                                     type='text'
                                     value={formData.customer.fio}
@@ -349,7 +431,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                 />
                             </div>
                             <div className='flex items-center justify-between'>
-                                <p>Телефон</p>
+                                <p className='font-bold'>Телефон</p>
                                 <input
                                     type='text'
                                     value={formData.customer.phone}
@@ -358,7 +440,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                 />
                             </div>
                             <div className='flex items-center justify-between'>
-                                <p>Почта</p>
+                                <p className='font-bold'>Почта</p>
                                 <input
                                     type='text'
                                     value={formData.customer.email}
@@ -372,7 +454,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                     <div className='flex justify-between'>
                         <div className='space-y-2'>
                             <div className='flex items-center justify-between'>
-                                <p>Заказчик</p>
+                                <p className='font-bold'>Заказчик</p>
                                 <input
                                     type='text'
                                     value={formData.carrier.organizationName}
@@ -381,7 +463,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                 />
                             </div>
                             <div className='flex items-center justify-between'>
-                                <p>ИНН</p>
+                                <p className='font-bold'>ИНН</p>
                                 <input
                                     type='text'
                                     value={formData.carrier.inn}
@@ -390,7 +472,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                 />
                             </div>
                             <div className='flex items-center justify-between'>
-                                <p>Раб телефон</p>
+                                <p className='font-bold'>Раб телефон</p>
                                 <input
                                     type='text'
                                     value={formData.carrier.organizationPhone}
@@ -402,7 +484,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
 
                         <div className='space-y-2'>
                             <div className='flex items-center justify-between'>
-                                <p>Отвественный</p>
+                                <p className='font-bold'>Отвественный</p>
                                 <input
                                     type='text'
                                     value={formData.carrier.fio}
@@ -411,20 +493,20 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                 />
                             </div>
                             <div className='flex items-center justify-between'>
-                                <p>Телефон</p>
+                                <p className='font-bold'>Телефон</p>
                                 <input
                                     type='text'
                                     value={formData.carrier.phone}
-                                    className='border ml-3 border-gray-300 rounded px-2 py-1 text-sm'
+                                    className='border ml-3 border-gray-300 rounded px-2 py-1 text-sm flex justify-center items-center'
                                     readOnly
                                 />
                             </div>
                             <div className='flex items-center justify-between'>
-                                <p>Почта</p>
+                                <p className='font-bold'>Почта</p>
                                 <input
                                     type='text'
                                     value={formData.carrier.email}
-                                    className='border ml-3 border-gray-300 rounded px-2 py-1 text-sm'
+                                    className='border ml-3 border-gray-300 rounded px-2 py-1 text-sm flex justify-center'
                                     readOnly
                                 />
                             </div>
@@ -435,20 +517,20 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                         <p className='text-[20px] font-bold'>Приклепленные файлы</p>
                     </div>
 
-                    <div className='flex flex-col'>
+                    <div className='flex flex-col text-[#03B4E0] font-bold underline'>
                         {formData.assignedVehicleFiles.map((file, index) => (
                             <a key={index} href={file.link}>
-                                {file.name}
+                                Ссылка
                             </a>
                         ))}
                         {formData.assignedTrailerFiles.map((file, index) => (
                             <a key={index} href={file.link}>
-                                {file.name}
+                                Ссылка
                             </a>
                         ))}
                         {formData.assignedDriverFiles.map((file, index) => (
                             <a key={index} href={file.link}>
-                                {file.name}
+                                Ссылка
                             </a>
                         ))}
                     </div>
@@ -460,18 +542,24 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                     {formData.documentOrderItems.map((doc, index) => (
                         <div key={index} className='flex'>
                             <p className='text-[16px] font-bold'>{doc.DisplayName}</p>
-                            <div className='ml-3 flex gap-2'>
-                                <a href={doc.URI_HTML}>HTML</a>
+                            <div className='ml-3 flex text-[#03B4E0] font-bold underline gap-2'>
+                                <a className='' href={doc.URI_HTML}>
+                                    HTML
+                                </a>
                                 <a href={doc.URI_PDF}>PDF</a>
                                 <a href={doc.URI_PDF_Download}>Скачать</a>
                             </div>
                         </div>
                     ))}
 
-                    <div className='flex justify-end'>
-                        <Button size='lg' className='bg-orange-500 hover:bg-orange-600' onClick={handleCloseModal}>
-                            Закрыть
+                    <div className='flex justify-center gap-4 py-6'>
+                        <Button onClick={handleSave} className='bg-orange-500 hover:bg-orange-600 text-white'>
+                            Сохранить изменения
                         </Button>
+                        <Button className='bg-orange-500 hover:bg-orange-600 text-white'>
+                            Сохранить заявку как новую
+                        </Button>
+                        <Button className='bg-orange-500 hover:bg-orange-600 text-white'>Редактировать</Button>
                     </div>
                 </div>
             </DialogContent>

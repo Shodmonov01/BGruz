@@ -100,7 +100,7 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
         const num = value.replace(/\D/g, '') // Убираем все нечисловые символы
         return num ? new Intl.NumberFormat('ru-RU').format(Number(num)) : ''
     }
- 
+
     return (
         <div className='space-y-4'>
             <h1 className='text-center text-red-600 font-bold'>Все цены указаны без НДС</h1>
