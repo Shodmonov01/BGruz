@@ -138,7 +138,11 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 size: 150,
                 cell: ({ getValue }) => {
                     const value = getValue()
-                    return value.length > 0 ? 'Есть' : 'Нет'
+                    if (value && value[0].DateCreate) {
+                        const date = new Date(value[0].DateCreate)
+                        return date.toISOString().split('T')[0]
+                    }
+                    return 'Нет'
                 },
                 searchable: true
             },
