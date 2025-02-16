@@ -199,13 +199,12 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                         <Button
                             type='button'
                             variant='secondary'
-                            className='rounded-full'
                             size='lg'
                             onClick={modalClose}
                         >
                             Отмена
                         </Button>
-                        <Button type='submit' className='rounded-full' size='lg' disabled={!isClientSelected}>
+                        <Button variant='tertiary' type='submit'  size='lg' disabled={!isClientSelected}>
                             Создать заявку
                         </Button>
                     </div>
