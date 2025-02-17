@@ -7,7 +7,7 @@ import * as z from 'zod'
 import { useState } from 'react'
 import axios from 'axios'
 import { useRouter } from '@/routes/hooks'
-import { ModeToggle } from '@/components/shared/theme-toggle'
+// import { ModeToggle } from '@/components/shared/theme-toggle'
 
 // Валидация через Zod
 const formSchema = z.object({

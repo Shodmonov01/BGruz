@@ -52,7 +52,6 @@ interface Orders {
 function OrdersTable({ orders, setFilters, handleFilterChange, loadMore, hasMore, loading }) {
     const [selectedBid, setSelectedBid] = useState<Partial<Orders> | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
-    {/* @ts-expect-error что нибудь придумаем */}
     const [isShortTable, setIsShortTable] = useState(false)
 
     const scrollRef = useRef<HTMLDivElement | null>(null)

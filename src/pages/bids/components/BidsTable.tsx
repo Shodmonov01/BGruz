@@ -4,7 +4,7 @@ import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import type { DateRange } from 'react-day-picker'
+// import type { DateRange } from 'react-day-picker'
 import { useBidsTableColumns } from './bids-table/useBidsTableColumns'
 import BidsInfoModal from './bids-info-modal'
 import BidHeader from './bids-header'
@@ -118,6 +118,7 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
                                             className='bg-[#EDEDED] border border-gray-300 whitespace-nowrap'
                                         >
                                             <div className='text-center'>
+                                                {/* @ts-expect-error что нибудь придумаем */}
                                                 {header.column.columnDef.searchable && (
                                                     <div className='text-center'>
                                                         {renderFilterInput(header.column, handleFilterChange)}

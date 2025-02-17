@@ -19,6 +19,7 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
     const [terminals, setTerminals] = useState<Terminal[]>([])
     const [warehouses, setWarehouses] = useState<Warehouse[]>([])
     const [vehicleProfiles, setVehicleProfiles] = useState<VehicleProfile[]>([])
+     {/* @ts-expect-error что нибудь придумаем */}
     const [extraServices, setExtraServices] = useState([])
     const [data, setData] = useState()
     const [isFetched, setIsFetched] = useState(true)

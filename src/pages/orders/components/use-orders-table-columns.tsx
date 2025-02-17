@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo} from 'react'
 
 import { ColumnDef } from '@tanstack/react-table'
 
@@ -47,28 +47,26 @@ interface ColumnsProps {
     onDelete: (bidId: string) => void
     onOpenModal: (bid: Orders) => void
 }
-{
-    /* @ts-expect-error что нибудь придумаем */
-}
 
-const AuctionTimer = ({ activationTime }: { activationTime: string }) => {
-    const [timeLeft, setTimeLeft] = useState(() => {
-        const time = new Date(activationTime).getTime()
-        return Math.max(0, Math.floor((time - Date.now()) / 1000))
-    })
 
-    useEffect(() => {
-        if (timeLeft <= 0) return
-        const interval = setInterval(() => {
-            setTimeLeft(prev => Math.max(prev - 1, 0))
-        }, 1000)
-        return () => clearInterval(interval)
-    }, [timeLeft])
+// const AuctionTimer = ({ activationTime }: { activationTime: string }) => {
+//     const [timeLeft, setTimeLeft] = useState(() => {
+//         const time = new Date(activationTime).getTime()
+//         return Math.max(0, Math.floor((time - Date.now()) / 1000))
+//     })
 
-    const minutes = Math.floor(timeLeft / 60)
-    const seconds = timeLeft % 60
-    return <>{timeLeft > 0 ? `${minutes}:${seconds.toString().padStart(2, '0')}` : 'Время вышло'}</>
-}
+//     useEffect(() => {
+//         if (timeLeft <= 0) return
+//         const interval = setInterval(() => {
+//             setTimeLeft(prev => Math.max(prev - 1, 0))
+//         }, 1000)
+//         return () => clearInterval(interval)
+//     }, [timeLeft])
+
+//     const minutes = Math.floor(timeLeft / 60)
+//     const seconds = timeLeft % 60
+//     return <>{timeLeft > 0 ? `${minutes}:${seconds.toString().padStart(2, '0')}` : 'Время вышло'}</>
+// }
 
 export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpenModal }: ColumnsProps) => {
     const formatNumber = (value: string) => {
