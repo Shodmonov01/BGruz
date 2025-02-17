@@ -17,7 +17,7 @@ interface DateRange {
 
 export default function BidsPage() {
     const [searchParams] = useSearchParams()
-    const [size, setSize] = useState(Number(searchParams.get('size')) || 50)
+    const [size, setSize] = useState(Number(searchParams.get('size')) || 100)
     const [localFilters, setLocalFilters] = useState<{ [key: string]: string }>({})
 
     const debounceRef = useRef<NodeJS.Timeout | null>(null)
