@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useMemo, useState } from 'react'
 import type { ColumnDef } from '@tanstack/react-table'
 import { Button } from '@/components/ui/button'
@@ -92,6 +94,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
             },
             {
                 header: 'Вагон/Контейнер',
+                accessorKey: 'cargoType',
                 size: 200,
                 accessorFn: row => {
                     let cargoTypeLabel = ''
@@ -113,14 +116,16 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
             },
             {
                 header: 'Погрузка/Выгрузка',
+                accessorKey: 'loadingMode',
                 size: 200,
                 accessorFn: row => {
                     let loadingModeLabel = ''
                     if (row.loadingMode === 'loading') {
                         loadingModeLabel = 'Погрузка'
-                    } else if (row.loadingMode === 'unloading') {
+                    } else {
                         loadingModeLabel = 'Выгрузка'
                     }
+
                     return `${loadingModeLabel}`
                 },
                 isShortVersion: true,
@@ -183,7 +188,16 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 cell: ({ row }) => <AuctionTimer activationTime={row.original.activationTime} />,
                 isShortVersion: true,
                 searchable: true,
-                filterType: 'range'
+                filterType: 'range',
+                sortingFn: (rowA, rowB, columnId) => {
+                    const valueA = rowA.getValue(columnId)
+                    const valueB = rowB.getValue(columnId)
+
+                    const numA = typeof valueA === 'string' ? Number(valueA.replace(/\D/g, '')) : Number(valueA ?? 0)
+                    const numB = typeof valueB === 'string' ? Number(valueB.replace(/\D/g, '')) : Number(valueB ?? 0)
+
+                    return numA - numB
+                }
             },
             {
                 accessorKey: 'status',
@@ -210,7 +224,16 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                     const value = getValue()
                     return formatNumber(String(value))
                 },
-                filterType: 'range'
+                filterType: 'range',
+                sortingFn: (rowA, rowB, columnId) => {
+                    const valueA = rowA.getValue(columnId)
+                    const valueB = rowB.getValue(columnId)
+
+                    const numA = typeof valueA === 'string' ? Number(valueA.replace(/\D/g, '')) : Number(valueA ?? 0)
+                    const numB = typeof valueB === 'string' ? Number(valueB.replace(/\D/g, '')) : Number(valueB ?? 0)
+
+                    return numA - numB
+                }
             },
             {
                 accessorKey: 'bestSalePrice',
@@ -221,7 +244,16 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                     const value = getValue()
                     return formatNumber(String(value))
                 },
-                filterType: 'range'
+                filterType: 'range',
+                sortingFn: (rowA, rowB, columnId) => {
+                    const valueA = rowA.getValue(columnId)
+                    const valueB = rowB.getValue(columnId)
+
+                    const numA = typeof valueA === 'string' ? Number(valueA.replace(/\D/g, '')) : Number(valueA ?? 0)
+                    const numB = typeof valueB === 'string' ? Number(valueB.replace(/\D/g, '')) : Number(valueB ?? 0)
+
+                    return numA - numB
+                }
             },
             {
                 accessorKey: 'extraServicesPrice',
@@ -232,7 +264,16 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                     const value = getValue()
                     return formatNumber(String(value))
                 },
-                filterType: 'range'
+                filterType: 'range',
+                sortingFn: (rowA, rowB, columnId) => {
+                    const valueA = rowA.getValue(columnId)
+                    const valueB = rowB.getValue(columnId)
+
+                    const numA = typeof valueA === 'string' ? Number(valueA.replace(/\D/g, '')) : Number(valueA ?? 0)
+                    const numB = typeof valueB === 'string' ? Number(valueB.replace(/\D/g, '')) : Number(valueB ?? 0)
+
+                    return numA - numB
+                }
             },
             {
                 accessorKey: 'fullPrice',
@@ -243,7 +284,16 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                     const value = getValue()
                     return formatNumber(String(value))
                 },
-                filterType: 'range'
+                filterType: 'range',
+                sortingFn: (rowA, rowB, columnId) => {
+                    const valueA = rowA.getValue(columnId)
+                    const valueB = rowB.getValue(columnId)
+
+                    const numA = typeof valueA === 'string' ? Number(valueA.replace(/\D/g, '')) : Number(valueA ?? 0)
+                    const numB = typeof valueB === 'string' ? Number(valueB.replace(/\D/g, '')) : Number(valueB ?? 0)
+
+                    return numA - numB
+                }
             },
             { accessorKey: 'commission', header: 'Комиссия', size: 100, searchable: true, filterType: 'range' },
             {
@@ -255,7 +305,16 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                     const value = getValue()
                     return formatNumber(String(value))
                 },
-                filterType: 'range'
+                filterType: 'range',
+                sortingFn: (rowA, rowB, columnId) => {
+                    const valueA = rowA.getValue(columnId)
+                    const valueB = rowB.getValue(columnId)
+
+                    const numA = typeof valueA === 'string' ? Number(valueA.replace(/\D/g, '')) : Number(valueA ?? 0)
+                    const numB = typeof valueB === 'string' ? Number(valueB.replace(/\D/g, '')) : Number(valueB ?? 0)
+
+                    return numA - numB
+                }
             },
             {
                 accessorKey: 'createdAt',
@@ -320,5 +379,5 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
         ]
 
         return allColumns.filter(col => (isShortTable ? col.isShortVersion : true))
-    }, [isShortTable, onApprove, onDelete, onOpenModal]) // Removed formatNumber from dependencies
+    }, [isShortTable, onApprove, onDelete, onOpenModal])
 }

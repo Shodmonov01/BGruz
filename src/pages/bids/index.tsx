@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 
 import { useSearchParams } from 'react-router-dom'
 
@@ -9,61 +9,59 @@ import { useGetBids } from '@/hooks/useGetBids'
 
 import BidsTableMobile from './components/bidsTableMobile'
 import BidsTable from './components/BidsTable'
-
-interface DateRange {
-    from: Date
-    to: Date
-}
+import { postData2 } from '@/api/api'
 
 export default function BidsPage() {
     const [searchParams] = useSearchParams()
     const [size, setSize] = useState(Number(searchParams.get('size')) || 50)
-    const [localFilters, setLocalFilters] = useState<{ [key: string]: string }>({})
+    const [localFilters, setLocalFilters] = useState<{ [key: string]: string | any[] }>({})
 
     const debounceRef = useRef<NodeJS.Timeout | null>(null)
 
     const { bids, hasMore, loading, setFilters, refreshTable } = useGetBids(size)
+    console.log('localFilters', localFilters)
 
-    const handleFilterChange = (columnId: string, value: string | DateRange | null) => {
-        const newFilters = { ...localFilters }
-        if (value) {
-            if (typeof value === 'string') {
-                newFilters[columnId] = value
-            } else if (value.from && value.to) {
-                newFilters[columnId] = `${value.from.toISOString()},${value.to.toISOString()}`
+    const handleFilterChange = useCallback(
+        (columnId: string, value: any | any[]) => {
+            const newFilters = {
+                ...localFilters,
+                [columnId]: value ? [value] : []
             }
-        } else {
-            delete newFilters[columnId]
-        }
+            console.log('newFilters', newFilters)
 
-        setLocalFilters(newFilters)
+            setLocalFilters(newFilters)
 
-        if (debounceRef.current) clearTimeout(debounceRef.current)
-        debounceRef.current = setTimeout(() => {
-            console.log('Обновляем фильтры:', newFilters)
-            setFilters(newFilters)
-            refreshTable()
-        }, 500)
-    }
+            if (debounceRef.current) clearTimeout(debounceRef.current)
+            debounceRef.current = setTimeout(() => {
+                const filterPayload = {
+                    filter: {
+                        cargoType: [newFilters.cargoType] || [],
+                        loadingMode: [newFilters.loadingMode] || []
+                    },
+                    sort: {
+                        filterFieldName: 'createdAt',
+                        direction: 'descending'
+                    },
+                    size: size
+                }
+
+                try {
+                    const token = localStorage.getItem('authToken') || ''
+                    postData2('/api/v1/bids/getbatch', filterPayload, token)
+                    refreshTable()
+                } catch (error) {
+                    console.log(error)
+                }
+            }, 500)
+        },
+        [localFilters, size, refreshTable]
+    )
 
     const loadMore = () => {
         if (hasMore) {
             setSize(prev => prev + 50)
         }
     }
-
-    useEffect(() => {
-        const handleScroll = () => {
-            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
-                if (hasMore && !loading) {
-                    loadMore()
-                }
-            }
-        }
-
-        window.addEventListener('scroll', handleScroll)
-        return () => window.removeEventListener('scroll', handleScroll)
-    }, [hasMore, loading])
 
     return (
         <div className='py-4 md:px-4'>
@@ -80,6 +78,7 @@ export default function BidsPage() {
                         loadMore={loadMore}
                         hasMore={hasMore}
                         loading={loading}
+                        localFilters={localFilters}
                     />
                 </div>
 
