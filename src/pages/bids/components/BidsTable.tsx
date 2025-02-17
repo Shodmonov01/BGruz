@@ -86,7 +86,7 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
         onOpenModal: handleOpenModal
     })
     const table = useReactTable({ data: bids || [], columns, getCoreRowModel: getCoreRowModel() })
-    console.log('columns', columns)
+    // console.log('columns', columns)
 
     return (
         <div>

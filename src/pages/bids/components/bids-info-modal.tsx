@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { postData2, fetchPrivateData } from '@/api/api'
-import { Dialog, DialogContent } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -23,6 +23,10 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
     const [extraServices, setExtraServices] = useState([])
     const [data, setData] = useState()
     const [isFetched, setIsFetched] = useState(true)
+
+
+    console.log(selectedBid);
+    
 
     useEffect(() => {
         const loadClients = async () => {
@@ -59,7 +63,6 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
         try {
             const token = localStorage.getItem('authToken')
             const data = await fetchPrivateData(`api/v1/organization/?organization_id=${clientId}`, token)
-
             setData(data)
 
             setTerminals(data.terminals || [])
@@ -102,11 +105,12 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
 
     return (
         <Dialog open={isModalOpen} onOpenChange={handleCloseModal}>
+            <DialogTitle></DialogTitle>
             <DialogContent className='max-w-2xl max-h-[90vh] overflow-y-auto p-0'>
                 <div className='relative bg-white rounded-lg'>
                     <div className='p-6 space-y-6'>
                         <div className='text-center'>
-                            <h2 className='text-2xl font-bold text-[#ff6b00]'>Заявка СМ ID {formData.persistentId}</h2>
+                            <h2 className='text-2xl font-bold text-tertiary'>Заявка СМ ID {formData.persistentId}</h2>
                             <p className='text-sm '>
                                 Дата {format(new Date(formData.loadingDate || new Date()), 'dd.MM.yyyy')} №
                                 {formData.number}
@@ -129,6 +133,14 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                         <RadioGroupItem value='unloading' id='unloading' disabled={isReadOnly} />
                                         <Label htmlFor='unloading'>Выгрузка</Label>
                                     </div>
+                                  
+                                </RadioGroup>
+                                <RadioGroup
+                                    defaultValue={formData.cargoType}
+                                    className='flex gap-6 mt-2'
+                                    onValueChange={value => handleChange('loadingMode', value)}
+                                >
+                           
                                     <div className='flex items-center gap-2'>
                                         <RadioGroupItem value='container' id='container' disabled={isReadOnly} />
                                         <Label htmlFor='container'>Контейнер</Label>
@@ -169,18 +181,18 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                         <Select
                                             disabled={isReadOnly}
                                             onValueChange={value => handleChange('recipient', value)}
-                                            defaultValue={formData.client?.organizationId?.toString()}
+                                            defaultValue={formData.customer?.organizationId?.toString()}
                                         >
                                             <SelectTrigger className='mt-1'>
                                                 <SelectValue placeholder='Выберите получателя' />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                {clients.map(client => (
+                                                {clients.map(customer => (
                                                     <SelectItem
-                                                        key={client.organizationId}
-                                                        value={client.organizationId.toString()}
+                                                        key={customer.organizationId}
+                                                        value={customer.organizationId.toString()}
                                                     >
-                                                        {client.organizationName}
+                                                        {customer.organizationName}
                                                     </SelectItem>
                                                 ))}
                                             </SelectContent>
@@ -200,7 +212,7 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                 <div className='flex gap-4 items-center w-full'>
                                     <Select
                                         onValueChange={value => handleChange('vehicleType', value)}
-                                        defaultValue={formData.vehicleProfile?.id?.toString()}
+                                        defaultValue={formData.vehicleProfile?.name?.toString()}
                                     >
                                         <SelectTrigger className='mt-1'>
                                             <SelectValue placeholder='Выберите профиль транспорта' />
