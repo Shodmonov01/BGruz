@@ -1,5 +1,12 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
-import { useReactTable, getCoreRowModel, flexRender } from '@tanstack/react-table'
+import {
+    useReactTable,
+    getCoreRowModel,
+    flexRender,
+    type ColumnFiltersState,
+    type SortingState,
+    getSortedRowModel
+} from '@tanstack/react-table'
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Input } from '@/components/ui/input'
@@ -11,7 +18,7 @@ import BidHeader from './bids-header'
 import { deleteData, postData2 } from '@/api/api'
 import loader from '../../../../public/gear-spinner.svg'
 import { DateRangePicker } from './bid-form-detail/rangePicker'
-import { Button } from '@/components/ui/button'
+import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
 
 interface Bid {
     _id?: string
@@ -21,11 +28,24 @@ interface Bid {
     status: string | null
 }
 
-function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, loading }) {
+interface BidsTableProps {
+    bids: Bid[]
+    setFilters: (filters: Record<string, unknown>) => void
+    handleFilterChange: (columnId: string, value: any) => void
+    loadMore: () => void
+    hasMore: boolean
+    loading: boolean
+    localFilters: Record<string, string | any[]>
+}
+function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, loading, localFilters }: BidsTableProps) {
     const [selectedBid, setSelectedBid] = useState<Partial<Bid> | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isShortTable, setIsShortTable] = useState(false)
     const scrollRef = useRef<HTMLDivElement | null>(null)
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
+        Object.entries(localFilters).map(([id, value]) => ({ id, value }))
+    )
+    const [sorting, setSorting] = useState<SortingState>([])
 
     useEffect(() => {
         let isFetching = false
@@ -85,8 +105,37 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
         onDelete: handleDelete,
         onOpenModal: handleOpenModal
     })
-    const table = useReactTable({ data: bids || [], columns, getCoreRowModel: getCoreRowModel() })
-    // console.log('columns', columns)
+
+    const table = useReactTable({
+        data: bids || [],
+        columns,
+        getCoreRowModel: getCoreRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        state: {
+            columnFilters,
+            sorting
+        },
+        onColumnFiltersChange: setColumnFilters,
+        onSortingChange: setSorting,
+        enableSorting: true
+    })
+
+    useEffect(() => {
+        const newFilters = columnFilters.reduce(
+            (acc, filter) => {
+                acc[filter.id] = filter.value
+                return acc
+            },
+            {} as Record<string, unknown>
+        )
+        setFilters(newFilters)
+    }, [columnFilters, setFilters])
+
+    useEffect(() => {
+        const newColumnFilters = Object.entries(localFilters).map(([id, value]) => ({ id, value }))
+
+        setColumnFilters(newColumnFilters)
+    }, [localFilters])
 
     return (
         <div>
@@ -117,11 +166,26 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
                                             key={header.id}
                                             className='bg-[#EDEDED] border border-gray-300 whitespace-nowrap'
                                         >
-                                            <div className='text-center'>
-                                                {/* @ts-expect-error что нибудь придумаем */}
-                                                {header.column.columnDef.searchable && (
+                                            <div className=''>
+                                                {header.column.columnDef.filterType !== 'range' ? (
                                                     <div className='text-center'>
                                                         {renderFilterInput(header.column, handleFilterChange)}
+                                                    </div>
+                                                ) : (
+                                                    <div
+                                                        className='flex text-xs items-center gap-1 cursor-pointer h-7 min-w-full px-3 rounded-md bg-white'
+                                                        onClick={header.column.getToggleSortingHandler()}
+                                                    >
+                                                        {header.column.columnDef.header}
+                                                        {header.column.getIsSorted() ? (
+                                                            header.column.getIsSorted() === 'asc' ? (
+                                                                <ArrowUp className='h-4 w-4' />
+                                                            ) : (
+                                                                <ArrowDown className='h-4 w-4' />
+                                                            )
+                                                        ) : (
+                                                            <ArrowUpDown className='h-4 w-4 opacity-50' />
+                                                        )}
                                                     </div>
                                                 )}
                                             </div>
@@ -191,7 +255,7 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
     )
 }
 
-function renderFilterInput(column, handleFilterChange) {
+function renderFilterInput(column) {
     const filterType = column.columnDef.filterType
     const filterOptions = column.columnDef.filterOptions
 
@@ -199,15 +263,19 @@ function renderFilterInput(column, handleFilterChange) {
         case 'exact':
             return (
                 <Input
-                    onChange={e => handleFilterChange(column.id, e.target.value)}
+                    value={(column.getFilterValue() as string) ?? ''}
+                    onChange={e => column.setFilterValue(e.target.value)}
                     placeholder='Точное совпадение'
-                    className='text-xs h-7 bg-white'
+                    className='text-xs min-w-16 h-7 bg-white'
                 />
             )
         case 'select':
             return (
-                <Select onValueChange={value => handleFilterChange(column.id, value)} defaultValue='Все'>
-                    <SelectTrigger className='text-xs h-7 bg-white'>
+                <Select
+                    value={column.getFilterValue()?.toString() ?? ''}
+                    onValueChange={value => column.setFilterValue(value || null)}
+                >
+                    <SelectTrigger className='text-xs min-w-full h-7 bg-white'>
                         <SelectValue placeholder='Выберите' />
                     </SelectTrigger>
                     <SelectContent>
@@ -222,30 +290,23 @@ function renderFilterInput(column, handleFilterChange) {
         case 'dateRange':
             return (
                 <DateRangePicker
-                    onChange={range => handleFilterChange(column.id, range)}
+                    value={column.getFilterValue() as { from: Date; to: Date } | undefined}
+                    onChange={range => column.setFilterValue(range)}
                     placeholder='Выберите даты'
-                    className='text-xs h-7 bg-white'
+                    className='text-xs'
                 />
             )
         case 'fuzzy':
             return (
                 <Input
-                    onChange={e => handleFilterChange(column.id, e.target.value)}
+                    value={(column.getFilterValue() as string) ?? ''}
+                    onChange={e => column.setFilterValue(e.target.value)}
                     placeholder='Поиск...'
-                    className='text-xs h-7 bg-white'
+                    className='text-xs h-7 min-w-16 bg-white'
                 />
             )
         case 'range':
-            return (
-                <div className='flex gap-2 items-center'>
-                    <Button className='p-1' onClick={() => handleFilterChange(column.id, 'asc')}>
-                        Возраст
-                    </Button>
-                    <Button className='p-1' onClick={() => handleFilterChange(column.id, 'desc')}>
-                        Убыв
-                    </Button>
-                </div>
-            )
+            return <button className='text-xs h-7 bg-white px-2'>{column.columnDef.header}</button>
         default:
             return null
     }
