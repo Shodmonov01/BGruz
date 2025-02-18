@@ -112,10 +112,10 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                 cargoType: data.transportType,
                 loadingMode: data.loadingType,
 
-                clientId: Number(data.client) || 4751,
+                clientId: Number(data.recipientOrSender) ,
                 startDate: getValues('startDate'),
                 slideDayTotal: 0,
-                customerId: Number(data.client) || 4751,
+                customerId: Number(data.client) ,
                 terminal1: {
                     cityId: data.terminal1Id,
                     cityName: data.terminal1Name,
@@ -137,7 +137,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                 vehicleProfileId: Number(data.vehicleProfiles),
                 vehicleCount: getValues('vehicleCount'),
                 cargoTitle: data.cargoTitle,
-                filingTime: '00:00',
+                filingTime: getValues('submissionTime'),
 
                 extraServices: data.extraServices || [],
                 description: data.description
@@ -197,13 +197,12 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                         <Button
                             type='button'
                             variant='secondary'
-                            className='rounded-full'
                             size='lg'
                             onClick={modalClose}
                         >
                             Отмена
                         </Button>
-                        <Button type='submit' className='rounded-full' size='lg' disabled={!isClientSelected}>
+                        <Button variant='tertiary' type='submit' size='lg' disabled={!isClientSelected}>
                             Создать заявку
                         </Button>
                     </div>

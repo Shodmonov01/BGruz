@@ -15,8 +15,8 @@ function BidHeader({ setIsShortTable, isShortTable }) {
                     <div className='flex gap-3 '>
                         <PopupModal renderModal={onClose => <StudentCreateForm modalClose={onClose} />} />
                     </div>
-                    <Button variant='outline'>Загрузить</Button>
-                    <Button variant='outline'>Отменить</Button>
+                    <Button variant='outlineTertiary'>Загрузить</Button>
+                    <Button variant='outlineTertiary'>Отменить</Button>
                 </div>
                 <div className='flex items-center gap-3'>
                     <Button variant='secondary' onClick={() => setIsShortTable(prev => !prev)}>

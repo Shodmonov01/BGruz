@@ -13,8 +13,8 @@ import { postData2 } from '@/api/api'
 
 export default function BidsPage() {
     const [searchParams] = useSearchParams()
-    const [size, setSize] = useState(Number(searchParams.get('size')) || 50)
-    const [localFilters, setLocalFilters] = useState<{ [key: string]: string | any[] }>({})
+    const [size, setSize] = useState(Number(searchParams.get('size')) || 100)
+    const [localFilters, setLocalFilters] = useState<{ [key: string]: string }>({})
 
     const debounceRef = useRef<NodeJS.Timeout | null>(null)
 

@@ -46,6 +46,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                 <FormField
                     control={control}
                     name='loadingType'
+                    rules={{ required: 'Заполните это поле.' }}
                     render={({ field }) => (
                         <FormItem>
                             <FormControl>
@@ -80,6 +81,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                 <FormField
                     control={control}
                     name='transportType'
+                    rules={{ required: 'Заполните это поле.' }}
                     render={({ field }) => (
                         <FormItem>
                             <FormControl>
@@ -118,6 +120,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                 <FormField
                     control={control}
                     name='client'
+                    rules={{ required: 'Заполните это поле.' }}
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel className='font-bold text-[18px]'>Заказчик</FormLabel>
@@ -164,6 +167,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                     <FormField
                         control={control}
                         name='recipientOrSender'
+                        rules={{ required: 'Заполните это поле.' }}
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel className='font-bold text-[18px]'>
@@ -210,6 +214,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                 <FormField
                     control={control}
                     name='vehicleProfiles'
+                    rules={{ required: 'Заполните это поле.' }}
                     render={({ field }) => (
                         <FormItem>
                             <Select
@@ -218,6 +223,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                     setValue('vehicleProfiles', Number(value))
                                 }}
                                 value={field.value?.toString()}
+                                required
                             >
                                 <FormControl>
                                     <SelectTrigger>
@@ -237,30 +243,12 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                     )}
                 />
 
-                {/* <div className='flex items-center border rounded-lg overflow-hidden w-24 h-[37px]'>
-                    <div className='flex-1 flex items-center justify-center text-xl font-semibold'>{count}</div>
-                    <div className='flex flex-col border-l'>
-                        <button
-                            type='button'
-                            className='w-6 h-5 flex items-center justify-center hover:bg-gray-200'
-                            onClick={() => setCount(count + 1)}
-                        >
-                            <Plus size={14} className='text-green-500' />
-                        </button>
-                        <button
-                            type='button'
-                            className='w-6 h-5 flex items-center justify-center hover:bg-gray-200'
-                            onClick={() => setCount(Math.max(1, count - 1))}
-                        >
-                            <Minus size={14} className='text-yellow-500' />
-                        </button>
-                    </div>
-                </div> */}
+
 
                 <FormField
                     control={control}
                     name='vehicleCount'
-                    defaultValue={1} // Значение по умолчанию
+                    defaultValue={1} 
                     render={({ field }) => (
                         <div className='flex items-center border rounded-lg overflow-hidden w-24 h-[37px] ml-4'>
                             <div className='flex-1 flex items-center justify-center text-xl font-semibold'>

@@ -17,7 +17,7 @@ interface Bid {
     createdBy: string
     createdAt: string
     isPriceRequest?: boolean
-    customer?: { name: string }
+    customer?: { organizationName: string }
     terminal1?: { cityName: string }
     terminal2?: { cityName: string }
     warehouses?: { cityName: string }[]
@@ -335,7 +335,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 accessorKey: 'customer',
                 header: 'Заказчик',
                 size: 150,
-                accessorFn: row => row.customer?.name ?? '—',
+                accessorFn: row => row.customer?.organizationName ?? '—',
                 searchable: true,
                 filterType: 'fuzzy'
             },
@@ -343,15 +343,25 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 accessorKey: 'isPriceRequest',
                 header: 'Согласовано',
                 size: 150,
+                // cell: ({ row }) => {
+                //     const isApproved = row.original.isPriceRequest
+                //     return (
+                //         <Button
+                //             onClick={() => onApprove(row.original._id)}
+                //             disabled={isApproved}
+                //             variant={isApproved ? 'secondary' : 'default'}
+                //         >
+                //             {isApproved ? 'Согласовано' : 'Согласовать'}
+                //         </Button>
+                //     )
+                // },
                 cell: ({ row }) => {
-                    const isApproved = row.original.isPriceRequest
                     return (
                         <Button
                             onClick={() => onApprove(row.original._id)}
-                            disabled={isApproved}
-                            variant={isApproved ? 'secondary' : 'default'}
+                            
                         >
-                            {isApproved ? 'Согласовано' : 'Согласовать'}
+                            Согласовать
                         </Button>
                     )
                 },
