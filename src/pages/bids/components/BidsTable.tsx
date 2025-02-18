@@ -206,7 +206,7 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
                                     onDoubleClick={() => handleOpenModal(row.original)}
                                     key={row.id}
                                     className={`cursor-pointer text-[16px] hover:bg-gray-100 ${
-                                        row.original.ownState === 'canceled'
+                                        row.original.status === 'canceled'
                                             ? 'bg-gray-50 opacity-50 line-through'
                                             : index % 2 === 0
                                               ? 'bg-gray-100'

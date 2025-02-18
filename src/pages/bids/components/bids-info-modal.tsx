@@ -95,6 +95,8 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
             alert('Нет изменений для сохранения.')
             return
         }
+
+        console.log('Отправляем на сервер:', updatedFields)
     
         try {
             await postData2(`api/v1/bids/${formData._id}`, updatedFields, token)
@@ -122,14 +124,19 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
         setFormData(prev => ({ ...prev, [name]: value }))
     }
 
-    const handleVehicleChange = value => {
-        const selectedVehicle = vehicleOptions.find(v => v.id === parseInt(value))
+    const handleVehicleChange = (value) => {
+        const selectedVehicle = vehicleProfiles.find(v => v.id === parseInt(value))
+
+        console.log(selectedVehicle);
+        
+    
         setFormData(prev => ({
             ...prev,
-            vehicleProfile: selectedVehicle,
-            vehicleProfileId: selectedVehicle?.id
+            vehicleProfile: selectedVehicle || null, // Обновляем сам объект
+            vehicleProfileId: selectedVehicle?.id || null // Обновляем ID
         }))
     }
+    
 
     return (
         <Dialog open={isModalOpen} onOpenChange={handleCloseModal}>
@@ -272,21 +279,6 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                     <div>
                         <strong>Тип перевозки:</strong>
                         {isEditing ? (
-                            // <Select
-                            //     onValueChange={handleVehicleChange}
-                            //     value={formData.vehicleProfileId?.toString() || ''}
-                            // >
-                            //     <SelectTrigger>
-                            //         <SelectValue placeholder='Выберите тип перевозки' />
-                            //     </SelectTrigger>
-                            //     <SelectContent>
-                            //         {vehicleOptions.map(option => (
-                            //             <SelectItem key={option.id} value={option.id.toString()}>
-                            //                 {option.name}
-                            //             </SelectItem>
-                            //         ))}
-                            //     </SelectContent>
-                            // </Select>
                             <Select
                                 onValueChange={handleVehicleChange}
                                 value={formData.vehicleProfileId?.toString() || ''}
