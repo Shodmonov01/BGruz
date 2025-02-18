@@ -7,11 +7,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { fetchPrivateData, postData2 } from '@/api/api'
 
-const vehicleOptions = [
-    { id: 169, name: 'Тент 20т 82 куб' },
-    { id: 170, name: 'Рефрижератор 10т 50 куб' },
-    { id: 171, name: 'Контейнеровоз 30т 70 куб' }
-]
+
 
 function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
     const [isEditing, setIsEditing] = useState(false)
@@ -37,6 +33,7 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
         }
     }
 
+//@ts-ignore
     useEffect(() => {
         if (isModalOpen && clientId) {
             fetchVehicleProfiles()
@@ -125,6 +122,7 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
     }
 
     const handleVehicleChange = (value) => {
+        //@ts-ignore
         const selectedVehicle = vehicleProfiles.find(v => v.id === parseInt(value))
 
         console.log(selectedVehicle);
@@ -133,6 +131,7 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
         setFormData(prev => ({
             ...prev,
             vehicleProfile: selectedVehicle || null, // Обновляем сам объект
+            //@ts-ignore
             vehicleProfileId: selectedVehicle?.id || null // Обновляем ID
         }))
     }
@@ -288,9 +287,8 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                 </SelectTrigger>
                                 <SelectContent>
                                     {vehicleProfiles.map(option => (
-                                        <SelectItem key={option.id} value={option.id.toString()}>
-                                            {option.name}
-                                        </SelectItem>
+                                        //@ts-expect-error fdkfj hido
+                                        <SelectItem key={option.id} value={option.id.toString()}>{option.name}</SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>

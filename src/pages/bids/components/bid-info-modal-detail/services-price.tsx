@@ -2,11 +2,9 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
 import { Checkbox } from '@/components/ui/checkbox'
-import { useFormatNumber } from '@/hooks/useFormatNumber'
 
 function ServicesPrice({ formData, handleChange, isReadOnly }) {
 
-  const { formatNumber } = useFormatNumber()
 
     return (
         <div>

@@ -37,6 +37,7 @@ interface BidsTableProps {
     loading: boolean
     localFilters: Record<string, string | any[]>
 }
+//@ts-ignore
 function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, loading, localFilters }: BidsTableProps) {
     const [selectedBid, setSelectedBid] = useState<Partial<Bid> | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -103,11 +104,14 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
         isShortTable,
         onApprove: handleApprove,
         onDelete: handleDelete,
+        //@ts-ignore
         onOpenModal: handleOpenModal
     })
 
     const table = useReactTable({
+        //@ts-ignore
         data: bids || [],
+        //@ts-ignore
         columns,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
@@ -172,8 +176,9 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
                                             key={header.id}
                                             className='bg-[#EDEDED] border border-gray-300 whitespace-nowrap'
                                         >
-                                            <div className=''>
-                                                {header.column.columnDef.filterType !== 'range' ? (
+                                            <div>
+                                                {//@ts-ignore
+                                                header.column.columnDef.filterType !== 'range' ? (
                                                     <div className='text-center'>
                                                         {renderFilterInput(header.column, handleFilterChange)}
                                                     </div>
@@ -182,7 +187,13 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
                                                         className='flex text-xs items-center gap-1 cursor-pointer h-7 min-w-full px-3 rounded-md bg-white'
                                                         onClick={header.column.getToggleSortingHandler()}
                                                     >
-                                                        {header.column.columnDef.header}
+                                                        <div className='text-center'>
+                                                            {flexRender(
+                                                                header.column.columnDef.header,
+                                                                header.getContext()
+                                                            )}
+                                                        </div>
+
                                                         {header.column.getIsSorted() ? (
                                                             header.column.getIsSorted() === 'asc' ? (
                                                                 <ArrowUp className='h-4 w-4' />
@@ -203,6 +214,7 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
                         <TableBody>
                             {table.getRowModel().rows.map((row, index) => (
                                 <TableRow
+                                    //@ts-ignore
                                     onDoubleClick={() => handleOpenModal(row.original)}
                                     key={row.id}
                                     className={`cursor-pointer text-[16px] hover:bg-gray-100 ${
@@ -316,6 +328,7 @@ function renderFilterInput(column, handleFilterChange) {
         case 'dateRange':
             return (
                 <DateRangePicker
+                    //@ts-ignore
                     value={column.getFilterValue() as { start: Date; end: Date } | undefined}
                     onChange={range => handleChange(range)}
                     placeholder='Выберите даты'

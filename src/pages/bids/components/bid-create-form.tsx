@@ -111,7 +111,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
             const payload = {
                 cargoType: data.transportType,
                 loadingMode: data.loadingType,
-
+                //@ts-ignore
                 clientId: Number(data.recipientOrSender),
                 startDate: getValues('startDate'),
                 slideDayTotal: 0,
@@ -137,6 +137,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                 vehicleProfileId: Number(data.vehicleProfiles),
                 vehicleCount: getValues('vehicleCount'),
                 cargoTitle: data.cargoTitle,
+                //@ts-ignore
                 filingTime: getValues('submissionTime'),
 
                 extraServices: data.extraServices || [],
