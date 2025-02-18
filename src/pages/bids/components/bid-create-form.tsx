@@ -112,10 +112,10 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                 cargoType: data.transportType,
                 loadingMode: data.loadingType,
 
-                clientId: Number(data.recipientOrSender) ,
+                clientId: Number(data.recipientOrSender),
                 startDate: getValues('startDate'),
                 slideDayTotal: 0,
-                customerId: Number(data.client) ,
+                customerId: Number(data.client),
                 terminal1: {
                     cityId: data.terminal1Id,
                     cityName: data.terminal1Name,
@@ -194,12 +194,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                     </div>
                     {errorMessage && <div className='text-red-500 text-center py-2'>{errorMessage}</div>}
                     <div className='flex items-center justify-center gap-4'>
-                        <Button
-                            type='button'
-                            variant='secondary'
-                            size='lg'
-                            onClick={modalClose}
-                        >
+                        <Button type='button' variant='secondary' size='lg' onClick={modalClose}>
                             Отмена
                         </Button>
                         <Button variant='tertiary' type='submit' size='lg' disabled={!isClientSelected}>

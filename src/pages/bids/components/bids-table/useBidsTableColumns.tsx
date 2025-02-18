@@ -10,14 +10,14 @@ interface Bid {
     _id: string
     persistentId: string
     cargoTitle: string
-    client: { organizationName: string }
+    clientName: { organizationName: string }
     price: number | null
     status: string | null
     filingTime: string
     createdBy: string
     createdAt: string
     isPriceRequest?: boolean
-    customer?: { organizationName: string }
+    customerName?: { organizationName: string }
     terminal1?: { cityName: string }
     terminal2?: { cityName: string }
     warehouses?: { cityName: string }[]
@@ -343,7 +343,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
             },
             { accessorKey: 'createdBy', header: 'Создал', size: 150, searchable: true, filterType: 'fuzzy' },
             {
-                accessorKey: 'client',
+                accessorKey: 'clientName',
                 header: 'Клиент',
                 size: 150,
                 accessorFn: row => row.client?.organizationName ?? '—',
@@ -351,7 +351,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 filterType: 'fuzzy'
             },
             {
-                accessorKey: 'customer',
+                accessorKey: 'customerName',
                 header: 'Заказчик',
                 size: 150,
                 accessorFn: row => row.customer?.organizationName ?? '—',
