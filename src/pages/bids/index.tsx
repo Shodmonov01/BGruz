@@ -26,11 +26,13 @@ export default function BidsPage() {
 
             if (columnId === 'loadingMode' || columnId === 'cargoType' || columnId === 'status') {
                 formattedValue = Array.isArray(value) ? value : [value]
-            } else if (columnId === 'loadingDate' && value) {
+            } else if ((columnId === 'loadingDate' || columnId === 'createdAt') && value) {
                 formattedValue = {
                     start: value.from,
                     end: value.to
                 }
+            } else if (['number', 'fullPrice', 'comission', 'extraServicesPrice'].includes(columnId)) {
+                formattedValue = Number(value)
             }
 
             const newFilters = {
