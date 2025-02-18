@@ -270,6 +270,13 @@ function renderFilterInput(column, handleFilterChange) {
         handleFilterChange(column.id, value)
     }
 
+    const getStringValue = (value: string | string[] | null): string => {
+        if (Array.isArray(value)) {
+            return value.join(',')
+        }
+        return value ?? ''
+    }
+
     switch (filterType) {
         case 'exact':
             return (
@@ -283,15 +290,23 @@ function renderFilterInput(column, handleFilterChange) {
         case 'select':
             return (
                 <Select
-                    value={column.getFilterValue()?.toString() ?? ''}
-                    onValueChange={value => handleChange(value || null)}
+                    value={getStringValue(column.getFilterValue())}
+                    onValueChange={value => {
+                        const selectedOption = filterOptions?.find(option =>
+                            Array.isArray(option.value) ? option.value.join(',') === value : option.value === value
+                        )
+                        handleChange(selectedOption ? selectedOption.value : null)
+                    }}
                 >
                     <SelectTrigger className='text-xs min-w-full h-7 bg-white'>
                         <SelectValue placeholder='Выберите' />
                     </SelectTrigger>
                     <SelectContent>
                         {filterOptions?.map(option => (
-                            <SelectItem key={option.value} value={option.value}>
+                            <SelectItem
+                                key={Array.isArray(option.value) ? option.value.join(',') : option.value}
+                                value={Array.isArray(option.value) ? option.value.join(',') : option.value}
+                            >
                                 {option.label}
                             </SelectItem>
                         ))}

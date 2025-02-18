@@ -9,7 +9,6 @@ import { useGetBids } from '@/hooks/useGetBids'
 
 import BidsTableMobile from './components/bidsTableMobile'
 import BidsTable from './components/BidsTable'
-import { postData2 } from '@/api/api'
 
 export default function BidsPage() {
     const [searchParams] = useSearchParams()
@@ -28,8 +27,8 @@ export default function BidsPage() {
                 formattedValue = Array.isArray(value) ? value : [value]
             } else if ((columnId === 'loadingDate' || columnId === 'createdAt') && value) {
                 formattedValue = {
-                    start: value.from,
-                    end: value.to
+                    start: new Date(value.from.setHours(23, 59, 59, 999)).toISOString(),
+                    end: new Date(value.to.setHours(23, 59, 59, 999)).toISOString()
                 }
             } else if (['number', 'fullPrice', 'comission', 'extraServicesPrice'].includes(columnId)) {
                 formattedValue = Number(value)

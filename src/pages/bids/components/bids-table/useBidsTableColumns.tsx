@@ -72,7 +72,8 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
             isShortVersion?: boolean
             searchable?: boolean
             filterType?: string
-            filterOptions?: { value: string; label: string }[]
+            filterOptions?: { value: string | string[]; label: string }[]
+            accessorFn?: any
         })[] = [
             {
                 accessorKey: 'number',
@@ -202,16 +203,34 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 header: 'Статус',
                 size: 100,
                 accessorFn: row => row.status ?? null,
-                cell: ({ row }) =>
-                    row.original.status ? (
-                        row.original.status
+                cell: ({ row }) => {
+                    const statusMap = {
+                        active: 'Активна',
+                        waiting: 'На ожидании',
+                        executed: 'Выполнена',
+                        canceled: 'Отменена'
+                    }
+
+                    const status = row.original.status
+
+                    return status ? (
+                        <span>{statusMap[status] || status}</span>
                     ) : (
                         <div className='flex items-center justify-center'>
                             <img src={loading || '/placeholder.svg'} alt='Загрузка...' />
                         </div>
-                    ),
+                    )
+                },
                 searchable: true,
-                filterType: 'select'
+                filterType: 'select',
+                filterOptions: [
+                    { value: ['active', 'waiting', 'executed', 'canceled'], label: 'Все' },
+                    { value: ['active', 'waiting'], label: 'Акт.+ожид.' },
+                    { value: 'active', label: 'Активна' },
+                    { value: 'waiting', label: 'На ожидании' },
+                    { value: 'executed', label: 'Выполнена' },
+                    { value: 'canceled', label: 'Отменены' }
+                ]
             },
             {
                 accessorKey: 'price',
@@ -356,14 +375,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 //     )
                 // },
                 cell: ({ row }) => {
-                    return (
-                        <Button
-                            onClick={() => onApprove(row.original._id)}
-                            
-                        >
-                            Согласовать
-                        </Button>
-                    )
+                    return <Button onClick={() => onApprove(row.original._id)}>Согласовать</Button>
                 },
                 isShortVersion: true
                 // searchable: true,
