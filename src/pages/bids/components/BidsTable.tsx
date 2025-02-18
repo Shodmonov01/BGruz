@@ -120,20 +120,26 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
         enableSorting: true
     })
 
-    useEffect(() => {
-        const newFilters = columnFilters.reduce(
-            (acc, filter) => {
-                acc[filter.id] = filter.value
-                return acc
-            },
-            {} as Record<string, unknown>
-        )
-        setFilters(newFilters)
-    }, [columnFilters, setFilters])
+    // useEffect(() => {
+    //     const newFilters = columnFilters.reduce(
+    //         (acc, filter) => {
+    //             acc[filter.id] = filter.value
+    //             return acc
+    //         },
+    //         {} as Record<string, unknown>
+    //     )
+    //     setFilters(newFilters)
+    // }, [columnFilters, setFilters])
+
+    // useEffect(() => {
+    //     const newColumnFilters = Object.entries(localFilters).map(([id, value]) => ({ id, value }))
+
+    //     setColumnFilters(newColumnFilters)
+    // }, [localFilters])
+    // console.log('columnFilters', columnFilters)
 
     useEffect(() => {
         const newColumnFilters = Object.entries(localFilters).map(([id, value]) => ({ id, value }))
-
         setColumnFilters(newColumnFilters)
     }, [localFilters])
 
@@ -255,16 +261,21 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
     )
 }
 
-function renderFilterInput(column) {
+function renderFilterInput(column, handleFilterChange) {
     const filterType = column.columnDef.filterType
     const filterOptions = column.columnDef.filterOptions
+
+    const handleChange = value => {
+        column.setFilterValue(value)
+        handleFilterChange(column.id, value)
+    }
 
     switch (filterType) {
         case 'exact':
             return (
                 <Input
                     value={(column.getFilterValue() as string) ?? ''}
-                    onChange={e => column.setFilterValue(e.target.value)}
+                    onChange={e => handleChange(e.target.value)}
                     placeholder='Точное совпадение'
                     className='text-xs min-w-16 h-7 bg-white'
                 />
@@ -273,7 +284,7 @@ function renderFilterInput(column) {
             return (
                 <Select
                     value={column.getFilterValue()?.toString() ?? ''}
-                    onValueChange={value => column.setFilterValue(value || null)}
+                    onValueChange={value => handleChange(value || null)}
                 >
                     <SelectTrigger className='text-xs min-w-full h-7 bg-white'>
                         <SelectValue placeholder='Выберите' />
@@ -290,8 +301,8 @@ function renderFilterInput(column) {
         case 'dateRange':
             return (
                 <DateRangePicker
-                    value={column.getFilterValue() as { from: Date; to: Date } | undefined}
-                    onChange={range => column.setFilterValue(range)}
+                    value={column.getFilterValue() as { start: Date; end: Date } | undefined}
+                    onChange={range => handleChange(range)}
                     placeholder='Выберите даты'
                     className='text-xs'
                 />
@@ -300,7 +311,7 @@ function renderFilterInput(column) {
             return (
                 <Input
                     value={(column.getFilterValue() as string) ?? ''}
-                    onChange={e => column.setFilterValue(e.target.value)}
+                    onChange={e => handleChange(e.target.value)}
                     placeholder='Поиск...'
                     className='text-xs h-7 min-w-16 bg-white'
                 />

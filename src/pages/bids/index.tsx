@@ -19,24 +19,33 @@ export default function BidsPage() {
     const debounceRef = useRef<NodeJS.Timeout | null>(null)
 
     const { bids, hasMore, loading, setFilters, refreshTable } = useGetBids(size)
-    console.log('localFilters', localFilters)
 
     const handleFilterChange = useCallback(
-        (columnId: string, value: any | any[]) => {
+        (columnId: string, value: any) => {
+            let formattedValue = value
+
+            if (columnId === 'loadingMode' || columnId === 'cargoType' || columnId === 'status') {
+                formattedValue = Array.isArray(value) ? value : [value]
+            } else if (columnId === 'loadingDate' && value) {
+                formattedValue = {
+                    start: value.from,
+                    end: value.to
+                }
+            }
+
             const newFilters = {
                 ...localFilters,
-                [columnId]: value ? [value] : []
+                [columnId]: formattedValue
             }
-            console.log('newFilters', newFilters)
 
             setLocalFilters(newFilters)
+            setFilters(newFilters)
 
             if (debounceRef.current) clearTimeout(debounceRef.current)
-            debounceRef.current = setTimeout(() => {
+            debounceRef.current = setTimeout(async () => {
                 const filterPayload = {
                     filter: {
-                        cargoType: [newFilters.cargoType] || [],
-                        loadingMode: [newFilters.loadingMode] || []
+                        ...newFilters
                     },
                     sort: {
                         filterFieldName: 'createdAt',
@@ -47,16 +56,30 @@ export default function BidsPage() {
 
                 try {
                     const token = localStorage.getItem('authToken') || ''
-                    postData2('/api/v1/bids/getbatch', filterPayload, token)
+                    const response = await fetch('https://portal.bgruz.com/api/v1/bids/getbatch', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${token}`
+                        },
+                        body: JSON.stringify(filterPayload)
+                    })
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`)
+                    }
+
+                    await response.json()
                     refreshTable()
                 } catch (error) {
-                    console.log(error)
+                    console.error('Error in filter change:', error)
                 }
             }, 500)
         },
         [localFilters, size, refreshTable]
     )
 
+    console.log('localFilters', localFilters)
     const loadMore = () => {
         if (hasMore) {
             setSize(prev => prev + 50)
