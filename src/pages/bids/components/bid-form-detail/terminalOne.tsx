@@ -22,7 +22,8 @@ function TerminalOne({ terminals }) {
             <div className='grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-4'>
                 <FormField
                     control={control}
-                    name='terminal1Name' // хранит ID терминала
+                    name='terminal1Name'
+                    rules={{ required: 'Пожалуйста, выберите терминал' }}
                     render={({ field }) => (
                         <FormItem>
                             <Select

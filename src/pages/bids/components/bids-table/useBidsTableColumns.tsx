@@ -345,15 +345,25 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 accessorKey: 'isPriceRequest',
                 header: 'Согласовано',
                 size: 150,
+                // cell: ({ row }) => {
+                //     const isApproved = row.original.isPriceRequest
+                //     return (
+                //         <Button
+                //             onClick={() => onApprove(row.original._id)}
+                //             disabled={isApproved}
+                //             variant={isApproved ? 'secondary' : 'default'}
+                //         >
+                //             {isApproved ? 'Согласовано' : 'Согласовать'}
+                //         </Button>
+                //     )
+                // },
                 cell: ({ row }) => {
-                    const isApproved = row.original.isPriceRequest
                     return (
                         <Button
                             onClick={() => onApprove(row.original._id)}
-                            disabled={isApproved}
-                            variant={isApproved ? 'secondary' : 'default'}
+                            
                         >
-                            {isApproved ? 'Согласовано' : 'Согласовать'}
+                            Согласовать
                         </Button>
                     )
                 },
