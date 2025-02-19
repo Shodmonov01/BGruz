@@ -47,35 +47,35 @@ const AuctionTimer = ({ activationTime }: { activationTime: string }) => {
     const [timeLeft, setTimeLeft] = useState<number>(0)
     const initialFetchDone = useRef(false)
 
-    useEffect(() => {
-        const fetchTime = async () => {
-            try {
-                const token = localStorage.getItem('authToken')
-                const res = await fetchPrivateData('api/v1/time/now', token)
-                // console.log('current_time', res.current_time)
-                // console.log('activationTime', activationTime)
+    // useEffect(() => {
+    //     const fetchTime = async () => {
+    //         try {
+    //             const token = localStorage.getItem('authToken')
+    //             // const res = await fetchPrivateData('api/v1/time/now', token)
+    //             // console.log('current_time', res.current_time)
+    //             // console.log('activationTime', activationTime)
 
-                const serverTime = new Date(res.current_time).getTime()
-                const targetTime = new Date(activationTime).getTime()
+    //             const serverTime = new Date(res.current_time).getTime()
+    //             const targetTime = new Date(activationTime).getTime()
 
-                const initialTimeLeft = Math.max(0, Math.floor((targetTime - serverTime) / 1000))
-                setTimeLeft(initialTimeLeft)
-                initialFetchDone.current = true
-            } catch (error) {
-                console.error('Error fetching time:', error)
-            }
-        }
+    //             const initialTimeLeft = Math.max(0, Math.floor((targetTime - serverTime) / 1000))
+    //             setTimeLeft(initialTimeLeft)
+    //             initialFetchDone.current = true
+    //         } catch (error) {
+    //             console.error('Error fetching time:', error)
+    //         }
+    //     }
 
-        if (!initialFetchDone.current) {
-            fetchTime()
-        }
+    //     if (!initialFetchDone.current) {
+    //         fetchTime()
+    //     }
 
-        const interval = setInterval(() => {
-            setTimeLeft(prevTime => Math.max(0, prevTime - 1))
-        }, 1000)
+    //     const interval = setInterval(() => {
+    //         setTimeLeft(prevTime => Math.max(0, prevTime - 1))
+    //     }, 1000)
 
-        return () => clearInterval(interval)
-    }, [activationTime])
+    //     return () => clearInterval(interval)
+    // }, [activationTime])
 
     const minutes = Math.floor(timeLeft / 60)
     const seconds = timeLeft % 60
