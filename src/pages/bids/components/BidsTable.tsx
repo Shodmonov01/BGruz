@@ -257,6 +257,31 @@ function renderFilterInput(column, handleFilterChange) {
     const filterType = column.columnDef.filterType
     const filterOptions = column.columnDef.filterOptions
 
+    const getDefaultValue = columnId => {
+        switch (columnId) {
+            case 'cargoType':
+                return ['wagon', 'container']
+            case 'status':
+                return ['active', 'waiting']
+            case 'loadingMode':
+                return ['loading', 'unloading']
+            default:
+                return []
+        }
+    }
+
+    useEffect(() => {
+        if (filterType === 'select' && !column.getFilterValue()) {
+            const defaultValue = getDefaultValue(column.id)
+            if (defaultValue.length > 0) {
+                const defaultValueString = defaultValue.join(',')
+                console.log(`Setting default value for ${column.id}:`, defaultValueString)
+                column.setFilterValue(defaultValue)
+                handleFilterChange(column.id, defaultValue)
+            }
+        }
+    }, [column.id])
+
     const handleChange = value => {
         column.setFilterValue(value)
         handleFilterChange(column.id, value)
@@ -280,23 +305,19 @@ function renderFilterInput(column, handleFilterChange) {
                 />
             )
         case 'select':
-            let defaultValue = ''
-            if (column.id === 'status') {
-                defaultValue = ['active', 'waiting'].join(',')
-            } else if (column.id === 'cargoType') {
-                defaultValue = ['wagon', 'container'].join(',')
-            } else if (column.id === 'loadingMode') {
-                defaultValue = ['loading', 'unloading'].join(',')
-            }
+            const defaultValue = getDefaultValue(column.id)
+            const defaultValueString = defaultValue.join(',')
 
             return (
                 <Select
-                    value={getStringValue(column.getFilterValue()) || defaultValue}
+                    value={getStringValue(column.getFilterValue()) || defaultValueString}
                     onValueChange={value => {
                         const selectedOption = filterOptions?.find(option =>
                             Array.isArray(option.value) ? option.value.join(',') === value : option.value === value
                         )
-                        handleChange(selectedOption ? selectedOption.value : null)
+                        const newValue = selectedOption ? selectedOption.value : defaultValue
+                        column.setFilterValue(newValue)
+                        handleFilterChange(column.id, newValue)
                     }}
                 >
                     <SelectTrigger className='text-xs min-w-full h-7 bg-white'>
@@ -314,6 +335,7 @@ function renderFilterInput(column, handleFilterChange) {
                     </SelectContent>
                 </Select>
             )
+
         case 'dateRange':
             return (
                 <DateRangePicker
