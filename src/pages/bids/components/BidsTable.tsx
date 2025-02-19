@@ -120,24 +120,6 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
         enableSorting: true
     })
 
-    // useEffect(() => {
-    //     const newFilters = columnFilters.reduce(
-    //         (acc, filter) => {
-    //             acc[filter.id] = filter.value
-    //             return acc
-    //         },
-    //         {} as Record<string, unknown>
-    //     )
-    //     setFilters(newFilters)
-    // }, [columnFilters, setFilters])
-
-    // useEffect(() => {
-    //     const newColumnFilters = Object.entries(localFilters).map(([id, value]) => ({ id, value }))
-
-    //     setColumnFilters(newColumnFilters)
-    // }, [localFilters])
-    // console.log('columnFilters', columnFilters)
-
     useEffect(() => {
         const newColumnFilters = Object.entries(localFilters).map(([id, value]) => ({ id, value }))
         setColumnFilters(newColumnFilters)
@@ -288,9 +270,18 @@ function renderFilterInput(column, handleFilterChange) {
                 />
             )
         case 'select':
+            let defaultValue = ''
+            if (column.id === 'status') {
+                defaultValue = ['active', 'waiting'].join(',')
+            } else if (column.id === 'cargoType') {
+                defaultValue = ['wagon', 'container'].join(',')
+            } else if (column.id === 'loadingMode') {
+                defaultValue = ['loading', 'unloading'].join(',')
+            }
+
             return (
                 <Select
-                    value={getStringValue(column.getFilterValue())}
+                    value={getStringValue(column.getFilterValue()) || defaultValue}
                     onValueChange={value => {
                         const selectedOption = filterOptions?.find(option =>
                             Array.isArray(option.value) ? option.value.join(',') === value : option.value === value
