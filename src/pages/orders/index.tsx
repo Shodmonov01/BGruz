@@ -7,6 +7,7 @@ import BgruzHeader from '@/components/shared/bgruz-header'
 import { useGetOrders } from '@/hooks/useGetOrders'
 import OrdersTable from './components/orders-table'
 import { useSearchParams } from 'react-router-dom'
+import OrderTableMobile from './components/ordersTableMobile'
 
 export default function OrderPage() {
     // const [isShortTable, setIsShortTable] = useState(false)
@@ -104,15 +105,21 @@ export default function OrderPage() {
         <div className='p-4'>
             <BgruzHeader />
             {/* <OrdersHeader setIsShortTable={setIsShortTable} isShortTable={isShortTable} /> */}
-            <OrdersTable
-                orders={orders || []}
-                setFilters={setFilters}
-                handleFilterChange={handleFilterChange}
-                loadMore={loadMore}
-                hasMore={hasMore}
-                loading={loading}
-                localFilters={localFilters}
-            />
+            <div className='hidden md:block'>
+                <OrdersTable
+                    orders={orders || []}
+                    setFilters={setFilters}
+                    handleFilterChange={handleFilterChange}
+                    loadMore={loadMore}
+                    hasMore={hasMore}
+                    loading={loading}
+                    localFilters={localFilters}
+                />
+            </div>
+            <div className='md:hidden'>
+                <OrderTableMobile orders={orders || []} />
+            </div>
+
             {/* <Table className='border rounded-lg border-gray-300 w-full'>
                 <TableHeader>
                     <TableRow className='border border-gray-300'>

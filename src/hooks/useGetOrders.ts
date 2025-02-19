@@ -20,14 +20,13 @@ interface Orders {
     terminal2: { cityName: string; address: string }
 }
 
-export const useGetOrders = (size: number, ) => {
+export const useGetOrders = (size: number) => {
     const [orders, setOrders] = useState<Orders[] | null>(null)
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
     const [hasMore, setHasMore] = useState<boolean>(true)
     const [filters, setFilters] = useState<OrderFilter>({})
     const [refreshTrigger, setRefreshTrigger] = useState<number>(0)
-
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -40,8 +39,7 @@ export const useGetOrders = (size: number, ) => {
                     'api/v1/orders/getbatch',
                     {
                         size,
-                        filter: filters,
-                        
+                        filter: filters
                     },
                     token
                 )
@@ -62,5 +60,4 @@ export const useGetOrders = (size: number, ) => {
 
     // return { orders, loading, error, hasMore, setFilters}
     return { orders, loading, error, setFilters, hasMore, refreshTable: () => setRefreshTrigger(prev => prev + 1) }
-
 }

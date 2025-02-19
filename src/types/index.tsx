@@ -98,3 +98,114 @@ export interface ApiResponse {
     extraServices: ExtraService[]
     activationDelay: number
 }
+
+export interface IOrder {
+    _id?: number
+    buyBid?: {
+        loadingMode?: string
+        cargoType?: string
+        loadingDate?: string
+        terminal1: {
+            cityId?: number
+            cityName?: string
+            address?: string
+        }
+        terminal2?: {
+            cityId?: number
+            cityName?: string
+            address?: string
+        }
+        warehouses?: {
+            cityId?: number
+            cityName?: string
+            address?: string
+        }[]
+        vehicleProfile?: {
+            id?: number
+            name?: string
+        }
+        customer?: {
+            organizationId?: number
+            organizationName?: string
+            userId?: number
+        }
+    }
+    createdAt?: string
+    customer?: {
+        fio?: string
+        phone?: string
+        email?: string
+        organizationName?: string
+        organizationPhone?: string
+        inn?: string
+    }
+    carrier?: {
+        fio?: string
+        phone?: string
+        email?: string
+        organizationName?: string
+        organizationPhone?: string
+        inn?: string
+    }
+    status?: string
+    statusUpdated?: string
+    price?: number
+    priceNds?: number
+    fullPrice?: number
+    fullPriceNds?: number
+    commission?: number
+    extraServicesPrice?: number
+    extraServicesPriceNds?: number
+    extraServices?: {
+        orderExtraServiceId: number
+        billableCount: number
+        count: number
+        price: number
+        priceNds: number
+        totalPrice: number
+        totalPriceNds: number
+        sortOrder: number
+        maxCount: number
+        factoringMultiplier: number
+        totalFactoringMultiplier: number
+        packsDetailId: number
+        name: string
+        id: number
+    }[]
+    assignedVehicle?: {
+        vehicleId: number
+        organizationId: number
+        vehicleClassId: number
+        vehicleProfileId: number
+        plateNum: string
+        docModel: string
+    }
+    assignedTrailer?: {
+        vehicleId: number
+        organizationId: number
+        vehicleClassId: number
+        vehicleProfileId: number
+        plateNum: string
+        docModel: string | null
+    }
+    assignedVehicleFiles?: {
+        id: number
+        link: string
+        name: string
+        mime: string
+        description: string | null
+        uploadTime: string
+        editPermission: boolean
+    }[]
+    assignedTrailerFiles?: {
+        id: number
+        link: string
+        name: string
+        mime: string
+        description: string | null
+        uploadTime: string
+        editPermission: boolean
+    }[]
+    assignedDriverFiles?: any[]
+    documentOrderItems?: any[]
+}

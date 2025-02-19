@@ -1,4 +1,3 @@
-// import { useEffect } from 'react'
 import { Input } from '../ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { DateRangePicker } from '@/pages/bids/components/bid-form-detail/rangePicker'
@@ -20,17 +19,18 @@ export function renderFilterInput(column, handleFilterChange) {
         }
     }
 
-    // useEffect(() => {
-    //     if (filterType === 'select' && !column.getFilterValue()) {
-    //         const defaultValue = getDefaultValue(column.id)
-    //         if (defaultValue.length > 0) {
-    //             const defaultValueString = defaultValue.join(',')
-    //             console.log(`Setting default value for ${column.id}:`, defaultValueString)
-    //             column.setFilterValue(defaultValue)
-    //             handleFilterChange(column.id, defaultValue)
-    //         }
-    //     }
-    // }, [column.id])
+    const initializeFilter = () => {
+        const currentValue = column.getFilterValue()
+        if (!currentValue) {
+            const defaultValue = getDefaultValue(column.id)
+            if (defaultValue.length > 0) {
+                column.setFilterValue(defaultValue)
+                handleFilterChange(column.id, defaultValue)
+            }
+        }
+    }
+
+    initializeFilter()
 
     const handleChange = value => {
         column.setFilterValue(value)
@@ -55,17 +55,14 @@ export function renderFilterInput(column, handleFilterChange) {
                 />
             )
         case 'select':
-            const defaultValue = getDefaultValue(column.id)
-            const defaultValueString = defaultValue.join(',')
-
             return (
                 <Select
-                    value={getStringValue(column.getFilterValue()) || defaultValueString}
+                    value={getStringValue(column.getFilterValue())}
                     onValueChange={value => {
                         const selectedOption = filterOptions?.find(option =>
                             Array.isArray(option.value) ? option.value.join(',') === value : option.value === value
                         )
-                        const newValue = selectedOption ? selectedOption.value : defaultValue
+                        const newValue = selectedOption ? selectedOption.value : getDefaultValue(column.id)
                         column.setFilterValue(newValue)
                         handleFilterChange(column.id, newValue)
                     }}
@@ -85,7 +82,6 @@ export function renderFilterInput(column, handleFilterChange) {
                     </SelectContent>
                 </Select>
             )
-
         case 'dateRange':
             return (
                 <DateRangePicker

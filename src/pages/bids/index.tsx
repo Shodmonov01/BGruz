@@ -80,7 +80,6 @@ export default function BidsPage() {
         [localFilters, size, refreshTable]
     )
 
-    console.log('localFilters', localFilters)
     const loadMore = () => {
         if (hasMore) {
             setSize(prev => prev + 50)
