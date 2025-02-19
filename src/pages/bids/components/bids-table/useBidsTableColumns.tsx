@@ -185,6 +185,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 searchable: true,
                 filterType: 'select',
                 filterOptions: [
+                    { value: ['wagon', 'container'], label: 'Все' },
                     { value: 'wagon', label: 'Вагон' },
                     { value: 'container', label: 'Контейнер' }
                 ]
@@ -207,6 +208,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 searchable: true,
                 filterType: 'select',
                 filterOptions: [
+                    { value: ['loading', 'unloading'], label: 'Все' },
                     { value: 'loading', label: 'Погрузка' },
                     { value: 'unloading', label: 'Выгрузка' }
                 ]
