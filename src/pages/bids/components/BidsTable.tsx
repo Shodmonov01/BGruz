@@ -19,6 +19,7 @@ import { deleteData, postData2 } from '@/api/api'
 import loader from '../../../../public/gear-spinner.svg'
 import { DateRangePicker } from './bid-form-detail/rangePicker'
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
+import FilterInput from './filter-inputs'
 
 interface Bid {
     _id?: string
@@ -38,7 +39,7 @@ interface BidsTableProps {
     localFilters: Record<string, string | any[]>
 }
 //@ts-ignore
-function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, loading, localFilters }: BidsTableProps) {
+function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, loading, localFilters , refreshBids }: BidsTableProps) {
     const [selectedBid, setSelectedBid] = useState<Partial<Bid> | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isShortTable, setIsShortTable] = useState(false)
@@ -131,7 +132,7 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
 
     return (
         <div>
-            <BidHeader setIsShortTable={setIsShortTable} isShortTable={isShortTable} />
+            <BidHeader setIsShortTable={setIsShortTable} isShortTable={isShortTable}  refreshBids={refreshBids}/>
 
             <ScrollArea>
                 <div className='h-[calc(98vh-200px)] overflow-auto !scrollbar-thin !scrollbar-thumb-gray-400 !scrollbar-track-gray-100'>
@@ -159,36 +160,38 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
                                             className='bg-[#EDEDED] border border-gray-300 whitespace-nowrap'
                                         >
                                             <div>
-                                                {
-                                                    //@ts-ignore
-                                                    header.column.columnDef.filterType !== 'range' ? (
+                                                {header.column.columnDef.
+                                                //@ts-ignore
+                                                filterType !== 'range' ? (
+                                                    <div className='text-center'>
+                                                        <FilterInput
+                                                            column={header.column}
+                                                            handleFilterChange={handleFilterChange}
+                                                        />
+                                                    </div>
+                                                ) : (
+                                                    <div
+                                                        className='flex text-xs items-center gap-1 cursor-pointer h-7 min-w-full px-3 rounded-md bg-white'
+                                                        onClick={header.column.getToggleSortingHandler()}
+                                                    >
                                                         <div className='text-center'>
-                                                            {renderFilterInput(header.column, handleFilterChange)}
-                                                        </div>
-                                                    ) : (
-                                                        <div
-                                                            className='flex text-xs items-center gap-1 cursor-pointer h-7 min-w-full px-3 rounded-md bg-white'
-                                                            onClick={header.column.getToggleSortingHandler()}
-                                                        >
-                                                            <div className='text-center'>
-                                                                {flexRender(
-                                                                    header.column.columnDef.header,
-                                                                    header.getContext()
-                                                                )}
-                                                            </div>
-
-                                                            {header.column.getIsSorted() ? (
-                                                                header.column.getIsSorted() === 'asc' ? (
-                                                                    <ArrowUp className='h-4 w-4' />
-                                                                ) : (
-                                                                    <ArrowDown className='h-4 w-4' />
-                                                                )
-                                                            ) : (
-                                                                <ArrowUpDown className='h-4 w-4 opacity-50' />
+                                                            {flexRender(
+                                                                header.column.columnDef.header,
+                                                                header.getContext()
                                                             )}
                                                         </div>
-                                                    )
-                                                }
+
+                                                        {header.column.getIsSorted() ? (
+                                                            header.column.getIsSorted() === 'asc' ? (
+                                                                <ArrowUp className='h-4 w-4' />
+                                                            ) : (
+                                                                <ArrowDown className='h-4 w-4' />
+                                                            )
+                                                        ) : (
+                                                            <ArrowUpDown className='h-4 w-4 opacity-50' />
+                                                        )}
+                                                    </div>
+                                                )}
                                             </div>
                                         </TableHead>
                                     ))}
@@ -251,114 +254,6 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
             )}
         </div>
     )
-}
-
-function renderFilterInput(column, handleFilterChange) {
-    const filterType = column.columnDef.filterType
-    const filterOptions = column.columnDef.filterOptions
-
-    const getDefaultValue = columnId => {
-        switch (columnId) {
-            case 'cargoType':
-                return ['wagon', 'container']
-            case 'status':
-                return ['active', 'waiting']
-            case 'loadingMode':
-                return ['loading', 'unloading']
-            default:
-                return []
-        }
-    }
-
-    useEffect(() => {
-        if (filterType === 'select' && !column.getFilterValue()) {
-            const defaultValue = getDefaultValue(column.id)
-            if (defaultValue.length > 0) {
-                const defaultValueString = defaultValue.join(',')
-                console.log(`Setting default value for ${column.id}:`, defaultValueString)
-                column.setFilterValue(defaultValue)
-                handleFilterChange(column.id, defaultValue)
-            }
-        }
-    }, [column.id])
-
-    const handleChange = value => {
-        column.setFilterValue(value)
-        handleFilterChange(column.id, value)
-    }
-
-    const getStringValue = (value: string | string[] | null): string => {
-        if (Array.isArray(value)) {
-            return value.join(',')
-        }
-        return value ?? ''
-    }
-
-    switch (filterType) {
-        case 'exact':
-            return (
-                <Input
-                    value={(column.getFilterValue() as string) ?? ''}
-                    onChange={e => handleChange(e.target.value)}
-                    placeholder='Точное совпадение'
-                    className='text-xs min-w-16 h-7 bg-white'
-                />
-            )
-        case 'select':
-            const defaultValue = getDefaultValue(column.id)
-            const defaultValueString = defaultValue.join(',')
-
-            return (
-                <Select
-                    value={getStringValue(column.getFilterValue()) || defaultValueString}
-                    onValueChange={value => {
-                        const selectedOption = filterOptions?.find(option =>
-                            Array.isArray(option.value) ? option.value.join(',') === value : option.value === value
-                        )
-                        const newValue = selectedOption ? selectedOption.value : defaultValue
-                        column.setFilterValue(newValue)
-                        handleFilterChange(column.id, newValue)
-                    }}
-                >
-                    <SelectTrigger className='text-xs min-w-full h-7 bg-white'>
-                        <SelectValue placeholder='Выберите' />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {filterOptions?.map(option => (
-                            <SelectItem
-                                key={Array.isArray(option.value) ? option.value.join(',') : option.value}
-                                value={Array.isArray(option.value) ? option.value.join(',') : option.value}
-                            >
-                                {option.label}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-            )
-
-        case 'dateRange':
-            return (
-                <DateRangePicker
-                    value={column.getFilterValue() as { from: Date; to?: Date } | undefined}
-                    onChange={range => handleChange(range)}
-                    placeholder='Выберите даты'
-                    className='text-xs'
-                />
-            )
-        case 'fuzzy':
-            return (
-                <Input
-                    value={(column.getFilterValue() as string) ?? ''}
-                    onChange={e => handleChange(e.target.value)}
-                    placeholder='Поиск...'
-                    className='text-xs h-7 min-w-16 bg-white'
-                />
-            )
-        case 'range':
-            return <button className='text-xs h-7 bg-white px-2'>{column.columnDef.header}</button>
-        default:
-            return null
-    }
 }
 
 export default BidsTable
