@@ -6,8 +6,8 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { fetchPrivateData, postData2 } from '@/api/api'
-
-
+import { Label } from '@/components/ui/label'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
 function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
     const [isEditing, setIsEditing] = useState(false)
@@ -19,27 +19,38 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
 
     const clientId = selectedBid?.clientId
 
-
     const fetchVehicleProfiles = async () => {
-        if (!clientId) return 
+        if (!clientId) return
 
         try {
             const token = localStorage.getItem('authToken')
             const data = await fetchPrivateData(`api/v1/organization/?organization_id=${clientId}`, token)
             setVehicleProfiles(data.vehicleProfiles || [])
-            
         } catch (error) {
             console.error('Ошибка загрузки типов перевозки:', error)
         }
     }
 
-//@ts-ignore
+    //@ts-ignore
     useEffect(() => {
         if (isModalOpen && clientId) {
             fetchVehicleProfiles()
         }
         setOriginalData({ ...selectedBid })
     }, [isModalOpen, clientId])
+
+    // Обновленный useEffect
+    useEffect(() => {
+        if (isModalOpen && selectedBid) {
+            setFormData(prev => ({
+                ...prev, // Оставляем уже измененные данные
+                vehicleProfileId: prev.vehicleProfileId || selectedBid.vehicleProfileId?.toString() || '',
+                transportType: prev.transportType || selectedBid.cargoType || '',
+                transportMethod: prev.transportMethod || selectedBid.loadingMode || ''
+            }))
+        }
+    }, [isModalOpen, selectedBid])
+
     
 
     const handleEdit = () => {
@@ -47,39 +58,9 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
         setFormData(selectedBid)
     }
 
-    // const handleSave = () => {
-    //     console.log('Сохраняем изменения:', formData)
-    //     setIsEditing(false)
-    //     // Здесь отправляем данные на сервер
-    // }
-
-    // const handleSave = async () => {
-    //     const token = localStorage.getItem('authToken')
-
-    //     const updatedFields = Object.keys(formData).reduce((acc, key) => {
-    //         if (JSON.stringify(formData[key]) !== JSON.stringify(originalData[key])) {
-    //             acc[key] = formData[key]
-    //         }
-    //         return acc
-    //     }, {})
-
-    //     if (Object.keys(updatedFields).length === 0) {
-    //         alert('Нет изменений для сохранения.')
-    //         return
-    //     }
-
-    //     try {
-    //         await postData2(`api/v1/bids/${formData._id}`, updatedFields, token)
-    //         alert('Заявка успешно обновлена!')
-    //         handleCloseModal()
-    //     } catch (error) {
-    //         console.error('Ошибка при обновлении заявки:', error)
-    //     }
-    // }
-
     const handleSave = async () => {
         const token = localStorage.getItem('authToken')
-    
+
         // Определяем только измененные поля
         const updatedFields = Object.keys(formData).reduce((acc, key) => {
             if (JSON.stringify(formData[key]) !== JSON.stringify(originalData[key])) {
@@ -87,28 +68,27 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
             }
             return acc
         }, {})
-    
+
         if (Object.keys(updatedFields).length === 0) {
             alert('Нет изменений для сохранения.')
             return
         }
 
         console.log('Отправляем на сервер:', updatedFields)
-    
+
         try {
             await postData2(`api/v1/bids/${formData._id}`, updatedFields, token)
             alert('Заявка успешно обновлена!')
-            
+
             // Обновляем оригинальные данные, чтобы отслеживать новые изменения
             setOriginalData({ ...formData })
-    
+
             // Закрываем модальное окно
             handleCloseModal()
         } catch (error) {
             console.error('Ошибка при обновлении заявки:', error)
         }
     }
-    
 
     const handleSaveAsNew = () => {
         console.log('Сохраняем как новую заявку:', formData)
@@ -121,13 +101,12 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
         setFormData(prev => ({ ...prev, [name]: value }))
     }
 
-    const handleVehicleChange = (value) => {
+    const handleVehicleChange = value => {
         //@ts-ignore
         const selectedVehicle = vehicleProfiles.find(v => v.id === parseInt(value))
 
-        console.log(selectedVehicle);
-        
-    
+        console.log(selectedVehicle)
+
         setFormData(prev => ({
             ...prev,
             vehicleProfile: selectedVehicle || null, // Обновляем сам объект
@@ -135,125 +114,50 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
             vehicleProfileId: selectedVehicle?.id || null // Обновляем ID
         }))
     }
-    
 
     return (
         <Dialog open={isModalOpen} onOpenChange={handleCloseModal}>
             <DialogContent className='max-w-2xl max-h-[90vh] overflow-y-auto p-5'>
                 <DialogTitle>Информация о заявке</DialogTitle>
                 <ScrollArea className='space-y-4'>
-                    {/* Название груза */}
-                    <div>
-                        <strong>Название груза:</strong>
-                        {isEditing ? (
-                            <Input name='cargoTitle' value={formData.cargoTitle} onChange={handleChange} />
-                        ) : (
-                            <p>{formData.cargoTitle}</p>
-                        )}
-                    </div>
-
                     {/* Тип груза */}
-                    <div>
-                        <strong>Тип груза:</strong>
-                        {isEditing ? (
-                            <Input name='cargoType' value={formData.cargoType} onChange={handleChange} />
-                        ) : (
-                            <p>{formData.cargoType}</p>
-                        )}
+
+                    <div className='flex items-center border-b-2 border-[#D0D1D5] pb-4'>
+                        <Label className='text-base font-medium mr-4'>Тип перевозки</Label>
+                        {/* Радиокнопки для типа транспорта */}
+                        <RadioGroup
+                            className='flex gap-6 mt-2'
+                            value={formData.transportType} // Устанавливаем текущее значение
+                            onValueChange={value => setFormData(prev => ({ ...prev, transportType: value }))}
+                            disabled={!isEditing}
+                        >
+                            <div className='flex items-center gap-2'>
+                                <RadioGroupItem value='container' id='container' />
+                                <Label htmlFor='container'>Контейнер</Label>
+                            </div>
+                            <div className='flex items-center gap-2'>
+                                <RadioGroupItem value='wagon' id='wagon' />
+                                <Label htmlFor='wagon'>Вагон</Label>
+                            </div>
+                        </RadioGroup>
+
+                        {/* Радиокнопки для способа загрузки */}
+                        <RadioGroup
+                            className='flex gap-6 mt-2'
+                            value={formData.transportMethod}
+                            onValueChange={value => setFormData(prev => ({ ...prev, transportMethod: value }))}
+                            disabled={!isEditing}
+                        >
+                            <div className='flex items-center gap-2'>
+                                <RadioGroupItem value='loading' id='loading' />
+                                <Label htmlFor='loading'>Погрузка</Label>
+                            </div>
+                            <div className='flex items-center gap-2'>
+                                <RadioGroupItem value='unloading' id='unloading' />
+                                <Label htmlFor='unloading'>Выгрузка</Label>
+                            </div>
+                        </RadioGroup>
                     </div>
-
-                    {/* Описание */}
-                    <div>
-                        <strong>Описание:</strong>
-                        {isEditing ? (
-                            <Textarea name='description' value={formData.description} onChange={handleChange} />
-                        ) : (
-                            <p>{formData.description || 'Нет описания'}</p>
-                        )}
-                    </div>
-
-                    <hr />
-
-                    {/* Цена */}
-                    <div>
-                        <strong>Цена:</strong>
-                        {isEditing ? (
-                            <Input name='price' type='number' value={formData.price} onChange={handleChange} />
-                        ) : (
-                            <p>{formData.price ? `${formData.price} ₽` : 'Не указана'}</p>
-                        )}
-                    </div>
-
-                    <div>
-                        <strong>Финальная цена с НДС:</strong>
-                        {isEditing ? (
-                            <Input
-                                name='fullPriceNds'
-                                type='number'
-                                value={formData.fullPriceNds}
-                                onChange={handleChange}
-                            />
-                        ) : (
-                            <p>{formData.fullPriceNds ? `${formData.fullPriceNds} ₽` : 'Не указана'}</p>
-                        )}
-                    </div>
-
-                    <hr />
-
-                    {/* Клиент и заказчик */}
-                    <div>
-                        <strong>Клиент:</strong>
-                        <p>{formData.client?.organizationName || 'Не указан'}</p>
-                    </div>
-
-                    <div>
-                        <strong>Заказчик:</strong>
-                        <p>{formData.customer?.organizationName || 'Не указан'}</p>
-                    </div>
-
-                    <hr />
-
-                    {/* Маршрут */}
-                    <div>
-                        <strong>Маршрут:</strong>
-                        <p>
-                            {formData.terminal1?.cityName} → {formData.terminal2?.cityName}
-                        </p>
-                    </div>
-
-                    <div>
-                        <strong>Адрес погрузки:</strong>
-                        <p>{formData.terminal1?.address}</p>
-                    </div>
-
-                    <div>
-                        <strong>Адрес разгрузки:</strong>
-                        <p>{formData.terminal2?.address}</p>
-                    </div>
-
-                    <hr />
-
-                    {/* Тип перевозки */}
-                    <div>
-                        <strong>Тип перевозки:</strong>
-                        <p>{formData.vehicleProfile?.name || 'Не указан'}</p>
-                    </div>
-
-                    <div>
-                        <strong>Количество машин:</strong>
-                        {isEditing ? (
-                            <Input
-                                name='vehicleCount'
-                                type='number'
-                                value={formData.vehicleCount}
-                                onChange={handleChange}
-                            />
-                        ) : (
-                            <p>{formData.vehicleCount || 1}</p>
-                        )}
-                    </div>
-
-                    <hr />
 
                     {/* Дата создания */}
                     <div>
@@ -288,7 +192,9 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                 <SelectContent>
                                     {vehicleProfiles.map(option => (
                                         //@ts-expect-error fdkfj hido
-                                        <SelectItem key={option.id} value={option.id.toString()}>{option.name}</SelectItem>
+                                        <SelectItem key={option.id} value={option.id.toString()}>
+                                            {option.name}
+                                        </SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>
