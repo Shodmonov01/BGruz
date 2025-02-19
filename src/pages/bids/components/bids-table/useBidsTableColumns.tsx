@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { ColumnDef } from '@tanstack/react-table'
 import { Button } from '@/components/ui/button'
 import { Eye, Trash } from 'lucide-react'
 import loading from '../../../../../public/gear-spinner.svg'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
+import { fetchPrivateData } from '@/api/api'
 
 interface Bid {
     _id: string
@@ -43,22 +44,43 @@ interface ColumnsProps {
 }
 
 const AuctionTimer = ({ activationTime }: { activationTime: string }) => {
-    const [timeLeft, setTimeLeft] = useState(() => {
-        const time = new Date(activationTime).getTime()
-        return Math.max(0, Math.floor((time - Date.now()) / 1000))
-    })
+    const [timeLeft, setTimeLeft] = useState<number>(0)
+    const initialFetchDone = useRef(false)
 
     useEffect(() => {
-        if (timeLeft <= 0) return
+        const fetchTime = async () => {
+            try {
+                const token = localStorage.getItem('authToken')
+                const res = await fetchPrivateData('api/v1/time/now', token)
+                // console.log('current_time', res.current_time)
+                // console.log('activationTime', activationTime)
+
+                const serverTime = new Date(res.current_time).getTime()
+                const targetTime = new Date(activationTime).getTime()
+
+                const initialTimeLeft = Math.max(0, Math.floor((targetTime - serverTime) / 1000))
+                setTimeLeft(initialTimeLeft)
+                initialFetchDone.current = true
+            } catch (error) {
+                console.error('Error fetching time:', error)
+            }
+        }
+
+        if (!initialFetchDone.current) {
+            fetchTime()
+        }
+
         const interval = setInterval(() => {
-            setTimeLeft(prev => Math.max(prev - 1, 0))
+            setTimeLeft(prevTime => Math.max(0, prevTime - 1))
         }, 1000)
+
         return () => clearInterval(interval)
-    }, [timeLeft])
+    }, [activationTime])
 
     const minutes = Math.floor(timeLeft / 60)
     const seconds = timeLeft % 60
-    return <>{timeLeft > 0 ? `${minutes}:${seconds.toString().padStart(2, '0')}` : 'Время вышло'}</>
+
+    return timeLeft > 0 ? `${minutes}:${seconds.toString().padStart(2, '0')}` : 'Время вышло'
 }
 
 export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenModal }: ColumnsProps) => {
@@ -184,7 +206,10 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 header: 'Аукцион',
                 size: 140,
                 accessorKey: 'activationTime',
-                cell: ({ row }) => <AuctionTimer activationTime={row.original.activationTime} />,
+                cell: ({ row }) => {
+                    // console.log('Activation Time:', row.original.activationTime)
+                    return <AuctionTimer activationTime={row.original.activationTime} />
+                },
                 isShortVersion: true,
                 searchable: true,
                 filterType: 'range',

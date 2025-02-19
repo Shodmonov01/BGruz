@@ -29,7 +29,7 @@ interface Bid {
 }
 
 interface BidsTableProps {
-    bids: Bid[]
+    bids: Bid[] | any[]
     setFilters: (filters: Record<string, unknown>) => void
     handleFilterChange: (columnId: string, value: any) => void
     loadMore: () => void
@@ -328,8 +328,7 @@ function renderFilterInput(column, handleFilterChange) {
         case 'dateRange':
             return (
                 <DateRangePicker
-                    //@ts-ignore
-                    value={column.getFilterValue() as { start: Date; end: Date } | undefined}
+                    value={column.getFilterValue() as { from: Date; to?: Date } | undefined}
                     onChange={range => handleChange(range)}
                     placeholder='Выберите даты'
                     className='text-xs'
