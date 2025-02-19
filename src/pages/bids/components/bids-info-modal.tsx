@@ -23,15 +23,13 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
 
     const clientId = selectedBid?.clientId
 
-
     const fetchVehicleProfiles = async () => {
-        if (!clientId) return 
+        if (!clientId) return
 
         try {
             const token = localStorage.getItem('authToken')
             const data = await fetchPrivateData(`api/v1/organization/?organization_id=${clientId}`, token)
             setVehicleProfiles(data.vehicleProfiles || [])
-            
         } catch (error) {
             console.error('Ошибка загрузки типов перевозки:', error)
         }
@@ -43,7 +41,6 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
         }
         setOriginalData({ ...selectedBid })
     }, [isModalOpen, clientId])
-    
 
     const handleEdit = () => {
         setIsEditing(true)
@@ -82,7 +79,7 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
 
     const handleSave = async () => {
         const token = localStorage.getItem('authToken')
-    
+
         // Определяем только измененные поля
         const updatedFields = Object.keys(formData).reduce((acc, key) => {
             if (JSON.stringify(formData[key]) !== JSON.stringify(originalData[key])) {
@@ -90,26 +87,25 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
             }
             return acc
         }, {})
-    
+
         if (Object.keys(updatedFields).length === 0) {
             alert('Нет изменений для сохранения.')
             return
         }
-    
+
         try {
             await postData2(`api/v1/bids/${formData._id}`, updatedFields, token)
             alert('Заявка успешно обновлена!')
-            
+
             // Обновляем оригинальные данные, чтобы отслеживать новые изменения
             setOriginalData({ ...formData })
-    
+
             // Закрываем модальное окно
             handleCloseModal()
         } catch (error) {
             console.error('Ошибка при обновлении заявки:', error)
         }
     }
-    
 
     const handleSaveAsNew = () => {
         console.log('Сохраняем как новую заявку:', formData)

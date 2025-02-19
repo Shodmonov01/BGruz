@@ -1,11 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
 import type { ColumnDef } from '@tanstack/react-table'
 import { Button } from '@/components/ui/button'
 import { Eye, Trash } from 'lucide-react'
 import loading from '../../../../../public/gear-spinner.svg'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
-import { fetchPrivateData } from '@/api/api'
 
 interface Bid {
     _id: string
@@ -40,12 +39,11 @@ interface ColumnsProps {
     isShortTable: boolean
     onApprove: (bidId: string) => void
     onDelete: (bidId: string) => void
-    onOpenModal: (bid: Bid) => void
+    onOpenModal: (bid: any) => void
 }
 
 const AuctionTimer = ({ activationTime }: { activationTime: string }) => {
-    const [timeLeft, setTimeLeft] = useState<number>(0)
-    const initialFetchDone = useRef(false)
+    const [timeLeft] = useState<number>(0)
 
     // useEffect(() => {
     //     const fetchTime = async () => {

@@ -1,10 +1,17 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 
-import { useReactTable, getCoreRowModel, flexRender } from '@tanstack/react-table'
+import {
+    useReactTable,
+    getCoreRowModel,
+    flexRender,
+    getSortedRowModel,
+    type ColumnFiltersState,
+    type SortingState
+} from '@tanstack/react-table'
 
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import { Input } from '@/components/ui/input'
+// import { Input } from '@/components/ui/input'
 
 // import ordersInfoModal from './orders-info-modal'
 
@@ -14,45 +21,43 @@ import loader from '../../../../public/gear-spinner.svg'
 import { useOrdersTableColumns } from './use-orders-table-columns'
 import OrderInfoModal from './ordersInfoModal'
 import OrdersHeader from './orders-header'
+import { renderFilterInput } from '@/components/renderFilterInput/renderFilterInput'
+import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
 
-interface Orders {
-    _id: string
-    buyBid: {
-        loadingMode: string
-        cargoType: string
-        loadingDate: string
-        terminal1: {
-            cityName: string
-        }
-        terminal2: {
-            cityName: string
-        }
-        warehouses: Array<{
-            cityName: string
-        }>
-        vehicleProfile: {
-            name: string
-        }
-    }
-    status: string
-    price: number
-    priceNds: number
-    fullPrice: number
-    fullPriceNds: number
-    commission: number
-    extraServicesPrice: number
-    extraServicesPriceNds: number
-    createdAt: string
-    customer: {
-        organizationName: string
-    }
-    ownState?: 'canceled' | string
+interface Bid {
+    _id?: string
+    client: { organizationName: string }
+    cargoTitle: string
+    price: number | null
+    status: string | null
 }
 
-function OrdersTable({ orders, setFilters, handleFilterChange, loadMore, hasMore, loading }) {
-    const [selectedBid, setSelectedBid] = useState<Partial<Orders> | null>(null)
+interface BidsTableProps {
+    orders: Bid[] | any[]
+    setFilters: (filters: Record<string, unknown>) => void
+    handleFilterChange: (columnId: string, value: any) => void
+    loadMore: () => void
+    hasMore: boolean
+    loading: boolean
+    localFilters: Record<string, string | any[]>
+}
+
+function OrdersTable({
+    orders,
+    setFilters,
+    handleFilterChange,
+    loadMore,
+    hasMore,
+    loading,
+    localFilters
+}: BidsTableProps) {
+    const [selectedBid, setSelectedBid] = useState<Partial<Bid> | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isShortTable, setIsShortTable] = useState(false)
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
+        Object.entries(localFilters).map(([id, value]) => ({ id, value }))
+    )
+    const [sorting, setSorting] = useState<SortingState>([])
 
     const scrollRef = useRef<HTMLDivElement | null>(null)
 
@@ -87,7 +92,7 @@ function OrdersTable({ orders, setFilters, handleFilterChange, loadMore, hasMore
     }, [hasMore, loading, loadMore])
     console.log('orders', orders)
 
-    const handleOpenModal = useCallback((bid: Orders) => {
+    const handleOpenModal = useCallback((bid: Bid) => {
         setSelectedBid(bid)
         setIsModalOpen(true)
     }, [])
@@ -115,7 +120,26 @@ function OrdersTable({ orders, setFilters, handleFilterChange, loadMore, hasMore
         onDelete: handleDelete,
         onOpenModal: handleOpenModal
     })
-    const table = useReactTable({ data: orders || [], columns, getCoreRowModel: getCoreRowModel() })
+    // const table = useReactTable({ data: orders || [], columns, getCoreRowModel: getCoreRowModel() })
+
+    const table = useReactTable({
+        data: orders || [],
+        columns,
+        getCoreRowModel: getCoreRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        state: {
+            columnFilters,
+            sorting
+        },
+        onColumnFiltersChange: setColumnFilters,
+        onSortingChange: setSorting,
+        enableSorting: true
+    })
+
+    useEffect(() => {
+        const newColumnFilters = Object.entries(localFilters).map(([id, value]) => ({ id, value }))
+        setColumnFilters(newColumnFilters)
+    }, [localFilters])
 
     return (
         <div>
@@ -145,16 +169,27 @@ function OrdersTable({ orders, setFilters, handleFilterChange, loadMore, hasMore
                                             key={header.id}
                                             className='bg-[#EDEDED] border border-gray-300 whitespace-nowrap'
                                         >
-                                            <div className='text-center'>
-                                                {/* @ts-expect-error Пока не знаю что делать */}
-                                                {header.column.columnDef.searchable && (
-                                                    <Input
-                                                        onChange={e =>
-                                                            handleFilterChange(header.column.id, e.target.value)
-                                                        }
-                                                        placeholder='Поиск...'
-                                                        className='text-xs h-7 bg-white'
-                                                    />
+                                            <div className=''>
+                                                {header.column.columnDef.filterType !== 'range' ? (
+                                                    <div className='text-center'>
+                                                        {renderFilterInput(header.column, handleFilterChange)}
+                                                    </div>
+                                                ) : (
+                                                    <div
+                                                        className='flex text-xs items-center gap-1 cursor-pointer h-7 min-w-full px-3 rounded-md bg-white'
+                                                        onClick={header.column.getToggleSortingHandler()}
+                                                    >
+                                                        {header.column.columnDef.header}
+                                                        {header.column.getIsSorted() ? (
+                                                            header.column.getIsSorted() === 'asc' ? (
+                                                                <ArrowUp className='h-4 w-4' />
+                                                            ) : (
+                                                                <ArrowDown className='h-4 w-4' />
+                                                            )
+                                                        ) : (
+                                                            <ArrowUpDown className='h-4 w-4 opacity-50' />
+                                                        )}
+                                                    </div>
                                                 )}
                                             </div>
                                         </TableHead>
