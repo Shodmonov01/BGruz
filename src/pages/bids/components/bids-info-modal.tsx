@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
+// import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { fetchPrivateData, postData2 } from '@/api/api'
 import { Label } from '@/components/ui/label'
@@ -192,8 +192,7 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                 <SelectContent>
                                     {vehicleProfiles.map(option => (
                                         //@ts-expect-error fdkfj hido
-                                        <SelectItem key={option.id} value={option.id.toString()}>
-                                            {option.name}
+                                        <SelectItem key={option.id} value={option.id.toString()}>{option.name}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>

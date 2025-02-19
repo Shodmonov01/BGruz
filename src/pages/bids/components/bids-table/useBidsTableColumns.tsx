@@ -1,11 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { ColumnDef } from '@tanstack/react-table'
 import { Button } from '@/components/ui/button'
 import { Eye, Trash } from 'lucide-react'
 import loading from '../../../../../public/gear-spinner.svg'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
-import { fetchPrivateData } from '@/api/api'
 import { useServerTime } from '@/lib/ServerTimeContext'
 
 interface Bid {
