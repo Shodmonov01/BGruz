@@ -43,45 +43,99 @@ interface ColumnsProps {
     onOpenModal: (bid: Bid) => void
 }
 
+// const AuctionTimer = ({ activationTime }: { activationTime: string }) => {
+//     const [timeLeft, setTimeLeft] = useState<number>(0)
+//     const initialFetchDone = useRef(false)
+
+//     useEffect(() => {
+//         const fetchTime = async () => {
+//             try {
+//                 const token = localStorage.getItem('authToken')
+//                 const res = await fetchPrivateData('api/v1/time/now', token)
+//                 // console.log('current_time', res.current_time)
+//                 // console.log('activationTime', activationTime)
+
+//                 const serverTime = new Date(res.current_time).getTime()
+//                 console.log(serverTime);
+
+//                 const targetTime = new Date(activationTime).getTime()
+//                 console.log(targetTime);
+
+//                 const initialTimeLeft = Math.max(0, Math.floor((targetTime - serverTime) / 1000))
+//                 setTimeLeft(initialTimeLeft)
+//                 initialFetchDone.current = true
+//             } catch (error) {
+//                 console.error('Error fetching time:', error)
+//             }
+//         }
+
+//         if (!initialFetchDone.current) {
+//             fetchTime()
+//         }
+
+//         const interval = setInterval(() => {
+//             setTimeLeft(prevTime => Math.max(0, prevTime - 1))
+//         }, 1000)
+
+//         return () => clearInterval(interval)
+//     }, [activationTime])
+
+//     const minutes = Math.floor(timeLeft / 60)
+//     const seconds = timeLeft % 60
+
+//     return timeLeft > 0 ? `${minutes}:${seconds.toString().padStart(2, '0')}` : 'Время вышло'
+// }
+
 const AuctionTimer = ({ activationTime }: { activationTime: string }) => {
-    const [timeLeft, setTimeLeft] = useState<number>(0)
-    const initialFetchDone = useRef(false)
+    const [timeLeft, setTimeLeft] = useState<number>(0);
+    const initialFetchDone = useRef(false);
 
     useEffect(() => {
         const fetchTime = async () => {
             try {
-                const token = localStorage.getItem('authToken')
-                const res = await fetchPrivateData('api/v1/time/now', token)
-                // console.log('current_time', res.current_time)
-                // console.log('activationTime', activationTime)
+                const token = localStorage.getItem("authToken");
+                const res = await fetchPrivateData("api/v1/time/now", token);
 
-                const serverTime = new Date(res.current_time).getTime()
-                const targetTime = new Date(activationTime).getTime()
+                let serverTime = new Date(res.current_time).getTime();
+                let targetTime = new Date(activationTime).getTime();
 
-                const initialTimeLeft = Math.max(0, Math.floor((targetTime - serverTime) / 1000))
-                setTimeLeft(initialTimeLeft)
-                initialFetchDone.current = true
+                // ⬇ Добавляем 5 часов
+                targetTime += 5 * 60 * 60 * 1000;
+
+                // console.log("✅ Server Time (ISO):", new Date(serverTime).toISOString());
+                // console.log("🎯 Target Time (ISO):", new Date(targetTime).toISOString());
+
+                const initialTimeLeft = Math.max(0, Math.floor((targetTime - serverTime) / 1000));
+                // console.log("⏳ Initial time left (s):", initialTimeLeft);
+
+                setTimeLeft(initialTimeLeft);
+                initialFetchDone.current = true;
             } catch (error) {
-                console.error('Error fetching time:', error)
+                console.error("❌ Error fetching time:", error);
             }
-        }
+        };
 
         if (!initialFetchDone.current) {
-            fetchTime()
+            fetchTime();
         }
 
         const interval = setInterval(() => {
-            setTimeLeft(prevTime => Math.max(0, prevTime - 1))
-        }, 1000)
+            setTimeLeft((prevTime) => Math.max(0, prevTime - 1));
+        }, 1000);
 
-        return () => clearInterval(interval)
-    }, [activationTime])
+        return () => clearInterval(interval);
+    }, [activationTime]);
 
-    const minutes = Math.floor(timeLeft / 60)
-    const seconds = timeLeft % 60
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
 
-    return timeLeft > 0 ? `${minutes}:${seconds.toString().padStart(2, '0')}` : 'Время вышло'
-}
+    return timeLeft > 0 ? `${minutes}:${seconds.toString().padStart(2, "0")}` : "Время вышло";
+};
+
+export default AuctionTimer;
+
+
+
 
 export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenModal }: ColumnsProps) => {
     const formatNumber = (value: string) => {
