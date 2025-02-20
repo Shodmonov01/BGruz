@@ -381,7 +381,7 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                 </div>
 
                                 <div className='flex items-center'>
-                                    <Label className='text-[18px] font-bold text-[#1E293B] min-w-28'>
+                                    <Label className='text-[18px] font-bold text-[#1E293B] min-w-40'>
                                         Цена перевозки
                                     </Label>
                                     <Input
