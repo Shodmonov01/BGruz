@@ -9,22 +9,33 @@ import {
     DropdownMenuShortcut,
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
+import { useEffect, useState } from 'react'
 
-export default function UserNav() {
+export default function UserNav({ isMinimized }) {
+    const [username, setUsername] = useState('')
+
+    useEffect(() => {
+        setUsername(localStorage.getItem('username') || 'Гость')
+    }, [])
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant='ghost' className='relative h-14 w-14 rounded-full'>
-                    <Avatar className='h-14 w-14'>
-                        <AvatarImage
-                            src={
-                                'https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001882.png'
-                            }
-                            alt={''}
-                        />
-                        <AvatarFallback>hello</AvatarFallback>
-                    </Avatar>
-                </Button>
+                <div className='flex items-center'>
+                    <Button variant='ghost' className='relative h-14 w-14 rounded-full mr-3'>
+                        <Avatar className='h-14 w-14 mr-[14px]'>
+                            <AvatarImage
+                                src={
+                                    'https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001882.png'
+                                }
+                                alt={''}
+                            />
+                            <AvatarFallback>{username}</AvatarFallback>
+                        </Avatar>
+                    </Button>
+                    <div>
+                        <div className={isMinimized ? 'hidden' : 'inline-block'}>{username}</div>
+                    </div>
+                </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent className='w-56' align='end' forceMount>
                 <DropdownMenuLabel className='font-normal'>

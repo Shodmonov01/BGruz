@@ -56,9 +56,10 @@ export default function Sidebar({ className }: SidebarProps) {
             </div>
             <div className='space-y-4 py-4'>
                 <div className='px-2 py-2'>
-                    <div className='mt-3 space-y-1 flex justify-between'>
-                        <UserNav />
+                    <div className='mt-3 space-y-1 flex justify-between items-center'>
+                        <UserNav isMinimized={isMinimized}/>
                         <div className={isMinimized ? 'hidden' : 'inline-block'}>
+
                             <ModeToggle />
                         </div>
                     </div>

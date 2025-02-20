@@ -13,7 +13,7 @@ export const useSidebar = () => useContext(SidebarContext);
 export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({
   children
 }) => {
-  const [isMinimized, setIsMinimized] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(true);
 
   const toggle = () => {
     setIsMinimized(!isMinimized);

@@ -55,6 +55,8 @@ export default function UserAuthForm() {
                 })
                 console.log('User info:', userResponse.data)
 
+                localStorage.setItem('username', userResponse.data.username)
+
                 // Перенаправление после входа
                 router.push('/bids')
             }

@@ -32,10 +32,10 @@ function BgruzHeader() {
                 </ul>
             </div>
 
-            <div>
+            {/* <div>
                 <p>Амир Шодмонов</p>
                 <p>admin@mail.com</p>
-            </div>
+            </div> */}
         </div>
     )
 }
