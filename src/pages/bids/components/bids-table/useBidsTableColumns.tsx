@@ -91,33 +91,67 @@ interface ColumnsProps {
 
 // export default AuctionTimer;
 
+// const AuctionTimer = ({ activationTime }: { activationTime: string }) => {
+//     const serverTime = useServerTime() // Берем серверное время из контекста
+//     const [timeLeft, setTimeLeft] = useState<number>(0)
+
+//     useEffect(() => {
+//         if (!serverTime) return // Ждем, пока контекст загрузит серверное время
+
+//         let targetTime = new Date(activationTime).getTime()
+//         targetTime += 5 * 60 * 60 * 1000 // Добавляем 5 часов
+
+//         const initialTimeLeft = Math.max(0, Math.floor((targetTime - serverTime) / 1000))
+//         setTimeLeft(initialTimeLeft)
+
+//         const interval = setInterval(() => {
+//             setTimeLeft(prevTime => Math.max(0, prevTime - 1))
+//         }, 1000)
+
+//         return () => clearInterval(interval)
+//     }, [serverTime, activationTime])
+
+//     const minutes = Math.floor(timeLeft / 60)
+//     const seconds = timeLeft % 60
+
+//     return timeLeft > 0 ? `${minutes}:${seconds.toString().padStart(2, '0')}` : 'Время вышло'
+// }
+
+// export default AuctionTimer
+
+
+
 const AuctionTimer = ({ activationTime }: { activationTime: string }) => {
-    const serverTime = useServerTime() // Берем серверное время из контекста
-    const [timeLeft, setTimeLeft] = useState<number>(0)
+    const serverTime = useServerTime(); // Берем серверное время из контекста
+    const [timeLeft, setTimeLeft] = useState<number>(0);
 
     useEffect(() => {
-        if (!serverTime) return // Ждем, пока контекст загрузит серверное время
-
-        let targetTime = new Date(activationTime).getTime()
-        targetTime += 5 * 60 * 60 * 1000 // Добавляем 5 часов
-
-        const initialTimeLeft = Math.max(0, Math.floor((targetTime - serverTime) / 1000))
-        setTimeLeft(initialTimeLeft)
-
+        if (!serverTime) return; 
+    
+        const targetTime = new Date(activationTime).getTime(); 
+        
+        // console.log("🎯 ActivationTime (ms):", targetTime);
+        // console.log("⏳ ServerTime (ms):", serverTime);
+        // console.log("🕒 Разница (секунды):", Math.floor((targetTime - serverTime) / 1000));
+    
+        setTimeLeft(Math.max(0, Math.floor((targetTime - serverTime) / 1000))); 
+    
         const interval = setInterval(() => {
-            setTimeLeft(prevTime => Math.max(0, prevTime - 1))
-        }, 1000)
+            setTimeLeft(prevTime => Math.max(0, prevTime - 1));
+        }, 1000);
+    
+        return () => clearInterval(interval);
+    }, [serverTime, activationTime]);
+    
 
-        return () => clearInterval(interval)
-    }, [serverTime, activationTime])
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
 
-    const minutes = Math.floor(timeLeft / 60)
-    const seconds = timeLeft % 60
+    return <span>{timeLeft > 0 ? `${minutes}:${seconds.toString().padStart(2, '0')}` : 'Время вышло'}</span>;
+};
 
-    return timeLeft > 0 ? `${minutes}:${seconds.toString().padStart(2, '0')}` : 'Время вышло'
-}
+export default AuctionTimer;
 
-export default AuctionTimer
 
 export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenModal }: ColumnsProps) => {
     const formatNumber = (value: string) => {

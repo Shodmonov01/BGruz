@@ -151,9 +151,9 @@ const StudentCreateForm = ({ modalClose,  }: { modalClose: () => void}) => {
             }
 
             const res = await postData('api/v1/bids', payload, token)
-            modalClose()
-            // refreshBids()
-            window.location.reload()
+            // modalClose()
+            // // refreshBids()
+            // window.location.reload()
             console.log('res', res)
         } catch (error: any) {
             console.error('Ошибка при создании заявки:', error)

@@ -236,7 +236,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                 <p className='font-bold'>Водитель</p>
                                 <input
                                     type='text'
-                                    value={formData.assignedVehicle.driverName}
+                                    value={formData.assignedVehicle?.driverName}
                                     className='border ml-3 border-gray-300 rounded px-2 py-1 text-sm'
                                     readOnly
                                 />
@@ -245,7 +245,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                 <p className='font-bold'>Машина</p>
                                 <input
                                     type='text'
-                                    value={formData.assignedVehicle.plateNum}
+                                    value={formData.assignedVehicle?.plateNum}
                                     className='border ml-3 border-gray-300 rounded px-2 py-1 text-sm'
                                     readOnly
                                 />
@@ -254,7 +254,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                 <p className='font-bold'>Прицеп</p>
                                 <input
                                     type='text'
-                                    value={formData.assignedTrailer.plateNum}
+                                    value={formData.assignedTrailer?.plateNum}
                                     className='border ml-3 border-gray-300 rounded px-2 py-1 text-sm'
                                     readOnly
                                 />

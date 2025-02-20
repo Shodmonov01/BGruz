@@ -109,7 +109,7 @@ export const useGetBids = (size: number) => {
                 token
             )
 
-            console.log('Ответ от API:', response.items)
+            // console.log('Ответ от API:', response.items)
             setBids(response.items)
             setHasMore(response.items.length < response.total)
         } catch (err) {
