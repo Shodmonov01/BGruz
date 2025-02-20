@@ -48,11 +48,16 @@ export default function DashboardNav({ items, setOpen, isMobileNav = false }: Da
                                         }}
                                     >
                                         <Icon className={`ml-2.5 size-5`} />
-                                        {isMobileNav || (!isMinimized && !isMobileNav) ? (
+                                        <span className='hidden md:block'>
+                                            {isMobileNav || (!isMinimized && !isMobileNav) ? (
+                                                <span className='mr-2 truncate'>{item.title}</span>
+                                            ) : (
+                                                ''
+                                            )}
+                                        </span>
+                                        <span className='block md:hidden'>
                                             <span className='mr-2 truncate'>{item.title}</span>
-                                        ) : (
-                                            ''
-                                        )}
+                                        </span>
                                     </Link>
                                 </TooltipTrigger>
                                 <TooltipContent

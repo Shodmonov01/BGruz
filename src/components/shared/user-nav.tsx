@@ -22,7 +22,7 @@ export default function UserNav({ isMinimized }) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <div className='flex items-center'>
+                <div className='flex items-center mr-8 md:mr-0'>
                     <Button variant='ghost' className='relative h-14 w-14 rounded-full mr-3'>
                         <Avatar className='h-14 w-14 mr-[14px]'>
                             <AvatarImage

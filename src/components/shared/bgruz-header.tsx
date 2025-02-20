@@ -9,7 +9,7 @@ function BgruzHeader() {
             <div className='flex gap-1 justify-center items-center'>
                 <img src={logo} alt='logo' className='h-10' />
                 <span className='text-[#03B4E0]'>Биржа</span>
-                <span className=''>Грузоверевозок</span>
+                <span className=''>Грузоперевозок</span>
             </div>
             <div>
                 <CurrentTime />

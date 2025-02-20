@@ -42,7 +42,7 @@ export default function Sidebar({ className }: SidebarProps) {
                     <Link to={'/'} className='flex justify-center items-center gap-2'>
                         <img src={logo} alt='' className='h-12' />
                         <span>
-                            <span className='text-[#03b4e0]'>Биржа</span> Грузоверевозок
+                            <span className='text-[#03b4e0]'>Биржа</span> Грузоперевозок
                         </span>
                     </Link>
                 )} */}
