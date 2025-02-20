@@ -5,10 +5,22 @@ export interface NavItem {
     href: string
     disabled?: boolean
     external?: boolean
-    icon?: keyof typeof Icons | string
+    icon?: keyof typeof Icons
     label?: string
     description?: string
 }
+
+// import { Icons } from '@/components/ui/icons'
+
+// export interface NavItem {
+//     title: string
+//     href: string
+//     disabled?: boolean
+//     external?: boolean
+//     icon?: keyof typeof Icons | string
+//     label?: string
+//     description?: string
+// }
 
 export interface NavItemWithChildren extends NavItem {
     items: NavItemWithChildren[]

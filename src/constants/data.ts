@@ -1,17 +1,16 @@
 import { NavItem } from '@/types'
 
-
 export const navItems: NavItem[] = [
     {
         title: 'Заявки',
         href: '/bids',
-        icon: '/src/assets/bids.svg',
+        icon: 'dashboard',
         label: 'Dashboard'
     },
     {
         title: 'Заказы',
         href: '/orders',
-        icon: '/src/assets/orders.svg',
+        icon: 'user',
         label: 'Student'
     },
     {
@@ -21,6 +20,31 @@ export const navItems: NavItem[] = [
         label: 'Login'
     }
 ]
+
+
+// import { NavItem } from '@/types'
+
+
+// export const navItems: NavItem[] = [
+//     {
+//         title: 'Заявки',
+//         href: '/bids',
+//         icon: '/src/assets/bids.svg',
+//         label: 'Dashboard'
+//     },
+//     {
+//         title: 'Заказы',
+//         href: '/orders',
+//         icon: '/src/assets/orders.svg',
+//         label: 'Student'
+//     },
+//     {
+//         title: 'Выход',
+//         href: '/login',
+//         icon: 'login',
+//         label: 'Login'
+//     }
+// ]
 
 
 
