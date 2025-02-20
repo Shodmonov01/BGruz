@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Icons } from '@/components/ui/icons'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
@@ -10,6 +11,7 @@ import {
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { useEffect, useState } from 'react'
+import { LogIn } from 'lucide-react'
 
 export default function UserNav({ isMinimized }) {
     const [username, setUsername] = useState('')
@@ -40,8 +42,8 @@ export default function UserNav({ isMinimized }) {
             <DropdownMenuContent className='w-56' align='end' forceMount>
                 <DropdownMenuLabel className='font-normal'>
                     <div className='flex flex-col space-y-1'>
-                        <p className='text-sm font-medium leading-none'>{'Admin'}</p>
-                        <p className='text-xs leading-none text-muted-foreground'>{'admin@gmail.com'}</p>
+                        <p className='text-sm font-medium leading-none'>{username}</p>
+                        {/* <p className='text-xs leading-none text-muted-foreground'>{'admin@gmail.com'}</p> */}
                     </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
@@ -62,8 +64,9 @@ export default function UserNav({ isMinimized }) {
         </DropdownMenuGroup> */}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => console.log('logout')}>
-                    Log out
-                    <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                    Выход
+                    <DropdownMenuShortcut><LogIn/>
+                    </DropdownMenuShortcut>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
