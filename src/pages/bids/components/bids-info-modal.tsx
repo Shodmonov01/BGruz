@@ -15,15 +15,21 @@ import { Terminal, UserContext, VehicleProfile, Warehouse } from '@/types'
 function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
     const [formData, setFormData] = useState({ ...selectedBid })
     const [isReadOnly, setIsReadOnly] = useState<boolean>(true)
-    {/* @ts-expect-error что нибудь придумаем */}
+    {
+        /* @ts-expect-error что нибудь придумаем */
+    }
     const [clients, setClients] = useState<UserContext[]>([])
     const [terminals, setTerminals] = useState<Terminal[]>([])
     const [warehouses, setWarehouses] = useState<Warehouse[]>([])
     const [vehicleProfiles, setVehicleProfiles] = useState<VehicleProfile[]>([])
-    {/* @ts-expect-error что нибудь придумаем */}
+    {
+        /* @ts-expect-error что нибудь придумаем */
+    }
     const [extraServices, setExtraServices] = useState([])
     const [data, setData] = useState()
-    {/* @ts-expect-error что нибудь придумаем */}
+    {
+        /* @ts-expect-error что нибудь придумаем */
+    }
     const [isFetched, setIsFetched] = useState(true)
     const [originalData, setOriginalData] = useState({ ...selectedBid }) // Сохраняем оригинальные данные
 
@@ -185,6 +191,59 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                         <Label htmlFor='wagon'>Вагон</Label>
                                     </div>
                                 </RadioGroup>
+                            </div>
+                        </div>
+
+                        <div className='flex gap-4'>
+                            <div className='w-full'>
+                                <Label className='font-medium'>Заказчик</Label>
+                                <Select
+                                    onValueChange={handleClientChange}
+                                    defaultValue={formData.client?.organizationId?.toString()}
+                                    disabled={isFetched}
+                                >
+                                    <SelectTrigger className='mt-1'>
+                                        <SelectValue placeholder='Выберите клиента' />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {clients.map(client => (
+                                            <SelectItem
+                                                key={client.organizationId}
+                                                value={client.organizationId.toString()}
+                                            >
+                                                {client.organizationName}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className='w-full'>
+                                <div>
+                                    <Label className='font-medium'>Получатель</Label>
+                                    <Select
+                                        disabled={isReadOnly}
+                                        onValueChange={value => handleChange('recipient', value)}
+                                        defaultValue={formData.customer?.organizationId?.toString()}
+                                    >
+                                        <SelectTrigger className='mt-1'>
+                                            <SelectValue placeholder='Выберите получателя' />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {clients.map(customer => (
+                                                <SelectItem
+                                                    key={customer.organizationId}
+                                                    value={customer.organizationId.toString()}
+                                                >
+                                                    {customer.organizationName}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div>
+                                    <Label className='font-medium'>Контактное лицо:</Label>
+                                    <p className='mt-1'>{formData.contactPerson || 'Иванов Иван | +7 998 851 6060'}</p>
+                                </div>
                             </div>
                         </div>
 
