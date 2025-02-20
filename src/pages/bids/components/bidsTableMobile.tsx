@@ -1,10 +1,10 @@
 import { Card, CardContent } from '@/components/ui/card'
-import BidsInfoModal from './bids-info-modal'
 import { useCallback, useState } from 'react'
 import { ScrollArea } from '@radix-ui/react-scroll-area'
 import info from '../../../../public/info.svg'
 import PopupModal from '@/components/shared/popup-modal'
 import StudentCreateForm from './bid-create-form'
+import { BidsOrderDialog } from './bids-info-modal-mobile'
 interface Bid {
     _id: string
     persistentId: string
@@ -26,16 +26,19 @@ interface Bid {
 
 function BidsTableMobile({ bids }) {
     const [selectedBid, setSelectedBid] = useState<Partial<Bid> | null>(null)
-    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [_, setIsModalOpen] = useState(false)
+    const [open, setOpen] = useState(false)
+
     const handleCloseModal = useCallback(() => {
         setIsModalOpen(false)
-        setSelectedBid(null)
+        setOpen(false)
     }, [])
 
-    const handleOpenModal = useCallback((bid: Bid) => {
-        setSelectedBid(bid)
-        setIsModalOpen(true)
+    const handleOpenModal = useCallback(order => {
+        setSelectedBid(order)
+        setOpen(true)
     }, [])
+
     return (
         <div className='flex flex-col gap-4 '>
             <ScrollArea className='flex flex-col gap-4 max-h-[87vh] w-full overflow-auto rounded-md border'>
@@ -91,10 +94,11 @@ function BidsTableMobile({ bids }) {
             </div>
 
             {selectedBid && (
-                <BidsInfoModal
-                    handleCloseModal={handleCloseModal}
+                <BidsOrderDialog
                     selectedBid={selectedBid}
-                    isModalOpen={isModalOpen}
+                    handleCloseModal={handleCloseModal}
+                    open={open}
+                    onOpenChange={setOpen}
                 />
             )}
         </div>
