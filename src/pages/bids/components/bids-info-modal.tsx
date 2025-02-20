@@ -19,21 +19,12 @@ import BidFinance from './bid-info-modal-details/BidFinance'
 function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
     const [formData, setFormData] = useState({ ...selectedBid })
     const [isReadOnly, setIsReadOnly] = useState<boolean>(true)
-    {
-        /* @ts-expect-error что нибудь придумаем */
-    }
     const [clients, setClients] = useState<UserContext[]>([])
     const [terminals, setTerminals] = useState<Terminal[]>([])
     const [warehouses, setWarehouses] = useState<Warehouse[]>([])
     const [vehicleProfiles, setVehicleProfiles] = useState<VehicleProfile[]>([])
-    {
-        /* @ts-expect-error что нибудь придумаем */
-    }
     const [extraServices, setExtraServices] = useState([])
     const [data, setData] = useState()
-    {
-        /* @ts-expect-error что нибудь придумаем */
-    }
     const [isFetched, setIsFetched] = useState(true)
     const [originalData, setOriginalData] = useState({ ...selectedBid }) // Сохраняем оригинальные данные
 
