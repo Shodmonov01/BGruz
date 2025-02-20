@@ -35,7 +35,17 @@ interface BidsTableProps {
     loading: boolean
     localFilters: Record<string, string | any[]>
 }
-function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, loading, localFilters }: BidsTableProps) {
+//@ts-ignore
+function BidsTable({
+    bids,
+    setFilters,
+    handleFilterChange,
+    loadMore,
+    hasMore,
+    loading,
+    localFilters,
+    refreshBids
+}: BidsTableProps) {
     const [selectedBid, setSelectedBid] = useState<Partial<Bid> | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isShortTable, setIsShortTable] = useState(false)
@@ -101,11 +111,14 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
         isShortTable,
         onApprove: handleApprove,
         onDelete: handleDelete,
+        //@ts-ignore
         onOpenModal: handleOpenModal
     })
 
     const table = useReactTable({
+        //@ts-ignore
         data: bids || [],
+        //@ts-ignore
         columns,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
@@ -125,7 +138,7 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
 
     return (
         <div>
-            <BidHeader setIsShortTable={setIsShortTable} isShortTable={isShortTable} />
+            <BidHeader setIsShortTable={setIsShortTable} isShortTable={isShortTable} refreshBids={refreshBids} />
 
             <ScrollArea>
                 <div className='h-[calc(98vh-200px)] overflow-auto !scrollbar-thin !scrollbar-thumb-gray-400 !scrollbar-track-gray-100'>
@@ -152,28 +165,37 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
                                             key={header.id}
                                             className='bg-[#EDEDED] border border-gray-300 whitespace-nowrap'
                                         >
-                                            <div className=''>
-                                                {header.column.columnDef.filterType !== 'range' ? (
-                                                    <div className='text-center'>
-                                                        {renderFilterInput(header.column, handleFilterChange)}
-                                                    </div>
-                                                ) : (
-                                                    <div
-                                                        className='flex text-xs items-center gap-1 cursor-pointer h-7 min-w-full px-3 rounded-md bg-white'
-                                                        onClick={header.column.getToggleSortingHandler()}
-                                                    >
-                                                        {header.column.columnDef.header}
-                                                        {header.column.getIsSorted() ? (
-                                                            header.column.getIsSorted() === 'asc' ? (
-                                                                <ArrowUp className='h-4 w-4' />
+                                            <div>
+                                                {
+                                                    //@ts-ignore
+                                                    header.column.columnDef.filterType !== 'range' ? (
+                                                        <div className='text-center'>
+                                                            {renderFilterInput(header.column, handleFilterChange)}
+                                                        </div>
+                                                    ) : (
+                                                        <div
+                                                            className='flex text-xs items-center gap-1 cursor-pointer h-7 min-w-full px-3 rounded-md bg-white'
+                                                            onClick={header.column.getToggleSortingHandler()}
+                                                        >
+                                                            <div className='text-center'>
+                                                                {flexRender(
+                                                                    header.column.columnDef.header,
+                                                                    header.getContext()
+                                                                )}
+                                                            </div>
+
+                                                            {header.column.getIsSorted() ? (
+                                                                header.column.getIsSorted() === 'asc' ? (
+                                                                    <ArrowUp className='h-4 w-4' />
+                                                                ) : (
+                                                                    <ArrowDown className='h-4 w-4' />
+                                                                )
                                                             ) : (
-                                                                <ArrowDown className='h-4 w-4' />
-                                                            )
-                                                        ) : (
-                                                            <ArrowUpDown className='h-4 w-4 opacity-50' />
-                                                        )}
-                                                    </div>
-                                                )}
+                                                                <ArrowUpDown className='h-4 w-4 opacity-50' />
+                                                            )}
+                                                        </div>
+                                                    )
+                                                }
                                             </div>
                                         </TableHead>
                                     ))}
@@ -183,10 +205,11 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
                         <TableBody>
                             {table.getRowModel().rows.map((row, index) => (
                                 <TableRow
+                                    //@ts-ignore
                                     onDoubleClick={() => handleOpenModal(row.original)}
                                     key={row.id}
                                     className={`cursor-pointer text-[16px] hover:bg-gray-100 ${
-                                        row.original.ownState === 'canceled'
+                                        row.original.status === 'canceled'
                                             ? 'bg-gray-50 opacity-50 line-through'
                                             : index % 2 === 0
                                               ? 'bg-gray-100'
@@ -207,11 +230,7 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
                                 <TableRow>
                                     <TableCell colSpan={columns.length} className='text-center p-4'>
                                         <div className='flex items-center justify-center'>
-                                            <img
-                                                src={loader || '/placeholder.svg'}
-                                                alt='Загрузка...'
-                                                className='h-8 w-8'
-                                            />
+                                            <img src={loader} alt='Загрузка...' className='h-8 w-8' />
                                             <span className='ml-2 text-gray-500'>Загрузка данных...</span>
                                         </div>
                                     </TableCell>

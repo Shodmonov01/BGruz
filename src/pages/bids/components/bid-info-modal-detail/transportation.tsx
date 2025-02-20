@@ -12,30 +12,26 @@ function Transportation({ formData, handleChange, clients, vehicleProfiles, isRe
                 <div className='flex items-center border-b-2 border-[#D0D1D5] pb-4'>
                     <Label className='text-base font-medium mr-4'>Тип перевозки</Label>
                     <RadioGroup
-                        defaultValue={formData.loadingMode}
                         className='flex gap-6 mt-2'
-                        onValueChange={value => handleChange('loadingMode', value)}
                     >
                         <div className='flex items-center gap-2'>
-                            <RadioGroupItem value='loading' id='loading' disabled={isReadOnly} />
+                            <RadioGroupItem value='loading' id='loading'  />
                             <Label htmlFor='loading'>Погрузка</Label>
                         </div>
                         <div className='flex items-center gap-2'>
-                            <RadioGroupItem value='unloading' id='unloading' disabled={isReadOnly} />
+                            <RadioGroupItem value='unloading' id='unloading'  />
                             <Label htmlFor='unloading'>Выгрузка</Label>
                         </div>
                     </RadioGroup>
                     <RadioGroup
-                        defaultValue={formData.cargoType}
                         className='flex gap-6 mt-2'
-                        onValueChange={value => handleChange('loadingMode', value)}
                     >
                         <div className='flex items-center gap-2'>
-                            <RadioGroupItem value='container' id='container' disabled={isReadOnly} />
+                            <RadioGroupItem value='container' id='container'  />
                             <Label htmlFor='container'>Контейнер</Label>
                         </div>
                         <div className='flex items-center gap-2'>
-                            <RadioGroupItem value='wagon' id='wagon' disabled={isReadOnly} />
+                            <RadioGroupItem value='wagon' id='wagon'  />
                             <Label htmlFor='wagon'>Вагон</Label>
                         </div>
                     </RadioGroup>

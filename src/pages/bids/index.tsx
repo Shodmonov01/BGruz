@@ -12,12 +12,12 @@ import BidsTable from './components/BidsTable'
 
 export default function BidsPage() {
     const [searchParams] = useSearchParams()
-    const [size, setSize] = useState(Number(searchParams.get('size')) || 100)
+    const [size, setSize] = useState(Number(searchParams.get('size')) || 200)
     const [localFilters, setLocalFilters] = useState<{ [key: string]: string }>({})
 
     const debounceRef = useRef<NodeJS.Timeout | null>(null)
 
-    const { bids, hasMore, loading, setFilters, refreshTable } = useGetBids(size)
+    const { bids, hasMore, loading, setFilters, refreshTable, refreshBids } = useGetBids(size)
 
     const handleFilterChange = useCallback(
         (columnId: string, value: any) => {
@@ -102,6 +102,7 @@ export default function BidsPage() {
                         hasMore={hasMore}
                         loading={loading}
                         localFilters={localFilters}
+                        refreshBids = {refreshBids}
                     />
                 </div>
 

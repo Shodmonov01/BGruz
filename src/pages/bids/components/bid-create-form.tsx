@@ -38,7 +38,7 @@ interface BidFormData {
     extraServices: Array<{ id: number; count: number }>
 }
 
-const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
+const StudentCreateForm = ({ modalClose, refreshBids }: { modalClose: () => void ,refreshBids: ()=> void}) => {
     const [clients, setClients] = useState<{ organizationId: number; organizationName: string }[]>([])
     const [terminals, setTerminals] = useState<{ id: number; name: string; description: string }[]>([])
     const [warehouses, setWarehouses] = useState<{ id: number; name: string; description: string }[]>([])
@@ -111,7 +111,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
             const payload = {
                 cargoType: data.transportType,
                 loadingMode: data.loadingType,
-
+                //@ts-ignore
                 clientId: Number(data.recipientOrSender),
                 startDate: getValues('startDate'),
                 slideDayTotal: 0,
@@ -137,6 +137,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                 vehicleProfileId: Number(data.vehicleProfiles),
                 vehicleCount: getValues('vehicleCount'),
                 cargoTitle: data.cargoTitle,
+                //@ts-ignore
                 filingTime: getValues('submissionTime'),
 
                 extraServices: data.extraServices || [],
@@ -151,6 +152,8 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
 
             const res = await postData('api/v1/bids', payload, token)
             modalClose()
+            refreshBids()
+            window.location.reload()
             console.log('res', res)
         } catch (error: any) {
             console.error('Ошибка при создании заявки:', error)

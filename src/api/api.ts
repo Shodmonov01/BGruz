@@ -6,18 +6,38 @@ const API_URL = axios.create({
     baseURL: 'https://portal.bgruz.com'
 })
 
+// API_URL.interceptors.response.use(
+//     response => response,
+//     error => {
+//         if (error.response && error.response.status === 401) {
+//             localStorage.removeItem('authToken')
+//             setTimeout(() => {
+//                 window.location.href = '/login'
+//             }, 100)
+//         }
+//         return Promise.reject(error)
+//     }
+// )
+
 API_URL.interceptors.response.use(
     response => response,
     error => {
         if (error.response && error.response.status === 401) {
-            localStorage.removeItem('authToken')
+            const requestUrl = error.config?.url;
+
+            if (requestUrl && requestUrl.includes('/api/v1/time/now')) {
+                return Promise.reject(error);
+            }
+
+            localStorage.removeItem('authToken');
             setTimeout(() => {
-                window.location.href = '/login'
-            }, 100)
+                window.location.href = '/login';
+            }, 100);
         }
-        return Promise.reject(error)
+        return Promise.reject(error);
     }
-)
+);
+
 
 export const deleteData = async (endpoint, token: string | null = null) => {
     try {
