@@ -5,11 +5,11 @@ import logo from '../../../public/logoRb.png'
 
 function BgruzHeader() {
     return (
-        <div className='hidden md:flex items-start justify-between gap-2 pb-5'>
-            <div className='flex gap-1 justify-center items-center'>
-                <img src={logo} alt='logo' className='h-10' />
+        <div className='hidden md:flex items-center justify-between gap-2 pb-5'>
+            <div className='flex gap-1 justify-center items-center md:text-2xl'>
+                <img src={logo} alt='logo' className='h-20' />
                 <span className='text-[#03B4E0]'>Биржа</span>
-                <span className=''>Грузоперевозок</span>
+                <span className=''>Грузоверевозок</span>
             </div>
             <div>
                 <CurrentTime />
@@ -31,11 +31,6 @@ function BgruzHeader() {
                     </li>
                 </ul>
             </div>
-
-            {/* <div>
-                <p>Амир Шодмонов</p>
-                <p>admin@mail.com</p>
-            </div> */}
         </div>
     )
 }

@@ -184,7 +184,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 filterType: 'exact'
             },
             {
-                header: 'Вагон/Контейнер',
+                header: 'Вагон/Конт',
                 accessorKey: 'cargoType',
                 size: 200,
                 accessorFn: row => {
@@ -207,7 +207,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 ]
             },
             {
-                header: 'Погрузка/Выгрузка',
+                header: 'Операция',
                 accessorKey: 'loadingMode',
                 size: 200,
                 accessorFn: row => {

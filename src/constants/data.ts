@@ -4,13 +4,13 @@ export const navItems: NavItem[] = [
     {
         title: 'Заявки',
         href: '/bids',
-        icon: 'dashboard',
+        icon: '/src/assets/bids.svg',
         label: 'Dashboard'
     },
     {
         title: 'Заказы',
         href: '/orders',
-        icon: 'user',
+        icon: '/src/assets/orders.svg',
         label: 'Student'
     },
     {

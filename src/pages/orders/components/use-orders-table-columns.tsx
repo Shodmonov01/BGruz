@@ -136,7 +136,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 filterType: 'exact'
             },
             {
-                header: 'Вагон/Контейнер',
+                header: 'Вагон/Конт',
                 accessorKey: 'cargoType',
                 size: 200,
                 accessorFn: row => {

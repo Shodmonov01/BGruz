@@ -22,13 +22,11 @@ export default function DashboardNav({ items, setOpen, isMobileNav = false }: Da
         return null
     }
 
-    // console.log('isActive', isMobileNav, isMinimized);
-
     return (
         <nav className='grid items-start gap-2'>
             <TooltipProvider>
                 {items.map((item, index) => {
-                    const Icon = Icons[item.icon || 'arrowRight']
+                    const IconComponent = item.icon && Icons[item.icon as keyof typeof Icons] // Получаем компонент
                     return (
                         item.href && (
                             <Tooltip key={index}>
@@ -47,7 +45,15 @@ export default function DashboardNav({ items, setOpen, isMobileNav = false }: Da
                                             }
                                         }}
                                     >
-                                        <Icon className={`ml-2.5 size-5`} />
+                                        {/* Обработка иконки */}
+                                        {item.icon &&
+                                            (typeof item.icon === 'string' &&
+                                            (item.icon.startsWith('/') || item.icon.endsWith('.svg')) ? (
+                                                <img src={item.icon} alt={item.title} className='ml-2.5 size-5' />
+                                            ) : (
+                                                IconComponent && <IconComponent className='ml-2.5 size-5' />
+                                            ))}
+
                                         <span className='hidden md:block'>
                                             {isMobileNav || (!isMinimized && !isMobileNav) ? (
                                                 <span className='mr-2 truncate'>{item.title}</span>
