@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 // import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table'
 import BgruzHeader from '@/components/shared/bgruz-header'
 // import { Input } from '@/components/ui/input'
@@ -7,6 +7,7 @@ import BgruzHeader from '@/components/shared/bgruz-header'
 import { useGetOrders } from '@/hooks/useGetOrders'
 import OrdersTable from './components/orders-table'
 import { useSearchParams } from 'react-router-dom'
+import OrderTableMobile from './components/ordersTableMobile'
 
 export default function OrderPage() {
     // const [isShortTable, setIsShortTable] = useState(false)
@@ -18,26 +19,73 @@ export default function OrderPage() {
 
     const { orders, hasMore, loading, setFilters, refreshTable } = useGetOrders(size)
 
-    const handleFilterChange = (columnId: string, value: string) => {
-        const newFilters = { ...localFilters }
-        if (value) newFilters[columnId] = value
-        else delete newFilters[columnId]
+    const handleFilterChange = useCallback(
+        (columnId: string, value: any) => {
+            let formattedValue = value
 
-        setLocalFilters(newFilters)
+            if (columnId === 'loadingMode' || columnId === 'cargoType' || columnId === 'status') {
+                formattedValue = Array.isArray(value) ? value : [value]
+            } else if ((columnId === 'loadingDate' || columnId === 'createdAt') && value) {
+                formattedValue = {
+                    start: new Date(value.from.setHours(23, 59, 59, 999)).toISOString(),
+                    end: new Date(value.to.setHours(23, 59, 59, 999)).toISOString()
+                }
+            } else if (['number', 'fullPrice', 'comission', 'extraServicesPrice'].includes(columnId)) {
+                formattedValue = Number(value)
+            }
 
-        if (debounceRef.current) clearTimeout(debounceRef.current)
-        debounceRef.current = setTimeout(() => {
-            console.log('Обновляем фильтры:', newFilters)
+            const newFilters = {
+                ...localFilters,
+                [columnId]: formattedValue
+            }
+
+            setLocalFilters(newFilters)
             setFilters(newFilters)
-            refreshTable()
-        }, 500)
-    }
+
+            if (debounceRef.current) clearTimeout(debounceRef.current)
+            debounceRef.current = setTimeout(async () => {
+                const filterPayload = {
+                    filter: {
+                        ...newFilters
+                    },
+                    sort: {
+                        filterFieldName: 'createdAt',
+                        direction: 'descending'
+                    },
+                    size: size
+                }
+
+                try {
+                    const token = localStorage.getItem('authToken') || ''
+                    const response = await fetch('https://portal.bgruz.com/api/v1/orders/getbatch', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${token}`
+                        },
+                        body: JSON.stringify(filterPayload)
+                    })
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`)
+                    }
+
+                    await response.json()
+                    refreshTable()
+                } catch (error) {
+                    console.error('Error in filter change:', error)
+                }
+            }, 500)
+        },
+        [localFilters, size, refreshTable]
+    )
 
     const loadMore = () => {
         if (hasMore) {
             setSize(prev => prev + 50)
         }
     }
+
     console.log('orders', orders)
 
     useEffect(() => {
@@ -57,14 +105,21 @@ export default function OrderPage() {
         <div className='p-4'>
             <BgruzHeader />
             {/* <OrdersHeader setIsShortTable={setIsShortTable} isShortTable={isShortTable} /> */}
-            <OrdersTable
-                orders={orders || []}
-                setFilters={setFilters}
-                handleFilterChange={handleFilterChange}
-                loadMore={loadMore}
-                hasMore={hasMore}
-                loading={loading}
-            />
+            <div className='hidden md:block'>
+                <OrdersTable
+                    orders={orders || []}
+                    setFilters={setFilters}
+                    handleFilterChange={handleFilterChange}
+                    loadMore={loadMore}
+                    hasMore={hasMore}
+                    loading={loading}
+                    localFilters={localFilters}
+                />
+            </div>
+            <div className='md:hidden'>
+                <OrderTableMobile orders={orders || []} />
+            </div>
+
             {/* <Table className='border rounded-lg border-gray-300 w-full'>
                 <TableHeader>
                     <TableRow className='border border-gray-300'>

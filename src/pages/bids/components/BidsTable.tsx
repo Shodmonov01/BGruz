@@ -9,17 +9,15 @@ import {
 } from '@tanstack/react-table'
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 // import type { DateRange } from 'react-day-picker'
 import { useBidsTableColumns } from './bids-table/useBidsTableColumns'
 import BidsInfoModal from './bids-info-modal'
 import BidHeader from './bids-header'
 import { deleteData, postData2 } from '@/api/api'
 import loader from '../../../../public/gear-spinner.svg'
-import { DateRangePicker } from './bid-form-detail/rangePicker'
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
 import FilterInput from './filter-inputs'
+import { renderFilterInput } from '@/components/renderFilterInput/renderFilterInput'
 
 interface Bid {
     _id?: string

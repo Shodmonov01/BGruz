@@ -40,7 +40,7 @@ interface ColumnsProps {
     isShortTable: boolean
     onApprove: (bidId: string) => void
     onDelete: (bidId: string) => void
-    onOpenModal: (bid: Bid) => void
+    onOpenModal: (bid: any) => void
 }
 
 
