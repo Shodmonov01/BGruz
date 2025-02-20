@@ -1,16 +1,18 @@
 import { NavItem } from '@/types'
+import BidsIcon from '@/assets/bids.svg';
+import OrdersIcon from '@/assets/orders.svg';
 
 export const navItems: NavItem[] = [
     {
         title: 'Заявки',
         href: '/bids',
-        icon: '/src/assets/bids.svg',
+        icon: BidsIcon,        
         label: 'Dashboard'
     },
     {
         title: 'Заказы',
         href: '/orders',
-        icon: '/src/assets/orders.svg',
+        icon: OrdersIcon,
         label: 'Student'
     },
     {
