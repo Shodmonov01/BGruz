@@ -2,8 +2,10 @@ import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import useNumberFormatter from '@/hooks/use-format-number'
 
 function BidFinance({ formData, handleChange, isReadOnly, extraServices }) {
+    const { formatNumber } = useNumberFormatter()
     return (
         <>
             <div className='bg-[#00b6f1] text-white py-3 -mx-6 text-center'>
@@ -28,10 +30,10 @@ function BidFinance({ formData, handleChange, isReadOnly, extraServices }) {
                     <div className='flex items-center'>
                         <Label className='text-[18px] font-bold text-[#1E293B] min-w-40'>Цена перевозки</Label>
                         <Input
-                            type='number'
+                            type='text'
                             className='w-full'
                             name='price'
-                            value={formData.price || ''}
+                            value={formatNumber(String(formData.price)) || ''}
                             onChange={e => handleChange('price', e.target.value)}
                             disabled={isReadOnly || formData.isPriceRequest}
                         />
@@ -58,9 +60,9 @@ function BidFinance({ formData, handleChange, isReadOnly, extraServices }) {
                                 </Label>
                                 <div className='flex items-center gap-2 ml-auto'>
                                     <Input
-                                        type='number'
+                                        type='text'
                                         className='w-20'
-                                        value={service.count}
+                                        value={formatNumber(String(service.count))}
                                         onChange={e => {
                                             const newValue = Number(e.target.value)
                                             if (newValue >= 0) {
@@ -90,7 +92,7 @@ function BidFinance({ formData, handleChange, isReadOnly, extraServices }) {
                     <Input
                         type='text'
                         className='mt-1'
-                        value={formData.fullPrice || ''}
+                        value={formatNumber(String(formData.fullPrice)) || ''}
                         onChange={e => handleChange('fullPrice', e.target.value)}
                         disabled
                     />

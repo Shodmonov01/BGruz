@@ -19,7 +19,6 @@ import BidFinance from './bid-info-modal-details/BidFinance'
 function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
     const [formData, setFormData] = useState({ ...selectedBid })
     const [isReadOnly, setIsReadOnly] = useState<boolean>(true)
-    const [isDueDateEnabled, setIsDueDateEnabled] = useState(false)
     {
         /* @ts-expect-error что нибудь придумаем */
     }
