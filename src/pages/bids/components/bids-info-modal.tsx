@@ -123,48 +123,74 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                 <div className='relative bg-white rounded-lg'>
                     <div className='p-6 space-y-6'>
                         <div className='text-center'>
-                            <h2 className='text-2xl font-bold text-tertiary'>Заявка СМ ID {formData.persistentId}</h2>
-                            <p className='text-sm '>
-                                Дата {format(new Date(formData.loadingDate || new Date()), 'dd.MM.yyyy')} №
-                                {formData.number}
-                            </p>
+                            <h2 className='text-[32px] font-bold text-tertiary'>
+                                Заявка СМ ID {formData.persistentId}
+                            </h2>
+                            <div className='text-lg text-center flex gap-3 items-center justify-center'>
+                                <span>Дата {format(new Date(formData.loadingDate || new Date()), 'dd.MM.yyyy')}</span> №
+                                <span>{formData.number}</span>
+                            </div>
                         </div>
 
-                        <div className='flex items-center border-b-2 border-[#D0D1D5] pb-4'>
-                            <Label className='text-base font-medium mr-4'>Тип перевозки</Label>
-                            <RadioGroup
-                                defaultValue={formData.loadingMode}
-                                className='flex gap-6 mt-2'
-                                onValueChange={value => handleChange('loadingMode', value)}
-                            >
-                                <div className='flex items-center gap-2'>
-                                    <RadioGroupItem value='loading' id='loading' disabled={isReadOnly} />
-                                    <Label htmlFor='loading'>Погрузка</Label>
-                                </div>
-                                <div className='flex items-center gap-2'>
-                                    <RadioGroupItem value='unloading' id='unloading' disabled={isReadOnly} />
-                                    <Label htmlFor='unloading'>Выгрузка</Label>
-                                </div>
-                            </RadioGroup>
-                            <RadioGroup
-                                defaultValue={formData.cargoType}
-                                className='flex gap-6 mt-2'
-                                onValueChange={value => handleChange('loadingMode', value)}
-                            >
-                                <div className='flex items-center gap-2'>
-                                    <RadioGroupItem value='container' id='container' disabled={isReadOnly} />
-                                    <Label htmlFor='container'>Контейнер</Label>
-                                </div>
-                                <div className='flex items-center gap-2'>
-                                    <RadioGroupItem value='wagon' id='wagon' disabled={isReadOnly} />
-                                    <Label htmlFor='wagon'>Вагон</Label>
-                                </div>
-                            </RadioGroup>
+                        <div className='flex items-center border-b-2 border-[#D0D1D5] gap-8 pb-4'>
+                            <Label className='text-base text-[20px] mr-4 font-bold text-[#1E293B]'>Тип перевозки</Label>
+                            <div className='flex items-center justify-between gap-10 '>
+                                <RadioGroup
+                                    defaultValue={formData.loadingMode}
+                                    className='flex gap-4'
+                                    onValueChange={value => handleChange('loadingMode', value)}
+                                >
+                                    <div className='flex items-center gap-2'>
+                                        <Label htmlFor='loading' className=''>
+                                            Погрузка
+                                        </Label>
+                                        <RadioGroupItem
+                                            className='size-5'
+                                            value='loading'
+                                            id='loading'
+                                            disabled={isReadOnly}
+                                        />
+                                    </div>
+                                    <div className='flex items-center gap-2'>
+                                        <RadioGroupItem
+                                            className='size-5'
+                                            value='unloading'
+                                            id='unloading'
+                                            disabled={isReadOnly}
+                                        />
+                                        <Label htmlFor='unloading'>Выгрузка</Label>
+                                    </div>
+                                </RadioGroup>
+                                <RadioGroup
+                                    defaultValue={formData.cargoType}
+                                    className='flex gap-4'
+                                    onValueChange={value => handleChange('loadingMode', value)}
+                                >
+                                    <div className='flex items-center gap-2'>
+                                        <Label htmlFor='container'>Контейнер</Label>
+                                        <RadioGroupItem
+                                            className='size-5'
+                                            value='container'
+                                            id='container'
+                                            disabled={isReadOnly}
+                                        />
+                                    </div>
+                                    <div className='flex items-center gap-2'>
+                                        <RadioGroupItem
+                                            className='size-5'
+                                            value='wagon'
+                                            id='wagon'
+                                            disabled={isReadOnly}
+                                        />
+                                        <Label htmlFor='wagon'>Вагон</Label>
+                                    </div>
+                                </RadioGroup>
+                            </div>
                         </div>
 
                         <div className='space-y-4'>
                             <div className='flex gap-4 items-center'>
-                                <Label className='font-medium min-w-24'>Тип перевозки</Label>
+                                <Label className=' min-w-36  text-[18px] font-bold text-[#1E293B]'>Тип перевозки</Label>
                                 <div className='flex gap-4 items-center w-full'>
                                     <Select
                                         onValueChange={value => handleChange('vehicleProfileId', value)}
@@ -184,8 +210,8 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                         </SelectContent>
                                     </Select>
                                 </div>
-                                <div className='w-24'>
-                                    <div className='flex items-center mt-1'>
+                                <div className=''>
+                                    <div className='flex items-start mt-1'>
                                         <Input
                                             type='number'
                                             value={formData.vehicleCount || 1}
@@ -202,15 +228,15 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
 
                             <div className='flex flex-col gap-4'>
                                 <div className='flex items-center gap-5'>
-                                    <Label className='font-medium'>Дата погрузки</Label>
-                                    <div className='flex gap-2 mt-1'>
+                                    <Label className='text-[18px] font-bold text-[#1E293B] '>Дата погрузки</Label>
+                                    <div className='flex gap-2 mt-1 relative left-4'>
                                         <Input
                                             type='date'
                                             value={format(new Date(formData.loadingDate || new Date()), 'yyyy-MM-dd')}
                                             onChange={e => handleChange('loadingDate', e.target.value)}
                                             readOnly={isReadOnly}
                                         />
-                                        <div className='flex items-center justify-center px-4  text-[#00b6f1] font-medium'>
+                                        <div className='flex items-center justify-center px-2  text-[#00b6f1] font-medium'>
                                             ПО
                                         </div>
                                         <Input
@@ -222,10 +248,12 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                     </div>
                                 </div>
                                 <div className='flex items-center gap-4'>
-                                    <Label className='font-medium min-w-24'>Время подачи</Label>
+                                    <Label className='text-[18px] font-bold text-[#1E293B] min-w-36'>
+                                        Время подачи
+                                    </Label>
                                     <Input
                                         type='time'
-                                        className='mt-1'
+                                        className='mt-1 w-[115px]'
                                         value={formData.filingTime || ''}
                                         onChange={e => handleChange('filingTime', e.target.value)}
                                         readOnly={isReadOnly}
@@ -234,45 +262,47 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                             </div>
                         </div>
 
-                        <div className='bg-[#00b6f1] text-white py-3 -mx-6 text-center text-xl font-medium'>
+                        <div className='bg-[#00b6f1] text-white py-3 -mx-6 text-center text-xl text-[20px] font-bold'>
                             Маршрут
                         </div>
 
                         <div className='space-y-4'>
-                            <div className='grid grid-cols-2 gap-4'>
-                                <div>
-                                    <Label className='font-medium'>Терминал 1</Label>
-                                    <Select
-                                        onValueChange={value => handleChange('terminal1', value)}
-                                        value={formData.terminal1?.id ? formData.terminal1.id.toString() : ''}
-                                    >
-                                        <SelectTrigger className='mt-1'>
-                                            <SelectValue>
-                                                {formData.terminal1?.name || 'Выберите терминал 1'}
-                                            </SelectValue>
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {terminals.map(terminal => (
-                                                <SelectItem key={terminal.id} value={terminal.id.toString()}>
-                                                    {terminal.name}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
+                            <div>
+                                <Label className='text-[18px] font-bold text-[#1E293B]'>Терминал 1</Label>
+                                <div className='grid grid-cols-2 gap-4'>
+                                    <div>
+                                        <Select
+                                            onValueChange={value => handleChange('terminal1', value)}
+                                            value={formData.terminal1?.id ? formData.terminal1.id.toString() : ''}
+                                        >
+                                            <SelectTrigger className='mt-1'>
+                                                <SelectValue>
+                                                    {formData.terminal1?.name || 'Выберите терминал 1'}
+                                                </SelectValue>
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {terminals.map(terminal => (
+                                                    <SelectItem key={terminal.id} value={terminal.id.toString()}>
+                                                        {terminal.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
 
-                                <div>
-                                    <Label className='font-medium'>Адрес</Label>
-                                    <Input
-                                        className='mt-1'
-                                        value={formData.terminal1?.address || ''}
-                                        readOnly={isReadOnly}
-                                    />
+                                    <div>
+                                        {/* <Label className='text-[18px] font-bold text-[#1E293B]'>Адрес</Label> */}
+                                        <Input
+                                            className='mt-1'
+                                            value={formData.terminal1?.address || ''}
+                                            readOnly={isReadOnly}
+                                        />
+                                    </div>
                                 </div>
                             </div>
 
                             <div>
-                                <Label className='font-medium'>Склад клиента</Label>
+                                <Label className='text-[18px] font-bold text-[#1E293B]'>Склад клиента</Label>
                                 <div className='grid grid-cols-2 gap-4 mt-1'>
                                     <Select
                                         onValueChange={value => handleChange('warehouse', value)}
@@ -302,7 +332,7 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                             </div>
 
                             <div>
-                                <Label className='font-medium'>Терминал 2</Label>
+                                <Label className='text-[18px] font-bold text-[#1E293B]'>Терминал 2</Label>
                                 <div className='grid grid-cols-2 gap-4'>
                                     <div>
                                         <Select
@@ -333,7 +363,7 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                         </div>
 
                         <div className='bg-[#00b6f1] text-white py-3 -mx-6 text-center'>
-                            <div className='text-xl font-medium'>Финансы</div>
+                            <div className='text-[20px] font-bold '>Финансы</div>
                             <div className='text-sm'>Все цены указаны без НДС</div>
                         </div>
 
@@ -345,13 +375,15 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                         checked={formData.isPriceRequest}
                                         onCheckedChange={checked => handleChange('isPriceRequest', checked)}
                                     />
-                                    <Label htmlFor='priceRequest' className='font-medium'>
+                                    <Label htmlFor='priceRequest' className='text-[18px] font-bold text-[#1E293B]'>
                                         Запрос цены
                                     </Label>
                                 </div>
 
                                 <div className='flex items-center'>
-                                    <Label className='font-medium min-w-28'>Цена перевозки</Label>
+                                    <Label className='text-[18px] font-bold text-[#1E293B] min-w-40'>
+                                        Цена перевозки
+                                    </Label>
                                     <Input
                                         type='number'
                                         className='w-full'
@@ -364,12 +396,19 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                             </div>
 
                             <div className='space-y-2'>
-                                <Label className='font-medium'>Доп услуги</Label>
+                                <div className='mb-6'>
+                                    <Label className='text-[18px] font-bold text-[#1E293B]'>Доп услуги</Label>
+                                </div>
                                 <div className='space-y-2'>
                                     {formData.extraServices?.map((service, index) => (
                                         <div key={index} className='flex items-center gap-2'>
                                             <Checkbox id={`service${index}`} checked={true} />
-                                            <Label htmlFor={`service${index}`}>{service.name}</Label>
+                                            <Label
+                                                className='text-[18px] font-bold text-[#1E293B]'
+                                                htmlFor={`service${index}`}
+                                            >
+                                                {service.name}
+                                            </Label>
                                             <div className='flex items-center gap-2 ml-auto'>
                                                 <Input
                                                     type='number'
@@ -389,7 +428,7 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                                     onChange={e =>
                                                         handleChange(`extraServices[${index}].price`, e.target.value)
                                                     }
-                                                    className='w-32'
+                                                    className='w-[185px]'
                                                     readOnly={isReadOnly}
                                                 />
                                             </div>
@@ -399,7 +438,9 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                             </div>
 
                             <div className='flex items-center'>
-                                <Label className='font-medium w-full'>Полная стоимость рейса без НДС</Label>
+                                <Label className='text-[18px] font-bold text-[#1E293B] w-full min-w-[420px]'>
+                                    Полная стоимость рейса без НДС
+                                </Label>
                                 <Input
                                     type='text'
                                     className='mt-1'
@@ -413,7 +454,7 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
 
                         <div className='space-y-4'>
                             <div>
-                                <Label className='font-medium'>Груз</Label>
+                                <Label className='text-[18px] font-bold text-[#1E293B]'>Груз</Label>
                                 <Input
                                     className='mt-1'
                                     placeholder='Название груза'
@@ -423,7 +464,7 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                 />
                             </div>
                             <div>
-                                <Label className='font-medium'>Комментарии</Label>
+                                <Label className='text-[18px] font-bold text-[#1E293B]'>Комментарии</Label>
                                 <Textarea
                                     placeholder='Комментарии к грузу'
                                     className='mt-1 min-h-[100px]'

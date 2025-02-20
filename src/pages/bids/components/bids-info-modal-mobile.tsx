@@ -15,6 +15,10 @@ interface ShippingOrderDialogProps {
 export function BidsOrderDialog({ open, onOpenChange, selectedBid, handleCloseModal }: ShippingOrderDialogProps) {
     const [isReadOnly, _] = useState<boolean>(true)
 
+    const formatDate = (dateString: string) => {
+        return new Date(dateString).toLocaleDateString('ru-RU')
+    }
+
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className='max-w-full h-full p-0 gap-0'>
@@ -22,17 +26,13 @@ export function BidsOrderDialog({ open, onOpenChange, selectedBid, handleCloseMo
                     <Button variant='ghost' size='icon' className='hover:bg-white/20' onClick={handleCloseModal}>
                         <ChevronLeft className='h-6 w-6' />
                     </Button>
-                    <h2 className='text-lg font-medium'>Заявка №{selectedBid.persistentId}</h2>
+                    <h2 className='text-lg font-medium'>Заявка №{selectedBid.number}</h2>
                 </div>
 
                 <div className='overflow-y-auto flex-1'>
                     <div className='flex flex-col'>
                         <div className='text-center text-[18px] flex flex-col justify-center items-center bg-gray-100 p-2'>
-                            <RadioGroup
-                                defaultValue={selectedBid.loadingMode}
-                                className='flex gap-6 mt-2'
-                                // onValueChange={value => handleChange('loadingMode', value)}
-                            >
+                            <RadioGroup defaultValue={selectedBid.loadingMode} className='flex gap-6 mt-2'>
                                 <div className='flex items-center mb-3'>
                                     <Label className='text-[#1E293B] text-[18px] font-bold mr-3' htmlFor='loading'>
                                         Погрузка
@@ -56,11 +56,7 @@ export function BidsOrderDialog({ open, onOpenChange, selectedBid, handleCloseMo
                                     </Label>
                                 </div>
                             </RadioGroup>
-                            <RadioGroup
-                                defaultValue={selectedBid.cargoType}
-                                className='flex gap-6 mt-2 '
-                                // onValueChange={value => handleChange('loadingMode', value)}
-                            >
+                            <RadioGroup defaultValue={selectedBid.cargoType} className='flex gap-6 mt-2 '>
                                 <div className='flex items-center  relative -left-5 mb-2'>
                                     <Label className='text-[#1E293B] text-[18px] font-bold mr-2' htmlFor='container'>
                                         Контейнер
@@ -91,17 +87,17 @@ export function BidsOrderDialog({ open, onOpenChange, selectedBid, handleCloseMo
                         </div>
                         <div className='flex gap-6 items-center text-[18px]  px-6 py-2 '>
                             <p className='text-gray-600'>Автор статуса</p>
-                            <p className='font-bold text-[#1E293B]'>Сидоров С.К.</p>
+                            <p className='font-bold text-[#1E293B]'>{selectedBid.createdBy}</p>
                         </div>
                         <div className='flex gap-6 items-center text-[18px] bg-[#E6E6E6] px-6 py-2 '>
                             <p className='text-gray-600 '>Дата погрузки</p>
-                            <p className='font-bold text-[#1E293B]'>
-                                {new Date(selectedBid?.loadingDate).toLocaleDateString('ru-RU')}
-                            </p>
+                            <p className='font-bold text-[#1E293B]'>{formatDate(selectedBid.loadingDate)}</p>
                         </div>
                         <div className='flex gap-6 items-center text-[18px]   px-6 py-2 '>
                             <p className='text-gray-600'>Срок доставки</p>
-                            <p className='font-bold text-[#1E293B]'>04.02.2025</p>
+                            <p className='font-bold text-[#1E293B]'>
+                                {selectedBid.dueDate ? formatDate(selectedBid.dueDate) : 'Не указан'}
+                            </p>
                         </div>
                     </div>
 
@@ -147,7 +143,7 @@ export function BidsOrderDialog({ open, onOpenChange, selectedBid, handleCloseMo
                     <div>
                         <div className='flex gap-6 items-center text-[18px]  px-6 py-2 '>
                             <p className='text-gray-600'>Время подачи</p>
-                            <p className='font-bold text-[#1E293B]'>16:00</p>
+                            <p className='font-bold text-[#1E293B]'>{selectedBid.filingTime}</p>
                         </div>
                         <div className='flex gap-6 items-center text-[18px] bg-[#E6E6E6] px-6 py-2 '>
                             <p className='text-gray-600'>Транспорт</p>
@@ -155,20 +151,18 @@ export function BidsOrderDialog({ open, onOpenChange, selectedBid, handleCloseMo
                         </div>
                         <div className='flex gap-6 items-center text-[18px]  px-6 py-2 '>
                             <p className='text-gray-600'>Количество:</p>
-                            <p className='font-bold text-[#1E293B]'>
-                                {selectedBid.assignedVehicle?.docModel} {selectedBid.assignedVehicle?.plateNum}
-                            </p>
+                            <p className='font-bold text-[#1E293B]'>{selectedBid.vehicleCount}</p>
                         </div>
                     </div>
 
                     <div className='space-y-4'>
                         <div className='flex gap-6 items-center text-[18px] bg-[#E6E6E6] px-6 py-2 '>
                             <p className='text-gray-600'>Груз</p>
-                            <p className='font-bold text-[#1E293B]'>Хрустальные вазы</p>
+                            <p className='font-bold text-[#1E293B]'>{selectedBid.cargoTitle || ''}</p>
                         </div>
                         <div className='flex gap-6 items-center px-6 py-2 '>
                             <p className='text-gray-600 text-[16px] '>Комментарии заказчика</p>
-                            <p className='font-bold text-[18px]  text-[#1E293B]'>-</p>
+                            <p className='font-bold text-[18px]  text-[#1E293B]'>{selectedBid.description || '-'}</p>
                         </div>
                         <div>
                             <h3 className='font-medium bg-[#E6E6E6] px-6 py-2 text-[18px]'>Финансы:</h3>
@@ -183,8 +177,8 @@ export function BidsOrderDialog({ open, onOpenChange, selectedBid, handleCloseMo
                                 {selectedBid?.extraServices?.map((service, index) => (
                                     <React.Fragment key={index}>
                                         <div>{service.name}</div>
-                                        {/* <div className='text-center font-bold text-[#1E293B]'>{service.count}</div> */}
-                                        <div className='text-right font-bold text-[#1E293B]'>{service.totalPrice}</div>
+                                        <div className='text-center'>{service.count}</div>
+                                        <div className='text-right font-bold text-[#1E293B]'>{service.price}</div>
                                     </React.Fragment>
                                 ))}
                             </div>
