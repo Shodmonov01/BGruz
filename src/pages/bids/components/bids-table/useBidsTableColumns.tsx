@@ -92,8 +92,8 @@ interface ColumnsProps {
 // export default AuctionTimer;
 
 const AuctionTimer = ({ activationTime }: { activationTime: string }) => {
-    const serverTime = useServerTime(); // Берем серверное время из контекста
-    const [timeLeft, setTimeLeft] = useState<number>(0);
+    const serverTime = useServerTime() // Берем серверное время из контекста
+    const [timeLeft, setTimeLeft] = useState<number>(0)
 
     useEffect(() => {
         if (!serverTime) return // Ждем, пока контекст загрузит серверное время

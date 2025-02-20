@@ -46,6 +46,7 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
         }
         loadClients()
     }, [])
+
     const handleChange = (name, value) => {
         setFormData(prev => {
             if (name.includes('extraServices')) {

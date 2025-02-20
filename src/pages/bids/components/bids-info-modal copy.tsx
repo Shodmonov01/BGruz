@@ -17,8 +17,6 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
     const [originalData, setOriginalData] = useState({ ...selectedBid })
     const [organizations, setOrganizations] = useState([])
 
-    
-
     if (!selectedBid) return null
 
     const clientId = selectedBid?.clientId
@@ -262,5 +260,3 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
 }
 
 export default BidsInfoModal
-
-
