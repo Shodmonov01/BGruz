@@ -2,21 +2,22 @@ import { Card, CardContent } from '@/components/ui/card'
 import { useCallback, useState } from 'react'
 import { ScrollArea } from '@radix-ui/react-scroll-area'
 import info from '../../../../public/info.svg'
-import OrderInfoModal from './ordersInfoModal'
 import { IOrder } from '@/types'
+import { ShippingOrderDialog } from './modalInfoMobile'
 
 function OrderTableMobile({ orders }) {
     const [selectedOrder, setSelectedOrder] = useState<IOrder | null>(null)
-    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [_, setIsModalOpen] = useState(false)
+    const [open, setOpen] = useState(false)
 
     const handleCloseModal = useCallback(() => {
         setIsModalOpen(false)
-        setSelectedOrder(null)
+        setOpen(false)
     }, [])
 
     const handleOpenModal = useCallback((order: IOrder) => {
         setSelectedOrder(order)
-        setIsModalOpen(true)
+        setOpen(true)
     }, [])
 
     return (
@@ -60,12 +61,12 @@ function OrderTableMobile({ orders }) {
                     </Card>
                 ))}
             </ScrollArea>
-
             {selectedOrder && (
-                <OrderInfoModal
+                <ShippingOrderDialog
                     handleCloseModal={handleCloseModal}
-                    selectedBid={selectedOrder}
-                    isModalOpen={isModalOpen}
+                    open={open}
+                    onOpenChange={setOpen}
+                    selectedOrder={selectedOrder}
                 />
             )}
         </div>

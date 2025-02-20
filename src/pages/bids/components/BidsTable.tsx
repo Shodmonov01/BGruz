@@ -37,7 +37,16 @@ interface BidsTableProps {
     localFilters: Record<string, string | any[]>
 }
 //@ts-ignore
-function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, loading, localFilters , refreshBids }: BidsTableProps) {
+function BidsTable({
+    bids,
+    setFilters,
+    handleFilterChange,
+    loadMore,
+    hasMore,
+    loading,
+    localFilters,
+    refreshBids
+}: BidsTableProps) {
     const [selectedBid, setSelectedBid] = useState<Partial<Bid> | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isShortTable, setIsShortTable] = useState(false)
@@ -130,7 +139,7 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
 
     return (
         <div>
-            <BidHeader setIsShortTable={setIsShortTable} isShortTable={isShortTable}  refreshBids={refreshBids}/>
+            <BidHeader setIsShortTable={setIsShortTable} isShortTable={isShortTable} refreshBids={refreshBids} />
 
             <ScrollArea>
                 <div className='h-[calc(98vh-200px)] overflow-auto !scrollbar-thin !scrollbar-thumb-gray-400 !scrollbar-track-gray-100'>
@@ -158,38 +167,36 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
                                             className='bg-[#EDEDED] border border-gray-300 whitespace-nowrap'
                                         >
                                             <div>
-                                                {header.column.columnDef.
-                                                //@ts-ignore
-                                                filterType !== 'range' ? (
-                                                    <div className='text-center'>
-                                                        <FilterInput
-                                                            column={header.column}
-                                                            handleFilterChange={handleFilterChange}
-                                                        />
-                                                    </div>
-                                                ) : (
-                                                    <div
-                                                        className='flex text-xs items-center gap-1 cursor-pointer h-7 min-w-full px-3 rounded-md bg-white'
-                                                        onClick={header.column.getToggleSortingHandler()}
-                                                    >
+                                                {
+                                                    //@ts-ignore
+                                                    header.column.columnDef.filterType !== 'range' ? (
                                                         <div className='text-center'>
-                                                            {flexRender(
-                                                                header.column.columnDef.header,
-                                                                header.getContext()
+                                                            {renderFilterInput(header.column, handleFilterChange)}
+                                                        </div>
+                                                    ) : (
+                                                        <div
+                                                            className='flex text-xs items-center gap-1 cursor-pointer h-7 min-w-full px-3 rounded-md bg-white'
+                                                            onClick={header.column.getToggleSortingHandler()}
+                                                        >
+                                                            <div className='text-center'>
+                                                                {flexRender(
+                                                                    header.column.columnDef.header,
+                                                                    header.getContext()
+                                                                )}
+                                                            </div>
+
+                                                            {header.column.getIsSorted() ? (
+                                                                header.column.getIsSorted() === 'asc' ? (
+                                                                    <ArrowUp className='h-4 w-4' />
+                                                                ) : (
+                                                                    <ArrowDown className='h-4 w-4' />
+                                                                )
+                                                            ) : (
+                                                                <ArrowUpDown className='h-4 w-4 opacity-50' />
                                                             )}
                                                         </div>
-
-                                                        {header.column.getIsSorted() ? (
-                                                            header.column.getIsSorted() === 'asc' ? (
-                                                                <ArrowUp className='h-4 w-4' />
-                                                            ) : (
-                                                                <ArrowDown className='h-4 w-4' />
-                                                            )
-                                                        ) : (
-                                                            <ArrowUpDown className='h-4 w-4 opacity-50' />
-                                                        )}
-                                                    </div>
-                                                )}
+                                                    )
+                                                }
                                             </div>
                                         </TableHead>
                                     ))}

@@ -130,38 +130,36 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                         </div>
 
                         <div className='flex items-center border-b-2 border-[#D0D1D5] pb-4'>
-                                <Label className='text-base font-medium mr-4'>Тип перевозки</Label>
-                                <RadioGroup
-                                    defaultValue={formData.loadingMode}
-                                    className='flex gap-6 mt-2'
-                                    onValueChange={value => handleChange('loadingMode', value)}
-                                >
-                                    <div className='flex items-center gap-2'>
-                                        <RadioGroupItem value='loading' id='loading' disabled={isReadOnly} />
-                                        <Label htmlFor='loading'>Погрузка</Label>
-                                    </div>
-                                    <div className='flex items-center gap-2'>
-                                        <RadioGroupItem value='unloading' id='unloading' disabled={isReadOnly} />
-                                        <Label htmlFor='unloading'>Выгрузка</Label>
-                                    </div>
-                                  
-                                </RadioGroup>
-                                <RadioGroup
-                                    defaultValue={formData.cargoType}
-                                    className='flex gap-6 mt-2'
-                                    onValueChange={value => handleChange('loadingMode', value)}
-                                >
-                           
-                                    <div className='flex items-center gap-2'>
-                                        <RadioGroupItem value='container' id='container' disabled={isReadOnly} />
-                                        <Label htmlFor='container'>Контейнер</Label>
-                                    </div>
-                                    <div className='flex items-center gap-2'>
-                                        <RadioGroupItem value='wagon' id='wagon' disabled={isReadOnly} />
-                                        <Label htmlFor='wagon'>Вагон</Label>
-                                    </div>
-                                </RadioGroup>
-                            </div>
+                            <Label className='text-base font-medium mr-4'>Тип перевозки</Label>
+                            <RadioGroup
+                                defaultValue={formData.loadingMode}
+                                className='flex gap-6 mt-2'
+                                onValueChange={value => handleChange('loadingMode', value)}
+                            >
+                                <div className='flex items-center gap-2'>
+                                    <RadioGroupItem value='loading' id='loading' disabled={isReadOnly} />
+                                    <Label htmlFor='loading'>Погрузка</Label>
+                                </div>
+                                <div className='flex items-center gap-2'>
+                                    <RadioGroupItem value='unloading' id='unloading' disabled={isReadOnly} />
+                                    <Label htmlFor='unloading'>Выгрузка</Label>
+                                </div>
+                            </RadioGroup>
+                            <RadioGroup
+                                defaultValue={formData.cargoType}
+                                className='flex gap-6 mt-2'
+                                onValueChange={value => handleChange('loadingMode', value)}
+                            >
+                                <div className='flex items-center gap-2'>
+                                    <RadioGroupItem value='container' id='container' disabled={isReadOnly} />
+                                    <Label htmlFor='container'>Контейнер</Label>
+                                </div>
+                                <div className='flex items-center gap-2'>
+                                    <RadioGroupItem value='wagon' id='wagon' disabled={isReadOnly} />
+                                    <Label htmlFor='wagon'>Вагон</Label>
+                                </div>
+                            </RadioGroup>
+                        </div>
 
                         <div className='space-y-4'>
                             <div className='flex gap-4 items-center'>
@@ -241,26 +239,26 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
 
                         <div className='space-y-4'>
                             <div className='grid grid-cols-2 gap-4'>
-                            <div>
-    <Label className='font-medium'>Терминал 1</Label>
-    <Select
-        onValueChange={value => handleChange('terminal1', value)}
-        value={formData.terminal1?.id ? formData.terminal1.id.toString() : ''}
-    >
-        <SelectTrigger className='mt-1'>
-            <SelectValue>
-                {formData.terminal1?.name || 'Выберите терминал 1'}
-            </SelectValue>
-        </SelectTrigger>
-        <SelectContent>
-            {terminals.map(terminal => (
-                <SelectItem key={terminal.id} value={terminal.id.toString()}>
-                    {terminal.name}
-                </SelectItem>
-            ))}
-        </SelectContent>
-    </Select>
-</div>
+                                <div>
+                                    <Label className='font-medium'>Терминал 1</Label>
+                                    <Select
+                                        onValueChange={value => handleChange('terminal1', value)}
+                                        value={formData.terminal1?.id ? formData.terminal1.id.toString() : ''}
+                                    >
+                                        <SelectTrigger className='mt-1'>
+                                            <SelectValue>
+                                                {formData.terminal1?.name || 'Выберите терминал 1'}
+                                            </SelectValue>
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {terminals.map(terminal => (
+                                                <SelectItem key={terminal.id} value={terminal.id.toString()}>
+                                                    {terminal.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
 
                                 <div>
                                     <Label className='font-medium'>Адрес</Label>

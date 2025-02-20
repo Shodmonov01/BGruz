@@ -101,10 +101,10 @@ export interface ApiResponse {
 
 export interface IOrder {
     _id?: number
-    buyBid?: {
+    buyBid: {
         loadingMode?: string
         cargoType?: string
-        loadingDate?: string
+        loadingDate: string
         terminal1: {
             cityId?: number
             cityName?: string
@@ -115,10 +115,10 @@ export interface IOrder {
             cityName?: string
             address?: string
         }
-        warehouses?: {
-            cityId?: number
-            cityName?: string
-            address?: string
+        warehouses: {
+            cityId: number
+            cityName: string
+            address: string
         }[]
         vehicleProfile?: {
             id?: number
