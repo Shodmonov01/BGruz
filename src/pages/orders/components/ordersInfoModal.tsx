@@ -69,8 +69,8 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
             <DialogContent className='max-h-[90vh] max-w-4xl overflow-y-auto !p-0'>
                 <DialogHeader>
                     <div className=''>
-                        <div className='mb-6'>
-                            <span className='rounded bg-orange-500 px-4 py-2 text-sm text-white '>Груз сдан</span>
+                        <div className='mb-6 mt-3 px-6'>
+                            <span className='rounded bg-orange-500 px-4 py-2 text-sm text-white mt-3 '>Груз сдан</span>
                         </div>
                         <div className='flex justify-center items-center w-full'>
                             <div className='flex items-center gap-4 w-full justify-center'>
