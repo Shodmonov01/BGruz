@@ -38,13 +38,13 @@ interface BidsTableProps {
 //@ts-ignore
 function BidsTable({
     bids,
-    setFilters,
-    handleFilterChange,
-    loadMore,
-    hasMore,
-    loading,
-    localFilters,
-    refreshBids
+setFilters,
+handleFilterChange,
+loadMore,
+hasMore,
+loading,
+localFilters,
+
 }: BidsTableProps) {
     const [selectedBid, setSelectedBid] = useState<Partial<Bid> | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -138,7 +138,7 @@ function BidsTable({
 
     return (
         <div>
-            <BidHeader setIsShortTable={setIsShortTable} isShortTable={isShortTable} refreshBids={refreshBids} />
+            <BidHeader setIsShortTable={setIsShortTable} isShortTable={isShortTable}/>
 
             <ScrollArea>
                 <div className='h-[calc(98vh-200px)] overflow-auto !scrollbar-thin !scrollbar-thumb-gray-400 !scrollbar-track-gray-100'>

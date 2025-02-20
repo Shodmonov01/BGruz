@@ -1,5 +1,4 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Icons } from '@/components/ui/icons'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
@@ -13,7 +12,9 @@ import {
 import { useEffect, useState } from 'react'
 import { LogIn } from 'lucide-react'
 
-export default function UserNav({ isMinimized }) {
+// export default function UserNav({ isMinimized }) {
+    export default function UserNav({ isMinimized = false }: { isMinimized?: boolean }) {
+
     const [username, setUsername] = useState('')
 
     useEffect(() => {

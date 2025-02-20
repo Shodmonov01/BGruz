@@ -17,7 +17,7 @@ export default function BidsPage() {
 
     const debounceRef = useRef<NodeJS.Timeout | null>(null)
 
-    const { bids, hasMore, loading, setFilters, refreshTable, refreshBids } = useGetBids(size)
+    const { bids, hasMore, loading, setFilters, refreshTable } = useGetBids(size)
 
     const handleFilterChange = useCallback(
         (columnId: string, value: any) => {
@@ -102,7 +102,7 @@ export default function BidsPage() {
                         hasMore={hasMore}
                         loading={loading}
                         localFilters={localFilters}
-                        refreshBids = {refreshBids}
+                        // refreshBids = {refreshBids}
                     />
                 </div>
 

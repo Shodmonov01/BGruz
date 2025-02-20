@@ -170,7 +170,8 @@ function OrdersTable({
                                             className='bg-[#EDEDED] border border-gray-300 whitespace-nowrap'
                                         >
                                             <div className=''>
-                                                {header.column.columnDef.filterType !== 'range' ? (
+                                                {//@ts-ignore
+                                                header.column.columnDef.filterType !== 'range' ? (
                                                     <div className='text-center'>
                                                         {renderFilterInput(header.column, handleFilterChange)}
                                                     </div>
@@ -179,7 +180,12 @@ function OrdersTable({
                                                         className='flex text-xs items-center gap-1 cursor-pointer h-7 min-w-full px-3 rounded-md bg-white'
                                                         onClick={header.column.getToggleSortingHandler()}
                                                     >
-                                                        {header.column.columnDef.header}
+                                                        <div className='text-center'>
+                                                            {flexRender(
+                                                                header.column.columnDef.header,
+                                                                header.getContext()
+                                                            )}
+                                                        </div>
                                                         {header.column.getIsSorted() ? (
                                                             header.column.getIsSorted() === 'asc' ? (
                                                                 <ArrowUp className='h-4 w-4' />

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Search } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 
-function BidHeader({ setIsShortTable, isShortTable, refreshBids }) {
+function BidHeader({ setIsShortTable, isShortTable }) {
     return (
         <div className='flex '>
             <div className='w-full flex flex-wrap gap-5 items-center justify-between'>
@@ -13,7 +13,7 @@ function BidHeader({ setIsShortTable, isShortTable, refreshBids }) {
                         Заявки <span className='text-primary'>|</span>
                     </span>
                     <div className='flex gap-3 '>
-                        <PopupModal renderModal={onClose => <StudentCreateForm modalClose={onClose}  refreshBids={refreshBids}/>} />
+                        <PopupModal renderModal={onClose => <StudentCreateForm modalClose={onClose}  />} />
                     </div>
                     <Button variant='outlineTertiary'>Загрузить</Button>
                     <Button variant='outlineTertiary'>Отменить</Button>

@@ -38,7 +38,7 @@ interface BidFormData {
     extraServices: Array<{ id: number; count: number }>
 }
 
-const StudentCreateForm = ({ modalClose, refreshBids }: { modalClose: () => void ,refreshBids: ()=> void}) => {
+const StudentCreateForm = ({ modalClose,  }: { modalClose: () => void}) => {
     const [clients, setClients] = useState<{ organizationId: number; organizationName: string }[]>([])
     const [terminals, setTerminals] = useState<{ id: number; name: string; description: string }[]>([])
     const [warehouses, setWarehouses] = useState<{ id: number; name: string; description: string }[]>([])
@@ -152,7 +152,7 @@ const StudentCreateForm = ({ modalClose, refreshBids }: { modalClose: () => void
 
             const res = await postData('api/v1/bids', payload, token)
             modalClose()
-            refreshBids()
+            // refreshBids()
             window.location.reload()
             console.log('res', res)
         } catch (error: any) {
