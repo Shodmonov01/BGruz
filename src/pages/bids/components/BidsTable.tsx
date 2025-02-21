@@ -48,13 +48,18 @@ localFilters,
 }: BidsTableProps) {
     const [selectedBid, setSelectedBid] = useState<Partial<Bid> | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
-    const [isShortTable, setIsShortTable] = useState(false)
+    // const [isShortTable, setIsShortTable] = useState(false)
+    const [isShortTable, setIsShortTable] = useState(() => {
+        return localStorage.getItem('isShortTable') === 'true' // Получаем из localStorage
+    })
     const scrollRef = useRef<HTMLDivElement | null>(null)
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
         Object.entries(localFilters).map(([id, value]) => ({ id, value }))
     )
     const [sorting, setSorting] = useState<SortingState>([])
-
+    useEffect(() => {
+        localStorage.setItem('isShortTable', String(isShortTable)) // Сохраняем в localStorage при изменении
+    }, [isShortTable])
     
     useEffect(() => {
         let isFetching = false
