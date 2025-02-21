@@ -9,6 +9,7 @@ import { useGetBids } from '@/hooks/useGetBids'
 
 import BidsTableMobile from './components/bidsTableMobile'
 import BidsTable from './components/BidsTable'
+import { TotalsProvider } from '@/lib/TotalsContext'
 
 export default function BidsPage() {
     const [searchParams] = useSearchParams()
@@ -89,27 +90,28 @@ export default function BidsPage() {
     return (
         <div className='py-4 md:px-4'>
             <PageHead title='Заявки' />
+            <TotalsProvider data={bids}>
+                <BgruzHeader />
 
-            <BgruzHeader />
+                <div>
+                    <div className='hidden md:block'>
+                        <BidsTable
+                            bids={bids || []}
+                            setFilters={setFilters}
+                            handleFilterChange={handleFilterChange}
+                            loadMore={loadMore}
+                            hasMore={hasMore}
+                            loading={loading}
+                            localFilters={localFilters}
+                            // refreshBids = {refreshBids}
+                        />
+                    </div>
 
-            <div>
-                <div className='hidden md:block'>
-                    <BidsTable
-                        bids={bids || []}
-                        setFilters={setFilters}
-                        handleFilterChange={handleFilterChange}
-                        loadMore={loadMore}
-                        hasMore={hasMore}
-                        loading={loading}
-                        localFilters={localFilters}
-                        // refreshBids = {refreshBids}
-                    />
+                    <div className='md:hidden'>
+                        <BidsTableMobile bids={bids || []} />
+                    </div>
                 </div>
-
-                <div className='md:hidden'>
-                    <BidsTableMobile bids={bids || []} />
-                </div>
-            </div>
+            </TotalsProvider>
         </div>
     )
 }

@@ -8,6 +8,7 @@ import { useGetOrders } from '@/hooks/useGetOrders'
 import OrdersTable from './components/orders-table'
 import { useSearchParams } from 'react-router-dom'
 import OrderTableMobile from './components/ordersTableMobile'
+import { TotalsProvider } from '@/lib/TotalsContext'
 
 export default function OrderPage() {
     // const [isShortTable, setIsShortTable] = useState(false)
@@ -103,6 +104,9 @@ export default function OrderPage() {
 
     return (
         <div className='p-4'>
+                        <TotalsProvider data={orders}>
+
+
             <BgruzHeader />
             {/* <OrdersHeader setIsShortTable={setIsShortTable} isShortTable={isShortTable} /> */}
             <div className='hidden md:block'>
@@ -114,11 +118,12 @@ export default function OrderPage() {
                     hasMore={hasMore}
                     loading={loading}
                     localFilters={localFilters}
-                />
+                    />
             </div>
             <div className='md:hidden'>
                 <OrderTableMobile orders={orders || []} />
             </div>
+                    </TotalsProvider>
 
             {/* <Table className='border rounded-lg border-gray-300 w-full'>
                 <TableHeader>

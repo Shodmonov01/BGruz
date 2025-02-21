@@ -409,9 +409,9 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                     return numA - numB
                 }
             },
-            { accessorKey: 'commission', header: 'Комиссия', size: 100, searchable: true, filterType: 'range' },
+            { accessorKey: 'comission', header: 'Комиссия', size: 100, searchable: true, filterType: 'range' },
             {
-                accessorKey: 'fullPriceNDS',
+                accessorKey: 'fullPriceNds',
                 header: 'К оплате',
                 size: 150,
                 searchable: true,
