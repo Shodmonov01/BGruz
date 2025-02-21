@@ -195,14 +195,14 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 filterType: 'dateRange'
             },
             {
-                accessorKey: 'loadingTime',
+                accessorKey: 'loadingDate',
                 header: 'Время погрузки',
                 size: 120,
                 isShortVersion: true,
                 searchable: true,
                 accessorFn: row =>
                     row.buyBid?.loadingDate
-                        ? format(new Date(row.buyBid.loadingDate), 'HH.mm.ss', { locale: ru })
+                        ? format(new Date(row.buyBid.loadingDate), 'dd.MM.yyyy', { locale: ru })
                         : '—',
                 filterType: 'dateRange'
             },
