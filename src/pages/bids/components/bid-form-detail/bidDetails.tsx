@@ -41,7 +41,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
 
     return (
         <div>
-            <div className='flex flex-col md:flex-row items-start md:items-center gap2 md:gap-16 my-6'>
+            <div className='flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-16 my-0 md:my-6'>
                 <h1 className='font-bold'>Тип перевозки</h1>
                 <FormField
                     control={control}
@@ -57,17 +57,17 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                         setOperationType(mappedValue)
                                     }}
                                     defaultValue={field.value}
-                                    className='flex gap-6'
+                                    className='flex gap-6 ml-16 md:ml-auto'
                                 >
                                     <FormItem className='flex items-center space-x-3 space-y-0 '>
                                         <FormLabel className='font-normal'>Погрузка</FormLabel>
                                         <FormControl>
-                                            <RadioGroupItem value='Погрузка' />
+                                            <RadioGroupItem value='Погрузка' className=' size-5'/>
                                         </FormControl>
                                     </FormItem>
                                     <FormItem className='flex items-center space-x-3 space-y-0'>
                                         <FormControl>
-                                            <RadioGroupItem value='Выгрузка' />
+                                            <RadioGroupItem value='Выгрузка' className=' size-5'/>
                                         </FormControl>
                                         <FormLabel className='font-normal'>Выгрузка</FormLabel>
                                     </FormItem>
@@ -92,17 +92,17 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                         setTransportType(value)
                                     }}
                                     defaultValue={field.value}
-                                    className='flex gap-6'
+                                    className='flex gap-6 ml-[54px] md:ml-auto'
                                 >
                                     <FormItem className='flex items-center space-x-3 space-y-0'>
                                         <FormLabel className='font-normal'>Контейнер</FormLabel>
                                         <FormControl>
-                                            <RadioGroupItem value='Контейнер' />
+                                            <RadioGroupItem value='Контейнер' className=' size-5'/>
                                         </FormControl>
                                     </FormItem>
                                     <FormItem className='flex items-center space-x-3 space-y-0'>
                                         <FormControl>
-                                            <RadioGroupItem value='Вагон' />
+                                            <RadioGroupItem value='Вагон' className=' size-5'/>
                                         </FormControl>
                                         <FormLabel className='font-normal'>Вагон</FormLabel>
                                     </FormItem>
@@ -250,7 +250,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                     name='vehicleCount'
                     defaultValue={1} 
                     render={({ field }) => (
-                        <div className='flex items-center border rounded-lg overflow-hidden w-24 h-[37px] ml-4'>
+                        <div className='flex items-center border rounded-lg overflow-hidden w-24 h-[37px] ml-0 md:ml-4'>
                             <div className='flex-1 flex items-center justify-center text-xl font-semibold'>
                                 {field.value}
                             </div>
