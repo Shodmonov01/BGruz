@@ -248,8 +248,8 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 accessorFn: row => row.status ?? null,
                 cell: ({ row }) => {
                     const statusMap = {
-                        active: 'Активна',
-                        waiting: 'На ожидании',
+                        cancelledByCustomer: 'Отменено клиентом',
+                        new: 'Новый',
                         executed: 'Выполнена',
                         canceled: 'Отменена'
                     }
