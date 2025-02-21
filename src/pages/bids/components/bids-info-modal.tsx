@@ -28,9 +28,6 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
     const [isFetched, setIsFetched] = useState(true)
     const [originalData, setOriginalData] = useState({ ...selectedBid }) // Сохраняем оригинальные данные
 
-    console.log(selectedBid)
-    console.log('terminals', terminals)
-
     useEffect(() => {
         setFormData({ ...selectedBid })
         setOriginalData({ ...selectedBid }) // Обновляем оригинальные данные при открытии модалки
@@ -131,7 +128,6 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
             setIsReadOnly(false)
         }
     }, [data])
-    console.log('formData:', formData)
 
     return (
         <Dialog open={isModalOpen} onOpenChange={handleCloseModal}>
