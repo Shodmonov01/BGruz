@@ -62,7 +62,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
     //     }
     // }
 
-    console.log('formData Orders', formData)
+    console.log('formData Orders', formData.price)
 
     return (
         <Dialog open={isModalOpen} onOpenChange={handleCloseModal}>
@@ -439,11 +439,13 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                 Полная стоимость рейса без НДС
                             </p>
                             <Input
+                                className=' text-right'
                                 value={formData.fullPriceNds.toFixed(2)}
                                 placeholder='Полная стоимость с НДС'
                                 readOnly
                             />
                             <Input
+                                className=' text-right'
                                 value={formData.fullPrice.toFixed(2)}
                                 placeholder='Полная стоимость без НДС'
                                 readOnly
@@ -455,15 +457,20 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                             <div>
                                 <p className='font-bold text-[20px]'>Груз</p>
                                 <Input
+                                    className='mt-1'
                                     placeholder='Название груза'
                                     value={formData.terminal1?.cityName || ''}
-                                    className='mt-1'
                                     readOnly
                                 />
                             </div>
                             <div>
                                 <p className=' font-bold text-[20px]'>Стоимость груза</p>
-                                <Input name='price' value={formData.price} onChange={handleChange} className='mt-1' />
+                                <Input
+                                    className='mt-1 text-right'
+                                    name='price'
+                                    value={formatNumber(String(formData.price))}
+                                    onChange={handleChange}
+                                />
                             </div>
                         </div>
                         <div className='w-full flex justify-end mt-3'>
