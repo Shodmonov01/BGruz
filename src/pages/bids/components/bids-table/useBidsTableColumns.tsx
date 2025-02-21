@@ -258,6 +258,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 header: 'Терминал 2',
                 size: 120,
                 accessorFn: row => row.terminal2?.cityName ?? '—',
+                isShortVersion: true,
                 searchable: true,
                 filterType: 'fuzzy'
             },
@@ -315,6 +316,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                     )
                 },
                 searchable: true,
+                isShortVersion: true,
                 filterType: 'select',
                 filterOptions: [
                     { value: ['active', 'waiting', 'executed', 'canceled'], label: 'Все' },
@@ -330,6 +332,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 header: 'Моя цена',
                 size: 100,
                 searchable: true,
+                isShortVersion: true,
                 // cell: ({ getValue }) => {
                 //     const value = getValue()
                 //     return formatNumber(String(value))
@@ -360,6 +363,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 header: 'Предложение',
                 size: 120,
                 searchable: true,
+                isShortVersion: true,
                 cell: ({ getValue }) => {
                     const value = getValue()
                     return formatNumber(String(value))

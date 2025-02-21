@@ -223,7 +223,6 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 accessorKey: 'loadingTime', // Изменил accessorKey
                 header: 'Время погрузки',
                 size: 120,
-                isShortVersion: true,
                 searchable: true,
                 accessorFn: row =>
                     row.buyBid?.loadingDate
@@ -253,6 +252,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
             {
                 accessorKey: 'terminal2',
                 header: 'Терминал 2',
+                isShortVersion: true,
                 size: 120,
                 accessorFn: row => row.buyBid?.terminal2?.cityName ?? '—',
                 searchable: true,
@@ -292,6 +292,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 },
                 searchable: true,
                 filterType: 'select',
+                isShortVersion: true,
                 filterOptions: [
                     { value: ['active', 'waiting', 'executed', 'canceled'], label: 'Все' },
                     { value: ['active', 'waiting'], label: 'Акт.+ожид.' },
@@ -370,6 +371,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 accessorKey: 'fullPrice',
                 header: 'Цена + доп услуги',
                 size: 150,
+                isShortVersion: true,
                 cell: ({ getValue }) => {
                     const value = getValue()
                     return formatNumber(String(value))
@@ -509,20 +511,20 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
             //     size: 120,
             //     searchable: true
             // },
-            {
-                header: 'Действия',
-                size: 80,
-                cell: ({ row }) => (
-                    <div className='flex justify-center'>
-                        <Eye className='mr-2 h-5 w-5 cursor-pointer' onClick={() => onOpenModal(row.original)} />
-                        <Trash
-                            className='mr-2 h-5 w-5 cursor-pointer text-red-500'
-                            onClick={() => onDelete(row.original._id)}
-                        />
-                    </div>
-                ),
-                isShortVersion: true
-            }
+            // {
+            //     header: 'Действия',
+            //     size: 80,
+            //     cell: ({ row }) => (
+            //         <div className='flex justify-center'>
+            //             <Eye className='mr-2 h-5 w-5 cursor-pointer' onClick={() => onOpenModal(row.original)} />
+            //             <Trash
+            //                 className='mr-2 h-5 w-5 cursor-pointer text-red-500'
+            //                 onClick={() => onDelete(row.original._id)}
+            //             />
+            //         </div>
+            //     ),
+            //     isShortVersion: true
+            // }
         ]
 
         return allColumns.filter(col => (isShortTable ? col.isShortVersion : true))
