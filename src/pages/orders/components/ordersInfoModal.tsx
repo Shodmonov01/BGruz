@@ -138,7 +138,9 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                     onChange={e => {
                                         setFormData(prev => ({
                                             ...prev,
-                                            docSubmissionDate: e.target.checked ? new Date().toISOString() : null
+                                            docSubmissionDate: e.target.
+                                            //@ts-ignore
+                                            checked ? new Date().toISOString() : null
                                         }))
                                     }}
                                 />
