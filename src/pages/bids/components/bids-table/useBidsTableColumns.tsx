@@ -330,9 +330,19 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 header: 'Моя цена',
                 size: 100,
                 searchable: true,
-                cell: ({ getValue }) => {
-                    const value = getValue()
-                    return formatNumber(String(value))
+                // cell: ({ getValue }) => {
+                //     const value = getValue()
+                //     return formatNumber(String(value))
+                // },
+                cell: ({ row, getValue }) => {
+                    const isPriceRequest = row.original.isPriceRequest; // Достаем isPriceRequest
+                    const value = getValue();
+            
+                    if (isPriceRequest) {
+                        return "Запрос";
+                    }
+            
+                    return formatNumber(String(value));
                 },
                 filterType: 'range',
                 sortingFn: (rowA, rowB, columnId) => {

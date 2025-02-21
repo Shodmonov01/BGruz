@@ -182,6 +182,31 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                     { value: 'unloading', label: 'Выгрузка' }
                 ]
             },
+            // {
+            //     accessorKey: 'loadingDate',
+            //     header: 'Дата погрузки',
+            //     size: 120,
+            //     isShortVersion: true,
+            //     searchable: true,
+            //     accessorFn: row =>
+            //         row.buyBid?.loadingDate
+            //             ? format(new Date(row.buyBid.loadingDate), 'dd.MM.yyyy', { locale: ru })
+            //             : '—',
+            //     filterType: 'dateRange'
+            // },
+            // {
+            //     accessorKey: 'loadingDate',
+            //     header: 'Время погрузки',
+            //     size: 120,
+            //     isShortVersion: true,
+            //     searchable: true,
+            //     accessorFn: row =>
+            //         row.buyBid?.loadingDate
+            //             ? format(new Date(row.buyBid.loadingDate), 'HH:mm', { locale: ru })
+            //             : '—',
+            //     filterType: 'dateRange'
+            // },
+
             {
                 accessorKey: 'loadingDate',
                 header: 'Дата погрузки',
@@ -195,17 +220,18 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 filterType: 'dateRange'
             },
             {
-                accessorKey: 'loadingDate',
+                accessorKey: 'loadingTime', // Изменил accessorKey
                 header: 'Время погрузки',
                 size: 120,
                 isShortVersion: true,
                 searchable: true,
                 accessorFn: row =>
                     row.buyBid?.loadingDate
-                        ? format(new Date(row.buyBid.loadingDate), 'dd.MM.yyyy', { locale: ru })
+                        ? format(new Date(row.buyBid.loadingDate), 'HH:mm', { locale: ru })
                         : '—',
                 filterType: 'dateRange'
             },
+            
             {
                 accessorKey: 'terminal1',
                 header: 'Терминал 1',
