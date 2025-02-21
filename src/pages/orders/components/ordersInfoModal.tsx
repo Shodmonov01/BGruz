@@ -7,12 +7,13 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import useNumberFormatter from '@/hooks/use-format-number'
 
 function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
+    const { formatNumber } = useNumberFormatter()
     const [formData, setFormData] = useState({
         ...selectedBid
     })
-    console.log('formData', formData)
 
     const handleChange = e => {
         const { name, value } = e.target
@@ -61,6 +62,8 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
     //     }
     // }
 
+    console.log('formData Orders', formData)
+
     return (
         <Dialog open={isModalOpen} onOpenChange={handleCloseModal}>
             <DialogTrigger asChild>
@@ -70,7 +73,13 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                 <DialogHeader>
                     <div className=''>
                         <div className='mb-6 mt-3 px-6'>
-                            <span className='rounded bg-orange-500 px-4 py-2 text-sm text-white mt-3 '>Груз сдан</span>
+                            <span className='rounded bg-orange-500 px-4 py-2 text-sm text-white mt-3 '>
+                                {formData.status === 'new'
+                                    ? 'Новый'
+                                    : formData.status === 'cancelledByCustomer'
+                                      ? 'Отменено клиентом'
+                                      : formData.status}
+                            </span>
                         </div>
                         <div className='flex justify-center items-center w-full'>
                             <div className='flex items-center gap-4 w-full justify-center'>
@@ -103,7 +112,13 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                             <input
                                 type='text'
                                 name='status'
-                                value={formData.status}
+                                value={
+                                    formData.status === 'new'
+                                        ? 'Новый'
+                                        : formData.status === 'cancelledByCustomer'
+                                          ? 'Отменено клиентом'
+                                          : formData.status
+                                }
                                 onChange={handleChange}
                                 className='border border-gray-300 rounded px-2 py-1'
                             />
@@ -117,7 +132,16 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                     <div className='flex justify-between items-center px-10'>
                         <div className='flex justify-between items-center gap-4'>
                             <p className='font-bold'>Документы сданы:</p>
-                            <p>
+                            <p className='flex items-center gap-2'>
+                                <Checkbox
+                                    checked={!!formData.docSubmissionDate}
+                                    onChange={e => {
+                                        setFormData(prev => ({
+                                            ...prev,
+                                            docSubmissionDate: e.target.checked ? new Date().toISOString() : null
+                                        }))
+                                    }}
+                                />
                                 {formData.docSubmissionDate
                                     ? new Date(formData.docSubmissionDate).toLocaleString('ru-RU')
                                     : 'Не сданы'}
@@ -187,7 +211,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
 
                     <div className='px-10'>
                         <p className='text-[20px] font-bold'>Терминал 1</p>
-                        <div className='grid grid-cols-2 gap-4'>
+                        <div className='grid grid-cols-2 gap-16'>
                             <div>
                                 <Input value={formData.buyBid.terminal1.cityName || ''} className='mt-1' readOnly />
                             </div>
@@ -199,7 +223,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
 
                     <div className='px-10'>
                         <p className='text-[20px] font-bold '>Склад клиента</p>
-                        <div className='grid grid-cols-2 gap-4'>
+                        <div className='grid grid-cols-2 gap-16'>
                             <div>
                                 <Input value={formData.buyBid.warehouses[0].cityName || ''} className='mt-1' readOnly />
                             </div>
@@ -215,7 +239,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
 
                     <div className='px-10'>
                         <p className='text-[20px] font-bold'>Терминал 2</p>
-                        <div className='grid grid-cols-2 gap-4'>
+                        <div className='grid grid-cols-2 gap-16'>
                             <div>
                                 <Input value={formData.buyBid.terminal2.cityName || ''} className='mt-1' readOnly />
                             </div>
@@ -324,11 +348,21 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                     </div>
                                     <div>
                                         <p className='text-[20px] font-bold mb-3'>Цена с НДС</p>
-                                        <Input value={formData.priceNds.toFixed(2)} placeholder='Цена с НДС' readOnly />
+                                        <Input
+                                            className=' text-right'
+                                            value={formatNumber(String(formData.priceNds.toFixed(2)))}
+                                            placeholder='Цена с НДС'
+                                            readOnly
+                                        />
                                     </div>
                                     <div>
                                         <p className='text-[20px] font-bold mb-3'>Цена без НДС</p>
-                                        <Input value={formData.price.toFixed(2)} placeholder='Цена без НДС' readOnly />
+                                        <Input
+                                            className=' text-right'
+                                            value={formatNumber(String(formData.price.toFixed(2)))}
+                                            placeholder='Цена без НДС'
+                                            readOnly
+                                        />
                                     </div>
                                 </div>
                                 <div>
@@ -361,7 +395,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                                     </label>
                                                     <Input
                                                         type='number'
-                                                        className='w-20'
+                                                        className='w-20 '
                                                         value={service.count}
                                                         onChange={e => {
                                                             const newExtraServices = [...formData.extraServices]
@@ -375,8 +409,16 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                                             }))
                                                         }}
                                                     />
-                                                    <Input value={service.priceNds.toFixed(2)} readOnly />
-                                                    <Input value={service.price.toFixed(2)} readOnly />
+                                                    <Input
+                                                        className=' text-right'
+                                                        value={service.priceNds.toFixed(2)}
+                                                        readOnly
+                                                    />
+                                                    <Input
+                                                        className=' text-right'
+                                                        value={service.price.toFixed(2)}
+                                                        readOnly
+                                                    />
                                                 </div>
                                             </div>
                                         ))}
@@ -397,11 +439,13 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                 Полная стоимость рейса без НДС
                             </p>
                             <Input
+                                className=' text-right'
                                 value={formData.fullPriceNds.toFixed(2)}
                                 placeholder='Полная стоимость с НДС'
                                 readOnly
                             />
                             <Input
+                                className=' text-right'
                                 value={formData.fullPrice.toFixed(2)}
                                 placeholder='Полная стоимость без НДС'
                                 readOnly
@@ -413,15 +457,20 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                             <div>
                                 <p className='font-bold text-[20px]'>Груз</p>
                                 <Input
+                                    className='mt-1'
                                     placeholder='Название груза'
                                     value={formData.terminal1?.cityName || ''}
-                                    className='mt-1'
                                     readOnly
                                 />
                             </div>
                             <div>
                                 <p className=' font-bold text-[20px]'>Стоимость груза</p>
-                                <Input name='price' value={formData.price} onChange={handleChange} className='mt-1' />
+                                <Input
+                                    className='mt-1 text-right'
+                                    name='price'
+                                    value={formatNumber(String(formData.price))}
+                                    onChange={handleChange}
+                                />
                             </div>
                         </div>
                         <div className='w-full flex justify-end mt-3'>
@@ -442,61 +491,61 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                         <p className='text-[20px] font-bold'>Контакты сторон</p>
                     </div>
 
-                    <div className='flex justify-between px-3  border-b-2 border-[#03B4E0] mx-7 pb-4'>
-                        <div className='space-y-2'>
+                    <div className='flex gap-10 px-3  border-b-2 border-[#03B4E0] mx-7 pb-4'>
+                        <div className='space-y-2 flex-1'>
                             <div className='flex items-center justify-between'>
-                                <p className='font-bold'>Заказчик</p>
+                                <p className='font-bold min-w-[120px]'>Заказчик</p>
                                 <input
                                     type='text'
                                     value={formData.customer.organizationName}
-                                    className='border ml-3 border-gray-300 rounded px-2 py-1 text-sm'
+                                    className='border w-full ml-3 border-gray-300 rounded px-2 py-1 text-sm'
                                     readOnly
                                 />
                             </div>
                             <div className='flex items-center justify-between'>
-                                <p className='font-bold'>ИНН</p>
+                                <p className='font-bold  min-w-[120px]'>ИНН</p>
                                 <input
                                     type='text'
                                     value={formData.customer.inn}
-                                    className='border ml-3 border-gray-300 rounded px-2 py-1 text-sm'
+                                    className='border w-full ml-3 border-gray-300 rounded px-2 py-1 text-sm'
                                     readOnly
                                 />
                             </div>
                             <div className='flex items-center justify-between'>
-                                <p className='font-bold'>Раб телефон</p>
+                                <p className='font-bold  min-w-[120px]'>Раб телефон</p>
                                 <input
                                     type='text'
                                     value={formData.customer.organizationPhone}
-                                    className='border ml-3 border-gray-300 rounded px-2 py-1 text-sm'
+                                    className='border w-full ml-3 border-gray-300 rounded px-2 py-1 text-sm'
                                     readOnly
                                 />
                             </div>
                         </div>
 
-                        <div className='space-y-2'>
+                        <div className='space-y-2 flex-1'>
                             <div className='flex items-center justify-between'>
-                                <p className='font-bold'>Отвественный</p>
+                                <p className='font-bold min-w-[120px]'>Отвественный</p>
                                 <input
                                     type='text'
                                     value={formData.customer.fio}
-                                    className='border ml-3 border-gray-300 rounded px-2 py-1 text-sm'
+                                    className='border w-full ml-3 border-gray-300 rounded px-2 py-1 text-sm'
                                     readOnly
                                 />
                             </div>
                             <div className='flex items-center justify-between'>
-                                <p className='font-bold'>Телефон</p>
+                                <p className='font-bold min-w-[120px]'>Телефон</p>
                                 <input
                                     type='text'
                                     value={formData.customer.phone}
-                                    className='border ml-3 border-gray-300 rounded px-2 py-1 text-sm'
+                                    className='border w-full ml-3 border-gray-300 rounded px-2 py-1 text-sm'
                                     readOnly
                                 />
                             </div>
                             <div className='flex items-center justify-between'>
-                                <p className='font-bold'>Почта</p>
+                                <p className='font-bold min-w-[120px]'>Почта</p>
                                 <a
                                     href={`mailto:${formData.customer.email}`}
-                                    className='border ml-3 border-gray-300 w-[185px] rounded px-2 py-1 text-sm flex justify-center text-primary underline'
+                                    className='border ml-3  w-full border-gray-300 rounded px-2 py-1 text-sm flex justify-center text-primary underline'
                                 >
                                     {formData.carrier.email}
                                 </a>
@@ -504,61 +553,61 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                         </div>
                     </div>
 
-                    <div className='flex justify-between  px-3  border-b-2 border-[#03B4E0] mx-7 pb-4 '>
-                        <div className='space-y-2'>
+                    <div className='flex gap-10 px-3  border-b-2 border-[#03B4E0] mx-7 pb-4 '>
+                        <div className='space-y-2 flex-1'>
                             <div className='flex items-center justify-between'>
-                                <p className='font-bold'>Заказчик</p>
+                                <p className='font-bold  min-w-[120px]'>Заказчик</p>
                                 <input
                                     type='text'
                                     value={formData.carrier.organizationName}
-                                    className='border ml-3 border-gray-300 rounded px-2 py-1 text-sm'
+                                    className='border  w-full ml-3 border-gray-300 rounded px-2 py-1 text-sm'
                                     readOnly
                                 />
                             </div>
                             <div className='flex items-center justify-between'>
-                                <p className='font-bold'>ИНН</p>
+                                <p className='font-bold min-w-[120px]'>ИНН</p>
                                 <input
                                     type='text'
                                     value={formData.carrier.inn}
-                                    className='border ml-3 border-gray-300 rounded px-2 py-1 text-sm'
+                                    className='border  w-full  ml-3 border-gray-300 rounded px-2 py-1 text-sm'
                                     readOnly
                                 />
                             </div>
                             <div className='flex items-center justify-between'>
-                                <p className='font-bold'>Раб телефон</p>
+                                <p className='font-bold min-w-[120px]'>Раб телефон</p>
                                 <input
                                     type='text'
                                     value={formData.carrier.organizationPhone}
-                                    className='border ml-3 border-gray-300 rounded px-2 py-1 text-sm'
+                                    className='border  w-full ml-3 border-gray-300 rounded px-2 py-1 text-sm'
                                     readOnly
                                 />
                             </div>
                         </div>
 
-                        <div className='space-y-2'>
+                        <div className='space-y-2 flex-1'>
                             <div className='flex items-center justify-between'>
-                                <p className='font-bold'>Отвественный</p>
+                                <p className='font-bold min-w-[120px]'>Отвественный</p>
                                 <input
                                     type='text'
                                     value={formData.carrier.fio}
-                                    className='border ml-3 border-gray-300 rounded px-2 py-1 text-sm'
+                                    className='border  w-full ml-3 border-gray-300 rounded px-2 py-1 text-sm'
                                     readOnly
                                 />
                             </div>
                             <div className='flex items-center justify-between'>
-                                <p className='font-bold'>Телефон</p>
+                                <p className='font-bold min-w-[120px]'>Телефон</p>
                                 <input
                                     type='text'
                                     value={formData.carrier.phone}
-                                    className='border ml-3 border-gray-300 rounded px-2 py-1 text-sm flex justify-center items-center'
+                                    className='border  w-full ml-3 border-gray-300 rounded px-2 py-1 text-sm flex justify-center items-center'
                                     readOnly
                                 />
                             </div>
                             <div className='flex items-center justify-between'>
-                                <p className='font-bold'>Почта</p>
+                                <p className='font-bold min-w-[120px]'>Почта</p>
                                 <a
                                     href={`mailto:${formData.carrier.email}`}
-                                    className='border ml-3 border-gray-300 w-[185px] rounded px-2 py-1 text-sm flex justify-center text-primary underline'
+                                    className='border  w-full ml-3 border-gray-300  rounded px-2 py-1 text-sm flex justify-center text-primary underline'
                                 >
                                     {formData.carrier.email}
                                 </a>
