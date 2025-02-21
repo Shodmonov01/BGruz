@@ -230,16 +230,12 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
             //             : '—',
             //     filterType: 'dateRange'
             // },
-
             {
-                accessorKey: 'loadingTime', // Изменил accessorKey
+                accessorKey: 'loadingTime',
                 header: 'Время подачи',
                 size: 120,
                 searchable: true,
-                accessorFn: row =>
-                    row.buyBid?.filingTime 
-                        ? row.buyBid.filingTime // Если уже в "HH:mm", просто возвращаем
-                        : '—',
+                accessorFn: row => row.buyBid?.fillingTime || '—', // Просто возвращаем строку
                 filterType: 'dateRange'
             },
             
