@@ -62,7 +62,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
     //     }
     // }
 
-    console.log('formData Orders', formData.price)
+    console.log('formData Orders', formData)
 
     return (
         <Dialog open={isModalOpen} onOpenChange={handleCloseModal}>

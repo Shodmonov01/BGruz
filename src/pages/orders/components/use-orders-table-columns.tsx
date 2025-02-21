@@ -7,6 +7,7 @@ import { Eye, Trash } from 'lucide-react'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import loading from '../../../../public/gear-spinner.svg'
+import useNumberFormatter from '@/hooks/use-format-number'
 
 // interface Orders {
 //     _id: string
@@ -106,11 +107,11 @@ interface ColumnsProps {
 // }
 
 export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpenModal }: ColumnsProps) => {
-    const formatNumber = (value: string) => {
-        const num = value.replace(/\D/g, '') // Убираем все нечисловые символы
-        return num ? new Intl.NumberFormat('ru-RU').format(Number(num)) : ''
-    }
-
+    // const formatNumber = (value: string) => {
+    //     const num = value.replace(/\D/g, '') // Убираем все нечисловые символы
+    //     return num ? new Intl.NumberFormat('ru-RU').format(Number(num)) : ''
+    // }
+    const { formatNumber } = useNumberFormatter()
     return useMemo<ColumnDef<Bid>[]>(() => {
         const allColumns: (ColumnDef<Bid> & {
             isShortVersion?: boolean
