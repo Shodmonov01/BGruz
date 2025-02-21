@@ -141,6 +141,32 @@ function OrdersTable({
         setColumnFilters(newColumnFilters)
     }, [localFilters])
 
+    
+    useEffect(() => {
+        const totalPrice = orders.reduce((sum, bid) => {
+            const value = typeof bid.fullPrice === 'string' 
+                ? Number(bid.fullPrice.replace(/\D/g, '')) 
+                : Number(bid.fullPrice ?? 0);
+            return sum + value;
+        }, 0);
+        const totalPrice2 = orders.reduce((sum, bid) => {
+            const value = typeof bid.fullPriceNds === 'string' 
+                ? Number(bid.fullPriceNds.replace(/\D/g, '')) 
+                : Number(bid.fullPriceNds ?? 0);
+            return sum + value;
+        }, 0);
+        const totalPrice3 = orders.reduce((sum, bid) => {
+            const value = typeof bid.commission === 'string' 
+                ? Number(bid.commission.replace(/\D/g, '')) 
+                : Number(bid.commission ?? 0);
+            return sum + value;
+        }, 0);
+        
+        console.log("Сумма fullPrice:", totalPrice);
+        console.log("Сумма fullPriceNDS:", totalPrice2);
+        console.log("Сумма комисси:", totalPrice3);
+    }, [orders]);
+
     return (
         <div>
             <OrdersHeader setIsShortTable={setIsShortTable} isShortTable={isShortTable} />

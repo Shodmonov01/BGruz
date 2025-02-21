@@ -136,6 +136,32 @@ localFilters,
         setColumnFilters(newColumnFilters)
     }, [localFilters])
 
+    useEffect(() => {
+        const totalPrice = bids.reduce((sum, bid) => {
+            const value = typeof bid.fullPrice === 'string' 
+                ? Number(bid.fullPrice.replace(/\D/g, '')) 
+                : Number(bid.fullPrice ?? 0);
+            return sum + value;
+        }, 0);
+        const totalPrice2 = bids.reduce((sum, bid) => {
+            const value = typeof bid.fullPriceNDS === 'string' 
+                ? Number(bid.fullPriceNDS.replace(/\D/g, '')) 
+                : Number(bid.fullPriceNDS ?? 0);
+            return sum + value;
+        }, 0);
+        const totalPrice3 = bids.reduce((sum, bid) => {
+            const value = typeof bid.commission === 'string' 
+                ? Number(bid.commission.replace(/\D/g, '')) 
+                : Number(bid.commission ?? 0);
+            return sum + value;
+        }, 0);
+        
+        console.log("Сумма fullPrice:", totalPrice);
+        console.log("Сумма fullPriceNDS:", totalPrice2);
+        console.log("Сумма комисси:", totalPrice3);
+    }, [bids]);
+    
+
     return (
         <div>
             <BidHeader setIsShortTable={setIsShortTable} isShortTable={isShortTable}/>
