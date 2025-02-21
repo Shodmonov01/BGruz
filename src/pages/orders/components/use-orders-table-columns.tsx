@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 
 import { ColumnDef } from '@tanstack/react-table'
 
-import { Eye, Trash } from 'lucide-react'
+// import { Eye, Trash } from 'lucide-react'
 
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
@@ -150,7 +150,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                     return ` ${cargoTypeLabel}`
                 },
 
-                isShortVersion: true,
+                // isShortVersion: true,
                 searchable: true,
                 filterType: 'select',
                 filterOptions: [
@@ -173,7 +173,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
 
                     return `${loadingModeLabel}`
                 },
-                isShortVersion: true,
+                // isShortVersion: true,
                 searchable: true,
                 filterType: 'select',
                 filterOptions: [
@@ -209,7 +209,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
 
             {
                 accessorKey: 'loadingDate',
-                header: 'Дата погрузки',
+                header: 'Дата подачи',
                 size: 120,
                 isShortVersion: true,
                 searchable: true,
@@ -219,17 +219,30 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                         : '—',
                 filterType: 'dateRange'
             },
+            // {
+            //     accessorKey: 'loadingTime', // Изменил accessorKey
+            //     header: 'Время подачи',
+            //     size: 120,
+            //     searchable: true,
+            //     accessorFn: row =>
+            //         row.buyBid?.loadingDate
+            //             ? format(new Date(row.buyBid.loadingDate), 'HH:mm', { locale: ru })
+            //             : '—',
+            //     filterType: 'dateRange'
+            // },
+
             {
                 accessorKey: 'loadingTime', // Изменил accessorKey
-                header: 'Время погрузки',
+                header: 'Время подачи',
                 size: 120,
                 searchable: true,
                 accessorFn: row =>
-                    row.buyBid?.loadingDate
-                        ? format(new Date(row.buyBid.loadingDate), 'HH:mm', { locale: ru })
+                    row.buyBid?.filingTime 
+                        ? row.buyBid.filingTime // Если уже в "HH:mm", просто возвращаем
                         : '—',
                 filterType: 'dateRange'
             },
+            
             
             {
                 accessorKey: 'terminal1',
@@ -417,7 +430,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                     return formatNumber(String(value))
                 },
                 searchable: true,
-                isShortVersion: true,
+                // isShortVersion: true,
                 filterType: 'range',
                 sortingFn: (rowA, rowB, columnId) => {
                     const valueA = rowA.getValue(columnId)
@@ -463,6 +476,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 header: 'Клиент',
                 size: 120,
                 searchable: true,
+                isShortVersion: true,
                 filterType: 'fuzzy'
             },
             // {
@@ -475,7 +489,6 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 accessorKey: 'customer.organizationName',
                 header: 'Заказчик',
                 size: 150,
-                isShortVersion: true,
                 searchable: true,
                 accessorFn: row => row.customer?.organizationName ?? '—',
                 filterType: 'fuzzy'

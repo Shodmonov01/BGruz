@@ -193,7 +193,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                     return ` ${cargoTypeLabel}`
                 },
 
-                isShortVersion: true,
+                // isShortVersion: true,
                 searchable: true,
                 filterType: 'select',
                 filterOptions: [
@@ -216,7 +216,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
 
                     return `${loadingModeLabel}`
                 },
-                isShortVersion: true,
+                // isShortVersion: true,
                 searchable: true,
                 filterType: 'select',
                 filterOptions: [
@@ -227,7 +227,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
             },
             {
                 accessorKey: 'loadingDate',
-                header: 'Дата погрузки',
+                header: 'Дата подачи',
                 size: 120,
                 isShortVersion: true,
                 searchable: true,
@@ -333,19 +333,9 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 size: 100,
                 searchable: true,
                 isShortVersion: true,
-                // cell: ({ getValue }) => {
-                //     const value = getValue()
-                //     return formatNumber(String(value))
-                // },
-                cell: ({ row, getValue }) => {
-                    const isPriceRequest = row.original.isPriceRequest; // Достаем isPriceRequest
+                cell: ({ getValue }) => {
                     const value = getValue();
-            
-                    if (isPriceRequest) {
-                        return "Запрос";
-                    }
-            
-                    return formatNumber(String(value));
+                    return value ? formatNumber(String(value)) : 'Запрос';
                 },
                 filterType: 'range',
                 sortingFn: (rowA, rowB, columnId) => {

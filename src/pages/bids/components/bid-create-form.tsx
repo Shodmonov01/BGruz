@@ -138,7 +138,7 @@ const StudentCreateForm = ({ modalClose,  }: { modalClose: () => void}) => {
                 vehicleCount: getValues('vehicleCount'),
                 cargoTitle: data.cargoTitle,
                 //@ts-ignore
-                filingTime: getValues('submissionTime'),
+                filingTime: getValues('submissionTime') || "09:00",
 
                 extraServices: data.extraServices || [],
                 description: data.description

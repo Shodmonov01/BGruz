@@ -94,7 +94,7 @@ function BidDate() {
                 <FormField
                     control={control}
                     name='submissionTime'
-                    rules={{ required: 'Заполните это поле.' }}
+                    // rules={{ required: 'Заполните это поле.' }}
                     render={({ field }) => (
                         <FormItem>
                             <FormControl>
