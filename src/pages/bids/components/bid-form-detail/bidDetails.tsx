@@ -57,17 +57,17 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                         setOperationType(mappedValue)
                                     }}
                                     defaultValue={field.value}
-                                    className='flex gap-6 ml-16 md:ml-auto'
+                                    className='flex md:gap-6 gap-12 ml-16 md:ml-auto'
                                 >
                                     <FormItem className='flex items-center space-x-3 space-y-0 '>
                                         <FormLabel className='font-normal'>Погрузка</FormLabel>
                                         <FormControl>
-                                            <RadioGroupItem value='Погрузка' className=' size-5'/>
+                                            <RadioGroupItem value='Погрузка' className=' size-8'/>
                                         </FormControl>
                                     </FormItem>
                                     <FormItem className='flex items-center space-x-3 space-y-0'>
                                         <FormControl>
-                                            <RadioGroupItem value='Выгрузка' className=' size-5'/>
+                                            <RadioGroupItem value='Выгрузка' className=' size-8'/>
                                         </FormControl>
                                         <FormLabel className='font-normal'>Выгрузка</FormLabel>
                                     </FormItem>
@@ -92,17 +92,17 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                         setTransportType(value)
                                     }}
                                     defaultValue={field.value}
-                                    className='flex gap-6 ml-[54px] md:ml-auto'
+                                    className='flex md:gap-6 gap-12 ml-[54px] md:ml-auto'
                                 >
                                     <FormItem className='flex items-center space-x-3 space-y-0'>
                                         <FormLabel className='font-normal'>Контейнер</FormLabel>
                                         <FormControl>
-                                            <RadioGroupItem value='Контейнер' className=' size-5'/>
+                                            <RadioGroupItem value='Контейнер' className=' size-8'/>
                                         </FormControl>
                                     </FormItem>
                                     <FormItem className='flex items-center space-x-3 space-y-0'>
                                         <FormControl>
-                                            <RadioGroupItem value='Вагон' className=' size-5'/>
+                                            <RadioGroupItem value='Вагон' className=' size-8'/>
                                         </FormControl>
                                         <FormLabel className='font-normal'>Вагон</FormLabel>
                                     </FormItem>

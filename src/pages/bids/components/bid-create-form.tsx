@@ -13,6 +13,7 @@ import TerminalOne from './bid-form-detail/terminalOne'
 import Warehouses from './bid-form-detail/warhouses'
 import TerminalTwo from './bid-form-detail/terminalTwo'
 import BidDescribe from './bid-form-detail/bidDescribe'
+// import { ChevronLeft } from 'lucide-react'
 
 interface BidFormData {
     client: string
@@ -38,7 +39,7 @@ interface BidFormData {
     extraServices: Array<{ id: number; count: number }>
 }
 
-const StudentCreateForm = ({ modalClose,  }: { modalClose: () => void}) => {
+const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
     const [clients, setClients] = useState<{ organizationId: number; organizationName: string }[]>([])
     const [terminals, setTerminals] = useState<{ id: number; name: string; description: string }[]>([])
     const [warehouses, setWarehouses] = useState<{ id: number; name: string; description: string }[]>([])
@@ -138,7 +139,7 @@ const StudentCreateForm = ({ modalClose,  }: { modalClose: () => void}) => {
                 vehicleCount: getValues('vehicleCount'),
                 cargoTitle: data.cargoTitle,
                 //@ts-ignore
-                filingTime: getValues('submissionTime') || "09:00",
+                filingTime: getValues('submissionTime') || '09:00',
 
                 extraServices: data.extraServices || [],
                 description: data.description
@@ -170,10 +171,17 @@ const StudentCreateForm = ({ modalClose,  }: { modalClose: () => void}) => {
     return (
         <FormProvider {...formMethods}>
             <div className='px-0 md:px-2'>
-                <Heading title={'Создать новую заявку'} description={''} className='space-y-2 py-4 text-center' />
+                <Heading
+                    title={'Создать новую заявку'}
+                    description={''}
+                    className='hidden md:block space-y-2 py-0 md:py-4 text-center text-[#fff]'
+                />
+                <div className='flex md:hidden items-center gap-2 bg-primary text-white p-4'>
+                    <h2 className='text-lg font-medium'>Создать новую заявку</h2>
+                </div>
                 {errorMessage && <div className='text-red-500 text-center py-2'>{errorMessage}</div>}
                 <form onSubmit={handleSubmit(onSubmit)} className='space-y-4' autoComplete='off'>
-                    <div className='space-y-4'>
+                    <div className='space-y-4 px-4'>
                         <BidDetails
                             filteredClients={clients}
                             vehicleProfiles={vehicleProfiles}
@@ -182,7 +190,9 @@ const StudentCreateForm = ({ modalClose,  }: { modalClose: () => void}) => {
                             setTransportType={setTransportType}
                         />
                         <div className={isClientSelected ? '' : 'opacity-50 pointer-events-none'}>
-                            <BidDate />
+                            <div className='px-4'>
+                                <BidDate />
+                            </div>
                             <div className='bg-primary text-center text-[26px] text-white my-3 py-3'>
                                 <p>Маршрут</p>
                             </div>
