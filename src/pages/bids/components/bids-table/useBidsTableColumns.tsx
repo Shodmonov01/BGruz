@@ -43,81 +43,6 @@ interface ColumnsProps {
     onOpenModal: (bid: Bid) => void
 }
 
-// const AuctionTimer = ({ activationTime }: { activationTime: string }) => {
-//     const [timeLeft, setTimeLeft] = useState<number>(0);
-//     const initialFetchDone = useRef(false);
-
-//     useEffect(() => {
-//         const fetchTime = async () => {
-//             try {
-//                 const token = localStorage.getItem("authToken");
-//                 const res = await fetchPrivateData("api/v1/time/now", token);
-
-//                 let serverTime = new Date(res.current_time).getTime();
-//                 let targetTime = new Date(activationTime).getTime();
-
-//                 // ⬇ Добавляем 5 часов
-//                 targetTime += 5 * 60 * 60 * 1000;
-
-//                 // console.log("✅ Server Time (ISO):", new Date(serverTime).toISOString());
-//                 // console.log("🎯 Target Time (ISO):", new Date(targetTime).toISOString());
-
-//                 const initialTimeLeft = Math.max(0, Math.floor((targetTime - serverTime) / 1000));
-//                 // console.log("⏳ Initial time left (s):", initialTimeLeft);
-
-//                 setTimeLeft(initialTimeLeft);
-//                 initialFetchDone.current = true;
-//             } catch (error) {
-//                 console.error("❌ Error fetching time:", error);
-//             }
-//         };
-
-//         if (!initialFetchDone.current) {
-//             fetchTime();
-//         }
-
-//         const interval = setInterval(() => {
-//             setTimeLeft((prevTime) => Math.max(0, prevTime - 1));
-//         }, 1000);
-
-//         return () => clearInterval(interval);
-//     }, [activationTime]);
-
-//     const minutes = Math.floor(timeLeft / 60);
-//     const seconds = timeLeft % 60;
-
-//     return timeLeft > 0 ? `${minutes}:${seconds.toString().padStart(2, "0")}` : "Время вышло";
-// };
-
-// export default AuctionTimer;
-
-// const AuctionTimer = ({ activationTime }: { activationTime: string }) => {
-//     const serverTime = useServerTime() // Берем серверное время из контекста
-//     const [timeLeft, setTimeLeft] = useState<number>(0)
-
-//     useEffect(() => {
-//         if (!serverTime) return // Ждем, пока контекст загрузит серверное время
-
-//         let targetTime = new Date(activationTime).getTime()
-//         targetTime += 5 * 60 * 60 * 1000 // Добавляем 5 часов
-
-//         const initialTimeLeft = Math.max(0, Math.floor((targetTime - serverTime) / 1000))
-//         setTimeLeft(initialTimeLeft)
-
-//         const interval = setInterval(() => {
-//             setTimeLeft(prevTime => Math.max(0, prevTime - 1))
-//         }, 1000)
-
-//         return () => clearInterval(interval)
-//     }, [serverTime, activationTime])
-
-//     const minutes = Math.floor(timeLeft / 60)
-//     const seconds = timeLeft % 60
-
-//     return timeLeft > 0 ? `${minutes}:${seconds.toString().padStart(2, '0')}` : 'Время вышло'
-// }
-
-// export default AuctionTimer
 
 const AuctionTimer = ({ activationTime }: { activationTime: string }) => {
     const serverTime = useServerTime() // Берем серверное время из контекста
@@ -127,10 +52,6 @@ const AuctionTimer = ({ activationTime }: { activationTime: string }) => {
         if (!serverTime) return
 
         const targetTime = new Date(activationTime).getTime()
-
-        // console.log("🎯 ActivationTime (ms):", targetTime);
-        // console.log("⏳ ServerTime (ms):", serverTime);
-        // console.log("🕒 Разница (секунды):", Math.floor((targetTime - serverTime) / 1000));
 
         setTimeLeft(Math.max(0, Math.floor((targetTime - serverTime) / 1000)))
 
@@ -193,7 +114,6 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                     return ` ${cargoTypeLabel}`
                 },
 
-                // isShortVersion: true,
                 searchable: true,
                 filterType: 'select',
                 filterOptions: [
@@ -216,7 +136,6 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
 
                     return `${loadingModeLabel}`
                 },
-                // isShortVersion: true,
                 searchable: true,
                 filterType: 'select',
                 filterOptions: [
@@ -276,7 +195,6 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 size: 140,
                 accessorKey: 'activationTime',
                 cell: ({ row }) => {
-                    // console.log('Activation Time:', row.original.activationTime)
                     return <AuctionTimer activationTime={row.original.activationTime} />
                 },
                 isShortVersion: true,
@@ -459,24 +377,11 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 accessorKey: 'isPriceRequest',
                 header: 'Согласовано',
                 size: 150,
-                // cell: ({ row }) => {
-                //     const isApproved = row.original.isPriceRequest
-                //     return (
-                //         <Button
-                //             onClick={() => onApprove(row.original._id)}
-                //             disabled={isApproved}
-                //             variant={isApproved ? 'secondary' : 'default'}
-                //         >
-                //             {isApproved ? 'Согласовано' : 'Согласовать'}
-                //         </Button>
-                //     )
-                // },
                 cell: ({ row }) => {
                     return <Button onClick={() => onApprove(row.original._id)}>Согласовать</Button>
                 },
                 isShortVersion: true
-                // searchable: true,
-                // filterType: null,
+
             },
             {
                 header: 'Действия',

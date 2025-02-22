@@ -1,12 +1,9 @@
-'use client'
 import DashboardNav from '@/components/shared/dashboard-nav'
 import { navItems } from '@/constants/data'
 import { useSidebar } from '@/hooks/use-sidebar'
 import { cn } from '@/lib/utils'
 import { ChevronsLeft } from 'lucide-react'
 import { useState } from 'react'
-// import { Link } from 'react-router-dom'
-// import logo from '/logoRb.png'
 import UserNav from './user-nav'
 import { ModeToggle } from './theme-toggle'
 
@@ -38,14 +35,6 @@ export default function Sidebar({ className }: SidebarProps) {
                     isMinimized ? 'justify-center ' : 'justify-between'
                 )}
             >
-                {/* {!isMinimized && (
-                    <Link to={'/'} className='flex justify-center items-center gap-2'>
-                        <img src={logo} alt='' className='h-12' />
-                        <span>
-                            <span className='text-[#03b4e0]'>Биржа</span> Грузоперевозок
-                        </span>
-                    </Link>
-                )} */}
                 <ChevronsLeft
                     className={cn(
                         'mt-[18px] size-8 cursor-pointer rounded-full border bg-background text-foreground',

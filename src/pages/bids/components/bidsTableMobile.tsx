@@ -66,11 +66,6 @@ function BidsTableMobile({ bids }) {
                                 </div>
                                 <div className='flex justify-between'>
                                     <span>Количество машин: 1</span>
-
-                                    {/* <span className='font-medium'>Сумма:</span>
-                                <span className='text-green-600 font-semibold'>
-                                    {bid.price ? `${bid.price} ₽` : '—'}
-                                </span> */}
                                 </div>
                                 <div className='flex justify-between'>
                                     <span className='font-semibold'>{bid.vehicleProfile?.name || '—'}</span>
@@ -78,9 +73,6 @@ function BidsTableMobile({ bids }) {
                                 <div>
                                     <span className='text-lg font-semibold'>{bid.terminal2.cityName}</span>
                                 </div>
-                                {/* <Button onClick={() => handleOpenModal(bid)} className='mt-2 w-full'>
-                                Подробнее
-                            </Button> */}
                             </div>
                             <div className='ml-auto'>
                                 <span className='text-green-600 font-semibold'>

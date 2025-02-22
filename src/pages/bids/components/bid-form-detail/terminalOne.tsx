@@ -16,7 +16,6 @@ function TerminalOne({ terminals }) {
 
     return (
         <div className='md:mb-0 mb-8'>
-            {/* <h1 className='font-bold mb-2'>Терминал 1</h1> */}
             <h1 className='font-bold mb-2'>{getTerminalTitle()}</h1>
 
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-4'>

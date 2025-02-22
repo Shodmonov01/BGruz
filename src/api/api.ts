@@ -1,23 +1,9 @@
 import axios from 'axios'
 
-// export const API_URL = 'https://portal.bgruz.com'
-
 const API_URL = axios.create({
     baseURL: 'https://portal.bgruz.com'
 })
 
-// API_URL.interceptors.response.use(
-//     response => response,
-//     error => {
-//         if (error.response && error.response.status === 401) {
-//             localStorage.removeItem('authToken')
-//             setTimeout(() => {
-//                 window.location.href = '/login'
-//             }, 100)
-//         }
-//         return Promise.reject(error)
-//     }
-// )
 
 API_URL.interceptors.response.use(
     response => response,

@@ -11,9 +11,6 @@ import {
 
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-// import { Input } from '@/components/ui/input'
-
-// import ordersInfoModal from './orders-info-modal'
 
 import { deleteData, postData2 } from '@/api/api'
 
@@ -53,9 +50,8 @@ function OrdersTable({
 }: BidsTableProps) {
     const [selectedBid, setSelectedBid] = useState<Partial<Bid> | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
-    // const [isShortTable, setIsShortTable] = useState(false)
     const [isShortTable, setIsShortTable] = useState(() => {
-        return localStorage.getItem('isShortTable') === 'true' // Получаем из localStorage
+        return localStorage.getItem('isShortTable') === 'true'
     })
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
         Object.entries(localFilters).map(([id, value]) => ({ id, value }))
@@ -66,7 +62,7 @@ function OrdersTable({
 
 
     useEffect(() => {
-        localStorage.setItem('isShortTable', String(isShortTable)) // Сохраняем в localStorage при изменении
+        localStorage.setItem('isShortTable', String(isShortTable)) 
     }, [isShortTable])
     
     useEffect(() => {
@@ -98,7 +94,6 @@ function OrdersTable({
             }
         }
     }, [hasMore, loading, loadMore])
-    console.log('orders', orders)
 
     const handleOpenModal = useCallback((bid: Bid) => {
         setSelectedBid(bid)
@@ -112,7 +107,7 @@ function OrdersTable({
 
     const handleApprove = useCallback(async (bidId: string) => {
         const token = localStorage.getItem('authToken')
-        await postData2(`api/v1/orders/${bidId}/approve`, {}, token) // Передаём пустой объект как data
+        await postData2(`api/v1/orders/${bidId}/approve`, {}, token)
     }, [])
 
     const handleDelete = useCallback(async (bidId: string) => {
@@ -128,7 +123,6 @@ function OrdersTable({
         onDelete: handleDelete,
         onOpenModal: handleOpenModal
     })
-    // const table = useReactTable({ data: orders || [], columns, getCoreRowModel: getCoreRowModel() })
 
     const table = useReactTable({
         data: orders || [],
@@ -216,7 +210,6 @@ function OrdersTable({
                                 <TableRow
                                     onDoubleClick={() => handleOpenModal(row.original)}
                                     key={row.id}
-                                    // className={`hover:bg-gray-100 cursor-pointer ${index % 2 === 0 ? 'bg-gray-100' : ''}`}
                                     className={`cursor-pointer text-[16px] hover:bg-gray-100 !py-2 ${
                                         row.original.ownState === 'canceled'
                                             ? 'bg-gray-50 opacity-50 line-through'

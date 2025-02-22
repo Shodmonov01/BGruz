@@ -44,7 +44,6 @@ export const useGetOrders = (size: number) => {
                     token
                 )
 
-                console.log('Ответ от API:', response.items)
                 setOrders(response.items)
                 setHasMore(response.items.length < response.total) // Проверяем, есть ли ещё данные
             } catch (err) {
@@ -58,6 +57,5 @@ export const useGetOrders = (size: number) => {
         fetchOrders()
     }, [size, filters, refreshTrigger])
 
-    // return { orders, loading, error, hasMore, setFilters}
     return { orders, loading, error, setFilters, hasMore, refreshTable: () => setRefreshTrigger(prev => prev + 1) }
 }

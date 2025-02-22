@@ -2,46 +2,13 @@ import { useMemo } from 'react'
 
 import { ColumnDef } from '@tanstack/react-table'
 
-// import { Eye, Trash } from 'lucide-react'
 
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import loading from '../../../../public/gear-spinner.svg'
 import useNumberFormatter from '@/hooks/use-format-number'
 
-// interface Orders {
-//     _id: string
-//     buyBid: {
-//         loadingMode: string
-//         cargoType: string
-//         loadingDate: string
-//         terminal1: {
-//             cityName: string
-//         }
-//         terminal2: {
-//             cityName: string
-//         }
-//         warehouses: Array<{
-//             cityName: string
-//         }>
-//         vehicleProfile: {
-//             name: string
-//         }
-//     }
-//     status: string
-//     price: number
-//     priceNds: number
-//     fullPrice: number
-//     fullPriceNds: number
-//     commission: number
-//     extraServicesPrice: number
-//     extraServicesPriceNds: number
-//     createdAt: string
-//     customer: {
-//         organizationName: string
-//     }
-//     ownState?: 'canceled' | string
-// }
+
 
 interface Bid {
     _id: string
@@ -87,30 +54,8 @@ interface ColumnsProps {
     onOpenModal: (bid: any) => void
 }
 
-// const AuctionTimer = ({ activationTime }: { activationTime: string }) => {
-//     const [timeLeft, setTimeLeft] = useState(() => {
-//         const time = new Date(activationTime).getTime()
-//         return Math.max(0, Math.floor((time - Date.now()) / 1000))
-//     })
-
-//     useEffect(() => {
-//         if (timeLeft <= 0) return
-//         const interval = setInterval(() => {
-//             setTimeLeft(prev => Math.max(prev - 1, 0))
-//         }, 1000)
-//         return () => clearInterval(interval)
-//     }, [timeLeft])
-
-//     const minutes = Math.floor(timeLeft / 60)
-//     const seconds = timeLeft % 60
-//     return <>{timeLeft > 0 ? `${minutes}:${seconds.toString().padStart(2, '0')}` : 'Время вышло'}</>
-// }
-
 export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpenModal }: ColumnsProps) => {
-    // const formatNumber = (value: string) => {
-    //     const num = value.replace(/\D/g, '') // Убираем все нечисловые символы
-    //     return num ? new Intl.NumberFormat('ru-RU').format(Number(num)) : ''
-    // }
+
     const { formatNumber } = useNumberFormatter()
     return useMemo<ColumnDef<Bid>[]>(() => {
         const allColumns: (ColumnDef<Bid> & {
@@ -150,7 +95,6 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                     return ` ${cargoTypeLabel}`
                 },
 
-                // isShortVersion: true,
                 searchable: true,
                 filterType: 'select',
                 filterOptions: [
@@ -173,7 +117,6 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
 
                     return `${loadingModeLabel}`
                 },
-                // isShortVersion: true,
                 searchable: true,
                 filterType: 'select',
                 filterOptions: [
@@ -182,31 +125,6 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                     { value: 'unloading', label: 'Выгрузка' }
                 ]
             },
-            // {
-            //     accessorKey: 'loadingDate',
-            //     header: 'Дата погрузки',
-            //     size: 120,
-            //     isShortVersion: true,
-            //     searchable: true,
-            //     accessorFn: row =>
-            //         row.buyBid?.loadingDate
-            //             ? format(new Date(row.buyBid.loadingDate), 'dd.MM.yyyy', { locale: ru })
-            //             : '—',
-            //     filterType: 'dateRange'
-            // },
-            // {
-            //     accessorKey: 'loadingDate',
-            //     header: 'Время погрузки',
-            //     size: 120,
-            //     isShortVersion: true,
-            //     searchable: true,
-            //     accessorFn: row =>
-            //         row.buyBid?.loadingDate
-            //             ? format(new Date(row.buyBid.loadingDate), 'HH:mm', { locale: ru })
-            //             : '—',
-            //     filterType: 'dateRange'
-            // },
-
             {
                 accessorKey: 'loadingDate',
                 header: 'Дата подачи',
@@ -219,23 +137,13 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                         : '—',
                 filterType: 'dateRange'
             },
-            // {
-            //     accessorKey: 'loadingTime', // Изменил accessorKey
-            //     header: 'Время подачи',
-            //     size: 120,
-            //     searchable: true,
-            //     accessorFn: row =>
-            //         row.buyBid?.loadingDate
-            //             ? format(new Date(row.buyBid.loadingDate), 'HH:mm', { locale: ru })
-            //             : '—',
-            //     filterType: 'dateRange'
-            // },
+
             {
                 accessorKey: 'loadingTime',
                 header: 'Время подачи',
                 size: 120,
                 searchable: true,
-                accessorFn: row => row.buyBid?.fillingTime || '—', // Просто возвращаем строку
+                accessorFn: row => row.buyBid?.fillingTime || '—',
                 filterType: 'dateRange'
             },
             
@@ -311,30 +219,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                     { value: 'canceled', label: 'Отменены' }
                 ]
             },
-            // {
-            //     accessorKey: 'documentOrderItems',
-            //     header: 'Документы',
-            //     size: 150,
-            //     cell: ({ getValue }) => {
-            //         const value = getValue()
-            //         if (value && value[0].DateCreate) {
-            //             const date = new Date(value[0].DateCreate)
-            //             return date.toISOString().split('T')[0]
-            //         }
-            //         return 'Нет'
-            //     },
-            //     searchable: true
-            // },
-            // {
-            //     accessorKey: 'price',
-            //     header: 'Цена перевозки',
-            //     size: 150,
-            //     cell: ({ getValue }) => {
-            //         const value = getValue()
-            //         return formatNumber(String(value))
-            //     },
-            //     searchable: true
-            // },
+
             {
                 accessorKey: 'price',
                 header: 'Моя цена',
@@ -346,16 +231,6 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 searchable: true,
                 filterType: 'fuzzy'
             },
-            // {
-            //     accessorKey: 'fullPrice',
-            //     header: 'Цена + услуги',
-            //     size: 150,
-            //     cell: ({ getValue }) => {
-            //         const value = getValue()
-            //         return formatNumber(String(value))
-            //     },
-            //     searchable: true
-            // },
             {
                 accessorKey: 'extraServicesPrice',
                 header: 'Доп услуги',
@@ -426,7 +301,6 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                     return formatNumber(String(value))
                 },
                 searchable: true,
-                // isShortVersion: true,
                 filterType: 'range',
                 sortingFn: (rowA, rowB, columnId) => {
                     const valueA = rowA.getValue(columnId)
@@ -447,25 +321,6 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 accessorFn: (row: Bid) =>
                     row.createdAt ? format(new Date(row.createdAt), 'dd.MM.yyyy HH:mm', { locale: ru }) : '—'
             },
-            // {
-            //     accessorKey: 'assignedDriver.fio',
-            //     header: 'Водитель',
-            //     size: 120,
-            //     searchable: true,
-            //     isShortVersion: true
-            // },
-            // {
-            //     accessorKey: 'assignedVehicle.plateNum',
-            //     header: '№ машины',
-            //     size: 120,
-            //     searchable: true
-            // },
-            // {
-            //     accessorKey: 'assignedTrailer.plateNum',
-            //     header: '№ прицепа',
-            //     size: 120,
-            //     searchable: true
-            // },
 
             {
                 accessorKey: 'customer.fio',
@@ -475,12 +330,6 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 isShortVersion: true,
                 filterType: 'fuzzy'
             },
-            // {
-            //     accessorKey: '',
-            //     header: 'Предложения',
-            //     size: 120,
-            //     searchable: true
-            // },
             {
                 accessorKey: 'customer.organizationName',
                 header: 'Заказчик',
@@ -497,43 +346,6 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 accessorFn: row => row.carrier?.organizationName ?? '—',
                 filterType: 'fuzzy'
             },
-            // {
-            //     accessorKey: 'createdAtDate',
-            //     header: 'Дата создания',
-            //     size: 120,
-            //     searchable: true,
-            //     accessorFn: (row: Bid) =>
-            //         row.createdAt ? format(new Date(row.createdAt), 'dd.MM.yyyy HH:mm', { locale: ru }) : '—'
-            // },
-            // {
-            //     accessorKey: 'statusUpdated',
-            //     header: 'Дата статуса',
-            //     size: 120,
-            //     searchable: true,
-            //     accessorFn: (row: Bid) =>
-            //         row.statusUpdated ? format(new Date(row.statusUpdated), 'dd.MM.yyyy HH:mm', { locale: ru }) : '—',
-            //     filterType: 'dateRange'
-            // },
-            // {
-            //     accessorKey: '',
-            //     header: 'Бухгалтер',
-            //     size: 120,
-            //     searchable: true
-            // },
-            // {
-            //     header: 'Действия',
-            //     size: 80,
-            //     cell: ({ row }) => (
-            //         <div className='flex justify-center'>
-            //             <Eye className='mr-2 h-5 w-5 cursor-pointer' onClick={() => onOpenModal(row.original)} />
-            //             <Trash
-            //                 className='mr-2 h-5 w-5 cursor-pointer text-red-500'
-            //                 onClick={() => onDelete(row.original._id)}
-            //             />
-            //         </div>
-            //     ),
-            //     isShortVersion: true
-            // }
         ]
 
         return allColumns.filter(col => (isShortTable ? col.isShortVersion : true))

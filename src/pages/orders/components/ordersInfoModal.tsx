@@ -19,18 +19,6 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
         const { name, value } = e.target
         setFormData(prev => ({ ...prev, [name]: value }))
     }
-
-    // const handleSave = async () => {
-    //     const token = localStorage.getItem('authToken')
-    //     try {
-    //         await postData2(`api/v1/bids/${formData._id}`, formData, token)
-    //         alert('Заявка успешно обновлена!')
-    //         handleCloseModal()
-    //     } catch (error) {
-    //         console.error('Ошибка при обновлении заявки:', error)
-    //     }
-    // }
-
     const handleSave = async () => {
         const token = localStorage.getItem('authToken')
         try {
@@ -44,26 +32,6 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
             console.error('Ошибка при обновлении заявки:', error)
         }
     }
-
-    // const handleSave = async () => {
-    //     const token = localStorage.getItem('authToken')
-    //     try {
-    //         const updatedData = {
-    //             price: formData.price,
-    //             extraServices: formData.extraServices.map((service) => ({
-    //                 billableCount: service.count,
-    //               })),
-    //         }
-    //         await postData2(`api/v1/orders/${formData._id}`, updatedData, token)
-    //         alert('Заявка успешно обновлена!')
-    //         handleCloseModal()
-    //     } catch (error) {
-    //         console.error('Ошибка при обновлении заявки:', error)
-    //     }
-    // }
-
-    console.log('formData Orders', formData)
-
     return (
         <Dialog open={isModalOpen} onOpenChange={handleCloseModal}>
             <DialogTrigger asChild>
@@ -89,11 +57,9 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                 <span className='text-[40px] w-[33%] text-[#EE6F2D] flex justify-center border-x-2 px-14 border-[#EE6F2D] font-bold'>
                                     Заказ
                                 </span>
-                                {/* <div className='flex items-center'> */}
                                 <span className='text-[#03B4E0] text-[22px] flex font-semibold justify-center mx-auto w-[33%]'>
                                     ID {formData._id} от {new Date(formData.createdAt).toLocaleDateString('ru-RU')}
                                 </span>
-                                {/* </div> */}
                             </div>
                         </div>
                     </div>
@@ -295,7 +261,6 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                 <p className='font-bold'>Файлы</p>
                                 <button
                                     value='Ссылка на файл'
-                                    // className='border ml-3 border-gray-300 rounded px-2 py-1 text-sm'
                                 >
                                     <a
                                         href={`mailto:${formData.customer.email}`}
@@ -309,7 +274,6 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                 <p className='font-bold'>Файлы</p>
                                 <button
                                     value='Ссылка на файл'
-                                    // className='border ml-3 border-gray-300 rounded px-2 py-1 text-sm'
                                 >
                                     <a
                                         href={`mailto:${formData.customer.email}`}
@@ -323,7 +287,6 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                 <p className='font-bold'>Файлы</p>
                                 <button
                                     value='Ссылка на файл'
-                                    // className='border ml-3 border-gray-300 rounded px-2 py-1 text-sm'
                                 >
                                     <a
                                         href={`mailto:${formData.customer.email}`}

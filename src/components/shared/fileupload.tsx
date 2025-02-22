@@ -46,11 +46,9 @@ function ImagePreview({ file }: { file: File }) {
   const [objectUrl, setObjectUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    // Create an object URL for the file
     const url = URL.createObjectURL(file);
     setObjectUrl(url);
 
-    // Clean up the object URL when the component unmounts
     return () => {
       URL.revokeObjectURL(url);
     };

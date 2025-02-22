@@ -71,14 +71,6 @@ function BidFinance({ formData, handleChange, isReadOnly, extraServices }) {
                                         }}
                                         disabled={isReadOnly}
                                     />
-                                    {/* <Input
-                                        disabled={isReadOnly}
-                                        // type='number'
-                                        value={service.count * service.price}
-                                        onChange={e => handleChange(`extraServices[${index}].price`, e.target.value)}
-                                        className='w-[185px]'
-                                        readOnly={isReadOnly}
-                                    /> */}
                                     <Input
                                         disabled={isReadOnly}
                                         value={formatNumber(String(service.count * service.price))}

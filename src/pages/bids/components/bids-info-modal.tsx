@@ -2,14 +2,6 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { postData2, fetchPrivateData } from '@/api/api'
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
-// import { Input } from '@/components/ui/input'
-// import { Label } from '@/components/ui/label'
-// import { Textarea } from '@/components/ui/textarea'
-// import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-// import { format } from 'date-fns'
-// import { Plus } from 'lucide-react'
-// import { Checkbox } from '@/components/ui/checkbox'
-// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Terminal, UserContext, VehicleProfile, Warehouse } from '@/types'
 import BidHeader from './bid-info-modal-details/BidHeader'
 import BidDetails from './bid-info-modal-details/BidDetails'
@@ -26,11 +18,11 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
     const [extraServices, setExtraServices] = useState([])
     const [data, setData] = useState()
     const [isFetched, setIsFetched] = useState(true)
-    const [originalData, setOriginalData] = useState({ ...selectedBid }) // Сохраняем оригинальные данные
+    const [originalData, setOriginalData] = useState({ ...selectedBid }) 
 
     useEffect(() => {
         setFormData({ ...selectedBid })
-        setOriginalData({ ...selectedBid }) // Обновляем оригинальные данные при открытии модалки
+        setOriginalData({ ...selectedBid }) 
     }, [selectedBid])
 
     useEffect(() => {
@@ -120,7 +112,7 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
     const handleEdit = () => {
         handleClientChange(formData.client?.organizationId)
         setIsFetched(false)
-        console.log(data)
+        // console.log(data)
     }
 
     useEffect(() => {

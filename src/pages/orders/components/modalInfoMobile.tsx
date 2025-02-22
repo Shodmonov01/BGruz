@@ -12,7 +12,7 @@ interface ShippingOrderDialogProps {
 }
 
 export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleCloseModal }: ShippingOrderDialogProps) {
-    console.log('selectedBid', selectedOrder)
+    // console.log('selectedBid', selectedOrder)
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>

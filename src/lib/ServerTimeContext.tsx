@@ -13,12 +13,8 @@ export const ServerTimeProvider = ({ children }: { children: React.ReactNode }) 
             try {
                 const token = localStorage.getItem("authToken");
                 const res = await fetchPrivateData("api/v1/time/now", token);
-                
-                // console.log("✅ API Response:", res);
-                // console.log("✅ API current_time:", res.currentTime);
     
                 const parsedTime = new Date(res.currentTime).getTime();
-                // console.log("🔄 Converted serverTime (ms):", parsedTime);
     
                 setServerTime(parsedTime);
             } catch (error) {

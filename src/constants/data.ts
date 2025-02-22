@@ -22,32 +22,6 @@ export const navItems: NavItem[] = [
 ]
 
 
-// import { NavItem } from '@/types'
-
-
-// export const navItems: NavItem[] = [
-//     {
-//         title: 'Заявки',
-//         href: '/bids',
-//         icon: '/src/assets/bids.svg',
-//         label: 'Dashboard'
-//     },
-//     {
-//         title: 'Заказы',
-//         href: '/orders',
-//         icon: '/src/assets/orders.svg',
-//         label: 'Student'
-//     },
-//     {
-//         title: 'Выход',
-//         href: '/login',
-//         icon: 'login',
-//         label: 'Login'
-//     }
-// ]
-
-
-
 export type Employee = {
     id: number
     first_name: string

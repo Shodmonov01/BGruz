@@ -116,7 +116,6 @@ const BidDetails: React.FC<BidDetailsProps> = ({
 
             <Separator className='mb-4' />
             <div className='grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-4'>
-                {/* Выбор клиента */}
                 <FormField
                     control={control}
                     name='client'
@@ -205,7 +204,6 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                 </div>
             </div>
 
-            {/* Выбор профиля транспорта */}
             <div className='flex flex-col md:flex-row items-start md:items-center gap-2  my-6'>
                 <h1 className='font-bold mr-20'>
                     Профиль <br className='hidden md:block' /> Транспорта

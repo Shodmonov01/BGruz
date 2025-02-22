@@ -24,22 +24,21 @@ interface BidDescribeProps {
 function BidDescribe({ extraServices }: BidDescribeProps) {
     const { control, setValue, watch } = useFormContext()
     const [services, setServices] = useState<Service[]>([])
-    const requestPrice = useWatch({ control, name: 'requestPrice' }) // Следим за чекбоксом
+    const requestPrice = useWatch({ control, name: 'requestPrice' })
 
-    // Обновляем services, когда extraServices загружается
     useEffect(() => {
         if (extraServices.length > 0) {
             setServices(
                 extraServices.map(service => ({
                     ...service,
-                    count: service.countIncluded || 1, // Минимальное значение 1
-                    checked: false // Добавляем флаг выбора
+                    count: service.countIncluded || 1,
+                    checked: false
                 }))
             )
         }
     }, [extraServices])
 
-    console.log('services:', services) // Теперь данные должны появиться
+    console.log('services:', services)
 
     useEffect(() => {
         if (extraServices.length > 0) {
@@ -48,7 +47,7 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
             setServices(
                 uniqueServices.map(service => ({
                     ...service,
-                    count: 1, // Всегда начинаем с 1
+                    count: 1,
                     checked: false
                 }))
             )
@@ -61,18 +60,10 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
         setServices(updatedServices)
         updateFormData(updatedServices)
     }
-
-    // const handleCheckboxChange = index => {
-    //     const updatedServices = [...services]
-    //     updatedServices[index].checked = !updatedServices[index].checked
-    //     setServices(updatedServices)
-    //     updateFormData(updatedServices)
-    // }
-
     const handleCheckboxChange = (index: number) => {
         const updatedServices = [...services]
         updatedServices[index].checked = !updatedServices[index].checked
-        updatedServices[index].count = updatedServices[index].checked ? 1 : 1 // Устанавливаем 1, если выбрана
+        updatedServices[index].count = updatedServices[index].checked ? 1 : 1 
         setServices(updatedServices)
         updateFormData(updatedServices)
     }
@@ -86,18 +77,16 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
 
     useEffect(() => {
         if (requestPrice) {
-            setValue('price', '') // Очищаем цену
+            setValue('price', '')
         }
     }, [requestPrice, setValue])
 
-    // const totalSum = services.reduce((acc, service) => acc + (service.checked ? service.count * service.price : 0), 0)
     const totalSum =
         (watch('price') || 0) +
         services.reduce((acc, service) => acc + (service.checked ? service.count * service.price : 0), 0)
 
-    // Функция для форматирования числа с разрядностью
     const formatNumber = (value: string) => {
-        const num = value.replace(/\D/g, '') // Убираем все нечисловые символы
+        const num = value.replace(/\D/g, '')
         return num ? new Intl.NumberFormat('ru-RU').format(Number(num)) : ''
     }
 
@@ -129,16 +118,16 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
                             <FormItem>
                                 <FormControl>
                                     <Input
-                                        type='text' // Используем text, чтобы можно было форматировать ввод
+                                        type='text'
                                         placeholder='Цена'
                                         {...field}
                                         className='px-4 py-4 shadow-inner drop-shadow-xl'
                                         value={requestPrice ? '' : formatNumber(field.value?.toString() || '')}
                                         onChange={e => {
-                                            const rawValue = e.target.value.replace(/\D/g, '') // Убираем все нечисловые символы
-                                            field.onChange(rawValue ? Number(rawValue) : '') // Записываем только число
+                                            const rawValue = e.target.value.replace(/\D/g, '') 
+                                            field.onChange(rawValue ? Number(rawValue) : '') 
                                         }}
-                                        disabled={requestPrice} // Блокируем поле, если включен "Запрос цены"
+                                        disabled={requestPrice}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -147,7 +136,6 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
                     />
                 </div>
             </div>
-            {/* Доп Услуги */}
 
             <div className='space-y-4'>
                 <div className='flex items-center py-4 justify-between bg-secondary md:bg-transparent'>
@@ -174,18 +162,9 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
                                     value={service.count}
                                     onChange={e => handleCountChange(index, parseInt(e.target.value) || 1)}
                                     className='w-16 text-center'
-                                    disabled={!service.checked} // Отключаем, если чекбокс не активен
+                                    disabled={!service.checked} 
                                 />
 
-                                {/* <Input
-                                    type='number'
-                                    min='1'
-                                    max={service.maxCount}
-                                    value={service.count}
-                                    onChange={e => handleCountChange(index, parseInt(e.target.value) || 1)}
-                                    className='w-16 text-center'
-                                    disabled={!service.checked}
-                                /> */}
                                 <Input
                                     type='text'
                                     readOnly
@@ -203,7 +182,6 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
                 </div>
             </div>
 
-            {/* Описание */}
             <div className='md:px-0 px-4'>
                 <FormField
                     control={control}
