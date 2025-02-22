@@ -5,6 +5,7 @@ import info from '../../../../public/info.svg'
 import PopupModal from '@/components/shared/popup-modal'
 import StudentCreateForm from './bid-create-form'
 import { BidsOrderDialog } from './bids-info-modal-mobile'
+import useNumberFormatter from '@/hooks/use-format-number'
 interface Bid {
     _id: string
     persistentId: string
@@ -39,6 +40,8 @@ function BidsTableMobile({ bids }) {
         setOpen(true)
     }, [])
 
+    const { formatNumber } = useNumberFormatter()
+
     return (
         <div className='flex flex-col gap-4 '>
             <ScrollArea className='flex flex-col gap-4 max-h-[87vh] w-full overflow-auto rounded-md border'>
@@ -70,7 +73,7 @@ function BidsTableMobile({ bids }) {
                                 </span> */}
                                 </div>
                                 <div className='flex justify-between'>
-                                    <span className='zfont-semibold'>{bid.vehicleProfile?.name || '—'}</span>
+                                    <span className='font-semibold'>{bid.vehicleProfile?.name || '—'}</span>
                                 </div>
                                 <div>
                                     <span className='text-lg font-semibold'>{bid.terminal2.cityName}</span>
@@ -81,7 +84,7 @@ function BidsTableMobile({ bids }) {
                             </div>
                             <div className='ml-auto'>
                                 <span className='text-green-600 font-semibold'>
-                                    {bid.price ? `${bid.price} ₽` : '—'}
+                                    {bid.price ? `${formatNumber(bid.price)} ₽` : '—'}
                                 </span>
                             </div>
                         </CardContent>

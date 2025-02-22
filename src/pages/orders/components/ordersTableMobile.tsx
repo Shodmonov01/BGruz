@@ -4,6 +4,7 @@ import { ScrollArea } from '@radix-ui/react-scroll-area'
 import info from '../../../../public/info.svg'
 import { IOrder } from '@/types'
 import { ShippingOrderDialog } from './modalInfoMobile'
+import useNumberFormatter from '@/hooks/use-format-number'
 
 function OrderTableMobile({ orders }) {
     const [selectedOrder, setSelectedOrder] = useState<IOrder | null>(null)
@@ -19,6 +20,9 @@ function OrderTableMobile({ orders }) {
         setSelectedOrder(order)
         setOpen(true)
     }, [])
+
+    const { formatNumber } = useNumberFormatter()
+
 
     return (
         <div className='flex flex-col gap-4 '>
@@ -54,7 +58,7 @@ function OrderTableMobile({ orders }) {
                             </div>
                             <div className='ml-auto'>
                                 <span className='text-green-600 font-semibold'>
-                                    {order.price ? `${order.price} ₽` : '—'}
+                                    {order.price ? `${formatNumber(order.price)} ₽` : '—'}
                                 </span>
                             </div>
                         </CardContent>
