@@ -104,7 +104,7 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
     return (
         <div className='space-y-4'>
             <h1 className='text-center text-red-600 font-bold'>Все цены указаны без НДС</h1>
-            <div className='flex items-center py-4 justify-between'>
+            <div className='flex items-center py-4 justify-between md:px-0 px-4'>
                 <FormField
                     control={control}
                     name='requestPrice'
@@ -150,15 +150,15 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
             {/* Доп Услуги */}
 
             <div className='space-y-4'>
-                <div className='flex items-center py-4 justify-between'>
-                    <p className='font-bold'>Доп услуги</p>
+                <div className='flex items-center py-4 justify-between bg-secondary md:bg-transparent'>
+                    <p className='font-bold md:px-0 px-4'>Доп услуги</p>
                 </div>
 
                 {services.length === 0 ? (
                     <p className='text-gray-500'>Нет доступных доп. услуг или же выберите клиента</p>
                 ) : (
                     services.map((service, index) => (
-                        <div key={service.id} className='flex items-center justify-between gap-4'>
+                        <div key={service.id} className='flex items-center justify-between gap-4 md:px-0 px-4'>
                             <div className='flex items-center gap-2'>
                                 <Checkbox
                                     checked={service.checked}
@@ -197,43 +197,49 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
                     ))
                 )}
 
-                <div className='flex justify-end items-center gap-2 font-bold text-lg py-4'>
+                <div className='flex justify-end items-center gap-2 font-bold text-lg py-4 md:px-0 px-4'>
                     <span className='text-red-600'>Полная стоимость рейса без НДС:</span>{' '}
                     <Input type='text' readOnly value={totalSum.toLocaleString()} className='w-48 text-center' />
                 </div>
             </div>
 
             {/* Описание */}
-            <FormField
-                control={control}
-                name='cargoTitle'
-                render={({ field }) => (
-                    <FormItem>
-                        <FormLabel>Груз</FormLabel>
-                        <FormControl>
-                            <Input placeholder='Груз' {...field} className='px-4 py-6 shadow-inner drop-shadow-xl' />
-                        </FormControl>
-                        <FormMessage />
-                    </FormItem>
-                )}
-            />
-            <FormField
-                control={control}
-                name='description'
-                render={({ field }) => (
-                    <FormItem>
-                        <FormLabel>Описание</FormLabel>
-                        <FormControl>
-                            <textarea
-                                className='min-w-full max-w-[300px] min-h-[40px] max-h-[300px] p-2 border rounded-md resize focus:outline-none focus:ring-2 focus:ring-blue-500'
-                                placeholder='Описание'
-                                {...field}
-                            />
-                        </FormControl>
-                        <FormMessage />
-                    </FormItem>
-                )}
-            />
+            <div className='md:px-0 px-4'>
+                <FormField
+                    control={control}
+                    name='cargoTitle'
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Груз</FormLabel>
+                            <FormControl>
+                                <Input
+                                    placeholder='Груз'
+                                    {...field}
+                                    className='px-4 py-6 shadow-inner drop-shadow-xl'
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={control}
+                    name='description'
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Описание</FormLabel>
+                            <FormControl>
+                                <textarea
+                                    className='min-w-full max-w-[300px] min-h-[40px] max-h-[300px] p-2 border rounded-md resize focus:outline-none focus:ring-2 focus:ring-blue-500'
+                                    placeholder='Описание'
+                                    {...field}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+            </div>
         </div>
     )
 }

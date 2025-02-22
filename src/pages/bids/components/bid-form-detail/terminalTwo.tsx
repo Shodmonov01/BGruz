@@ -20,7 +20,7 @@ function TerminalTwo({ terminals }) {
         <div>
             {/* <h1 className='font-bold mb-2'>Терминал 2</h1> */}
             <h1 className='font-bold mb-2'>{getTerminalTitle()}</h1>
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-4'>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-4'>
                 <FormField
                     control={control}
                     name='terminal2Name' // хранит ID терминала

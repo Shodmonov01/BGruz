@@ -23,7 +23,7 @@ function BidDate() {
 
     return (
         <div>
-            <div className='flex flex-col md:flex-row items-start md:items-center gap-4 py-6'>
+            <div className='flex flex-col md:flex-row items-start md:items-center gap-4 py-6 md:px-0 px-4 bg-secondary md:bg-transparent'>
                 <h1 className='font-bold mr-11'>Дата Погрузки</h1>
                 <div className='flex items-center gap-3'>
                     <FormField
@@ -89,7 +89,7 @@ function BidDate() {
                     />
                 </div>
             </div>
-            <div className='flex'>
+            <div className='flex items-center my-7 md:my-0'>
                 <h1 className='font-bold mr-16'>Время подачи</h1>
                 <FormField
                     control={control}

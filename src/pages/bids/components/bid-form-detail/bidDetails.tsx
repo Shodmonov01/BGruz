@@ -62,12 +62,12 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                     <FormItem className='flex items-center space-x-3 space-y-0 '>
                                         <FormLabel className='font-normal'>Погрузка</FormLabel>
                                         <FormControl>
-                                            <RadioGroupItem value='Погрузка' className=' size-8'/>
+                                            <RadioGroupItem value='Погрузка' className=' size-8' />
                                         </FormControl>
                                     </FormItem>
                                     <FormItem className='flex items-center space-x-3 space-y-0'>
                                         <FormControl>
-                                            <RadioGroupItem value='Выгрузка' className=' size-8'/>
+                                            <RadioGroupItem value='Выгрузка' className=' size-8' />
                                         </FormControl>
                                         <FormLabel className='font-normal'>Выгрузка</FormLabel>
                                     </FormItem>
@@ -97,12 +97,12 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                     <FormItem className='flex items-center space-x-3 space-y-0'>
                                         <FormLabel className='font-normal'>Контейнер</FormLabel>
                                         <FormControl>
-                                            <RadioGroupItem value='Контейнер' className=' size-8'/>
+                                            <RadioGroupItem value='Контейнер' className=' size-8' />
                                         </FormControl>
                                     </FormItem>
                                     <FormItem className='flex items-center space-x-3 space-y-0'>
                                         <FormControl>
-                                            <RadioGroupItem value='Вагон' className=' size-8'/>
+                                            <RadioGroupItem value='Вагон' className=' size-8' />
                                         </FormControl>
                                         <FormLabel className='font-normal'>Вагон</FormLabel>
                                     </FormItem>
@@ -115,7 +115,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
             </div>
 
             <Separator className='mb-4' />
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-4'>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-4'>
                 {/* Выбор клиента */}
                 <FormField
                     control={control}
@@ -208,71 +208,70 @@ const BidDetails: React.FC<BidDetailsProps> = ({
             {/* Выбор профиля транспорта */}
             <div className='flex flex-col md:flex-row items-start md:items-center gap-2  my-6'>
                 <h1 className='font-bold mr-20'>
-                    Профиль <br /> Транспорта
+                    Профиль <br className='hidden md:block' /> Транспорта
                 </h1>
 
-                <FormField
-                    control={control}
-                    name='vehicleProfiles'
-                    rules={{ required: 'Заполните это поле.' }}
-                    render={({ field }) => (
-                        <FormItem>
-                            <Select
-                                onValueChange={value => {
-                                    field.onChange(Number(value))
-                                    setValue('vehicleProfiles', Number(value))
-                                }}
-                                value={field.value?.toString()}
-                                required
-                            >
-                                <FormControl>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder='Выберите профиль транспорта' />
-                                    </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                    {vehicleProfiles.map(profile => (
-                                        <SelectItem key={profile.id} value={profile.id.toString()}>
-                                            {profile.name}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-
-
-                <FormField
-                    control={control}
-                    name='vehicleCount'
-                    defaultValue={1} 
-                    render={({ field }) => (
-                        <div className='flex items-center border rounded-lg overflow-hidden w-24 h-[37px] ml-0 md:ml-4'>
-                            <div className='flex-1 flex items-center justify-center text-xl font-semibold'>
-                                {field.value}
-                            </div>
-                            <div className='flex flex-col border-l'>
-                                <button
-                                    type='button'
-                                    className='w-6 h-5 flex items-center justify-center hover:bg-gray-200'
-                                    onClick={() => field.onChange(field.value + 1)}
+                <div className='flex gap-3'>
+                    <FormField
+                        control={control}
+                        name='vehicleProfiles'
+                        rules={{ required: 'Заполните это поле.' }}
+                        render={({ field }) => (
+                            <FormItem>
+                                <Select
+                                    onValueChange={value => {
+                                        field.onChange(Number(value))
+                                        setValue('vehicleProfiles', Number(value))
+                                    }}
+                                    value={field.value?.toString()}
+                                    required
                                 >
-                                    <Plus size={14} className='text-green-500' />
-                                </button>
-                                <button
-                                    type='button'
-                                    className='w-6 h-5 flex items-center justify-center hover:bg-gray-200'
-                                    onClick={() => field.onChange(Math.max(1, field.value - 1))}
-                                >
-                                    <Minus size={14} className='text-yellow-500' />
-                                </button>
+                                    <FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder='Выберите профиль транспорта' />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        {vehicleProfiles.map(profile => (
+                                            <SelectItem key={profile.id} value={profile.id.toString()}>
+                                                {profile.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={control}
+                        name='vehicleCount'
+                        defaultValue={1}
+                        render={({ field }) => (
+                            <div className='flex items-center border rounded-lg overflow-hidden w-24 h-[37px] ml-0 md:ml-4'>
+                                <div className='flex-1 flex items-center justify-center text-xl font-semibold'>
+                                    {field.value}
+                                </div>
+                                <div className='flex flex-col border-l'>
+                                    <button
+                                        type='button'
+                                        className='w-6 h-5 flex items-center justify-center hover:bg-gray-200'
+                                        onClick={() => field.onChange(field.value + 1)}
+                                    >
+                                        <Plus size={14} className='text-green-500' />
+                                    </button>
+                                    <button
+                                        type='button'
+                                        className='w-6 h-5 flex items-center justify-center hover:bg-gray-200'
+                                        onClick={() => field.onChange(Math.max(1, field.value - 1))}
+                                    >
+                                        <Minus size={14} className='text-yellow-500' />
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    )}
-                />
+                        )}
+                    />
+                </div>
             </div>
         </div>
     )

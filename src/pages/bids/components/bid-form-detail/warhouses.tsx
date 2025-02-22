@@ -24,10 +24,10 @@ function Warehouses({ warehouses }) {
   const removeWarehouse = (index) => remove(index)
 
   return (
-    <div>
+    <div className='md:mb-0 mb-6' >
       <h1 className='font-bold mb-2'>Склад клиента</h1>
       {fields.map((field, index) => (
-        <div key={field.id} className='grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-4 mb-2'>
+        <div key={field.id} className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-4 mb-2'>
           <FormField
             control={control}
             name={`warehouses.${index}.name`}

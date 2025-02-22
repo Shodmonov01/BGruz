@@ -181,29 +181,31 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                 </div>
                 {errorMessage && <div className='text-red-500 text-center py-2'>{errorMessage}</div>}
                 <form onSubmit={handleSubmit(onSubmit)} className='space-y-4' autoComplete='off'>
-                    <div className='space-y-4 px-4'>
-                        <BidDetails
-                            filteredClients={clients}
-                            vehicleProfiles={vehicleProfiles}
-                            handleClientChange={handleClientChange}
-                            setOperationType={setOperationType}
-                            setTransportType={setTransportType}
-                        />
+                    <div className='space-y-4'>
+                        <div className='md:px-0 px-4'>
+                            <BidDetails
+                                filteredClients={clients}
+                                vehicleProfiles={vehicleProfiles}
+                                handleClientChange={handleClientChange}
+                                setOperationType={setOperationType}
+                                setTransportType={setTransportType}
+                            />
+                        </div>
                         <div className={isClientSelected ? '' : 'opacity-50 pointer-events-none'}>
-                            <div className='px-4'>
                                 <BidDate />
-                            </div>
-                            <div className='bg-primary text-center text-[26px] text-white my-3 py-3'>
+                            <div className='bg-secondary md:bg-primary text-center text-[26px] md:text-white my-3 py-3'>
                                 <p>Маршрут</p>
                             </div>
-                            {!hideTerminal1 && <TerminalOne terminals={terminals} />}
-                            <Warehouses warehouses={warehouses} />
-                            {!hideTerminal2 && <TerminalTwo terminals={terminals} />}
-                            <div className='bg-primary text-center text-[26px] text-white my-3 py-3'>
+                            <div className='px-4 '>
+                                {!hideTerminal1 && <TerminalOne terminals={terminals} />}
+                                <Warehouses warehouses={warehouses} />
+                                {!hideTerminal2 && <TerminalTwo terminals={terminals} />}
+                            </div>
+                            <div className='bg-secondary md:bg-primary text-center text-[26px] md:text-white my-3 py-3'>
                                 <p>Финансы</p>
                             </div>
-                            {/* @ts-expect-error что нибудь придумаем */}
-                            <BidDescribe extraServices={extraServices} />
+                                {/* @ts-expect-error что нибудь придумаем */}
+                                <BidDescribe extraServices={extraServices} />
                         </div>
                     </div>
                     {errorMessage && <div className='text-red-500 text-center py-2'>{errorMessage}</div>}
