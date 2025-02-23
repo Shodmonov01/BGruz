@@ -152,7 +152,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
             }
 
             const res = await postData('api/v1/bids', payload, token)
-            // modalClose()
+            modalClose()
             // refreshBids()
             // window.location.reload()
             console.log('res', res)
