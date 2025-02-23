@@ -88,7 +88,7 @@ export default function BidsPage() {
         }
     }
 
-    // useBidsWebSocket(refreshTable);
+    useBidsWebSocket(refreshTable);
     // useBidsWebSocket();
 
     return (
