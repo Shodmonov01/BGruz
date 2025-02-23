@@ -10,6 +10,7 @@ import { useGetBids } from '@/hooks/useGetBids'
 import BidsTableMobile from './components/bidsTableMobile'
 import BidsTable from './components/BidsTable'
 import { TotalsProvider } from '@/lib/TotalsContext'
+import { useBidsWebSocket } from '@/hooks/useBidsWebSocket'
 
 export default function BidsPage() {
     const [searchParams] = useSearchParams()
@@ -86,6 +87,9 @@ export default function BidsPage() {
             setSize(prev => prev + 50)
         }
     }
+
+    // useBidsWebSocket(refreshTable);
+    useBidsWebSocket();
 
     return (
         <div className='py-4 md:px-4'>

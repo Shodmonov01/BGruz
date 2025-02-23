@@ -154,7 +154,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
             const res = await postData('api/v1/bids', payload, token)
             modalClose()
             // refreshBids()
-            window.location.reload()
+            // window.location.reload()
             console.log('res', res)
         } catch (error: any) {
             console.error('Ошибка при создании заявки:', error)
@@ -182,7 +182,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                 {errorMessage && <div className='text-red-500 text-center py-2'>{errorMessage}</div>}
                 <form onSubmit={handleSubmit(onSubmit)} className='space-y-4' autoComplete='off'>
                     <div className='space-y-4'>
-                        <div className='md:px-0 px-4'>
+                        <div>
                             <BidDetails
                                 filteredClients={clients}
                                 vehicleProfiles={vehicleProfiles}
@@ -201,9 +201,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                                 <Warehouses warehouses={warehouses} />
                                 {!hideTerminal2 && <TerminalTwo terminals={terminals} />}
                             </div>
-                            <div className='bg-secondary md:bg-primary text-center text-[26px] md:text-white my-3 py-3'>
-                                <p>Финансы</p>
-                            </div>
+                            
                                 {/* @ts-expect-error что нибудь придумаем */}
                                 <BidDescribe extraServices={extraServices} />
                         </div>

@@ -41,7 +41,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
 
     return (
         <div>
-            <div className='flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-16 my-6'>
+            <div className='flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-16 my-6 md:px-0 px-4'>
                 <h1 className='font-bold'>Тип перевозки</h1>
                 <FormField
                     control={control}
@@ -115,7 +115,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
             </div>
 
             <Separator className='mb-4' />
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-4'>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-4 md:px-0 px-4'>
                 <FormField
                     control={control}
                     name='client'
@@ -204,12 +204,12 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                 </div>
             </div>
 
-            <div className='flex flex-col md:flex-row items-start md:items-center gap-2  my-6'>
+            <div className='flex flex-col md:flex-row items-start md:items-center gap-2  my-6 md:px-0 px-4 md:py-0 py-3 bg-secondary md:bg-transparent'>
                 <h1 className='font-bold mr-20'>
                     Профиль <br className='hidden md:block' /> Транспорта
                 </h1>
 
-                <div className='flex gap-3'>
+                <div className='flex gap-3 '>
                     <FormField
                         control={control}
                         name='vehicleProfiles'
@@ -241,35 +241,71 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                             </FormItem>
                         )}
                     />
-                    <FormField
-                        control={control}
-                        name='vehicleCount'
-                        defaultValue={1}
-                        render={({ field }) => (
-                            <div className='flex items-center border rounded-lg overflow-hidden w-24 h-[37px] ml-0 md:ml-4'>
-                                <div className='flex-1 flex items-center justify-center text-xl font-semibold'>
-                                    {field.value}
+                    <div className='hidden md:block'>
+                        <FormField
+                            control={control}
+                            name='vehicleCount'
+                            defaultValue={1}
+                            render={({ field }) => (
+                                <div className='flex items-center border rounded-lg overflow-hidden w-24 h-[37px] ml-0 md:ml-4 mt-4 md:mt-0'>
+                                    <div className='flex-1 flex items-center justify-center text-xl font-semibold'>
+                                        {field.value}
+                                    </div>
+                                    <div className='flex flex-col border-l'>
+                                        <button
+                                            type='button'
+                                            className='w-6 h-5 flex items-center justify-center hover:bg-gray-200'
+                                            onClick={() => field.onChange(field.value + 1)}
+                                        >
+                                            <Plus size={14} className='text-green-500' />
+                                        </button>
+                                        <button
+                                            type='button'
+                                            className='w-6 h-5 flex items-center justify-center hover:bg-gray-200'
+                                            onClick={() => field.onChange(Math.max(1, field.value - 1))}
+                                        >
+                                            <Minus size={14} className='text-yellow-500' />
+                                        </button>
+                                    </div>
                                 </div>
-                                <div className='flex flex-col border-l'>
-                                    <button
-                                        type='button'
-                                        className='w-6 h-5 flex items-center justify-center hover:bg-gray-200'
-                                        onClick={() => field.onChange(field.value + 1)}
-                                    >
-                                        <Plus size={14} className='text-green-500' />
-                                    </button>
-                                    <button
-                                        type='button'
-                                        className='w-6 h-5 flex items-center justify-center hover:bg-gray-200'
-                                        onClick={() => field.onChange(Math.max(1, field.value - 1))}
-                                    >
-                                        <Minus size={14} className='text-yellow-500' />
-                                    </button>
-                                </div>
-                            </div>
-                        )}
-                    />
+                            )}
+                        />
+                    </div>
                 </div>
+            </div>
+            <div className='block md:hidden md:px-0 px-4'>
+                
+                <h1 className='font-bold mr-20'>
+                Количество
+                </h1>
+                <FormField
+                    control={control}
+                    name='vehicleCount'
+                    defaultValue={1}
+                    render={({ field }) => (
+                        <div className='flex items-center border rounded-lg overflow-hidden w-24 h-[37px] ml-0 md:ml-4 mt-4 md:mt-0'>
+                            <div className='flex-1 flex items-center justify-center text-xl font-semibold'>
+                                {field.value}
+                            </div>
+                            <div className='flex flex-col border-l'>
+                                <button
+                                    type='button'
+                                    className='w-6 h-5 flex items-center justify-center hover:bg-gray-200'
+                                    onClick={() => field.onChange(field.value + 1)}
+                                >
+                                    <Plus size={14} className='text-green-500' />
+                                </button>
+                                <button
+                                    type='button'
+                                    className='w-6 h-5 flex items-center justify-center hover:bg-gray-200'
+                                    onClick={() => field.onChange(Math.max(1, field.value - 1))}
+                                >
+                                    <Minus size={14} className='text-yellow-500' />
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                />
             </div>
         </div>
     )

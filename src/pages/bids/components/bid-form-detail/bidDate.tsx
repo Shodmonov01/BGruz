@@ -89,7 +89,7 @@ function BidDate() {
                     />
                 </div>
             </div>
-            <div className='flex items-center my-7 md:my-0'>
+            <div className='flex items-center my-7 md:my-0 md:px-0 px-4'>
                 <h1 className='font-bold mr-16'>Время подачи</h1>
                 <FormField
                     control={control}
