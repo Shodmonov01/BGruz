@@ -30,11 +30,11 @@ export function useBidsWebSocket(onBidUpdate?: () => void) {
             }
         };
 
-        ws.current.onclose = (event) => {
-            console.log(`❌ WebSocket закрыт (${event.code}), попытка переподключения через 3 сек...`);
-            stopHeartbeat(); // Останавливаем пинг
-            reconnectTimeout.current = setTimeout(connect, 30000); // Переподключаемся через 3 секунды
-        };
+        // ws.current.onclose = (event) => {
+        //     console.log(`❌ WebSocket закрыт (${event.code}), попытка переподключения через 3 сек...`);
+        //     stopHeartbeat(); // Останавливаем пинг
+        //     reconnectTimeout.current = setTimeout(connect, 30000); // Переподключаемся через 3 секунды
+        // };
 
         ws.current.onerror = (error) => {
             console.error("⚠️ WebSocket ошибка:", error);
