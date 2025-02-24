@@ -52,8 +52,9 @@ export default function OrderPage() {
                 }
 
                 try {
+                    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
                     const token = localStorage.getItem('authToken') || ''
-                    const response = await fetch('https://portal.bgruz.com/api/v1/orders/getbatch', {
+                    const response = await fetch(`${API_BASE_URL}/api/v1/orders/getbatch`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

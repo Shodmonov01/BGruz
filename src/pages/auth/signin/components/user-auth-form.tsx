@@ -29,13 +29,15 @@ export default function UserAuthForm() {
 
     const onSubmit = async (data: UserFormValue) => {
         try {
+            const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
             setLoading(true)
             const params = new URLSearchParams()
             params.append('username', data.username)
             params.append('password', data.password)
 
             // Отправляем запрос на получение токена
-            const response = await axios.post('https://portal.bgruz.com/api/v1/auth/token', params, {
+            const response = await axios.post(`${API_BASE_URL}/api/v1/auth/token`, params, {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
@@ -46,7 +48,7 @@ export default function UserAuthForm() {
                 localStorage.setItem('authToken', token)
 
                 // Получаем данные текущего пользователя
-                const userResponse = await axios.get('https://portal.bgruz.com/api/v1/auth/currentuser', {
+                const userResponse = await axios.get(`${API_BASE_URL}/api/v1/auth/currentuser`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
