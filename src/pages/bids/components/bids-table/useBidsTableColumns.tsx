@@ -361,7 +361,8 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 accessorKey: 'clientName',
                 header: 'Клиент',
                 size: 150,
-                accessorFn: row => row.client?.organizationName ?? '—',
+                // accessorFn: row => row.client?.organizationName ?? '—',
+                accessorFn: (row: Bid) => row.clientName && typeof row.clientName === 'object' ? row.clientName.organizationName : '—',
                 searchable: true,
                 filterType: 'fuzzy'
             },
@@ -369,7 +370,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 accessorKey: 'customerName',
                 header: 'Заказчик',
                 size: 150,
-                accessorFn: row => row.customer?.organizationName ?? '—',
+                accessorFn: (row: Bid) => row.customerName && typeof row.customerName === 'object' ? row.customerName.organizationName : '—',
                 searchable: true,
                 filterType: 'fuzzy'
             },
