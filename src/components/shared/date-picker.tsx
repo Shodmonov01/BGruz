@@ -16,7 +16,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ value, onChange, minDate, disab
     return (
         <Popover>
             <PopoverTrigger asChild disabled={disabled}>
-                <Button variant='outline' className='w-full justify-start text-left' disabled={disabled}>
+                <Button variant='outlineSecondary' className='w-full justify-start text-left px-3 py-5 md:px-4 md:py-6 text-base md:text-xl' disabled={disabled}>
                     {value ? format(value, 'dd.MM.yyyy') : 'Выберите дату'}
                     <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
                 </Button>

@@ -240,54 +240,55 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                 </div>
             </div>
 
-                <div className='bg-slate-300 text-center text-[26px]  my-3 py-3'>
-                    <p>Транспорт</p>
-                </div>
+            <div className='bg-slate-300 text-center text-[26px]  my-3 py-3'>
+                <p>Транспорт</p>
+            </div>
             <div className='flex flex-col md:flex-row items-start md:items-center gap-2  my-6 md:px-0 px-4 md:py-0 py-3'>
                 {/* <h1 className='font-bold mr-20'>
                     Профиль <br className='hidden md:block' /> Транспорта
                 </h1> */}
 
-
-                <div className='flex gap-3 '>
-                    <FormField
-                        control={control}
-                        name='vehicleProfiles'
-                        rules={{ required: 'Заполните это поле.' }}
-                        render={({ field }) => (
-                            <FormItem>
-                                <Select
-                                    onValueChange={value => {
-                                        field.onChange(Number(value))
-                                        setValue('vehicleProfiles', Number(value))
-                                    }}
-                                    value={field.value?.toString()}
-                                    required
-                                >
-                                    <FormControl>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder='Профиль ТС' />
-                                        </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                        {vehicleProfiles.map(profile => (
-                                            <SelectItem key={profile.id} value={profile.id.toString()}>
-                                                {profile.name}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <div className=''>
+                <div className='flex gap-3 w-full items-center'>
+                    <div className='w-2/3'>
+                        <FormField
+                            control={control}
+                            name='vehicleProfiles'
+                            rules={{ required: 'Заполните это поле.' }}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <Select
+                                        onValueChange={value => {
+                                            field.onChange(Number(value))
+                                            setValue('vehicleProfiles', Number(value))
+                                        }}
+                                        value={field.value?.toString()}
+                                        required
+                                    >
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder='Профиль ТС' />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {vehicleProfiles.map(profile => (
+                                                <SelectItem key={profile.id} value={profile.id.toString()}>
+                                                    {profile.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+                    <div className='w-1/3'>
                         <FormField
                             control={control}
                             name='vehicleCount'
                             defaultValue={1}
                             render={({ field }) => (
-                                <div className='flex items-center border rounded-lg overflow-hidden w-24 h-[37px] ml-0 md:ml-4 mt-4 md:mt-0'>
+                                <div className='flex items-center border rounded-lg overflow-hidden h-[51px] '>
                                     <div className='flex-1 flex items-center justify-center text-xl font-semibold'>
                                         {field.value}
                                     </div>

@@ -28,8 +28,8 @@ function BidDate() {
             <div className='bg-slate-300 text-center text-[26px]  my-3 py-3'>
                                 <p>Дата и время подачи</p>
                             </div>
-            <div className='flex flex-col md:flex-row items-start md:items-center gap-2 py-6 md:px-0 px-4 '>
-                <p className='font-bold mr-11'>Дата подачи</p>
+            <div className='flex flex-col md:flex-row items-start md:items-center  py-6 md:px-0 px-4 '>
+                <p className='w-full md:w-1/6'>Дата подачи</p>
                 <div className='flex items-center gap-3'>
         
                     <FormField
@@ -37,7 +37,7 @@ function BidDate() {
                         name='startDate'
                         rules={{ required: 'Заполните это поле.' }}
                         render={({ field }) => (
-                            <FormItem>
+                            <FormItem className='md:w-60 w-full'>
                                 <FormControl>
                                     <DatePicker
                                         value={field.value ? new Date(field.value) : undefined}
@@ -71,7 +71,7 @@ function BidDate() {
                         name='endDate'
                         key={enableEndDate ? 'enabled' : 'disabled'}
                         render={({ field }) => (
-                            <FormItem>
+                            <FormItem className='md:w-[285px] w-full'>
                                 <FormControl>
                                     <DatePicker
                                         value={field.value ? new Date(field.value) : undefined}
@@ -93,9 +93,9 @@ function BidDate() {
             </div>
 
 
-           <div className='flex md:flex-col gap-5'>
-           <div className='md:my-0 md:px-0 px-4 block md:flex '>
-            <h1 className='font-bold mr-11 mb-2'>Срок доставки</h1>
+           <div className='flex md:flex-col gap-5 justify-between'>
+           <div className='md:my-0 md:px-0 px-4 block md:flex items-center'>
+            <h1 className='w-full md:w-1/6'>Срок доставки</h1>
                 <div className='flex items-center gap-3'>
         
                     <FormField
@@ -103,7 +103,7 @@ function BidDate() {
                         name='startDate'
                         rules={{ required: 'Заполните это поле.' }}
                         render={({ field }) => (
-                            <FormItem>
+                            <FormItem className='md:w-60 w-full'>
                                 <FormControl>
                                     <DatePicker
                                         value={field.value ? new Date(field.value) : undefined}
@@ -121,13 +121,13 @@ function BidDate() {
             
                 </div>
             </div>
-            <div className=' block md:flex md:my-0 md:px-0 px-4'>
-                <h1 className='font-bold mr-14 mb-2'>Время подачи</h1>
+            <div className=' block md:flex md:my-0 md:px-0 px-4 items-center'>
+                <h1 className='w-full md:w-1/6'>Время подачи</h1>
                 <FormField
                     control={control}
                     name='submissionTime'
                     render={({ field }) => (
-                        <FormItem>
+                        <FormItem className='md:w-60 w-full'>
                             <FormControl>
                                 <TimePicker value={field.value} onChange={field.onChange} />
                             </FormControl>

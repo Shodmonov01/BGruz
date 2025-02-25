@@ -23,11 +23,11 @@ function BidHeader({ setIsShortTable, isShortTable }) {
                         {isShortTable ? 'Полная версия' : 'Краткая версия'}
                     </Button>
                     <div className='relative flex items-center w-full max-w-md'>
-                        <Search className='absolute left-3 text-muted-foreground w-5 h-5' />
+                        <Search className='absolute left-4 text-muted-foreground w-5 h-5' />
                         <Input
                             type='text'
                             placeholder='Поиск заявки'
-                            className='pl-10 h-10 border border-border rounded-lg focus:ring-2 focus:ring-primary'
+                            className='!pl-10 border border-border rounded-lg focus:ring-2 focus:ring-primary'
                         />
                     </div>
                 </div>
