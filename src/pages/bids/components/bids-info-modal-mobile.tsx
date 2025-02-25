@@ -19,6 +19,13 @@ export function BidsOrderDialog({ open, onOpenChange, selectedBid, handleCloseMo
         return new Date(dateString).toLocaleDateString('ru-RU')
     }
 
+    const handleSave = async () => {
+        console.log('сохранён')
+    }
+    const handleEdit = () => {
+        console.log('edited')
+    }
+
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className='max-w-full h-full p-0 gap-0'>
@@ -189,18 +196,19 @@ export function BidsOrderDialog({ open, onOpenChange, selectedBid, handleCloseMo
                         </div>
                     </div>
 
-                    <div className='space-y-2 px-6 mt-3'>
-                        <Button className='w-full bg-[#F19737] text-white py-3 text-[18px]' color='red'>
-                            Создать заявку
-                        </Button>
-                        <Button className='w-full bg-[#F19737] text-white py-3 text-[18px]' color='red'>
+                    <div className='flex flex-col justify-center gap-4 py-6 px-4'>
+                        <Button
+                            // disabled={isReadOnly}
+                            onClick={handleSave}
+                            className='bg-orange-500 hover:bg-orange-600 text-white'
+                        >
                             Сохранить изменения
                         </Button>
-                        <Button className='w-full bg-[#F19737] text-white py-3 text-[18px]' color='red'>
-                            Сохранить на новую
+                        <Button  className='bg-orange-500 hover:bg-orange-600 text-white'>
+                            Сохранить заявку как новую
                         </Button>
-                        <Button className='w-full bg-[#E6E6E6] text-[#1E293B] py-3 text-[18px]' color='red'>
-                            Отмена
+                        <Button onClick={handleEdit} className='bg-orange-500 hover:bg-orange-600 text-white'>
+                            Редактировать
                         </Button>
                     </div>
                 </div>

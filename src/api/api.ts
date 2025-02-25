@@ -1,7 +1,6 @@
 import axios from 'axios'
 
  const API_URL = axios.create({
-    // baseURL: 'https://portal.bgruz.com'
     baseURL: import.meta.env.VITE_API_BASE_URL
 })
 
@@ -67,7 +66,7 @@ export const fetchPublicData = async endpoint => {
     }
 }
 
-export const fetchPrivateData = async (endpoint, token) => {
+export const fetchPrivateData = async <T>(endpoint: string, token: string): Promise<T> => {
     try {
         const response = await API_URL.get(`/${endpoint}`, {
             headers: {

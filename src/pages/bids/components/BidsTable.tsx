@@ -259,6 +259,9 @@ localFilters,
                 <ScrollBar orientation='horizontal' />
             </ScrollArea>
 
+
+
+
             {selectedBid && (
                 <BidsInfoModal
                     handleCloseModal={handleCloseModal}

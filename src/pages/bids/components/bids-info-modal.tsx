@@ -8,15 +8,28 @@ import BidDetails from './bid-info-modal-details/BidDetails'
 import BidRoute from './bid-info-modal-details/BidRoute'
 import BidFinance from './bid-info-modal-details/BidFinance'
 
+
+interface OrganizationData {
+    terminals: { id: number; name: string; description: string }[];
+    warehouses: { id: number; name: string; description: string }[];
+    // vehicleProfiles: { id: number; name: string }[];
+    vehicleProfiles: Pick<VehicleProfile, "id" | "name">[];
+    extraServices: { id: number; name: string; description: string }[];
+}
+
 function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
     const [formData, setFormData] = useState({ ...selectedBid })
     const [isReadOnly, setIsReadOnly] = useState<boolean>(true)
     const [clients, setClients] = useState<UserContext[]>([])
     const [terminals, setTerminals] = useState<Terminal[]>([])
     const [warehouses, setWarehouses] = useState<Warehouse[]>([])
+    // const [vehicleProfiles, setVehicleProfiles] = useState<VehicleProfile[]>([])
+    // const [extraServices, setExtraServices] = useState([])
     const [vehicleProfiles, setVehicleProfiles] = useState<VehicleProfile[]>([])
-    const [extraServices, setExtraServices] = useState([])
-    const [data, setData] = useState()
+    const [extraServices, setExtraServices] = useState<{ id: number; name: string; description: string }[]>([])
+    
+    // const [data, setData] = useState()
+    const [data, setData] = useState<OrganizationData | undefined>(undefined);
     const [isFetched, setIsFetched] = useState(true)
     const [originalData, setOriginalData] = useState({ ...selectedBid }) 
 
@@ -28,8 +41,8 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
     useEffect(() => {
         const loadClients = async () => {
             try {
-                const token = localStorage.getItem('authToken')
-                const data = await fetchPrivateData('api/v1/organization/clients', token)
+                const token = localStorage.getItem('authToken') || ''
+                const data = await fetchPrivateData<UserContext[]>('api/v1/organization/clients', token)
                 setClients(data)
             } catch (error) {
                 console.error('Ошибка при загрузке клиентов:', error)
@@ -73,13 +86,14 @@ function BidsInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
     const handleClientChange = async (clientId: string) => {
         handleChange('client', clientId)
         try {
-            const token = localStorage.getItem('authToken')
-            const data = await fetchPrivateData(`api/v1/organization/?organization_id=${clientId}`, token)
+            const token = localStorage.getItem('authToken') || ''
+            const data = await fetchPrivateData<OrganizationData>(`api/v1/organization/?organization_id=${clientId}`, token)
             setData(data)
 
             setTerminals(data.terminals || [])
             setWarehouses(data.warehouses || [])
-            setVehicleProfiles(data.vehicleProfiles || [])
+            // setVehicleProfiles(data.vehicleProfiles || [])
+            setVehicleProfiles(data.vehicleProfiles as VehicleProfile[]);
             setExtraServices(data.extraServices || [])
         } catch (error) {
             console.error('Ошибка при загрузке данных организации:', error)

@@ -44,6 +44,7 @@ interface Bid {
         terminal2: { cityName: string }
         warehouses: Array<{ cityName: string }>
         vehicleProfile: { name: string }
+        filingTime: string
     }
     [key: string]: unknown
 }
@@ -144,12 +145,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 header: 'Время подачи',
                 size: 120,
                 searchable: true,
-                // accessorFn: row => row.buyBid?.fillingTime || '—'
-                accessorFn: (row: Bid) => 
-                    row.buyBid && typeof row.buyBid === 'object' && 'filingTime' in row.buyBid
-                        ? row.buyBid.filingTime
-                        : '—'
-                ,
+                accessorFn: (row: Bid) => row.buyBid?.filingTime ?? '—',
                 filterType: 'dateRange'
             },
             
@@ -341,12 +337,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 header: 'Заказчик',
                 size: 150,
                 searchable: true,
-                // accessorFn: row => row.customer?.organizationName ?? '—'
-                accessorFn: (row: Bid) => 
-                    row.customerName && typeof row.customerName === 'object' 
-                        ? row.customerName.organizationName 
-                        : '—'
-                ,
+                accessorFn: (row: Bid) => row.customerName?.organizationName ?? '—',
                 filterType: 'fuzzy'
             },
             {
@@ -354,12 +345,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 header: 'Перевозчик',
                 size: 150,
                 searchable: true,
-                // accessorFn: row => row.carrier?.organizationName ?? '—'
-                accessorFn: (row: Bid) => 
-                    row.carrier && typeof row.carrier === 'object' 
-                        ? row.carrier.organizationName 
-                        : '—'
-                ,
+                accessorFn: (row: Bid) => row.carrier?.organizationName ?? '—',
                 filterType: 'fuzzy'
             },
         ]

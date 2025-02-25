@@ -5,6 +5,10 @@ const ServerTimeContext = createContext<number | null>(null)
 
 export const useServerTime = () => useContext(ServerTimeContext)
 
+interface ServerTimeResponse {
+    currentTime: string;
+}
+
 export const ServerTimeProvider = ({ children }: { children: React.ReactNode }) => {
     const [serverTime, setServerTime] = useState<number | null>(null)
 
@@ -12,7 +16,8 @@ export const ServerTimeProvider = ({ children }: { children: React.ReactNode }) 
         const fetchTime = async () => {
             try {
                 const token = localStorage.getItem("authToken");
-                const res = await fetchPrivateData("api/v1/time/now", token);
+                if (!token) return;
+                const res = await fetchPrivateData("api/v1/time/now", token) as ServerTimeResponse;
     
                 const parsedTime = new Date(res.currentTime).getTime();
     

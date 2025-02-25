@@ -3,17 +3,18 @@ import { FormControl, FormField, FormItem, FormMessage } from '@/components/ui/f
 import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useEffect, useState } from 'react'
+import DatePicker from '@/components/shared/date-picker'
 
 function BidDate() {
     const { control, setValue } = useFormContext()
     const startDate = useWatch({ control, name: 'startDate' })
     const enableEndDate = useWatch({ control, name: 'enableEndDate' })
-    const [today, setToday] = useState('')
+    // const [today, setToday] = useState('')
 
-    useEffect(() => {
-        const todayDate = new Date().toISOString().split('T')[0]
-        setToday(todayDate)
-    }, [])
+    // useEffect(() => {
+    //     const todayDate = new Date().toISOString().split('T')[0]
+    //     setToday(todayDate)
+    // }, [])
 
     useEffect(() => {
         if (!enableEndDate) {
@@ -26,7 +27,7 @@ function BidDate() {
             <div className='flex flex-col md:flex-row items-start md:items-center gap-4 py-6 md:px-0 px-4 bg-secondary md:bg-transparent'>
                 <h1 className='font-bold mr-11'>Дата Погрузки</h1>
                 <div className='flex items-center gap-3'>
-                    <FormField
+                    {/* <FormField
                         control={control}
                         name='startDate'
                         rules={{ required: 'Заполните это поле.' }}
@@ -44,7 +45,25 @@ function BidDate() {
                                 <FormMessage />
                             </FormItem>
                         )}
+                    /> */}
+                    <FormField
+                        control={control}
+                        name='startDate'
+                        rules={{ required: 'Заполните это поле.' }}
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormControl>
+                                    <DatePicker
+                                        value={field.value ? new Date(field.value) : undefined}
+                                        onChange={date => field.onChange(date?.toISOString().split('T')[0])}
+                                        minDate={new Date()} // Ограничение выбора только сегодняшним и будущими днями
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
                     />
+
                     <h3>ПО</h3>
                     <FormField
                         control={control}
@@ -60,7 +79,7 @@ function BidDate() {
                             </FormItem>
                         )}
                     />
-                    <FormField
+                    {/* <FormField
                         control={control}
                         name='endDate'
                         render={({ field }) => (
@@ -80,6 +99,29 @@ function BidDate() {
                                                 : today
                                         } // Запрещаем выбирать тот же день
                                         className='px-4 py-4 shadow-inner drop-shadow-xl'
+                                        disabled={!enableEndDate}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    /> */}
+                    <FormField
+                        control={control}
+                        name='endDate'
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormControl>
+                                    <DatePicker
+                                        value={field.value ? new Date(field.value) : undefined}
+                                        onChange={date => field.onChange(date?.toISOString().split('T')[0])}
+                                        minDate={
+                                            startDate
+                                                ? new Date(
+                                                      new Date(startDate).setDate(new Date(startDate).getDate() + 1)
+                                                  )
+                                                : new Date()
+                                        }
                                         disabled={!enableEndDate}
                                     />
                                 </FormControl>

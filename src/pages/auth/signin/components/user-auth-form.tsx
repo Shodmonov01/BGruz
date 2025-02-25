@@ -5,8 +5,9 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { useState } from 'react'
-import axios from 'axios'
 import { useRouter } from '@/routes/hooks'
+import { Eye, EyeOff } from 'lucide-react'
+import { fetchPrivateData, postData2 } from '@/api/api'
 
 const formSchema = z.object({
     username: z.string().nonempty({ message: 'Введите логин' }),
@@ -18,6 +19,7 @@ type UserFormValue = z.infer<typeof formSchema>
 export default function UserAuthForm() {
     const router = useRouter()
     const [loading, setLoading] = useState(false)
+    const [showPassword, setShowPassword] = useState(false)
 
     const form = useForm<UserFormValue>({
         resolver: zodResolver(formSchema),
@@ -29,35 +31,23 @@ export default function UserAuthForm() {
 
     const onSubmit = async (data: UserFormValue) => {
         try {
-            const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
             setLoading(true)
             const params = new URLSearchParams()
             params.append('username', data.username)
             params.append('password', data.password)
 
-            // Отправляем запрос на получение токена
-            const response = await axios.post(`${API_BASE_URL}/api/v1/auth/token`, params, {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            })
+            const response = await postData2<{ access_token: string }>("api/v1/auth/token", params);
 
-            const token = response.data.access_token
+
+            const token = response.access_token
             if (token) {
                 localStorage.setItem('authToken', token)
 
-                // Получаем данные текущего пользователя
-                const userResponse = await axios.get(`${API_BASE_URL}/api/v1/auth/currentuser`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                })
-                console.log('User info:', userResponse.data)
+                const userResponse = await fetchPrivateData<{ username: string }>("api/v1/auth/currentuser", token);
 
-                localStorage.setItem('username', userResponse.data.username)
+                localStorage.setItem('username', userResponse.username)
 
-                // Перенаправление после входа
                 router.push('/bids')
             }
         } catch (error) {
@@ -78,7 +68,13 @@ export default function UserAuthForm() {
                         <FormItem>
                             <FormLabel>Логин</FormLabel>
                             <FormControl>
-                                <Input className='py-6' type='text' placeholder='Введите логин...' disabled={loading} {...field} />
+                                <Input
+                                    className='py-6'
+                                    type='text'
+                                    placeholder='Введите логин...'
+                                    disabled={loading}
+                                    {...field}
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -89,10 +85,25 @@ export default function UserAuthForm() {
                     control={form.control}
                     name='password'
                     render={({ field }) => (
-                        <FormItem>
+                        <FormItem className='relative'>
                             <FormLabel>Пароль</FormLabel>
                             <FormControl>
-                                <Input className='py-6' type='password' placeholder='Введите пароль...' disabled={loading} {...field} />
+                                <div className='relative'>
+                                    <Input
+                                        className='py-6 pr-10'
+                                        type={showPassword ? 'text' : 'password'}
+                                        placeholder='Введите пароль...'
+                                        disabled={loading}
+                                        {...field}
+                                    />
+                                    <button
+                                        type='button'
+                                        className='absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700'
+                                        onClick={() => setShowPassword(prev => !prev)}
+                                    >
+                                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                    </button>
+                                </div>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -102,7 +113,6 @@ export default function UserAuthForm() {
                 <Button disabled={loading} className='ml-auto w-full p-6' type='submit'>
                     Вход
                 </Button>
-              
             </form>
         </Form>
     )

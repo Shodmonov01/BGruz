@@ -39,6 +39,18 @@ interface BidFormData {
     extraServices: Array<{ id: number; count: number }>
 }
 
+interface ClientData {
+    organizationId: number;
+    organizationName: string;
+}
+
+interface OrganizationData {
+    terminals: { id: number; name: string; description: string }[];
+    warehouses: { id: number; name: string; description: string }[];
+    vehicleProfiles: { id: number; name: string }[];
+    extraServices: { id: number; name: string; description: string }[];
+}
+
 const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
     const [clients, setClients] = useState<{ organizationId: number; organizationName: string }[]>([])
     const [terminals, setTerminals] = useState<{ id: number; name: string; description: string }[]>([])
@@ -55,8 +67,8 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
     useEffect(() => {
         const loadClients = async () => {
             try {
-                const token = localStorage.getItem('authToken')
-                const data = await fetchPrivateData('api/v1/organization/clients', token)
+                const token = localStorage.getItem('authToken') || ''
+                const data = await fetchPrivateData<ClientData[]>('api/v1/organization/clients', token)
                 setClients(data)
             } catch (error) {
                 console.error('Ошибка при загрузке клиентов:', error)
@@ -93,8 +105,8 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
     const handleClientChange = async (clientId: string) => {
         setValue('client', clientId)
         try {
-            const token = localStorage.getItem('authToken')
-            const data = await fetchPrivateData(`api/v1/organization/?organization_id=${clientId}`, token)
+            const token = localStorage.getItem('authToken') || ''
+            const data = await fetchPrivateData<OrganizationData>(`api/v1/organization/?organization_id=${clientId}`, token)
 
             setTerminals(data.terminals || [])
             setWarehouses(data.warehouses || [])
@@ -192,7 +204,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                             />
                         </div>
                         <div className={isClientSelected ? '' : 'opacity-50 pointer-events-none'}>
-                                <BidDate />
+                            <BidDate />
                             <div className='bg-secondary md:bg-primary text-center text-[26px] md:text-white my-3 py-3'>
                                 <p>Маршрут</p>
                             </div>
@@ -201,9 +213,9 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                                 <Warehouses warehouses={warehouses} />
                                 {!hideTerminal2 && <TerminalTwo terminals={terminals} />}
                             </div>
-                            
-                                {/* @ts-expect-error что нибудь придумаем */}
-                                <BidDescribe extraServices={extraServices} />
+
+                            {/* @ts-expect-error что нибудь придумаем */}
+                            <BidDescribe extraServices={extraServices} />
                         </div>
                     </div>
                     {errorMessage && <div className='text-red-500 text-center py-2'>{errorMessage}</div>}
