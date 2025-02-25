@@ -231,19 +231,23 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                             </FormItem>
                         )}
                     />
-                    <div className='mt-1'>
+                    {/* <div className='mt-1'>
                         <h3>Контактное лицо:</h3>
                         <h3>
                             Иванов Иван | <a href='tel:+79988516060'>+79988516060</a>
                         </h3>
-                    </div>
+                    </div> */}
                 </div>
             </div>
 
-            <div className='flex flex-col md:flex-row items-start md:items-center gap-2  my-6 md:px-0 px-4 md:py-0 py-3 bg-secondary md:bg-transparent'>
-                <h1 className='font-bold mr-20'>
+                <div className='bg-slate-300 text-center text-[26px]  my-3 py-3'>
+                    <p>Транспорт</p>
+                </div>
+            <div className='flex flex-col md:flex-row items-start md:items-center gap-2  my-6 md:px-0 px-4 md:py-0 py-3'>
+                {/* <h1 className='font-bold mr-20'>
                     Профиль <br className='hidden md:block' /> Транспорта
-                </h1>
+                </h1> */}
+
 
                 <div className='flex gap-3 '>
                     <FormField
@@ -262,7 +266,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                 >
                                     <FormControl>
                                         <SelectTrigger>
-                                            <SelectValue placeholder='Выберите профиль транспорта' />
+                                            <SelectValue placeholder='Профиль ТС' />
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
@@ -277,7 +281,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                             </FormItem>
                         )}
                     />
-                    <div className='hidden md:block'>
+                    <div className=''>
                         <FormField
                             control={control}
                             name='vehicleCount'
@@ -309,7 +313,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                     </div>
                 </div>
             </div>
-            <div className='block md:hidden md:px-0 px-4'>
+            {/* <div className='block md:hidden md:px-0 px-4'>
                 <h1 className='font-bold mr-20'>Количество</h1>
                 <FormField
                     control={control}
@@ -339,7 +343,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                         </div>
                     )}
                 />
-            </div>
+            </div> */}
         </div>
     )
 }

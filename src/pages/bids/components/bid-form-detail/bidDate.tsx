@@ -25,8 +25,11 @@ function BidDate() {
 
     return (
         <div>
-            <div className='flex flex-col md:flex-row items-start md:items-center gap-4 py-6 md:px-0 px-4 bg-secondary md:bg-transparent'>
-                <h1 className='font-bold mr-11'>Дата погрузки</h1>
+            <div className='bg-slate-300 text-center text-[26px]  my-3 py-3'>
+                                <p>Дата и время подачи</p>
+                            </div>
+            <div className='flex flex-col md:flex-row items-start md:items-center gap-2 py-6 md:px-0 px-4 '>
+                <p className='font-bold mr-11'>Дата подачи</p>
                 <div className='flex items-center gap-3'>
         
                     <FormField
@@ -88,8 +91,38 @@ function BidDate() {
                     />
                 </div>
             </div>
-            <div className='flex items-center my-7 md:my-0 md:px-0 px-4'>
-                <h1 className='font-bold mr-14'>Время подачи</h1>
+
+
+           <div className='flex md:flex-col gap-5'>
+           <div className='md:my-0 md:px-0 px-4 block md:flex '>
+            <h1 className='font-bold mr-11 mb-2'>Срок доставки</h1>
+                <div className='flex items-center gap-3'>
+        
+                    <FormField
+                        control={control}
+                        name='startDate'
+                        rules={{ required: 'Заполните это поле.' }}
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormControl>
+                                    <DatePicker
+                                        value={field.value ? new Date(field.value) : undefined}
+                                        onChange={date => field.onChange(date?.toISOString().split('T')[0])}
+                                        minDate={new Date(new Date().setHours(0, 0, 0, 0))}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+      
+               
+            
+                </div>
+            </div>
+            <div className=' block md:flex md:my-0 md:px-0 px-4'>
+                <h1 className='font-bold mr-14 mb-2'>Время подачи</h1>
                 <FormField
                     control={control}
                     name='submissionTime'
@@ -103,6 +136,8 @@ function BidDate() {
                     )}
                 />
             </div>
+           </div>
+            
         </div>
     )
 }

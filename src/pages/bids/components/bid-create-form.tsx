@@ -205,10 +205,10 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                         </div>
                         <div className={isClientSelected ? '' : 'opacity-50 pointer-events-none'}>
                             <BidDate />
-                            <div className='bg-secondary md:bg-primary text-center text-[26px] md:text-white my-3 py-3'>
+                            <div className='bg-slate-300 text-center text-[26px]  my-3 py-3'>
                                 <p>Маршрут</p>
                             </div>
-                            <div className='px-4 flex flex-col gap-6'>
+                            <div className='px-4 md:px-0 flex flex-col gap-6'>
                                 {!hideTerminal1 && <TerminalOne terminals={terminals} />}
                                 <Warehouses warehouses={warehouses} />
                                 {!hideTerminal2 && <TerminalTwo terminals={terminals} />}
@@ -219,7 +219,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                         </div>
                     </div>
                     {errorMessage && <div className='text-red-500 text-center py-2'>{errorMessage}</div>}
-                    <div className='flex items-center justify-center gap-4'>
+                    <div className='flex flex-col-reverse md:flex-row md:px-0 px-4 md:items-center justify-center gap-4'>
                         <Button type='button' variant='secondary' size='lg' onClick={modalClose}>
                             Отмена
                         </Button>

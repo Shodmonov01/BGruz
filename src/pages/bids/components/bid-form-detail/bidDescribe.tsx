@@ -94,10 +94,12 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
     return (
         <div className='space-y-4 flex flex-col-reverse md:block'>
             <div>
-                <div className='bg-secondary md:bg-primary text-center text-[26px] md:text-white my-3 py-3'>
+                <div className='bg-slate-300 text-center text-[26px] my-3 py-3'>
                     <h1>Финансы</h1>
-                <h1 className='text-center f'>Все цены указаны без НДС</h1>
                 </div>
+                <h1 className='text-center'>Все цены указаны без НДС</h1>
+                <p className='md:hidden block md:px-0 px-4 mt-5 mb-[-8px]'>Цена перевозки</p>
+
                 <div className='flex items-center py-4 justify-between md:px-0 px-4'>
                     <FormField
                         control={control}
@@ -114,7 +116,8 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
                         )}
                     />
                     <div className='flex items-center gap-4'>
-                        <p>Цена</p>
+                        <p className='hidden md:block'>Цена перевозки</p>
+
 
                         <FormField
                             control={control}
@@ -156,7 +159,7 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
                                         checked={service.checked}
                                         onCheckedChange={() => handleCheckboxChange(index)}
                                     />
-                                    <p className=''>{service.name}</p>
+                                    <p className='text-base font-bold w-1/2'>{service.name}</p>
                                 </div>
                                 <div className='flex gap-5'>
                                     <Input
@@ -180,22 +183,25 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
                         ))
                     )}
 
-                    <div className='flex justify-end items-center gap-2 font-bold text-lg py-4 md:px-0 px-4'>
-                        <span className='text-red-600'>Полная стоимость рейса без НДС:</span>{' '}
-                        <Input type='text' readOnly value={totalSum.toLocaleString()} className='w-48 text-center' />
+                    <div className='flex justify-between items-center gap-2 font-bold text-lg py-4 md:px-0 px-4'>
+                        <span className='text-base md:text-xl w-1/2'>Полная стоимость рейса без НДС:</span>{' '}
+                        <Input type='text' readOnly value={totalSum.toLocaleString()} className='w-1/2 text-center' />
                     </div>
                 </div>
             </div>
 
             <div>
-                {' '}
-                <div className='md:px-0 px-4 md:py-0 py-2 bg-secondary md:bg-transparent'>
-                    <FormField
+                <div className=' md:py-0 py-2 mb-10'>
+                    <div className='bg-slate-300 text-center text-[26px]  my-3 py-3'>
+                        <p>Груз</p>
+                    </div>
+                    <div className='md:px-0 px-4'>
+                         <FormField
                         control={control}
                         name='cargoTitle'
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Груз</FormLabel>
+                                {/* <FormLabel className='text-base md:text-xl'>Груз</FormLabel> */}
                                 <FormControl>
                                     <Input
                                         placeholder='Груз'
@@ -207,6 +213,8 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
                             </FormItem>
                         )}
                     />
+                    </div>
+                   
                 </div>
                 <div className='md:px-0 px-4 '>
                     <FormField
@@ -214,11 +222,11 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
                         name='description'
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Описание</FormLabel>
+                                <FormLabel className='text-base md:text-xl'>Комментарии</FormLabel>
                                 <FormControl>
                                     <Textarea
                                         // className='min-w-full max-w-[300px] min-h-[40px] max-h-[300px] p-2 border rounded-md resize focus:outline-none focus:ring-2 focus:ring-blue-500'
-                                        placeholder='Описание'
+                                        placeholder='Комментарии'
                                         {...field}
                                     />
                                 </FormControl>

@@ -1,5 +1,30 @@
-import * as React from 'react';
+// import * as React from 'react';
 
+// import { cn } from '@/lib/utils';
+
+// export interface TextareaProps
+//   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+
+// const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+//   ({ className, ...props }, ref) => {
+//     return (
+//       <textarea
+//         className={cn(
+//           'flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-4 py-6 md:px-4 md:py-6 text-xl md:text-xl shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50',
+//           className
+//         )}
+//         ref={ref}
+//         {...props}
+//       />
+//     );
+//   }
+// );
+// Textarea.displayName = 'Textarea';
+
+// export { Textarea };
+
+
+import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 export interface TextareaProps
@@ -7,14 +32,24 @@ export interface TextareaProps
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, ...props }, ref) => {
+    const [height, setHeight] = React.useState('auto');
+
+    const handleInput = (e: React.FormEvent<HTMLTextAreaElement>) => {
+      const textarea = e.target as HTMLTextAreaElement;
+      setHeight('auto');
+      setHeight(`${textarea.scrollHeight}px`);
+    };
+
     return (
       <textarea
         className={cn(
-          'flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50',
+          'flex w-full min-h-[60px] rounded-md border border-input bg-transparent px-4 py-6 md:px-4 md:py-6 text-xl md:text-xl shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 resize-none', // 'resize-none' отключает изменение размера вручную
           className
         )}
         ref={ref}
         {...props}
+        style={{ height }}
+        onInput={handleInput}
       />
     );
   }

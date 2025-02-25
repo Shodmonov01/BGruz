@@ -139,7 +139,7 @@ const TimePicker: React.FC<TimePickerProps> = ({ value, onChange }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="w-full justify-start">
+        <Button variant="secondary" className="w-full justify-start">
           {inputValue || "Выберите время"}
         </Button>
       </DropdownMenuTrigger>
