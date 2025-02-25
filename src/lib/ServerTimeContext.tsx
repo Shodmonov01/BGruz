@@ -28,7 +28,7 @@ export const ServerTimeProvider = ({ children }: { children: React.ReactNode }) 
         };
     
         fetchTime();
-        const interval = setInterval(fetchTime, 10000);
+        const interval = setInterval(fetchTime, 30000);
         return () => clearInterval(interval);
     }, []);
     

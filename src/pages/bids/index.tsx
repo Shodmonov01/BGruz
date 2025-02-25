@@ -90,7 +90,6 @@ export default function BidsPage() {
     }
 
     useBidsWebSocket(refreshTable);
-    // useBidsWebSocket();
 
     return (
         <div className='py-4 md:px-4'>

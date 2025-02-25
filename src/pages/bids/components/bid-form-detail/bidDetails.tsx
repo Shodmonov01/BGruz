@@ -33,9 +33,21 @@ const BidDetails: React.FC<BidDetailsProps> = ({
     setTransportType
 }) => {
     const { control, setValue } = useFormContext()
-    const [open, setOpen] = useState(false)
-    const [search, setSearch] = useState('')
+    // const [open, setOpen] = useState(false)
+    // const [search, setSearch] = useState('')
     // const [count, setCount] = useState(0)
+    const [openClient, setOpenClient] = useState(false)
+    const [openRecipient, setOpenRecipient] = useState(false)
+    const [searchClient, setSearchClient] = useState('')
+    const [searchRecipient, setSearchRecipient] = useState('')
+
+    const filteredClientList = filteredClients.filter(client =>
+        client.organizationName.toLowerCase().includes(searchClient.toLowerCase())
+    )
+
+    const filteredRecipientList = filteredClients.filter(client =>
+        client.organizationName.toLowerCase().includes(searchRecipient.toLowerCase())
+    )
 
     const operationType = useWatch({ control, name: 'loadingType' })
 
@@ -127,11 +139,11 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                 onValueChange={value => {
                                     field.onChange(Number(value))
                                     handleClientChange(value)
-                                    setOpen(false)
+                                    setOpenClient(false)
                                 }}
                                 value={field.value?.toString()}
-                                open={open}
-                                onOpenChange={setOpen}
+                                open={openClient}
+                                onOpenChange={setOpenClient}
                             >
                                 <FormControl>
                                     <SelectTrigger>
@@ -142,13 +154,13 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                     <div className='p-2'>
                                         <Input
                                             placeholder='Поиск клиента...'
-                                            value={search}
-                                            onChange={e => setSearch(e.target.value)}
-                                            onFocus={() => setOpen(true)}
+                                            value={searchClient}
+                                            onChange={e => setSearchClient(e.target.value)}
+                                            onFocus={() => setOpenClient(true)}
                                             onKeyDown={e => e.stopPropagation()}
                                         />
                                     </div>
-                                    {filteredClients.map(client => (
+                                    {filteredClientList.map(client => (
                                         <SelectItem
                                             key={client.organizationId}
                                             value={client.organizationId.toString()}
@@ -172,7 +184,12 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                 <FormLabel className='font-bold text-[18px]'>
                                     {operationType === 'loading' ? 'Отправитель' : 'Получатель'}
                                 </FormLabel>
-                                <Select onValueChange={value => field.onChange(value)} value={field.value}>
+                                <Select
+                                    onValueChange={value => field.onChange(value)}
+                                    value={field.value}
+                                    open={openRecipient}
+                                    onOpenChange={setOpenRecipient}
+                                >
                                     <FormControl>
                                         <SelectTrigger>
                                             <SelectValue
@@ -180,8 +197,27 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                             />
                                         </SelectTrigger>
                                     </FormControl>
-                                    <SelectContent>
+                                    {/* <SelectContent>
                                         {filteredClients.map(client => (
+                                            <SelectItem
+                                                key={client.organizationId}
+                                                value={client.organizationId.toString()}
+                                            >
+                                                {client.organizationName}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent> */}
+                                    <SelectContent onCloseAutoFocus={e => e.preventDefault()}>
+                                        <div className='p-2'>
+                                            <Input
+                                                placeholder='Поиск...'
+                                                value={searchRecipient}
+                                                onChange={e => setSearchRecipient(e.target.value)}
+                                                onFocus={() => setOpenRecipient(true)}
+                                                onKeyDown={e => e.stopPropagation()}
+                                            />
+                                        </div>
+                                        {filteredRecipientList.map(client => (
                                             <SelectItem
                                                 key={client.organizationId}
                                                 value={client.organizationId.toString()}
@@ -274,10 +310,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                 </div>
             </div>
             <div className='block md:hidden md:px-0 px-4'>
-                
-                <h1 className='font-bold mr-20'>
-                Количество
-                </h1>
+                <h1 className='font-bold mr-20'>Количество</h1>
                 <FormField
                     control={control}
                     name='vehicleCount'

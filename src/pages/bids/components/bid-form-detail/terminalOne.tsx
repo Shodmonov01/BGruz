@@ -12,7 +12,6 @@ function TerminalOne({ terminals }) {
     const [search, setSearch] = useState('')
     const [isOpen, setIsOpen] = useState(false)
 
-
     const getTerminalTitle = () => {
         if (transportType === 'Контейнер') return 'Получить контейнер'
         if (transportType === 'Вагон' && loadingType === 'Выгрузка') return 'Терминал выгрузки'
@@ -55,14 +54,14 @@ function TerminalOne({ terminals }) {
                                 </FormControl>
                                 <SelectContent>
                                     {/* Поле для поиска */}
-                                    <div className="p-2">
+                                    <div className='p-2'>
                                         <Input
-                                            placeholder="Поиск терминала..."
+                                            placeholder='Поиск терминала...'
                                             value={search}
                                             onChange={e => setSearch(e.target.value)}
                                             onFocus={() => setIsOpen(true)}
                                             onKeyDown={e => e.stopPropagation()}
-                                            className="w-full px-3 py-2 border rounded-md"
+                                            className='w-full px-3 py-2 border rounded-md'
                                         />
                                     </div>
                                     {/* Список терминалов */}
@@ -73,7 +72,7 @@ function TerminalOne({ terminals }) {
                                             </SelectItem>
                                         ))
                                     ) : (
-                                        <div className="p-2 text-center text-gray-500">Ничего не найдено</div>
+                                        <div className='p-2 text-center text-gray-500'>Ничего не найдено</div>
                                     )}
                                 </SelectContent>
                             </Select>
