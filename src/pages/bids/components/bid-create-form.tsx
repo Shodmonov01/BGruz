@@ -208,7 +208,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                             <div className='bg-secondary md:bg-primary text-center text-[26px] md:text-white my-3 py-3'>
                                 <p>Маршрут</p>
                             </div>
-                            <div className='px-4 '>
+                            <div className='px-4 flex flex-col gap-6'>
                                 {!hideTerminal1 && <TerminalOne terminals={terminals} />}
                                 <Warehouses warehouses={warehouses} />
                                 {!hideTerminal2 && <TerminalTwo terminals={terminals} />}

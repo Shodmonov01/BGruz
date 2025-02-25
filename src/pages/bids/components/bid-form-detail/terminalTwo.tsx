@@ -3,6 +3,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Input } from '@/components/ui/input'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { Separator } from '@/components/ui/separator'
+import { useState } from 'react'
 
 function TerminalTwo({ terminals }) {
     const { control, setValue } = useFormContext()
@@ -10,11 +11,17 @@ function TerminalTwo({ terminals }) {
     const loadingType = useWatch({ control, name: 'loadingType' })
     const transportType = useWatch({ control, name: 'transportType' })
 
+    const [search, setSearch] = useState('')
+
     const getTerminalTitle = () => {
         if (transportType === 'Контейнер') return 'Сдать контейнер'
         if (transportType === 'Вагон' && loadingType === 'Погрузка') return 'Терминал погрузки'
         return 'Терминал 2'
     }
+
+    const sortedTerminals = [...terminals]
+        .sort((a, b) => a.name.localeCompare(b.name)) // Сортировка по алфавиту
+        .filter(t => t.name.toLowerCase().includes(search.toLowerCase())) // Фильтрация по поиску
 
     return (
         <div>
@@ -41,12 +48,33 @@ function TerminalTwo({ terminals }) {
                                         <SelectValue placeholder='Выберите терминал 2' />
                                     </SelectTrigger>
                                 </FormControl>
-                                <SelectContent>
+                                {/* <SelectContent>
                                     {terminals.map(terminal => (
                                         <SelectItem key={terminal.id} value={terminal.id.toString()}>
                                             {terminal.name}
                                         </SelectItem>
                                     ))}
+                                </SelectContent> */}
+                                <SelectContent>
+                                    {/* Поле для поиска */}
+                                    <div className='p-2'>
+                                        <Input
+                                            placeholder='Поиск терминала...'
+                                            value={search}
+                                            onChange={e => setSearch(e.target.value)}
+                                            className='w-full px-3 py-2 border rounded-md'
+                                        />
+                                    </div>
+                                    {/* Список терминалов */}
+                                    {sortedTerminals.length > 0 ? (
+                                        sortedTerminals.map(terminal => (
+                                            <SelectItem key={terminal.id} value={terminal.id.toString()}>
+                                                {terminal.name}
+                                            </SelectItem>
+                                        ))
+                                    ) : (
+                                        <div className='p-2 text-center text-gray-500'>Ничего не найдено</div>
+                                    )}
                                 </SelectContent>
                             </Select>
                             <FormMessage />

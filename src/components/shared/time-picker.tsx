@@ -1,22 +1,87 @@
-import React from "react";
-import TimePickerLib from "react-time-picker";
-import "react-time-picker/dist/TimePicker.css";
+import React, { useState, useEffect, useRef } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { format, addMinutes, startOfHour, isValid, parse } from "date-fns";
 
 interface TimePickerProps {
   value: string | undefined;
-  onChange: (time: string | null) => void;
+  onChange: (time: string) => void;
+  
 }
 
+const generateTimeOptions = (startTime: Date): string[] => {
+  const times: string[] = []; // Явно указываем, что это массив строк
+  let current: Date = addMinutes(startTime, Math.ceil(startTime.getMinutes() / 10) * 10); // Указываем, что current — это Date
+  const endTime: Date = addMinutes(current, 24 * 60); // Указываем, что endTime — это Date
+
+  while (current <= endTime) {
+    times.push(format(current, "HH:mm"));
+    current = addMinutes(current, 10);
+  }
+
+  return times;
+};
+
+
+
 const TimePicker: React.FC<TimePickerProps> = ({ value, onChange }) => {
+  const [inputValue, setInputValue] = useState(value || "");
+  const [showOptions, setShowOptions] = useState(false);
+  const [timeOptions, setTimeOptions] = useState<string[]>([]);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const now = new Date();
+    const roundedNow = addMinutes(startOfHour(now), Math.ceil(now.getMinutes() / 10) * 10);
+    setTimeOptions(generateTimeOptions(roundedNow));
+  }, []);
+
+  useEffect(() => {
+    if (showOptions) {
+      containerRef.current?.focus();
+    }
+  }, [showOptions]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+    const parsedTime = parse(e.target.value, "HH:mm", new Date());
+    if (isValid(parsedTime)) {
+      onChange(format(parsedTime, "HH:mm"));
+    }
+  };
+
   return (
-    <div className="w-full">
-      <TimePickerLib
-        onChange={onChange}
-        value={value || ""}
-        disableClock={true} 
-        format="HH:mm" 
-        className="w-full border rounded-md px-4 py-2 shadow-inner drop-shadow-xl"
+    <div className="relative w-full">
+      <Input
+        type="time"
+        value={inputValue}
+        onChange={handleInputChange}
+        onFocus={() => setShowOptions(true)}
+        className="w-full"
       />
+      {showOptions && (
+        <div
+          ref={containerRef}
+          tabIndex={0}
+          className="absolute z-10 mt-2 w-full max-h-48 overflow-auto bg-white border rounded-md shadow-lg"
+          onBlur={() => setShowOptions(false)}
+        >
+          {timeOptions.map((time) => (
+            <Button
+              key={time}
+              variant="ghost"
+              className="w-full justify-start px-4 py-2"
+              onMouseDown={() => {
+                onChange(time);
+                setInputValue(time);
+                setShowOptions(false);
+              }}
+            >
+              {time}
+            </Button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
