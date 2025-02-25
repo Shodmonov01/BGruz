@@ -3,6 +3,7 @@ import { FormControl, FormField, FormItem, FormMessage, FormLabel } from '@/comp
 import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useEffect, useState } from 'react'
+import { Textarea } from '@/components/ui/textarea'
 
 interface ExtraService {
     id: number
@@ -215,8 +216,8 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
                             <FormItem>
                                 <FormLabel>Описание</FormLabel>
                                 <FormControl>
-                                    <textarea
-                                        className='min-w-full max-w-[300px] min-h-[40px] max-h-[300px] p-2 border rounded-md resize focus:outline-none focus:ring-2 focus:ring-blue-500'
+                                    <Textarea
+                                        // className='min-w-full max-w-[300px] min-h-[40px] max-h-[300px] p-2 border rounded-md resize focus:outline-none focus:ring-2 focus:ring-blue-500'
                                         placeholder='Описание'
                                         {...field}
                                     />

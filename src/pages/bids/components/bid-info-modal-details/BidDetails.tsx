@@ -19,10 +19,10 @@ function BidDetails({ formData, handleChange, isReadOnly, clients, handleClientC
                             <Label htmlFor='loading' className=''>
                                 Погрузка
                             </Label>
-                            <RadioGroupItem className='size-5' value='loading' id='loading' disabled={isReadOnly} />
+                            <RadioGroupItem className='size-8' value='loading' id='loading' disabled={isReadOnly} />
                         </div>
                         <div className='flex items-center gap-2'>
-                            <RadioGroupItem className='size-5' value='unloading' id='unloading' disabled={isReadOnly} />
+                            <RadioGroupItem className='size-8' value='unloading' id='unloading' disabled={isReadOnly} />
                             <Label htmlFor='unloading'>Выгрузка</Label>
                         </div>
                     </RadioGroup>
@@ -33,10 +33,10 @@ function BidDetails({ formData, handleChange, isReadOnly, clients, handleClientC
                     >
                         <div className='flex items-center gap-2'>
                             <Label htmlFor='container'>Контейнер</Label>
-                            <RadioGroupItem className='size-5' value='container' id='container' disabled={isReadOnly} />
+                            <RadioGroupItem className='size-8' value='container' id='container' disabled={isReadOnly} />
                         </div>
                         <div className='flex items-center gap-2'>
-                            <RadioGroupItem className='size-5' value='wagon' id='wagon' disabled={isReadOnly} />
+                            <RadioGroupItem className='size-8' value='wagon' id='wagon' disabled={isReadOnly} />
                             <Label htmlFor='wagon'>Вагон</Label>
                         </div>
                     </RadioGroup>

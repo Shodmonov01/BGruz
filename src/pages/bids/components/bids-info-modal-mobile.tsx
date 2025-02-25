@@ -45,7 +45,7 @@ export function BidsOrderDialog({ open, onOpenChange, selectedBid, handleCloseMo
                                         Погрузка
                                     </Label>
                                     <RadioGroupItem
-                                        className=' size-5'
+                                        className=' size-8'
                                         value='loading'
                                         id='loading'
                                         disabled={isReadOnly}
@@ -53,7 +53,7 @@ export function BidsOrderDialog({ open, onOpenChange, selectedBid, handleCloseMo
                                 </div>
                                 <div className='flex items-center gap-2  mb-3'>
                                     <RadioGroupItem
-                                        className=' size-5'
+                                        className=' size-8'
                                         value='unloading'
                                         id='unloading'
                                         disabled={isReadOnly}
@@ -69,7 +69,7 @@ export function BidsOrderDialog({ open, onOpenChange, selectedBid, handleCloseMo
                                         Контейнер
                                     </Label>
                                     <RadioGroupItem
-                                        className=' size-5'
+                                        className=' size-8'
                                         value='container'
                                         id='container'
                                         disabled={isReadOnly}
@@ -77,7 +77,7 @@ export function BidsOrderDialog({ open, onOpenChange, selectedBid, handleCloseMo
                                 </div>
                                 <div className='flex items-center gap-2  relative -left-5 mb-2'>
                                     <RadioGroupItem
-                                        className=' size-5'
+                                        className=' size-8'
                                         value='wagon'
                                         id='wagon'
                                         disabled={isReadOnly}

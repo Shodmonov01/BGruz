@@ -12,6 +12,8 @@ function TerminalTwo({ terminals }) {
     const transportType = useWatch({ control, name: 'transportType' })
 
     const [search, setSearch] = useState('')
+    const [isOpen, setIsOpen] = useState(false)
+
 
     const getTerminalTitle = () => {
         if (transportType === 'Контейнер') return 'Сдать контейнер'
@@ -34,6 +36,7 @@ function TerminalTwo({ terminals }) {
                         <FormItem>
                             <Select
                                 onValueChange={value => {
+                                    if (!isOpen) return
                                     field.onChange(value)
                                     const selectedTerminal = terminals.find(terminal => terminal.id === Number(value))
                                     if (selectedTerminal) {
@@ -42,6 +45,8 @@ function TerminalTwo({ terminals }) {
                                     }
                                 }}
                                 value={field.value}
+                                open={isOpen}
+                                onOpenChange={setIsOpen}
                             >
                                 <FormControl>
                                     <SelectTrigger>
@@ -62,6 +67,8 @@ function TerminalTwo({ terminals }) {
                                             placeholder='Поиск терминала...'
                                             value={search}
                                             onChange={e => setSearch(e.target.value)}
+                                            onFocus={() => setIsOpen(true)}
+                                            onKeyDown={e => e.stopPropagation()}
                                             className='w-full px-3 py-2 border rounded-md'
                                         />
                                     </div>
@@ -92,6 +99,7 @@ function TerminalTwo({ terminals }) {
                                     placeholder='Адрес'
                                     {...field}
                                     className='px-4 py-3 shadow-inner drop-shadow-xl'
+                                    readOnly
                                 />
                             </FormControl>
                             <FormMessage />

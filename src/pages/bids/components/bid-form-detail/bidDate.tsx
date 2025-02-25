@@ -28,25 +28,7 @@ function BidDate() {
             <div className='flex flex-col md:flex-row items-start md:items-center gap-4 py-6 md:px-0 px-4 bg-secondary md:bg-transparent'>
                 <h1 className='font-bold mr-11'>Дата Погрузки</h1>
                 <div className='flex items-center gap-3'>
-                    {/* <FormField
-                        control={control}
-                        name='startDate'
-                        rules={{ required: 'Заполните это поле.' }}
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormControl>
-                                    <Input
-                                        type='date'
-                                        {...field}
-                                        value={field.value || ''}
-                                        min={today}
-                                        className='px-4 py-4 shadow-inner drop-shadow-xl'
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    /> */}
+        
                     <FormField
                         control={control}
                         name='startDate'
@@ -57,7 +39,7 @@ function BidDate() {
                                     <DatePicker
                                         value={field.value ? new Date(field.value) : undefined}
                                         onChange={date => field.onChange(date?.toISOString().split('T')[0])}
-                                        minDate={new Date()} // Ограничение выбора только сегодняшним и будущими днями
+                                        minDate={new Date(new Date().setHours(0, 0, 0, 0))}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -80,36 +62,11 @@ function BidDate() {
                             </FormItem>
                         )}
                     />
-                    {/* <FormField
-                        control={control}
-                        name='endDate'
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormControl>
-                                    <Input
-                                        type='date'
-                                        {...field}
-                                        value={field.value || ''}
-                                        min={
-                                            startDate
-                                                ? new Date(
-                                                      new Date(startDate).setDate(new Date(startDate).getDate() + 1)
-                                                  )
-                                                      .toISOString()
-                                                      .split('T')[0]
-                                                : today
-                                        } // Запрещаем выбирать тот же день
-                                        className='px-4 py-4 shadow-inner drop-shadow-xl'
-                                        disabled={!enableEndDate}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    /> */}
+               
                     <FormField
                         control={control}
                         name='endDate'
+                        key={enableEndDate ? 'enabled' : 'disabled'}
                         render={({ field }) => (
                             <FormItem>
                                 <FormControl>
@@ -118,11 +75,10 @@ function BidDate() {
                                         onChange={date => field.onChange(date?.toISOString().split('T')[0])}
                                         minDate={
                                             startDate
-                                                ? new Date(
-                                                      new Date(startDate).setDate(new Date(startDate).getDate() + 1)
-                                                  )
-                                                : new Date()
-                                        }
+                                              ? new Date(new Date(startDate).setDate(new Date(startDate).getDate() + 1))
+                                              : new Date(new Date().setHours(0, 0, 0, 0))
+                                          }
+                                          
                                         disabled={!enableEndDate}
                                     />
                                 </FormControl>
@@ -133,19 +89,19 @@ function BidDate() {
                 </div>
             </div>
             <div className='flex items-center my-7 md:my-0 md:px-0 px-4'>
-                <h1 className='font-bold mr-16'>Время подачи</h1>
+                <h1 className='font-bold mr-14'>Время подачи</h1>
                 <FormField
-    control={control}
-    name="submissionTime"
-    render={({ field }) => (
-      <FormItem>
-        <FormControl>
-          <TimePicker value={field.value} onChange={field.onChange} />
-        </FormControl>
-        <FormMessage />
-      </FormItem>
-    )}
-  />
+                    control={control}
+                    name='submissionTime'
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormControl>
+                                <TimePicker value={field.value} onChange={field.onChange} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
             </div>
         </div>
     )
