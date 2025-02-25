@@ -102,7 +102,7 @@ function Warehouses({ warehouses }) {
                                         <Input
                                             placeholder='Адрес'
                                             {...field}
-                                            className={`px-4 py-3 shadow-inner drop-shadow-xl ${
+                                            className={`${
                                                 fields.length > 1 ? 'w-[310px]' : 'w-[345px]'
                                             }`}
                                         />

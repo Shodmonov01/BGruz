@@ -90,7 +90,7 @@ function TerminalOne({ terminals }) {
                                 <Input
                                     placeholder='Адрес'
                                     {...field}
-                                    className='px-4 py-3 shadow-inner drop-shadow-xl'
+                                    className=''
                                 />
                             </FormControl>
                             <FormMessage />

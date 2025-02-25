@@ -69,7 +69,7 @@ function TerminalTwo({ terminals }) {
                                             onChange={e => setSearch(e.target.value)}
                                             onFocus={() => setIsOpen(true)}
                                             onKeyDown={e => e.stopPropagation()}
-                                            className='w-full px-3 py-2 border rounded-md'
+                                            className='w-full border rounded-md'
                                         />
                                     </div>
                                     {/* Список терминалов */}
@@ -98,7 +98,7 @@ function TerminalTwo({ terminals }) {
                                 <Input
                                     placeholder='Адрес'
                                     {...field}
-                                    className='px-4 py-3 shadow-inner drop-shadow-xl'
+                                    className=''
                                     readOnly
                                 />
                             </FormControl>

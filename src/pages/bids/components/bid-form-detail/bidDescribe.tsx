@@ -95,9 +95,9 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
         <div className='space-y-4 flex flex-col-reverse md:block'>
             <div>
                 <div className='bg-secondary md:bg-primary text-center text-[26px] md:text-white my-3 py-3'>
-                    <p>Финансы</p>
+                    <h1>Финансы</h1>
+                <h1 className='text-center f'>Все цены указаны без НДС</h1>
                 </div>
-                <h1 className='text-center text-red-600 font-bold'>Все цены указаны без НДС</h1>
                 <div className='flex items-center py-4 justify-between md:px-0 px-4'>
                     <FormField
                         control={control}
@@ -126,7 +126,7 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
                                             type='text'
                                             placeholder='Цена'
                                             {...field}
-                                            className='px-4 py-4 shadow-inner drop-shadow-xl'
+                                            className=''
                                             value={requestPrice ? '' : formatNumber(field.value?.toString() || '')}
                                             onChange={e => {
                                                 const rawValue = e.target.value.replace(/\D/g, '')

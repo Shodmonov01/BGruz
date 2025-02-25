@@ -3,13 +3,15 @@ import { useEffect, useRef } from 'react'
 export function useBidsWebSocket(onBidUpdate?: () => void) {
     const ws = useRef<WebSocket | null>(null)
     const reconnectTimeout = useRef<NodeJS.Timeout | null>(null)
-    const heartbeat = useRef<NodeJS.Timeout | null>(null) // Для пинга
+    const heartbeat = useRef<NodeJS.Timeout | null>(null)
 
     const connect = () => {
-        if (ws.current) ws.current.close() // Закрываем старый сокет, если он есть
+        if (ws.current) ws.current.close()
 
-        // const token = localStorage.getItem("authToken");
-        // ws.current = new WebSocket(`wss://portal.bgruz.com/ws?token=${token}`);
+        if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+            console.warn('🔄 WebSocket уже открыт, не переподключаемся')
+            return
+        }
 
         const token = localStorage.getItem('authToken')
         const WS_BASE_URL = import.meta.env.VITE_WS_BASE_URL
@@ -35,15 +37,8 @@ export function useBidsWebSocket(onBidUpdate?: () => void) {
             }
         }
 
-        // ws.current.onclose = (event) => {
-        //     console.log(`❌ WebSocket закрыт (${event.code}), попытка переподключения через 3 сек...`);
-        //     stopHeartbeat(); // Останавливаем пинг
-        //     reconnectTimeout.current = setTimeout(connect, 30000); // Переподключаемся через 3 секунды
-        // };
-
         ws.current.onerror = error => {
             console.error('⚠️ WebSocket ошибка:', error)
-            // ws.current?.close(); // НЕ закрываем сокет вручную, сервер сам решит
         }
     }
 
@@ -69,5 +64,5 @@ export function useBidsWebSocket(onBidUpdate?: () => void) {
             stopHeartbeat()
             ws.current?.close()
         }
-    }, [onBidUpdate])
+    }, [])
 }
