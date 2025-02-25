@@ -1,9 +1,10 @@
 import { useFormContext, useWatch } from 'react-hook-form'
 import { FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
+// import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import DatePicker from '@/components/shared/date-picker'
+import TimePicker from '@/components/shared/time-picker'
 
 function BidDate() {
     const { control, setValue } = useFormContext()
@@ -134,23 +135,17 @@ function BidDate() {
             <div className='flex items-center my-7 md:my-0 md:px-0 px-4'>
                 <h1 className='font-bold mr-16'>Время подачи</h1>
                 <FormField
-                    control={control}
-                    name='submissionTime'
-                    // rules={{ required: 'Заполните это поле.' }}
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormControl>
-                                <Input
-                                    type='time'
-                                    {...field}
-                                    value={field.value || ''}
-                                    className='px-4 py-4 shadow-inner drop-shadow-xl'
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+    control={control}
+    name="submissionTime"
+    render={({ field }) => (
+      <FormItem>
+        <FormControl>
+          <TimePicker value={field.value} onChange={field.onChange} />
+        </FormControl>
+        <FormMessage />
+      </FormItem>
+    )}
+  />
             </div>
         </div>
     )
