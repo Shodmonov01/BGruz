@@ -51,7 +51,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
 
     const operationType = useWatch({ control, name: 'loadingType' })
 
-    const inputRef = useRef(null);
+    const inputRef = useRef<HTMLInputElement | null>(null);
 
 
     return (
@@ -198,8 +198,8 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                     setOpenClient(open);
                     if (open) {
                         setTimeout(() => {
-                            inputRef.current?.focus();
-                        }, 100); // Небольшая задержка для корректного автофокуса
+                            inputRef.current?.focus(); // Теперь TypeScript понимает, что это input
+                        }, 100);
                     }
                 }}
             >

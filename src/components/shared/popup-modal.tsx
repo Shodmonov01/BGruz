@@ -14,7 +14,7 @@ export default function PopupModal({ renderModal }: TPopupModalProps) {
     const onClose = () => setIsOpen(false)
     return (
         <>
-            <Button variant='tertiary' className='text-[23px] md:text-sm  py-6 md:py-0 ' onClick={() => setIsOpen(true)}>
+            <Button variant='tertiary' className='text-[23px] md:text-sm  py-6 md:py-0 w-full' onClick={() => setIsOpen(true)}>
                 <Plus className='mr-2 h-6 w-6 md:h-4 md:w-4' /> Новая заявка
             </Button>
             <Modal isOpen={isOpen} onClose={onClose} className={'!bg-background !p-0 w-full h-full md:h-[90vh] md:w-[800px]'}>

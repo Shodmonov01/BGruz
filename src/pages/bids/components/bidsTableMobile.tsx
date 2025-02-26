@@ -84,7 +84,7 @@ function BidsTableMobile({ bids }) {
                 ))}
             </ScrollArea>
 
-            <div className='flex gap-3 fixed bottom-10 px-12 py-6 text-[24px] left-1/2 -translate-x-1/2'>
+            <div className='flex gap-3 fixed bottom-3 px-6 py-6 text-[24px] left-1/2 -translate-x-1/2 w-full'>
                 <PopupModal renderModal={onClose => <StudentCreateForm modalClose={onClose} />} />
             </div>
 
