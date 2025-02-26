@@ -219,7 +219,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                         </div>
                     </div>
                     {errorMessage && <div className='text-red-500 text-center py-2'>{errorMessage}</div>}
-                    <div className='flex flex-col-reverse md:flex-row md:px-0 px-4 md:items-center justify-center gap-4'>
+                    <div className='flex flex-col-reverse md:grid md:grid-cols-2 md:px-0 px-4  justify-center gap-4'>
                         <Button type='button' variant='secondary' size='lg' onClick={modalClose}>
                             Отмена
                         </Button>

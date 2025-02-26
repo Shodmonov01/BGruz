@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useEffect, useState } from 'react'
 import { Textarea } from '@/components/ui/textarea'
+import { Minus, Plus } from 'lucide-react'
 
 interface ExtraService {
     id: number
@@ -55,12 +56,19 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
         }
     }, [extraServices])
 
-    const handleCountChange = (index, value) => {
-        const updatedServices = [...services]
-        updatedServices[index].count = value
-        setServices(updatedServices)
-        updateFormData(updatedServices)
+    // const handleCountChange = (index, value) => {
+    //     const updatedServices = [...services]
+    //     updatedServices[index].count = value
+    //     setServices(updatedServices)
+    //     updateFormData(updatedServices)
+    // }
+
+    const handleCountChange = (index: number, value: number) => {
+        setServices(prevServices => {
+            return prevServices.map((service, i) => (i === index ? { ...service, count: value } : service))
+        })
     }
+
     const handleCheckboxChange = (index: number) => {
         const updatedServices = [...services]
         updatedServices[index].checked = !updatedServices[index].checked
@@ -105,25 +113,25 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
                         control={control}
                         name='requestPrice'
                         render={({ field }) => (
-                            <FormItem className='flex flex-row items-start space-x-3 space-y-0'>
-                                <FormControl>
-                                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                                </FormControl>
-                                <div className='space-y-1 leading-none'>
-                                    <FormLabel>Запрос цены</FormLabel>
+                            <FormItem className='flex flex-row items-center justify-between space-x-3 space-y-0 w-1/2'>
+                                <div className='flex items-center gap-4'>
+                                    <FormControl>
+                                        <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                                    </FormControl>
+                                    <div className='space-y-1 leading-none'>
+                                        <FormLabel>Запрос цены</FormLabel>
+                                    </div>
                                 </div>
+                                <p className='hidden md:block whitespace-nowrap !mr-6'>Цена перевозки</p>
                             </FormItem>
                         )}
                     />
-                    <div className='flex items-center gap-4'>
-                        <p className='hidden md:block'>Цена перевозки</p>
-
-
+                    <div className='flex items-center gap-4 w-1/2 justify-end'>
                         <FormField
                             control={control}
                             name='price'
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem className='w-full'>
                                     <FormControl>
                                         <Input
                                             type='text'
@@ -153,30 +161,58 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
                         <p className='text-gray-500'>Нет доступных доп. услуг или же выберите клиента</p>
                     ) : (
                         services.map((service, index) => (
-                            <div key={service.id} className='flex items-center justify-between gap-4 md:px-0 px-4'>
-                                <div className='flex items-center gap-2'>
+                            <div key={service.id} className='flex items-center justify-between  gap-8 md:gap-4 md:px-0 px-4'>
+                                <div className='flex items-center gap-4 w-1/2'>
                                     <Checkbox
                                         checked={service.checked}
                                         onCheckedChange={() => handleCheckboxChange(index)}
                                     />
-                                    <p className='text-base font-bold w-1/2'>{service.name}</p>
+                                    <p className='text-base font-bold  w-[60%] md:w-full'>{service.name}</p>
                                 </div>
-                                <div className='flex gap-5'>
-                                    <Input
-                                        type='number'
-                                        min='1'
-                                        max={service.maxCount}
-                                        value={service.count}
-                                        onChange={e => handleCountChange(index, parseInt(e.target.value) || 1)}
-                                        className='w-16 text-center'
-                                        disabled={!service.checked}
-                                    />
+                                <div className='flex gap-0 md:gap-7 w-[70%] md:w-full justify-end items-center'>
+                                    <div
+                                        className={`md:px-0 px-4 ${!service.checked ? 'disabled' : ''}`}
+                                        aria-disabled={!service.checked}
+                                    >
+                                        <div
+                                            className={`flex items-center border rounded-lg overflow-hidden w-24 h-[51px] ml-0 md:ml-4 mt-0 ${!service.checked ? 'opacity-50 pointer-events-none' : ''}`}
+                                        >
+                                            <div className='flex-1 flex items-center justify-center text-xl font-semibold'>
+                                                {service.count}
+                                            </div>
+                                            <div className='flex flex-col border-l'>
+                                                <button
+                                                    type='button'
+                                                    className='w-6 h-5 flex items-center justify-center hover:bg-gray-200'
+                                                    onClick={() =>
+                                                        handleCountChange(
+                                                            index,
+                                                            Math.min(service.maxCount || Infinity, service.count + 1)
+                                                        )
+                                                    }
+                                                    disabled={!service.checked}
+                                                >
+                                                    <Plus size={14} className='text-green-500' />
+                                                </button>
+                                                <button
+                                                    type='button'
+                                                    className='w-6 h-5 flex items-center justify-center hover:bg-gray-200'
+                                                    onClick={() =>
+                                                        handleCountChange(index, Math.max(1, service.count - 1))
+                                                    }
+                                                    disabled={!service.checked}
+                                                >
+                                                    <Minus size={14} className='text-yellow-500' />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <Input
                                         type='text'
                                         readOnly
                                         value={service.checked ? (service.count * service.price).toLocaleString() : '0'}
-                                        className='w-20 text-center text-blue-600'
+                                        className='w-1/2 text-center text-blue-600'
                                     />
                                 </div>
                             </div>
@@ -196,25 +232,24 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
                         <p>Груз</p>
                     </div>
                     <div className='md:px-0 px-4'>
-                         <FormField
-                        control={control}
-                        name='cargoTitle'
-                        render={({ field }) => (
-                            <FormItem>
-                                {/* <FormLabel className='text-base md:text-xl'>Груз</FormLabel> */}
-                                <FormControl>
-                                    <Input
-                                        placeholder='Груз'
-                                        {...field}
-                                        className='px-4 py-6 shadow-inner drop-shadow-xl'
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                        <FormField
+                            control={control}
+                            name='cargoTitle'
+                            render={({ field }) => (
+                                <FormItem>
+                                    {/* <FormLabel className='text-base md:text-xl'>Груз</FormLabel> */}
+                                    <FormControl>
+                                        <Input
+                                            placeholder='Груз'
+                                            {...field}
+                                            className='px-4 py-6 shadow-inner drop-shadow-xl'
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                     </div>
-                   
                 </div>
                 <div className='md:px-0 px-4 '>
                     <FormField
