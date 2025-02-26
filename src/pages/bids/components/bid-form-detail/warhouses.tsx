@@ -14,7 +14,7 @@ function Warehouses({ warehouses }) {
     })
     const [search, setSearch] = useState('')
     const [isOpen, setIsOpen] = useState<Record<number, boolean>>({})
-    console.log(warehouses)
+    // console.log(warehouses)
 
     const sortedWarehouses = [...warehouses]
         .sort((a, b) => a.name.localeCompare(b.name)) // Сортировка по алфавиту

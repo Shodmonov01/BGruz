@@ -40,7 +40,7 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
         }
     }, [extraServices])
 
-    console.log('services:', services)
+    // console.log('services:', services)
 
     useEffect(() => {
         if (extraServices.length > 0) {

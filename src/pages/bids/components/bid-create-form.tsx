@@ -13,6 +13,7 @@ import TerminalOne from './bid-form-detail/terminalOne'
 import Warehouses from './bid-form-detail/warhouses'
 import TerminalTwo from './bid-form-detail/terminalTwo'
 import BidDescribe from './bid-form-detail/bidDescribe'
+import { Loader2 } from 'lucide-react'
 // import { ChevronLeft } from 'lucide-react'
 
 interface BidFormData {
@@ -40,15 +41,15 @@ interface BidFormData {
 }
 
 interface ClientData {
-    organizationId: number;
-    organizationName: string;
+    organizationId: number
+    organizationName: string
 }
 
 interface OrganizationData {
-    terminals: { id: number; name: string; description: string }[];
-    warehouses: { id: number; name: string; description: string }[];
-    vehicleProfiles: { id: number; name: string }[];
-    extraServices: { id: number; name: string; description: string }[];
+    terminals: { id: number; name: string; description: string }[]
+    warehouses: { id: number; name: string; description: string }[]
+    vehicleProfiles: { id: number; name: string }[]
+    extraServices: { id: number; name: string; description: string }[]
 }
 
 const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
@@ -63,6 +64,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
     const [isClientSelected, setIsClientSelected] = useState(false)
     const hideTerminal1 = operationType === 'loading' && transportType === 'Вагон'
     const hideTerminal2 = operationType === 'unloading' && transportType === 'Вагон'
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         const loadClients = async () => {
@@ -99,14 +101,22 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
         }
     })
 
-    const { handleSubmit, setValue, getValues } = formMethods
+    const {
+        handleSubmit,
+        setValue,
+        getValues,
+        formState: { errors }
+    } = formMethods
     // const { handleSubmit, setValue } = formMethods
 
     const handleClientChange = async (clientId: string) => {
         setValue('client', clientId)
         try {
             const token = localStorage.getItem('authToken') || ''
-            const data = await fetchPrivateData<OrganizationData>(`api/v1/organization/?organization_id=${clientId}`, token)
+            const data = await fetchPrivateData<OrganizationData>(
+                `api/v1/organization/?organization_id=${clientId}`,
+                token
+            )
 
             setTerminals(data.terminals || [])
             setWarehouses(data.warehouses || [])
@@ -119,6 +129,7 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
     }
 
     const onSubmit: SubmitHandler<BidFormData> = async data => {
+        setIsLoading(true)
         try {
             setErrorMessage(null) // Очистка ошибки перед отправкой
             const payload = {
@@ -162,12 +173,12 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                 console.error('Не найден токен авторизации')
                 return
             }
-
+            // @ts-expect-error dfdfdsd fd
             const res = await postData('api/v1/bids', payload, token)
             modalClose()
             // refreshBids()
             // window.location.reload()
-            console.log('res', res)
+            // console.log('res', res)
         } catch (error: any) {
             console.error('Ошибка при создании заявки:', error)
 
@@ -177,6 +188,8 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                     setErrorMessage(detailMessage)
                 }
             }
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -219,12 +232,30 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                         </div>
                     </div>
                     {errorMessage && <div className='text-red-500 text-center py-2'>{errorMessage}</div>}
-                    <div className='flex flex-col-reverse md:grid md:grid-cols-2 md:px-0 px-4  justify-center gap-4'>
+                    {/* <div className='flex flex-col-reverse md:grid md:grid-cols-2 md:px-0 px-4  justify-center gap-4'>
                         <Button type='button' variant='secondary' size='lg' onClick={modalClose}>
                             Отмена
                         </Button>
                         <Button variant='tertiary' type='submit' size='lg' disabled={!isClientSelected}>
                             Создать заявку
+                        </Button>
+                    </div> */}
+                    {Object.keys(errors).length > 0 && (
+                        <div className='text-red-500 text-center py-2'>Заполните все обязательные поля</div>
+                    )}
+                    <div className='flex flex-col-reverse md:grid md:grid-cols-2 gap-4'>
+                        <Button type='button' variant='secondary' size='lg' onClick={modalClose} disabled={isLoading}>
+                            Отмена
+                        </Button>
+                        <Button variant='tertiary' type='submit' size='lg' disabled={!isClientSelected || isLoading}>
+                            {isLoading ? (
+                                <>
+                                    <Loader2 className='animate-spin mr-2 h-5 w-5' />
+                                    Отправка...
+                                </>
+                            ) : (
+                                'Создать заявку'
+                            )}
                         </Button>
                     </div>
                 </form>

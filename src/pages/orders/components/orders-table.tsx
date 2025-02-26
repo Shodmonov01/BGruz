@@ -179,8 +179,8 @@ function OrdersTable({
                                                     </div>
                                                 ) : (
                                                     <div
-                                                        className='flex text-xs items-center gap-1 cursor-pointer h-7 min-w-full px-3 rounded-md bg-white'
-                                                        onClick={header.column.getToggleSortingHandler()}
+                                                    className='flex  items-center gap-1 cursor-pointer px-3 py-5 md:px-3 md:py-2 text-base md:text-xl rounded-md bg-white'
+                                                    onClick={header.column.getToggleSortingHandler()}
                                                     >
                                                         <div className='text-center'>
                                                             {flexRender(

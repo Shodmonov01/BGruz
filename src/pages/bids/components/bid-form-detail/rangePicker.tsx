@@ -24,8 +24,8 @@ export function DateRangePicker({ onChange, placeholder = 'Выберите да
                 <PopoverTrigger asChild>
                     <Button
                         id='date'
-                        variant={'outline'}
-                        className={cn('w-full justify-start text-left font-normal', !date && 'text-muted-foreground')}
+                        variant={'outlineSecondary'}
+                        className={cn('w-full justify-start text-left px-3 py-5 md:px-3 !md:py-6 text-base md:text-xl font-normal', !date && 'text-muted-foreground')}
                     >
                         <CalendarIcon className='mr-2 h-4 w-4' />
                         {date?.from ? (
