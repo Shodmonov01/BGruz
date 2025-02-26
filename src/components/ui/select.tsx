@@ -69,7 +69,7 @@ const SelectContent = React.forwardRef<
   React.useEffect(() => {
     if (!triggerRef.current) return;
 
-    const { top, bottom } = triggerRef.current.getBoundingClientRect();
+    const {  bottom } = triggerRef.current.getBoundingClientRect();
     const windowHeight = window.innerHeight;
 
     if (bottom + 200 > windowHeight) {
