@@ -8,6 +8,7 @@ import {
 import * as SelectPrimitive from '@radix-ui/react-select';
 
 import { cn } from '@/lib/utils';
+import { Input } from './input';
 
 const Select = SelectPrimitive.Root;
 
@@ -147,6 +148,57 @@ const SelectSeparator = React.forwardRef<
   />
 ));
 SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
+
+
+const SearchableSelect = ({ options, value, onChange }) => {
+  const [search, setSearch] = React.useState('');
+  const [open, setOpen] = React.useState(false);
+  const inputRef = React.useRef<HTMLInputElement | null>(null);
+
+  // Фильтрация списка
+  const filteredOptions = options.filter(option =>
+    option.label.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <Select
+      open={open}
+      onOpenChange={setOpen}
+      onValueChange={(val) => {
+        onChange(val);
+        setSearch('');
+        setOpen(false);
+      }}
+      value={value}
+    >
+      <SelectTrigger>
+        <Input
+          ref={inputRef}
+          value={search}
+          placeholder="Выберите значение"
+          onChange={(e) => setSearch(e.target.value)}
+          onFocus={() => setOpen(true)}
+          onKeyDown={(e) => e.stopPropagation()} // Предотвращаем закрытие списка
+          className="w-full bg-transparent border-none focus:ring-0"
+        />
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent onCloseAutoFocus={(e) => e.preventDefault()}>
+        {filteredOptions.length > 0 ? (
+          filteredOptions.map(option => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))
+        ) : (
+          <p className="p-2 text-center text-gray-500">Ничего не найдено</p>
+        )}
+      </SelectContent>
+    </Select>
+  );
+};
+
+export default SearchableSelect;
 
 export {
   Select,

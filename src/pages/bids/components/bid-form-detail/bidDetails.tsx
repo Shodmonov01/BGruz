@@ -51,8 +51,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
 
     const operationType = useWatch({ control, name: 'loadingType' })
 
-    const inputRef = useRef<HTMLInputElement | null>(null);
-
+    const inputRef = useRef<HTMLInputElement | null>(null)
 
     return (
         <div>
@@ -131,7 +130,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
 
             <Separator className='mb-4' />
             <div className='grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-4 md:px-0 px-4'>
-                {/* <FormField
+                <FormField
                     control={control}
                     name='client'
                     rules={{ required: 'Заполните это поле.' }}
@@ -176,63 +175,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                             <FormMessage />
                         </FormItem>
                     )}
-                /> */}
-
-<FormField
-    control={control}
-    name='client'
-    rules={{ required: 'Заполните это поле.' }}
-    render={({ field }) => (
-        <FormItem>
-            <FormLabel className='font-bold text-[18px]'>Заказчик</FormLabel>
-            <Select
-                onValueChange={value => {
-                    field.onChange(Number(value));
-                    handleClientChange(value);
-                    setSearchClient(''); // Очистка поискового поля при выборе
-                    setOpenClient(false);
-                }}
-                value={searchClient || field.value?.toString()} // Отображаем введенный текст
-                open={openClient}
-                onOpenChange={open => {
-                    setOpenClient(open);
-                    if (open) {
-                        setTimeout(() => {
-                            inputRef.current?.focus(); // Теперь TypeScript понимает, что это input
-                        }, 100);
-                    }
-                }}
-            >
-                <FormControl>
-                    <SelectTrigger>
-                        <SelectValue placeholder='Выберите клиента' />
-                    </SelectTrigger>
-                </FormControl>
-                <SelectContent onCloseAutoFocus={e => e.preventDefault()}>
-                    <div className='p-2'>
-                        <Input
-                            ref={inputRef}
-                            placeholder='Поиск клиента...'
-                            value={searchClient}
-                            onChange={e => setSearchClient(e.target.value)}
-                            onFocus={() => setOpenClient(true)}
-                            onKeyDown={e => e.stopPropagation()}
-                        />
-                    </div>
-                    {filteredClientList.map(client => (
-                        <SelectItem
-                            key={client.organizationId}
-                            value={client.organizationId.toString()}
-                        >
-                            {client.organizationName}
-                        </SelectItem>
-                    ))}
-                </SelectContent>
-            </Select>
-            <FormMessage />
-        </FormItem>
-    )}
-/>
+                />
                 <div>
                     <FormField
                         control={control}
@@ -266,7 +209,13 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                             </SelectItem>
                                         ))}
                                     </SelectContent> */}
-                                    <SelectContent onCloseAutoFocus={e => e.preventDefault()}>
+                                    <SelectContent
+                                        onCloseAutoFocus={e => e.preventDefault()}
+                                        position='popper'
+                                        side='bottom'
+                                        align='start'
+                                        className='origin-top-left'
+                                    >
                                         <div className='p-2'>
                                             <Input
                                                 placeholder='Поиск...'
