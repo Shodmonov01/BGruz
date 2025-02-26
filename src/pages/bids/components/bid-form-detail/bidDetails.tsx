@@ -51,7 +51,6 @@ const BidDetails: React.FC<BidDetailsProps> = ({
 
     const operationType = useWatch({ control, name: 'loadingType' })
 
-    const inputRef = useRef<HTMLInputElement | null>(null)
 
     return (
         <div>
