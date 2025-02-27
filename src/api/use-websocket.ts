@@ -19,16 +19,23 @@ export function useWebSocket(refreshBids: () => void = () => {}, refreshOrders: 
             startHeartbeat();
         };
 
+
+
         ws.current.onmessage = (event) => {
             try {
                 const data = JSON.parse(event.data);
-                if (data.type === "bid_update") refreshBids();
+                // console.log("📩 WebSocket message received:", data);
+                if (data.type === "bid_update") {
+                    // console.log("🔄 Refreshing bids...");
+                    refreshBids();
+                }
                 if (data.type === "order_update") refreshOrders();
                 if (data.type === "ping" && pongTimeout.current) clearTimeout(pongTimeout.current);
             } catch (error) {
                 // console.error("❌ Ошибка обработки сообщения WebSocket:", error);
             }
         };
+        
 
         ws.current.onerror = (error) => {
             // console.error("⚠️ WebSocket ошибка:", error);
