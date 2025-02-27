@@ -5,12 +5,12 @@ import { useSearchParams } from 'react-router-dom'
 import BgruzHeader from '@/components/shared/bgruz-header'
 import PageHead from '@/components/shared/page-head'
 
-import { useGetBids } from '@/hooks/useGetBids'
 
 import BidsTableMobile from './components/bidsTableMobile'
 import BidsTable from './components/BidsTable'
 import { TotalsProvider } from '@/lib/TotalsContext'
-import { useBidsWebSocket } from '@/hooks/useBidsWebSocket'
+import { useWebSocket } from '@/hooks/use-websocket'
+import { useGetBids } from '@/hooks/use-get-bids'
 
 export default function BidsPage() {
     const [searchParams] = useSearchParams()
@@ -21,7 +21,7 @@ export default function BidsPage() {
 
     const { bids, hasMore, loading, setFilters, refreshBids } = useGetBids(size)
 
-    // const handleFilterChange = useCallback(
+
     //     (columnId: string, value: any) => {
     //         let formattedValue = value
 
@@ -120,8 +120,8 @@ export default function BidsPage() {
         }
     }
 
-    useBidsWebSocket(refreshBids)
-
+    useWebSocket(refreshBids, () => {});
+    
     return (
         <div className='py-4 md:px-4'>
             <PageHead title='Заявки' />
@@ -142,6 +142,7 @@ export default function BidsPage() {
                     </div>
 
                     <div className='md:hidden'>
+                        {/* @ts-ignore */}
                         <BidsTableMobile bids={bids || []} />
                     </div>
                 </div>

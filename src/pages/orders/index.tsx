@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import BgruzHeader from '@/components/shared/bgruz-header'
-import { useGetOrders } from '@/hooks/useGetOrders'
 import OrdersTable from './components/orders-table'
 import { useSearchParams } from 'react-router-dom'
 import OrderTableMobile from './components/ordersTableMobile'
 import { TotalsProvider } from '@/lib/TotalsContext'
+import { useWebSocket } from '@/hooks/use-websocket'
+import { useGetOrders } from '@/hooks/use-get-orders'
 
 export default function OrderPage() {
     const [searchParams] = useSearchParams()
@@ -13,7 +14,7 @@ export default function OrderPage() {
 
     const debounceRef = useRef<NodeJS.Timeout | null>(null)
 
-    const { orders, hasMore, loading, setFilters, refreshTable } = useGetOrders(size)
+    const { orders, hasMore, loading, setFilters, refreshTable, refreshOrders } = useGetOrders(size)
 
     const handleFilterChange = useCallback(
         (columnId: string, value: any) => {
@@ -96,6 +97,9 @@ export default function OrderPage() {
         window.addEventListener('scroll', handleScroll)
         return () => window.removeEventListener('scroll', handleScroll)
     }, [hasMore, loading])
+
+    useWebSocket(() => {}, refreshOrders);
+
 
     return (
         <div className='p-4'>
