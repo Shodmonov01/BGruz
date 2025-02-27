@@ -93,13 +93,13 @@ function BidDate() {
             </div>
 
             <div className='flex md:flex-col gap-5 justify-between'>
-                <div className=' block md:flex md:my-0 md:px-0 px-4 items-center'>
+                <div className='block md:flex md:my-0 md:px-0 px-4 items-center'>
                     <h1 className='w-full md:w-1/6'>Время подачи</h1>
                     <FormField
                         control={control}
                         name='submissionTime'
                         render={({ field }) => (
-                            <FormItem className='md:w-60 w-full'>
+                            <FormItem className='md:w-60 w-[155px]'>
                                 <FormControl>
                                     <TimePicker value={field.value} onChange={field.onChange} />
                                 </FormControl>

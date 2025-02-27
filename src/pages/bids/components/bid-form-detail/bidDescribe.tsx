@@ -100,7 +100,7 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
     }
 
     return (
-        <div className='space-y-4 flex flex-col-reverse md:block'>
+        <div className='space-y-4  md:block'>
             <div>
                 <div className='bg-slate-300 text-center text-[26px] my-3 py-3'>
                     <h1>Финансы</h1>
