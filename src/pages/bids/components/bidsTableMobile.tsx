@@ -104,7 +104,6 @@ interface Bid {
 
 // export default BidsTableMobile
 
-
 function BidsTableMobile({ bids }) {
     const [selectedBid, setSelectedBid] = useState(null)
     const [open, setOpen] = useState(false)
@@ -122,20 +121,22 @@ function BidsTableMobile({ bids }) {
 
     // Группировка заявок по дате
     const groupedBids = useMemo(() => {
-        const groups = {};
-        const today = format(new Date(), 'dd.MM.yyyy', { locale: ru });
+        const groups = {}
+        const today = format(new Date(), 'dd.MM.yyyy', { locale: ru })
 
         bids.forEach(bid => {
-            const date = format(new Date(bid.loadingDate), 'dd.MM.yyyy', { locale: ru });
-            const label = date === today ? 'Сегодня' : date;
+            const date = format(new Date(bid.loadingDate), 'dd.MM.yyyy', { locale: ru })
+            const label = date === today ? 'Сегодня' : date
             if (!groups[label]) {
-                groups[label] = [];
+                groups[label] = []
             }
-            groups[label].push(bid);
-        });
+            groups[label].push(bid)
+        })
 
-        return Object.entries(groups).sort(([a], [b]) => (a === 'Сегодня' ? -1 : b === 'Сегодня' ? 1 : new Date(b) - new Date(a)));
-    }, [bids]);
+        return Object.entries(groups).sort(([a], [b]) =>
+            a === 'Сегодня' ? -1 : b === 'Сегодня' ? 1 : new Date(b) - new Date(a)
+        )
+    }, [bids])
 
     return (
         <div className='flex flex-col gap-4'>
@@ -173,9 +174,7 @@ function BidsTableMobile({ bids }) {
                                         </div>
                                     </div>
                                     <div className='ml-auto flex flex-col'>
-                                    <p className='text-green-600 font-semibold'>
-                                            {bid.status}
-                                        </p>
+                                        <p className='text-green-600 font-semibold'>{bid.status}</p>
                                         <p className='text-green-600 font-semibold'>
                                             {bid.price ? `${formatNumber(bid.price)} ₽` : '—'}
                                         </p>

@@ -36,16 +36,7 @@ interface BidsTableProps {
     localFilters: Record<string, string | any[]>
 }
 //@ts-ignore
-function BidsTable({
-    bids,
-setFilters,
-handleFilterChange,
-loadMore,
-hasMore,
-loading,
-localFilters,
-
-}: BidsTableProps) {
+function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, loading, localFilters }: BidsTableProps) {
     const [selectedBid, setSelectedBid] = useState<Partial<Bid> | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
     // const [isShortTable, setIsShortTable] = useState(false)
@@ -60,7 +51,7 @@ localFilters,
     useEffect(() => {
         localStorage.setItem('isShortTable', String(isShortTable)) // Сохраняем в localStorage при изменении
     }, [isShortTable])
-    
+
     useEffect(() => {
         let isFetching = false
 
@@ -142,13 +133,9 @@ localFilters,
         setColumnFilters(newColumnFilters)
     }, [localFilters])
 
-    
-    
-    
-
     return (
         <div>
-            <BidHeader setIsShortTable={setIsShortTable} isShortTable={isShortTable}/>
+            <BidHeader setIsShortTable={setIsShortTable} isShortTable={isShortTable} />
 
             <ScrollArea>
                 <div className='h-[calc(98vh-200px)] overflow-auto !scrollbar-thin !scrollbar-thumb-gray-400 !scrollbar-track-gray-100'>
@@ -258,9 +245,6 @@ localFilters,
                 </div>
                 <ScrollBar orientation='horizontal' />
             </ScrollArea>
-
-
-
 
             {selectedBid && (
                 <BidsInfoModal

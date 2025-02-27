@@ -13,7 +13,7 @@ function BidHeader({ setIsShortTable, isShortTable }) {
                         Заявки <span className='text-primary'>|</span>
                     </span>
                     <div className='flex gap-3 '>
-                        <PopupModal renderModal={onClose => <StudentCreateForm modalClose={onClose}  />} />
+                        <PopupModal renderModal={onClose => <StudentCreateForm modalClose={onClose} />} />
                     </div>
                     <Button variant='outlineTertiary'>Загрузить</Button>
                     <Button variant='outlineTertiary'>Отменить</Button>
