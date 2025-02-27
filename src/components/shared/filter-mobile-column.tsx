@@ -5,7 +5,7 @@ import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import { Bid } from '@/types'
 
-export const useBidsTableColumns = () => {
+export const FilterMobileColumns = () => {
     // const formatNumber = (value: string) => {
     //     const num = value.replace(/\D/g, '')
     //     return num ? new Intl.NumberFormat('ru-RU').format(Number(num)) : ''

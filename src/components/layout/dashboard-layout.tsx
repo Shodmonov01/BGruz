@@ -3,19 +3,20 @@ import Sidebar from '../shared/sidebar'
 import Header from '../shared/header'
 import MobileSidebar from '../shared/mobile-sidebar'
 import { MenuIcon } from 'lucide-react'
-import { useGetBids } from '@/hooks/useGetBids'
 import { useSearchParams } from 'react-router-dom'
+import { useGetBids } from '@/api/use-get-bids'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
     // const [currentStatus, setCurrentStatus] = useState()
     const [searchParams] = useSearchParams()
+    //@ts-expect-error dfjbhu djni
     const [size, setSize] = useState(Number(searchParams.get('size')) || 200)
     const [localFilters, setLocalFilters] = useState<{ [key: string]: string }>({})
 
     const debounceRef = useRef<NodeJS.Timeout | null>(null)
 
-    const { bids, hasMore, loading, setFilters, refreshBids } = useGetBids(size)
+    const { setFilters, refreshBids } = useGetBids(size)
 
     const handleFilterChange = useCallback(
         (columnId: string, value: any) => {

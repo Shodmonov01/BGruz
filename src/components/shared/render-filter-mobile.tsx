@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { ListFilter } from 'lucide-react'
-import { useBidsTableColumns } from './filter-mobile-column'
 import { renderFilterInput } from '../renderFilterInput/renderFilterInput'
+import { FilterMobileColumns } from './filter-mobile-column'
 
 interface IColumn {
     accessorKey: string
@@ -22,7 +22,7 @@ interface RenderFilterMobileProps {
 export function RenderFilterMobile({ handleFilterChange, localFilters }: RenderFilterMobileProps) {
     const [isOpen, setIsOpen] = useState(false)
 
-    const originalColumns = useBidsTableColumns()
+    const originalColumns = FilterMobileColumns()
 
     const columns = (originalColumns as IColumn[]).map(column => ({
         id: column.accessorKey,
