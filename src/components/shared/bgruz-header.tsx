@@ -1,4 +1,4 @@
-import { useTotals } from "@/lib/TotalsContext";
+import { useTotals } from "@/context/totals-context";
 import logo from "../../../public/logoRb.png";
 import CurrentTime from "./сurrent-time";
 

@@ -3,9 +3,9 @@ import BgruzHeader from '@/components/shared/bgruz-header'
 import OrdersTable from './components/orders-table'
 import { useSearchParams } from 'react-router-dom'
 import OrderTableMobile from './components/ordersTableMobile'
-import { TotalsProvider } from '@/lib/TotalsContext'
-import { useWebSocket } from '@/hooks/use-websocket'
-import { useGetOrders } from '@/hooks/use-get-orders'
+import { useWebSocket } from '@/api/use-websocket'
+import { useGetOrders } from '@/api/use-get-orders'
+import { TotalsProvider } from '@/context/totals-context'
 
 export default function OrderPage() {
     const [searchParams] = useSearchParams()

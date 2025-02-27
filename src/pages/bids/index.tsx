@@ -8,9 +8,10 @@ import PageHead from '@/components/shared/page-head'
 
 import BidsTableMobile from './components/bidsTableMobile'
 import BidsTable from './components/BidsTable'
-import { TotalsProvider } from '@/lib/TotalsContext'
-import { useWebSocket } from '@/hooks/use-websocket'
-import { useGetBids } from '@/hooks/use-get-bids'
+import { useGetBids } from '@/api/use-get-bids'
+import { useWebSocket } from '@/api/use-websocket'
+import { TotalsProvider } from '@/context/totals-context'
+
 
 export default function BidsPage() {
     const [searchParams] = useSearchParams()
