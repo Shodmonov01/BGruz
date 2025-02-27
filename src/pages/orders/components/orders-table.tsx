@@ -16,7 +16,7 @@ import { deleteData, postData2 } from '@/api/api'
 
 import loader from '../../../../public/gear-spinner.svg'
 import { useOrdersTableColumns } from './use-orders-table-columns'
-import OrderInfoModal from './ordersInfoModal'
+import OrderInfoModal from './orders-info-modal'
 import OrdersHeader from './orders-header'
 import { renderFilterInput } from '@/components/shared/renderFilterInput'
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'

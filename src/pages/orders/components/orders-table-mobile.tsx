@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react'
 import { ScrollArea } from '@radix-ui/react-scroll-area'
 import info from '../../../../public/info.svg'
 import { IOrder } from '@/types'
-import { ShippingOrderDialog } from './modalInfoMobile'
+import { ShippingOrderDialog } from './order-Info-modal-mobile'
 import useNumberFormatter from '@/hooks/use-format-number'
 
 function OrderTableMobile({ orders }) {
