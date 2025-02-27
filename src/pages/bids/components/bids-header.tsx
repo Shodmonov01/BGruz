@@ -1,8 +1,8 @@
 import PopupModal from '@/components/shared/popup-modal'
-import StudentCreateForm from './bid-create-form'
 import { Button } from '@/components/ui/button'
 import { Search } from 'lucide-react'
 import { Input } from '@/components/ui/input'
+import BidCreateForm from './bid-create-form'
 
 function BidHeader({ setIsShortTable, isShortTable }) {
     return (
@@ -13,7 +13,7 @@ function BidHeader({ setIsShortTable, isShortTable }) {
                         Заявки <span className='text-primary'>|</span>
                     </span>
                     <div className='flex gap-3 '>
-                        <PopupModal renderModal={onClose => <StudentCreateForm modalClose={onClose}  />} />
+                        <PopupModal renderModal={onClose => <BidCreateForm modalClose={onClose}  />} />
                     </div>
                     <Button variant='outlineTertiary'>Загрузить</Button>
                     <Button variant='outlineTertiary'>Отменить</Button>

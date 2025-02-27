@@ -3,11 +3,11 @@ import { useCallback, useMemo, useState } from 'react'
 import { ScrollArea } from '@radix-ui/react-scroll-area'
 import info from '../../../../public/info.svg'
 import PopupModal from '@/components/shared/popup-modal'
-import StudentCreateForm from './bid-create-form'
 import { BidsOrderDialog } from './bids-info-modal-mobile'
 import useNumberFormatter from '@/hooks/use-format-number'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
+import BidCreateForm from './bid-create-form'
 interface Bid {
     _id: string
     persistentId: string
@@ -112,7 +112,7 @@ function BidsTableMobile({ bids }: Bid) {
             </ScrollArea>
 
             <div className='flex gap-3 fixed bottom-3 px-6 py-6 text-[24px] left-1/2 -translate-x-1/2 w-full'>
-                <PopupModal renderModal={onClose => <StudentCreateForm modalClose={onClose} />} />
+                <PopupModal renderModal={onClose => <BidCreateForm modalClose={onClose} />} />
             </div>
 
             {selectedBid && (

@@ -52,7 +52,7 @@ interface OrganizationData {
     extraServices: { id: number; name: string; description: string }[]
 }
 
-const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
+const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
     const [clients, setClients] = useState<{ organizationId: number; organizationName: string }[]>([])
     const [terminals, setTerminals] = useState<{ id: number; name: string; description: string }[]>([])
     const [warehouses, setWarehouses] = useState<{ id: number; name: string; description: string }[]>([])
@@ -256,4 +256,4 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
     )
 }
 
-export default StudentCreateForm
+export default BidCreateForm
