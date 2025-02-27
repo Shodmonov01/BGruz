@@ -4,6 +4,9 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { ListFilter } from 'lucide-react'
 import { renderFilterInput } from '../renderFilterInput/renderFilterInput'
 import { FilterMobileColumns } from './filter-mobile-column'
+import { useGetBids } from '@/api/use-get-bids'
+import { useFilter } from '@/context/filter-context'
+import { useSearchParams } from 'react-router-dom'
 
 interface IColumn {
     accessorKey: string
@@ -14,13 +17,25 @@ interface IColumn {
     filterOptions?: { value: string | string[]; label: string }[]
 }
 
-interface RenderFilterMobileProps {
-    handleFilterChange: (columnId: string, value: any) => void
-    localFilters: { [key: string]: any }
-}
+// interface RenderFilterMobileProps {
+//     handleFilterChange: (columnId: string, value: any) => void
+//     filters: { [key: string]: any }
+// }
 
-export function RenderFilterMobile({ handleFilterChange, localFilters }: RenderFilterMobileProps) {
+export function RenderFilterMobile() {
     const [isOpen, setIsOpen] = useState(false)
+    const [searchParams] = useSearchParams()
+    //@ts-ignore
+    const [size, setSize] = useState(Number(searchParams.get('size')) || 200)
+    //@ts-ignore
+    const { setFilters, refreshBids } = useGetBids(size)
+    const { filters, handleFilterChange } = useFilter()
+    // const [localFilters, setLocalFilters] = useState(filters)
+
+    // useEffect(() => {
+    //     setLocalFilters(filters)
+    //     refreshBids()
+    // }, [filters])
 
     const originalColumns = FilterMobileColumns()
 
@@ -31,7 +46,7 @@ export function RenderFilterMobile({ handleFilterChange, localFilters }: RenderF
             filterOptions: column.filterOptions,
             header: column.header
         },
-        getFilterValue: () => localFilters[column.accessorKey] || null,
+        getFilterValue: () => filters[column.accessorKey] || null,
         setFilterValue: (value: any) => {
             if (handleFilterChange) {
                 handleFilterChange(column.accessorKey, value)
@@ -56,7 +71,7 @@ export function RenderFilterMobile({ handleFilterChange, localFilters }: RenderF
                                     {renderFilterInput(
                                         {
                                             ...column,
-                                            getFilterValue: () => localFilters[column.id] || null
+                                            getFilterValue: () => filters[column.id] || null
                                         },
                                         handleFilterChange
                                     )}
@@ -69,7 +84,7 @@ export function RenderFilterMobile({ handleFilterChange, localFilters }: RenderF
                                 variant='outline'
                                 size='sm'
                                 onClick={() => {
-                                    Object.keys(localFilters).forEach(key => {
+                                    Object.keys(filters).forEach(key => {
                                         handleFilterChange(key, null)
                                     })
                                     setIsOpen(false)

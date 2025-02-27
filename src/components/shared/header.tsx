@@ -12,7 +12,7 @@ const useMatchedPath = (pathname: string) => {
     return matchedPath?.title || ''
 }
 
-export default function Header({ handleFilterChange, localFilters }) {
+export default function Header() {
     const pathname = usePathname()
     const headingText = useMatchedPath(pathname)
 
@@ -22,7 +22,7 @@ export default function Header({ handleFilterChange, localFilters }) {
             <div className='ml-4 flex items-center md:ml-6'>
                 <UserNav />
                 <ModeToggle />
-                <RenderFilterMobile handleFilterChange={handleFilterChange} localFilters={localFilters} />
+                <RenderFilterMobile />
             </div>
         </div>
     )
