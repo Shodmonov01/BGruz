@@ -97,7 +97,9 @@ function BidsTableMobile({ bids }: Bid) {
                                             <span className='text-lg font-semibold'>{bid.terminal1.cityName}</span>
                                         </div>
                                         <div className='flex justify-between items-center'>
-                                            <span className='text-lg font-semibold'>{bid.warehouses?.[0]?.cityName}</span>
+                                            <span className='text-lg font-semibold'>
+                                                {bid.warehouses?.[0]?.cityName}
+                                            </span>
                                         </div>
                                         <div>
                                             <span className='text-lg font-semibold'>{bid.terminal2.cityName}</span>
