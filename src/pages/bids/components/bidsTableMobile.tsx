@@ -8,6 +8,7 @@ import useNumberFormatter from '@/hooks/use-format-number'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import BidCreateForm from './bid-create-form'
+import AuctionTimer from '@/hooks/use-action-timer'
 interface Bid {
     _id: string
     persistentId: string
@@ -75,24 +76,28 @@ function BidsTableMobile({ bids }: Bid) {
                                     <div onClick={() => handleOpenModal(bid)}>
                                         <img src={info} alt='' className='h-14' />
                                     </div>
-                                    <div className='flex flex-col justify-center gap-[1px]'>
+                                    <div className='flex flex-col justify-center gap-[1px] mt-6'>
                                         <div className='flex items-center gap-2'>
                                             <span className='w-2 h-2 bg-blue-500 rounded-full'></span>
                                         </div>
-                                        <div className='ml-[2.5px] w-[2px] h-[70px] bg-gray-300'></div>
+                                        <div className='ml-[2.5px] w-[2px] h-[20px] bg-gray-300'></div>
+                                        <div className='flex items-center gap-2'>
+                                            <span className='w-2 h-2 bg-blue-500 rounded-full'></span>
+                                        </div>
+                                        <div className='ml-[2.5px] w-[2px] h-[20px] bg-gray-300'></div>
                                         <div className='flex items-center gap-2'>
                                             <span className='w-2 h-2 bg-blue-500 rounded-full'></span>
                                         </div>
                                     </div>
                                     <div>
+                                        <div className='flex justify-between'>
+                                            <span className='font-semibold'>{bid.vehicleProfile?.name || '—'}</span>
+                                        </div>
                                         <div className='flex justify-between items-center'>
                                             <span className='text-lg font-semibold'>{bid.terminal1.cityName}</span>
                                         </div>
-                                        <div className='flex justify-between'>
-                                            <span>Количество машин: 1</span>
-                                        </div>
-                                        <div className='flex justify-between'>
-                                            <span className='font-semibold'>{bid.vehicleProfile?.name || '—'}</span>
+                                        <div className='flex justify-between items-center'>
+                                            <span className='text-lg font-semibold'>{bid.warehouses?.[0]?.cityName}</span>
                                         </div>
                                         <div>
                                             <span className='text-lg font-semibold'>{bid.terminal2.cityName}</span>
@@ -103,6 +108,7 @@ function BidsTableMobile({ bids }: Bid) {
                                         <p className='text-green-600 font-semibold'>
                                             {bid.price ? `${formatNumber(bid.price)} ₽` : '—'}
                                         </p>
+                                        <AuctionTimer activationTime={bid.activationTime} />
                                     </div>
                                 </CardContent>
                             </Card>
