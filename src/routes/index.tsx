@@ -25,6 +25,10 @@ export default function AppRouter() {
             ),
             children: [
                 {
+                    index: true,
+                    element: <Navigate to="bids" replace />
+                },
+                {
                     path: 'bids',
                     element:  <BidsPage />,
                     index: true

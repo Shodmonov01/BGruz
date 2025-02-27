@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
-import { ServerTimeProvider } from './lib/ServerTimeContext.tsx'
+import { ServerTimeProvider } from './lib/server-time-context.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>

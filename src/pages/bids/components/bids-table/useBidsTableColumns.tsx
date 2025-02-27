@@ -5,7 +5,7 @@ import { Eye, Trash } from 'lucide-react'
 import loading from '../../../../../public/gear-spinner.svg'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
-import { useServerTime } from '@/lib/ServerTimeContext'
+import { useServerTime } from '@/lib/server-time-context'
 
 interface Bid {
     _id: string
