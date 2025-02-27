@@ -209,3 +209,33 @@ export interface IOrder {
     assignedDriverFiles?: any[]
     documentOrderItems?: any[]
 }
+
+export interface Bid {
+    _id: string
+    persistentId: string
+    cargoTitle: string
+    clientName: { organizationName: string }
+    price: number | null
+    status: string | null
+    filingTime: string
+    createdBy: string
+    createdAt: string
+    isPriceRequest?: boolean
+    customerName?: { organizationName: string }
+    terminal1?: { cityName: string }
+    terminal2?: { cityName: string }
+    warehouses?: { cityName: string }[]
+    vehicleProfile?: { name: string }
+    loadingDate: number
+    activationTime: string
+    cargoType?: 'wagon' | 'container'
+    loadingMode?: 'loading' | 'unloading'
+    auction?: number
+    bestSalePrice?: number
+    extraServicesPrice?: number
+    fullPrice?: number
+    commission?: number
+    fullPriceNDS?: number
+    accessorKey: string
+    [key: string]: unknown
+}
