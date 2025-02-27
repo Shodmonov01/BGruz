@@ -17,6 +17,7 @@ import { deleteData, postData2 } from '@/api/api'
 import loader from '../../../../public/gear-spinner.svg'
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
 import { renderFilterInput } from '@/components/renderFilterInput/renderFilterInput'
+import { useFilter } from '@/context/filter-context'
 
 interface Bid {
     _id?: string
@@ -28,15 +29,18 @@ interface Bid {
 
 interface BidsTableProps {
     bids: Bid[] | any[]
-    setFilters: (filters: Record<string, unknown>) => void
-    handleFilterChange: (columnId: string, value: any) => void
+    // setFilters: (filters: Record<string, unknown>) => void
+    // handleFilterChange: (columnId: string, value: any) => void
     loadMore: () => void
     hasMore: boolean
     loading: boolean
-    localFilters: Record<string, string | any[]>
+    // localFilters: Record<string, string | any[]>
 }
 //@ts-ignore
-function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, loading, localFilters }: BidsTableProps) {
+function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
+    //@ts-ignore
+    const { filters, handleFilterChange, clearFilters } = useFilter()
+
     const [selectedBid, setSelectedBid] = useState<Partial<Bid> | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
     // const [isShortTable, setIsShortTable] = useState(false)
@@ -45,9 +49,10 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
     })
     const scrollRef = useRef<HTMLDivElement | null>(null)
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
-        Object.entries(localFilters).map(([id, value]) => ({ id, value }))
+        Object.entries(filters).map(([id, value]) => ({ id, value }))
     )
     const [sorting, setSorting] = useState<SortingState>([])
+
     useEffect(() => {
         localStorage.setItem('isShortTable', String(isShortTable)) // Сохраняем в localStorage при изменении
     }, [isShortTable])
@@ -129,9 +134,9 @@ function BidsTable({ bids, setFilters, handleFilterChange, loadMore, hasMore, lo
     })
 
     useEffect(() => {
-        const newColumnFilters = Object.entries(localFilters).map(([id, value]) => ({ id, value }))
+        const newColumnFilters = Object.entries(filters).map(([id, value]) => ({ id, value }))
         setColumnFilters(newColumnFilters)
-    }, [localFilters])
+    }, [filters])
 
     return (
         <div>
