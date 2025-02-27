@@ -3,6 +3,7 @@ import { usePathname } from '@/routes/hooks';
 import Heading from './heading';
 import UserNav from './user-nav';
 import { ModeToggle } from './theme-toggle';
+import { RenderFilterMobile } from './render-filter-mobile';
 
 const useMatchedPath = (pathname: string) => {
 
@@ -15,7 +16,7 @@ const useMatchedPath = (pathname: string) => {
   return matchedPath?.title || '';
 };
 
-export default function Header() {
+export default function Header({handleFilterChange , currentStatus}) {
   const pathname = usePathname();
   const headingText = useMatchedPath(pathname);
 
@@ -25,7 +26,8 @@ export default function Header() {
       <div className="ml-4 flex items-center md:ml-6">
         <UserNav />
         <ModeToggle />
-      </div>
+        <RenderFilterMobile handleFilterChange={handleFilterChange} currentStatus={currentStatus} />
+        </div>
     </div>
   );
 }

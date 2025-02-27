@@ -232,14 +232,6 @@ const StudentCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                         </div>
                     </div>
                     {errorMessage && <div className='text-red-500 text-center py-2'>{errorMessage}</div>}
-                    {/* <div className='flex flex-col-reverse md:grid md:grid-cols-2 md:px-0 px-4  justify-center gap-4'>
-                        <Button type='button' variant='secondary' size='lg' onClick={modalClose}>
-                            Отмена
-                        </Button>
-                        <Button variant='tertiary' type='submit' size='lg' disabled={!isClientSelected}>
-                            Создать заявку
-                        </Button>
-                    </div> */}
                     {Object.keys(errors).length > 0 && (
                         <div className='text-red-500 text-center py-2'>Заполните все обязательные поля</div>
                     )}

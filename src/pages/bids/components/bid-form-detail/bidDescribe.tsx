@@ -158,7 +158,7 @@ function BidDescribe({ extraServices }: BidDescribeProps) {
                     </div>
 
                     {services.length === 0 ? (
-                        <p className='text-gray-500'>Нет доступных доп. услуг или же выберите клиента</p>
+                        <p className='text-gray-500 md:px-0 px-4'>Нет доступных доп. услуг или же выберите клиента</p>
                     ) : (
                         services.map((service, index) => (
                             <div key={service.id} className='flex items-center justify-between  gap-8 md:gap-4 md:px-0 px-4'>
