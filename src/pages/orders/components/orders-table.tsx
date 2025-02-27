@@ -18,7 +18,7 @@ import loader from '../../../../public/gear-spinner.svg'
 import { useOrdersTableColumns } from './use-orders-table-columns'
 import OrderInfoModal from './ordersInfoModal'
 import OrdersHeader from './orders-header'
-import { renderFilterInput } from '@/components/renderFilterInput/renderFilterInput'
+import { renderFilterInput } from '@/components/shared/renderFilterInput'
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
 
 interface Bid {
@@ -60,11 +60,10 @@ function OrdersTable({
 
     const scrollRef = useRef<HTMLDivElement | null>(null)
 
-
     useEffect(() => {
-        localStorage.setItem('isShortTable', String(isShortTable)) 
+        localStorage.setItem('isShortTable', String(isShortTable))
     }, [isShortTable])
-    
+
     useEffect(() => {
         let isFetching = false
 
@@ -172,33 +171,35 @@ function OrdersTable({
                                             className='bg-[#EDEDED] border border-gray-300 whitespace-nowrap'
                                         >
                                             <div className=''>
-                                                {//@ts-ignore
-                                                header.column.columnDef.filterType !== 'range' ? (
-                                                    <div className='text-center'>
-                                                        {renderFilterInput(header.column, handleFilterChange)}
-                                                    </div>
-                                                ) : (
-                                                    <div
-                                                    className='flex  items-center gap-1 cursor-pointer px-3 py-5 md:px-3 md:py-2 text-base md:text-xl rounded-md bg-white'
-                                                    onClick={header.column.getToggleSortingHandler()}
-                                                    >
+                                                {
+                                                    //@ts-ignore
+                                                    header.column.columnDef.filterType !== 'range' ? (
                                                         <div className='text-center'>
-                                                            {flexRender(
-                                                                header.column.columnDef.header,
-                                                                header.getContext()
+                                                            {renderFilterInput(header.column, handleFilterChange)}
+                                                        </div>
+                                                    ) : (
+                                                        <div
+                                                            className='flex  items-center gap-1 cursor-pointer px-3 py-5 md:px-3 md:py-2 text-base md:text-xl rounded-md bg-white'
+                                                            onClick={header.column.getToggleSortingHandler()}
+                                                        >
+                                                            <div className='text-center'>
+                                                                {flexRender(
+                                                                    header.column.columnDef.header,
+                                                                    header.getContext()
+                                                                )}
+                                                            </div>
+                                                            {header.column.getIsSorted() ? (
+                                                                header.column.getIsSorted() === 'asc' ? (
+                                                                    <ArrowUp className='h-4 w-4' />
+                                                                ) : (
+                                                                    <ArrowDown className='h-4 w-4' />
+                                                                )
+                                                            ) : (
+                                                                <ArrowUpDown className='h-4 w-4 opacity-50' />
                                                             )}
                                                         </div>
-                                                        {header.column.getIsSorted() ? (
-                                                            header.column.getIsSorted() === 'asc' ? (
-                                                                <ArrowUp className='h-4 w-4' />
-                                                            ) : (
-                                                                <ArrowDown className='h-4 w-4' />
-                                                            )
-                                                        ) : (
-                                                            <ArrowUpDown className='h-4 w-4 opacity-50' />
-                                                        )}
-                                                    </div>
-                                                )}
+                                                    )
+                                                }
                                             </div>
                                         </TableHead>
                                     ))}

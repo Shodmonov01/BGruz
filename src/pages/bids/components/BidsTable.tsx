@@ -16,7 +16,7 @@ import BidHeader from './bids-header'
 import { deleteData, postData2 } from '@/api/api'
 import loader from '../../../../public/gear-spinner.svg'
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
-import { renderFilterInput } from '@/components/renderFilterInput/renderFilterInput'
+import { renderFilterInput } from '@/components/shared/renderFilterInput'
 import { useFilter } from '@/context/filter-context'
 
 interface Bid {
