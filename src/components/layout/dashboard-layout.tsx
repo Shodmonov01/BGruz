@@ -8,7 +8,6 @@ import { useGetBids } from '@/api/use-get-bids'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
-    // const [currentStatus, setCurrentStatus] = useState()
     const [searchParams] = useSearchParams()
     //@ts-expect-error dfjbhu djni
     const [size, setSize] = useState(Number(searchParams.get('size')) || 200)
