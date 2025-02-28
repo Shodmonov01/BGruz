@@ -9,6 +9,7 @@ import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import BidCreateForm from './bid-create-form'
 import AuctionTimer from '@/hooks/use-action-timer'
+//@ts-ignore
 interface Bid {
     _id: string
     persistentId: string
@@ -20,6 +21,7 @@ interface Bid {
     createdBy: string
     createdAt: string
     isPriceRequest?: boolean
+    loadingDate: string
     customer?: { name: string }
     terminal1?: { cityName: string }
     terminal2?: { cityName: string }
@@ -27,10 +29,15 @@ interface Bid {
     vehicleProfile?: { name: string }
     [key: string]: unknown
 }
+interface BidsTableMobileProps {
+    bids: any[]
+}
 
-function BidsTableMobile({ bids }: Bid) {
+function BidsTableMobile({ bids }: BidsTableMobileProps) {
     const [selectedBid, setSelectedBid] = useState(null)
     const [open, setOpen] = useState(false)
+    // const { filters } = useFilter()
+    // const { refreshBids } = useGetBids(200)
 
     const handleCloseModal = useCallback(() => {
         setOpen(false)
@@ -42,6 +49,15 @@ function BidsTableMobile({ bids }: Bid) {
     }, [])
 
     const { formatNumber } = useNumberFormatter()
+
+    // useEffect(() => {
+    //     console.log('BidsTableMobile received new bids:', bids)
+    //     console.log('Current filters:', filters)
+    // }, [bids, filters])
+
+    // useEffect(() => {
+    //     refreshBids()
+    // }, [refreshBids])
 
     // Группировка заявок по дате
     const groupedBids = useMemo(() => {

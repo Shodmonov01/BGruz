@@ -1,29 +1,27 @@
 import axios from 'axios'
 
- const API_URL = axios.create({
+const API_URL = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL
 })
-
 
 API_URL.interceptors.response.use(
     response => response,
     error => {
         if (error.response && error.response.status === 401) {
-            const requestUrl = error.config?.url;
+            const requestUrl = error.config?.url
 
             if (requestUrl && requestUrl.includes('/api/v1/time/now')) {
-                return Promise.reject(error);
+                return Promise.reject(error)
             }
 
-            localStorage.removeItem('authToken');
+            localStorage.removeItem('authToken')
             setTimeout(() => {
-                window.location.href = '/login';
-            }, 100);
+                window.location.href = '/login'
+            }, 100)
         }
-        return Promise.reject(error);
+        return Promise.reject(error)
     }
-);
-
+)
 
 export const deleteData = async (endpoint, token: string | null = null) => {
     try {
@@ -52,9 +50,6 @@ export const postData2 = async <T>(endpoint: string, data: any, token: string | 
         throw error
     }
 }
-
-
-
 
 export const fetchPublicData = async endpoint => {
     try {
@@ -91,8 +86,6 @@ export const postData = async (endpoint, data, token: string | null = null) => {
     }
 }
 
-
-
 export const putData = async (endpoint, data, token = null) => {
     try {
         const headers = token ? { Authorization: `Bearer ${token}` } : {}
@@ -103,7 +96,3 @@ export const putData = async (endpoint, data, token = null) => {
         throw error
     }
 }
-
-
-
-
