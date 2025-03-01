@@ -47,13 +47,14 @@ interface Bid {
 }
 
 interface ColumnsProps {
+    isMobile?: boolean
     isShortTable: boolean
     onApprove: (bidId: string) => void
     onDelete: (bidId: string) => void
     onOpenModal: (bid: any) => void
 }
 
-export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpenModal }: ColumnsProps) => {
+export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpenModal, isMobile }: ColumnsProps) => {
     const { formatNumber } = useNumberFormatter()
     return useMemo<ColumnDef<Bid>[]>(() => {
         const allColumns: (ColumnDef<Bid> & {
@@ -62,6 +63,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
             filterType?: string
             filterOptions?: { value: string | string[]; label: string }[]
             accessorFn?: any
+            isMobile?: boolean
         })[] = [
             {
                 accessorKey: '_id',
@@ -69,7 +71,8 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 size: 100,
                 isShortVersion: false,
                 searchable: true,
-                filterType: 'exact'
+                filterType: 'exact',
+                isMobile: false
             },
             {
                 accessorKey: 'persistentId',
@@ -77,7 +80,8 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 size: 100,
                 isShortVersion: false,
                 searchable: true,
-                filterType: 'exact'
+                filterType: 'exact',
+                isMobile: false
             },
             {
                 header: 'Вагон/Конт',
@@ -133,7 +137,9 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                     row.buyBid?.loadingDate
                         ? format(new Date(row.buyBid.loadingDate), 'dd.MM.yyyy', { locale: ru })
                         : '—',
-                filterType: 'dateRange'
+                filterType: 'dateRange',
+                isMobile: true
+
             },
 
             {
@@ -152,7 +158,8 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 accessorFn: row => row.buyBid?.terminal1?.cityName ?? '—',
                 isShortVersion: true,
                 searchable: true,
-                filterType: 'fuzzy'
+                filterType: 'fuzzy',
+                isMobile: true
             },
             {
                 accessorKey: 'warehouses',
@@ -161,7 +168,8 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 accessorFn: row => row.buyBid?.warehouses?.[0]?.cityName ?? '—',
                 isShortVersion: true,
                 searchable: true,
-                filterType: 'fuzzy'
+                filterType: 'fuzzy',
+                isMobile: true
             },
             {
                 accessorKey: 'terminal2',
@@ -170,7 +178,8 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 size: 120,
                 accessorFn: row => row.buyBid?.terminal2?.cityName ?? '—',
                 searchable: true,
-                filterType: 'fuzzy'
+                filterType: 'fuzzy',
+                isMobile: true
             },
             {
                 accessorKey: 'vehicleProfile',
@@ -206,6 +215,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 },
                 searchable: true,
                 filterType: 'select',
+                isMobile: true,
                 isShortVersion: true,
                 filterOptions: [
                     {

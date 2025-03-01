@@ -2,11 +2,11 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { ListFilter } from 'lucide-react'
-import { renderFilterInput } from './render-filter-input'
 import { useGetBids } from '@/api/use-get-bids'
 import { useFilter } from '@/context/filter-context'
 import { useSearchParams } from 'react-router-dom'
 import { useBidsTableColumns } from '@/pages/bids/components/bids-table/useBidsTableColumns'
+import { FilterInput } from './render-filter-input'
 
 interface IColumn {
     accessorKey: string
@@ -109,8 +109,15 @@ export function RenderFilterMobile() {
                         {memoizedColumns.map((column, index) => (
                             <div key={column.id} className='space-y-2'>
                                 <label className='text-xs font-medium'>{column.columnDef.header}</label>
+                                {/* <div>{renderFilterInput(column, handleFilterChange)}</div> */}
+                                <div>
                                 {/* @ts-ignore */}
-                                <div>{renderFilterInput(column, handleFilterChange)}</div>
+                                    <FilterInput
+                                        column={column}
+                                        handleFilterChange={handleFilterChange}
+                                        // pageType='orders'
+                                    />
+                                </div>
                             </div>
                         ))}
 

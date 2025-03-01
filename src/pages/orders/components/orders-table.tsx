@@ -18,7 +18,7 @@ import loader from '../../../../public/gear-spinner.svg'
 import { useOrdersTableColumns } from './use-orders-table-columns'
 import OrderInfoModal from './orders-info-modal'
 import OrdersHeader from './orders-header'
-import { renderFilterInput } from '@/components/shared/render-filter-input'
+import { FilterInput } from '@/components/shared/render-filter-input'
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
 
 interface Bid {
@@ -175,8 +175,9 @@ function OrdersTable({
                                                     //@ts-ignore
                                                     header.column.columnDef.filterType !== 'range' ? (
                                                         <div className='text-center'>
-                                                            {renderFilterInput(header.column, handleFilterChange, orders)}
-                                                        </div>
+                                                            {/* {renderFilterInput(header.column, handleFilterChange, orders)} */}
+                                                            <FilterInput column={header.column} handleFilterChange={handleFilterChange} pageType="orders" />
+                                                            </div>
                                                     ) : (
                                                         <div
                                                             className='flex  items-center gap-1 cursor-pointer px-3 py-5 md:px-3 md:py-2 text-base md:text-xl rounded-md bg-white'

@@ -149,7 +149,9 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 accessorFn: row => row.warehouses?.[0]?.cityName ?? '—',
                 isShortVersion: true,
                 searchable: true,
-                filterType: 'fuzzy'
+                filterType: 'fuzzy',
+                isMobile: true
+
             },
             {
                 accessorKey: 'terminal2',
