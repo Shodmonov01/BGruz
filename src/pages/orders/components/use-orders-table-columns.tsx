@@ -66,7 +66,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
             isMobile?: boolean
         })[] = [
             {
-                accessorKey: '_id',
+                accessorKey: 'id',
                 header: 'ID',
                 size: 100,
                 isShortVersion: false,
@@ -272,7 +272,15 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                     { value: 'delivered', label: 'Груз сдан' },
                                 ]
             },
-
+            {
+                accessorKey: 'docSubmissionDate',
+                header: 'Документы',
+                size: 100,
+                isShortVersion: false,
+                searchable: true,
+                filterType: 'exact',
+                isMobile: false
+            },
             {
                 accessorKey: 'price',
                 header: 'Моя цена',
@@ -306,7 +314,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
             },
             {
                 accessorKey: 'fullPrice',
-                header: 'Цена + доп услуги',
+                header: 'Цена + доп',
                 size: 150,
                 isShortVersion: true,
                 cell: ({ getValue }) => {

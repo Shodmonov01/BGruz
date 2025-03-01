@@ -250,7 +250,7 @@ export function FilterInput({ column, handleFilterChange, pageType }) {
                 <DateRangePicker
                     value={column.getFilterValue() as { from: Date; to?: Date } | undefined}
                     onChange={range => handleChange(range)}
-                    placeholder='Выберите даты'
+                    placeholder='Дата'
                     className='text-xs'
                 />
             )

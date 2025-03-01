@@ -20,7 +20,7 @@ import { useFilter } from '@/context/filter-context'
 import { FilterInput } from '@/components/shared/render-filter-input'
 
 interface Bid {
-    _id?: string
+    id?: string
     client: { organizationName: string }
     cargoTitle: string
     price: number | null
