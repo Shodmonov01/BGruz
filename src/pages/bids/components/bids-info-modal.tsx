@@ -336,7 +336,7 @@ const BidsInfoModal = ({
 
     useEffect(() => {
         if (selectedBid && Object.keys(selectedBid).length > 0) {
-            setIsEdit(true)
+            setIsEdit(false)
             setOriginalData({ ...selectedBid })
             setFormData({ ...selectedBid })
 
@@ -402,6 +402,8 @@ const BidsInfoModal = ({
             setIsEdit(false)
         }
     }, [selectedBid, reset, setValue])
+
+    console.log('terminals', terminals)
 
     const handleClientChange = async (clientId: string) => {
         setValue('client', clientId)

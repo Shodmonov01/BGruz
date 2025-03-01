@@ -41,6 +41,7 @@ function TerminalOne({ terminals }) {
                                     if (selectedTerminal) {
                                         setValue('terminal1Address', selectedTerminal.description || '')
                                         setValue('terminal1Id', selectedTerminal.id) // сохраняем ID терминала
+                                        // setValue('terminal1Name', selectedTerminal.name)
                                     }
                                 }}
                                 open={isOpen}

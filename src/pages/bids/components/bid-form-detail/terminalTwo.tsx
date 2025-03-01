@@ -14,7 +14,6 @@ function TerminalTwo({ terminals }) {
     const [search, setSearch] = useState('')
     const [isOpen, setIsOpen] = useState(false)
 
-
     const getTerminalTitle = () => {
         if (transportType === 'Контейнер') return 'Сдать контейнер'
         if (transportType === 'Вагон' && loadingType === 'Погрузка') return 'Терминал погрузки'
@@ -95,12 +94,7 @@ function TerminalTwo({ terminals }) {
                     render={({ field }) => (
                         <FormItem>
                             <FormControl>
-                                <Input
-                                    placeholder='Адрес'
-                                    {...field}
-                                    className=''
-                                    readOnly
-                                />
+                                <Input placeholder='Адрес' {...field} className='' readOnly />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
