@@ -5,12 +5,12 @@ import { useSearchParams } from 'react-router-dom'
 import BgruzHeader from '@/components/shared/bgruz-header'
 import PageHead from '@/components/shared/page-head'
 
-import BidsTableMobile from './components/bidsTableMobile'
 import BidsTable from './components/BidsTable'
 import { useGetBids } from '@/api/use-get-bids'
 import { useWebSocket } from '@/api/use-websocket'
 import { TotalsProvider } from '@/context/totals-context'
-import { FilterProvider } from '@/context/filter-context'
+import { FilterProvider, useFilter } from '@/context/filter-context'
+import BidsTableMobile from './components/bidsTableMobile'
 
 export default function BidsPage() {
     const [searchParams] = useSearchParams()
@@ -19,7 +19,8 @@ export default function BidsPage() {
 
     // const debounceRef = useRef<NodeJS.Timeout | null>(null)
 
-    const { bids, hasMore, loading, setFilters, refreshBids } = useGetBids(size)
+    const { bids, hasMore, loading, refreshBids } = useGetBids(size)
+    const { setFilters } = useFilter()
 
     // const handleFilterChange = useCallback(
     //     (columnId: string, value: any) => {
@@ -70,7 +71,6 @@ export default function BidsPage() {
                         </div>
 
                         <div className='md:hidden'>
-                            {/* @ts-ignore */}
                             <BidsTableMobile bids={bids || []} />
                         </div>
                     </div>

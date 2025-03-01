@@ -37,13 +37,14 @@ interface Bid {
 }
 
 interface ColumnsProps {
-    isShortTable: boolean
-    onApprove: (bidId: string) => void
-    onDelete: (bidId: string) => void
-    onOpenModal: (bid: Bid) => void
+    isMobile?: boolean
+    isShortTable?: boolean
+    onApprove?: (bidId: string) => void
+    onDelete?: (bidId: string) => void
+    onOpenModal?: (bid: Bid) => void
 }
 
-export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenModal }: ColumnsProps) => {
+export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenModal, isMobile }: ColumnsProps) => {
     const formatNumber = (value: string) => {
         const num = value.replace(/\D/g, '')
         return num ? new Intl.NumberFormat('ru-RU').format(Number(num)) : ''
@@ -56,6 +57,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
             filterType?: string
             filterOptions?: { value: string | string[]; label: string }[]
             accessorFn?: any
+            isMobile?: boolean
         })[] = [
             {
                 accessorKey: 'number',
@@ -63,7 +65,8 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 size: 100,
                 isShortVersion: false,
                 searchable: true,
-                filterType: 'exact'
+                filterType: 'exact',
+                isMobile: false
             },
             {
                 accessorKey: 'persistentId',
@@ -71,7 +74,8 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 size: 100,
                 isShortVersion: false,
                 searchable: true,
-                filterType: 'exact'
+                filterType: 'exact',
+                isMobile: false
             },
             {
                 header: 'Вагон/Конт',
@@ -125,7 +129,8 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 searchable: true,
                 accessorFn: row =>
                     row.loadingDate ? format(new Date(row.loadingDate), 'dd.MM.yyyy', { locale: ru }) : '',
-                filterType: 'dateRange'
+                filterType: 'dateRange',
+                isMobile: true
             },
             {
                 accessorKey: 'terminal1',
@@ -134,7 +139,8 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 accessorFn: row => row.terminal1?.cityName ?? '—',
                 isShortVersion: true,
                 searchable: true,
-                filterType: 'fuzzy'
+                filterType: 'fuzzy',
+                isMobile: true
             },
             {
                 accessorKey: 'warehouses',
@@ -152,7 +158,8 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 accessorFn: row => row.terminal2?.cityName ?? '—',
                 isShortVersion: true,
                 searchable: true,
-                filterType: 'fuzzy'
+                filterType: 'fuzzy',
+                isMobile: true
             },
             {
                 accessorKey: 'vehicleProfile',
@@ -209,6 +216,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 searchable: true,
                 isShortVersion: true,
                 filterType: 'select',
+                isMobile: true,
                 filterOptions: [
                     { value: ['active', 'waiting', 'executed', 'canceled'], label: 'Все' },
                     { value: ['active', 'waiting'], label: 'Акт.+ожид.' },
@@ -216,6 +224,23 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                     { value: 'waiting', label: 'На ожидании' },
                     { value: 'executed', label: 'Выполнена' },
                     { value: 'canceled', label: 'Отменены' }
+                    // { value: 'all', label: 'Все' },
+                    // { value: 'new', label: 'Новый' },
+                    // { value: 'canceledByCarrierWithPenalty', label: 'Отменяется перевозчиком (половина ГО)' },
+                    // { value: 'canceledByCustomerWithPenalty', label: 'Отменяется заказчиком (половина ГО)' },
+                    // { value: 'canceledByCarrier', label: 'Отменяется перевозчиком' },
+                    // { value: 'canceledByCustomer', label: 'Отменяется заказчиком' },
+                    // { value: 'failed', label: 'Сорван' },
+                    // { value: 'failing', label: 'Срывается' },
+                    // { value: 'completed', label: 'Выполнен' },
+                    // { value: 'inTransit', label: 'Машина в пути' },
+                    // { value: 'canceled', label: 'Отменен' },
+                    // { value: 'headingToLoading', label: 'Еду на погрузку"' },
+                    // { value: 'loading', label: 'На погрузке' },
+                    // { value: 'unloading', label: 'На выгрузке' },
+                    // { value: 'delivered', label: 'Груз сдан' },
+
+                    // { value: 'allExceptCanceled', label: 'Все (кроме отм.)' }
                 ]
             },
             {
@@ -225,8 +250,8 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 searchable: true,
                 isShortVersion: true,
                 cell: ({ getValue }) => {
-                    const value = getValue();
-                    return value ? formatNumber(String(value)) : 'Запрос';
+                    const value = getValue()
+                    return value ? formatNumber(String(value)) : 'Запрос'
                 },
                 filterType: 'range',
                 sortingFn: (rowA, rowB, columnId) => {
@@ -351,20 +376,19 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 header: 'Согласовано',
                 size: 150,
                 cell: ({ row }) => {
-                    return <Button onClick={() => onApprove(row.original._id)}>Согласовать</Button>
+                    return <Button onClick={() => onApprove?.(row.original._id)}>Согласовать</Button>
                 },
                 isShortVersion: true
-
             },
             {
                 header: 'Действия',
                 size: 80,
                 cell: ({ row }) => (
                     <div className='flex justify-center'>
-                        <Eye className='mr-2 h-5 w-5 cursor-pointer' onClick={() => onOpenModal(row.original)} />
+                        <Eye className='mr-2 h-5 w-5 cursor-pointer' onClick={() => onOpenModal?.(row.original)} />
                         <Trash
                             className='mr-2 h-5 w-5 cursor-pointer text-red-500'
-                            onClick={() => onDelete(row.original._id)}
+                            onClick={() => onDelete?.(row.original._id)}
                         />
                     </div>
                 )

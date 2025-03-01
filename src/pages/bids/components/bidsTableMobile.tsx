@@ -2,13 +2,13 @@ import { Card, CardContent } from '@/components/ui/card'
 import { useCallback, useMemo, useState } from 'react'
 import { ScrollArea } from '@radix-ui/react-scroll-area'
 import info from '../../../../public/info.svg'
-import PopupModal from '@/components/shared/popup-modal'
-import { BidsOrderDialog } from './bids-info-modal-mobile'
 import useNumberFormatter from '@/hooks/use-format-number'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
-import BidCreateForm from './bid-create-form'
 import AuctionTimer from '@/hooks/use-action-timer'
+import BidsInfoModal from './bids-info-modal'
+
+//@ts-ignore
 interface Bid {
     _id: string
     persistentId: string
@@ -20,6 +20,7 @@ interface Bid {
     createdBy: string
     createdAt: string
     isPriceRequest?: boolean
+    loadingDate: string
     customer?: { name: string }
     terminal1?: { cityName: string }
     terminal2?: { cityName: string }
@@ -28,9 +29,15 @@ interface Bid {
     [key: string]: unknown
 }
 
-function BidsTableMobile({ bids }: Bid) {
+interface BidsTableMobileProps {
+    bids: any[]
+}
+
+function BidsTableMobile({ bids }: BidsTableMobileProps) {
     const [selectedBid, setSelectedBid] = useState(null)
     const [open, setOpen] = useState(false)
+    // const { filters } = useFilter()
+    // const { refreshBids } = useGetBids(200)
 
     const handleCloseModal = useCallback(() => {
         setOpen(false)
@@ -42,6 +49,15 @@ function BidsTableMobile({ bids }: Bid) {
     }, [])
 
     const { formatNumber } = useNumberFormatter()
+
+    // useEffect(() => {
+    //     console.log('BidsTableMobile received new bids:', bids)
+    //     console.log('Current filters:', filters)
+    // }, [bids, filters])
+
+    // useEffect(() => {
+    //     refreshBids()
+    // }, [refreshBids])
 
     // Группировка заявок по дате
     const groupedBids = useMemo(() => {
@@ -119,12 +135,12 @@ function BidsTableMobile({ bids }: Bid) {
                 ))}
             </ScrollArea>
 
-            <div className='flex gap-3 fixed bottom-3 px-6 py-6 text-[24px] left-1/2 -translate-x-1/2 w-full'>
+            {/* <div className='flex gap-3 fixed bottom-3 px-6 py-6 text-[24px] left-1/2 -translate-x-1/2 w-full'>
                 <PopupModal renderModal={onClose => <BidCreateForm modalClose={onClose} />} />
-            </div>
+            </div> */}
 
             {selectedBid && (
-                <BidsOrderDialog
+                <BidsInfoModal
                     selectedBid={selectedBid}
                     handleCloseModal={handleCloseModal}
                     open={open}
