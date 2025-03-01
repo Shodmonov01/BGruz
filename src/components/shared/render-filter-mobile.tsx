@@ -109,6 +109,7 @@ export function RenderFilterMobile() {
                         {memoizedColumns.map((column, index) => (
                             <div key={column.id} className='space-y-2'>
                                 <label className='text-xs font-medium'>{column.columnDef.header}</label>
+                                {/* @ts-ignore */}
                                 <div>{renderFilterInput(column, handleFilterChange)}</div>
                             </div>
                         ))}

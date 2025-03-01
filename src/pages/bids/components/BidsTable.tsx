@@ -172,7 +172,7 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
                                                     //@ts-ignore
                                                     header.column.columnDef.filterType !== 'range' ? (
                                                         <div className='text-center'>
-                                                            {renderFilterInput(header.column, handleFilterChange)}
+                                                            {renderFilterInput(header.column, handleFilterChange, bids)}
                                                         </div>
                                                     ) : (
                                                         <div

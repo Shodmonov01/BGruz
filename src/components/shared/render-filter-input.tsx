@@ -2,20 +2,33 @@ import { Input } from '../ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { DateRangePicker } from '@/pages/bids/components/bid-form-detail/rangePicker'
 
-export function renderFilterInput(column, handleFilterChange) {
+export function renderFilterInput(column, handleFilterChange, pageType) {
     const filterType = column.columnDef.filterType
     const filterOptions = column.columnDef.filterOptions
 
     const getDefaultValue = columnId => {
-        switch (columnId) {
-            case 'cargoType':
-                return ['wagon', 'container']
-            case 'status':
-                return ['active', 'waiting']
-            case 'loadingMode':
-                return ['loading', 'unloading']
-            default:
-                return []
+        if (pageType === 'orders') {
+            switch (columnId) {
+                case 'cargoType':
+                    return ['bulk', 'liquid']
+                case 'status':
+                    return ['new', 'processed']
+                case 'loadingMode':
+                    return ['pickup', 'delivery']
+                default:
+                    return []
+            }
+        } else {
+            switch (columnId) {
+                case 'cargoType':
+                    return ['wagon', 'container']
+                case 'status':
+                    return ['active', 'waiting']
+                case 'loadingMode':
+                    return ['loading', 'unloading']
+                default:
+                    return []
+            }
         }
     }
 

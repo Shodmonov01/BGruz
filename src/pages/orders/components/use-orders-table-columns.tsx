@@ -2,13 +2,10 @@ import { useMemo } from 'react'
 
 import { ColumnDef } from '@tanstack/react-table'
 
-
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import loading from '../../../../public/gear-spinner.svg'
 import useNumberFormatter from '@/hooks/use-format-number'
-
-
 
 interface Bid {
     _id: string
@@ -57,7 +54,6 @@ interface ColumnsProps {
 }
 
 export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpenModal }: ColumnsProps) => {
-
     const { formatNumber } = useNumberFormatter()
     return useMemo<ColumnDef<Bid>[]>(() => {
         const allColumns: (ColumnDef<Bid> & {
@@ -148,8 +144,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 accessorFn: (row: Bid) => row.buyBid?.filingTime ?? '—',
                 filterType: 'dateRange'
             },
-            
-            
+
             {
                 accessorKey: 'terminal1',
                 header: 'Терминал 1',
@@ -213,12 +208,39 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 filterType: 'select',
                 isShortVersion: true,
                 filterOptions: [
-                    { value: ['active', 'waiting', 'executed', 'canceled'], label: 'Все' },
-                    { value: ['active', 'waiting'], label: 'Акт.+ожид.' },
-                    { value: 'active', label: 'Активна' },
-                    { value: 'waiting', label: 'На ожидании' },
-                    { value: 'executed', label: 'Выполнена' },
-                    { value: 'canceled', label: 'Отменены' }
+                    {
+                        value: [
+                            'new',
+                            'inTransit',
+                            'completed',
+                            'failing',
+                            'failed',
+                            'canceledByCustomer',
+                            'canceledByCarrier',
+                            'canceledByCustomerWithPenalty',
+                            'canceledByCarrierWithPenalty',
+                            'canceled',
+                            'headingToLoading',
+                            'loading',
+                            'unloading',
+                            'delivered',
+                        ],
+                        label: 'Все'
+                    },
+                    { value: 'new', label: 'Активна' },
+                    { value: 'inTransit', label: 'На ожидании' },
+                    { value: 'completed', label: 'Выполнена' },
+                    { value: 'failing', label: 'Выполнена' },
+                    { value: 'failed', label: 'Выполнена' },
+                    { value: 'canceledByCustomer', label: 'Выполнена' },
+                    { value: 'canceledByCarrier', label: 'Выполнена' },
+                    { value: 'canceledByCustomerWithPenalty', label: 'Выполнена' },
+                    { value: 'canceledByCarrierWithPenalty', label: 'Выполнена' },
+                    { value: 'canceled', label: 'Выполнена' },
+                    { value: 'headingToLoading', label: 'Выполнена' },
+                    { value: 'loading', label: 'Выполнена' },
+                    { value: 'unloading', label: 'Выполнена' },
+                    { value: 'delivered', label: 'Выполнена' },
                 ]
             },
 
@@ -347,7 +369,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 searchable: true,
                 accessorFn: (row: Bid) => row.carrier?.organizationName ?? '—',
                 filterType: 'fuzzy'
-            },
+            }
         ]
 
         return allColumns.filter(col => (isShortTable ? col.isShortVersion : true))

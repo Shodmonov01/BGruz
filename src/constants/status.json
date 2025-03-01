@@ -1,0 +1,68 @@
+{
+  "statusMapping": {
+    "0": {
+      "enumValue": "new",
+      "localized": "Новый"
+    },
+    "1": {
+      "enumValue": "inTransit",
+      "localized": "Машина в пути"
+    },
+    "2": {
+      "enumValue": "completed",
+      "localized": "Выполнен"
+    },
+    "3": {
+      "enumValue": "failing",
+      "localized": "Срывается"
+    },
+    "4": {
+      "enumValue": "failed",
+      "localized": "Сорван"
+    },
+    "5": {
+      "enumValue": "canceledByCustomer",
+      "localized": "Отменяется заказчиком"
+    },
+    "6": {
+      "enumValue": "canceledByCarrier",
+      "localized": "Отменяется перевозчиком"
+    },
+    "7": {
+      "enumValue": "canceledByCustomerWithPenalty",
+      "localized": "Отменяется заказчиком (половина ГО)"
+    },
+    "8": {
+      "enumValue": "canceledByCarrierWithPenalty",
+      "localized": "Отменяется перевозчиком (половина ГО)"
+    },
+    "9": {
+      "enumValue": "canceled",
+      "localized": "Отменен"
+    },
+    "10": {
+      "enumValue": "headingToLoading",
+      "localized": "Еду на погрузку"
+    },
+    "11": {
+      "enumValue": "loading",
+      "localized": "На погрузке"
+    },
+    "12": {
+      "enumValue": "unloading",
+      "localized": "На выгрузке"
+    },
+    "13": {
+      "enumValue": "delivered",
+      "localized": "Груз сдан"
+    },
+    "10001": {
+      "enumValue": "allExceptCanceled",
+      "localized": "Все (кроме отм.)"
+    },
+    "10002": {
+      "enumValue": "all",
+      "localized": "Все"
+    }
+  }
+}

@@ -175,7 +175,7 @@ function OrdersTable({
                                                     //@ts-ignore
                                                     header.column.columnDef.filterType !== 'range' ? (
                                                         <div className='text-center'>
-                                                            {renderFilterInput(header.column, handleFilterChange)}
+                                                            {renderFilterInput(header.column, handleFilterChange, orders)}
                                                         </div>
                                                     ) : (
                                                         <div
