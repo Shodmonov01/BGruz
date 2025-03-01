@@ -43,7 +43,22 @@ interface Bid {
         vehicleProfile: { name: string }
         filingTime: string
     }
-    [key: string]: unknown
+    driverUser?: {
+        fio: string;
+    };
+    assignedVehicle?: {
+        docModel: string;
+    };
+    assignedTrailer?: {
+        docModel: string;
+    };
+    statusUpdatedUser?: {
+        username: string;
+    };
+    docSubmissionUser?: {
+        fio: string;
+    };
+    [key: string]: unknown;
 }
 
 interface ColumnsProps {
@@ -203,6 +218,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                         canceled: 'Отменена'
                     }
 
+
                     const status = row.original.status
 
                     return status ? (
@@ -276,6 +292,19 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 accessorKey: 'docSubmissionDate',
                 header: 'Документы',
                 size: 100,
+              accessorFn: (row: Bid) =>
+                    row.createdAt ? format(new Date(row.createdAt), 'dd.MM.yyyy HH:mm', { locale: ru }) : '—',
+                isShortVersion: false,
+                searchable: true,
+                filterType: 'exact',
+                isMobile: false
+            },
+            {
+                accessorKey: 'docSubmissionDate',
+                header: 'Док сданы',
+                size: 100,
+              accessorFn: (row: Bid) =>
+                    row.createdAt ? format(new Date(row.createdAt), 'dd.MM.yyyy HH:mm', { locale: ru }) : '—',
                 isShortVersion: false,
                 searchable: true,
                 filterType: 'exact',
@@ -402,6 +431,62 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
             {
                 accessorKey: 'carrier.organizationName',
                 header: 'Перевозчик',
+                size: 150,
+                searchable: true,
+                accessorFn: (row: Bid) => row.carrier?.organizationName ?? '—',
+                filterType: 'fuzzy'
+            },
+            {
+                accessorKey: 'driverUser.fio',
+                header: 'Водитель',
+                size: 150,
+                searchable: true,
+                accessorFn: (row: Bid) => row.driverUser?.fio ?? '—',
+                filterType: 'fuzzy'
+            },
+            {
+                accessorKey: 'assignedVehicle.docModel',
+                header: 'Машина',
+                size: 150,
+                searchable: true,
+                accessorFn: (row: Bid) => row.assignedVehicle?.docModel ?? '—',
+                filterType: 'fuzzy'
+            },
+            {
+                accessorKey: 'assignedTrailer.docModel',
+                header: 'Прицеп',
+                size: 150,
+                searchable: true,
+                accessorFn: (row: Bid) => row.assignedTrailer?.docModel ?? '—',
+                filterType: 'fuzzy'
+            },
+            {
+                accessorKey: 'statusUpdatedUser.username',
+                header: 'Автор статуса',
+                size: 150,
+                searchable: true,
+                accessorFn: (row: Bid) => row.statusUpdatedUser?.username ?? '—',
+                filterType: 'fuzzy'
+            },
+            {
+                accessorKey: 'docSubmissionUser.fio',
+                header: 'Бухгалтер',
+                size: 150,
+                searchable: true,
+                accessorFn: (row: Bid) => row.docSubmissionUser?.fio ?? '—',
+                filterType: 'fuzzy'
+            },
+            {
+                accessorKey: 'carrier.organizationName',
+                header: 'Автор заявки',
+                size: 150,
+                searchable: true,
+                accessorFn: (row: Bid) => row.carrier?.organizationName ?? '—',
+                filterType: 'fuzzy'
+            },
+            {
+                accessorKey: 'carrier.organizationName',
+                header: 'Автор предложения',
                 size: 150,
                 searchable: true,
                 accessorFn: (row: Bid) => row.carrier?.organizationName ?? '—',
