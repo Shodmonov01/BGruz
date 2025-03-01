@@ -229,14 +229,33 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                             'canceledByCarrier',
                             'canceledByCustomerWithPenalty',
                             'canceledByCarrierWithPenalty',
-                            'canceled',
                             'headingToLoading',
                             'loading',
                             'unloading',
                             'delivered',
                         ],
+                        label: 'Все (кроме отм.)'
+                    },
+                    {
+                        value: [
+                            'new',
+                            'inTransit',
+                            'completed',
+                            'failing',
+                            'failed',
+                            'canceledByCustomer',
+                            'canceledByCarrier',
+                            'canceledByCustomerWithPenalty',
+                            'canceledByCarrierWithPenalty',
+                            'headingToLoading',
+                            'loading',
+                            'unloading',
+                            'delivered',
+                            'canceled'
+                        ],
                         label: 'Все'
                     },
+   
                     { value: 'new', label: 'Новый' },
                     { value: 'canceledByCarrierWithPenalty', label: 'Отменяется перевозчиком (половина ГО)' },
                     { value: 'canceledByCustomerWithPenalty', label: 'Отменяется заказчиком (половина ГО)' },

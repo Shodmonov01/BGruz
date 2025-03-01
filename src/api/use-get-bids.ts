@@ -112,51 +112,89 @@ export const useGetBids = (size: number) => {
 
     const filtersRef = useRef<BidFilter>({})
 
-    const fetchBids = useCallback(
-        async (force = false) => {
-            setLoading(true)
-            setError(null)
+    // const fetchBids = useCallback(
+    //     async (force = false) => {
+    //         setLoading(true)
+    //         setError(null)
 
-            try {
-                const token = localStorage.getItem('authToken') || ''
+    //         try {
+    //             const token = localStorage.getItem('authToken') || ''
 
-                // Берем актуальные фильтры из ref
-                const currentFilters = filtersRef.current
-                const isFiltersChanged = JSON.stringify(prevFiltersRef.current) !== JSON.stringify(currentFilters)
+    //             // Берем актуальные фильтры из ref
+    //             const currentFilters = filtersRef.current
+    //             const isFiltersChanged = JSON.stringify(prevFiltersRef.current) !== JSON.stringify(currentFilters)
 
-                if (!force && !isFiltersChanged) {
-                    setLoading(false)
-                    return
-                }
+    //             if (!force && !isFiltersChanged) {
+    //                 setLoading(false)
+    //                 return
+    //             }
 
-                prevFiltersRef.current = currentFilters
+    //             prevFiltersRef.current = currentFilters
 
-                const response = await postData2<{ items: Bid[]; total: number }>(
-                    'api/v1/bids/getbatch',
-                    { size, filter: currentFilters },
-                    token
-                )
+    //             const response = await postData2<{ items: Bid[]; total: number }>(
+    //                 'api/v1/bids/getbatch',
+    //                 { size, filter: currentFilters },
+    //                 token
+    //             )
 
-                setBids(response.items)
-                setHasMore(response.items.length < response.total)
-            } catch (err) {
-                console.error('Ошибка при загрузке заявок:', err)
-                setError('Не удалось загрузить заявки. Попробуйте позже.')
-            } finally {
-                setLoading(false)
+    //             setBids(response.items)
+    //             setHasMore(response.items.length < response.total)
+    //         } catch (err) {
+    //             console.error('Ошибка при загрузке заявок:', err)
+    //             setError('Не удалось загрузить заявки. Попробуйте позже.')
+    //         } finally {
+    //             setLoading(false)
+    //         }
+    //     },
+    //     [size]
+    // )
+
+    const fetchBids = useCallback(async (force = false) => {
+        setLoading(true);
+        setError(null);
+    
+        try {
+            const token = localStorage.getItem('authToken') || '';
+    
+            const currentFilters = filtersRef.current;
+            const isFiltersChanged = JSON.stringify(prevFiltersRef.current) !== JSON.stringify(currentFilters);
+    
+            if (!force && !isFiltersChanged) {
+                setLoading(false);
+                return;
             }
-        },
-        [size]
-    )
+    
+            prevFiltersRef.current = currentFilters;
+    
+            const response = await postData2<{ items: Bid[]; total: number }>(
+                'api/v1/bids/getbatch',
+                { size, filter: currentFilters },
+                token
+            );
+    
+            setBids(response.items);
+            setHasMore(response.items.length < response.total);
+        } catch (err) {
+            console.error('Ошибка при загрузке заявок:', err);
+            setError('Не удалось загрузить заявки. Попробуйте позже.');
+        } finally {
+            setLoading(false);
+        }
+    }, [size]); // Добавляем useCallback
+    
+    const refreshBids = useCallback(() => {
+        fetchBids(true);
+    }, [fetchBids]); // Убеждаемся, что refreshBids не меняется на каждом ререндере
+    
 
     useEffect(() => {
         filtersRef.current = filters // Обновляем ref перед запросом
         fetchBids()
     }, [size, filters, refreshTrigger])
 
-    const refreshBids = useCallback(() => {
-        fetchBids(true) // Принудительное обновление с актуальными фильтрами
-    }, [fetchBids])
+    // const refreshBids = useCallback(() => {
+    //     fetchBids(true) // Принудительное обновление с актуальными фильтрами
+    // }, [fetchBids])
 
     return {
         bids,

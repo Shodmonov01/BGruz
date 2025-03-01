@@ -135,7 +135,6 @@
 //     }
 // }
 
-
 import { useEffect } from 'react'
 import { Input } from '../ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -152,10 +151,19 @@ export function FilterInput({ column, handleFilterChange, pageType }) {
                     return ['wagon', 'container']
                 case 'status':
                     return [
-                        'new', 'inTransit', 'completed', 'failing', 'failed',
-                        'canceledByCustomer', 'canceledByCarrier',
-                        'canceledByCustomerWithPenalty', 'canceledByCarrierWithPenalty',
-                        'canceled', 'headingToLoading', 'loading', 'unloading', 'delivered'
+                        'new',
+                        'inTransit',
+                        'completed',
+                        'failing',
+                        'failed',
+                        'canceledByCustomer',
+                        'canceledByCarrier',
+                        'canceledByCustomerWithPenalty',
+                        'canceledByCarrierWithPenalty',
+                        'headingToLoading',
+                        'loading',
+                        'unloading',
+                        'delivered'
                     ]
                 case 'loadingMode':
                     return ['loading', 'unloading']

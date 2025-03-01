@@ -14,42 +14,10 @@ import BidsTableMobile from './components/bidsTableMobile'
 
 export default function BidsPage() {
     const [searchParams] = useSearchParams()
-    const [size, setSize] = useState(Number(searchParams.get('size')) || 200)
-    // const [localFilters, setLocalFilters] = useState<{ [key: string]: string }>({})
-
-    // const debounceRef = useRef<NodeJS.Timeout | null>(null)
+    const [size, setSize] = useState(Number(searchParams.get('size')) || 500)
 
     const { bids, hasMore, loading, refreshBids } = useGetBids(size)
     const { setFilters } = useFilter()
-
-    // const handleFilterChange = useCallback(
-    //     (columnId: string, value: any) => {
-    //         let formattedValue = value
-
-    //         if (columnId === 'loadingMode' || columnId === 'cargoType' || columnId === 'status') {
-    //             formattedValue = Array.isArray(value) ? value : [value]
-    //         } else if ((columnId === 'loadingDate' || columnId === 'createdAt') && value) {
-    //             formattedValue = {
-    //                 start: new Date(value.from.setHours(23, 59, 59, 999)).toISOString(),
-    //                 end: new Date(value.to.setHours(23, 59, 59, 999)).toISOString()
-    //             }
-    //         } else if (['number', 'fullPrice', 'comission', 'extraServicesPrice'].includes(columnId)) {
-    //             formattedValue = Number(value)
-    //         }
-
-    //         const newFilters = {
-    //             ...localFilters,
-    //             [columnId]: formattedValue
-    //         }
-
-    //         if (debounceRef.current) clearTimeout(debounceRef.current)
-    //         debounceRef.current = setTimeout(() => {
-    //             setLocalFilters(newFilters)
-    //             setFilters(newFilters)
-    //         }, 500)
-    //     },
-    //     [localFilters, setFilters]
-    // )
 
     const loadMore = () => {
         if (hasMore) {
