@@ -2,13 +2,12 @@ import { Card, CardContent } from '@/components/ui/card'
 import { useCallback, useMemo, useState } from 'react'
 import { ScrollArea } from '@radix-ui/react-scroll-area'
 import info from '../../../../public/info.svg'
-import PopupModal from '@/components/shared/popup-modal'
-import { BidsOrderDialog } from './bids-info-modal-mobile'
 import useNumberFormatter from '@/hooks/use-format-number'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
-import BidCreateForm from './bid-create-form'
 import AuctionTimer from '@/hooks/use-action-timer'
+import BidsInfoModal from './bids-info-modal'
+
 //@ts-ignore
 interface Bid {
     _id: string
@@ -29,6 +28,7 @@ interface Bid {
     vehicleProfile?: { name: string }
     [key: string]: unknown
 }
+
 interface BidsTableMobileProps {
     bids: any[]
 }
@@ -135,12 +135,12 @@ function BidsTableMobile({ bids }: BidsTableMobileProps) {
                 ))}
             </ScrollArea>
 
-            <div className='flex gap-3 fixed bottom-3 px-6 py-6 text-[24px] left-1/2 -translate-x-1/2 w-full'>
+            {/* <div className='flex gap-3 fixed bottom-3 px-6 py-6 text-[24px] left-1/2 -translate-x-1/2 w-full'>
                 <PopupModal renderModal={onClose => <BidCreateForm modalClose={onClose} />} />
-            </div>
+            </div> */}
 
             {selectedBid && (
-                <BidsOrderDialog
+                <BidsInfoModal
                     selectedBid={selectedBid}
                     handleCloseModal={handleCloseModal}
                     open={open}

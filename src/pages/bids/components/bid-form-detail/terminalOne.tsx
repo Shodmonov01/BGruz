@@ -87,11 +87,7 @@ function TerminalOne({ terminals }) {
                     render={({ field }) => (
                         <FormItem>
                             <FormControl>
-                                <Input
-                                    placeholder='Адрес'
-                                    {...field}
-                                    className=''
-                                />
+                                <Input placeholder='Адрес' {...field} className='' />
                             </FormControl>
                             <FormMessage />
                         </FormItem>

@@ -253,9 +253,10 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
 
             {selectedBid && (
                 <BidsInfoModal
-                    handleCloseModal={handleCloseModal}
                     selectedBid={selectedBid}
-                    isModalOpen={isModalOpen}
+                    handleCloseModal={handleCloseModal}
+                    open={isModalOpen}
+                    // onOpenChange={setOpen}
                 />
             )}
         </div>
