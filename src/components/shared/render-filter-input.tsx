@@ -12,7 +12,22 @@ export function renderFilterInput(column, handleFilterChange, pageType) {
                 case 'cargoType':
                     return ['bulk', 'liquid']
                 case 'status':
-                    return ['new', 'processed']
+                    return [
+                        'new',
+                        'inTransit',
+                        'completed',
+                        'failing',
+                        'failed',
+                        'canceledByCustomer',
+                        'canceledByCarrier',
+                        'canceledByCustomerWithPenalty',
+                        'canceledByCarrierWithPenalty',
+                        'canceled',
+                        'headingToLoading',
+                        'loading',
+                        'unloading',
+                        'delivered'
+                    ]
                 case 'loadingMode':
                     return ['pickup', 'delivery']
                 default:

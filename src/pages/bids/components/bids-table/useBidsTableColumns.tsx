@@ -224,23 +224,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                     { value: 'waiting', label: 'На ожидании' },
                     { value: 'executed', label: 'Выполнена' },
                     { value: 'canceled', label: 'Отменены' }
-                    // { value: 'all', label: 'Все' },
-                    // { value: 'new', label: 'Новый' },
-                    // { value: 'canceledByCarrierWithPenalty', label: 'Отменяется перевозчиком (половина ГО)' },
-                    // { value: 'canceledByCustomerWithPenalty', label: 'Отменяется заказчиком (половина ГО)' },
-                    // { value: 'canceledByCarrier', label: 'Отменяется перевозчиком' },
-                    // { value: 'canceledByCustomer', label: 'Отменяется заказчиком' },
-                    // { value: 'failed', label: 'Сорван' },
-                    // { value: 'failing', label: 'Срывается' },
-                    // { value: 'completed', label: 'Выполнен' },
-                    // { value: 'inTransit', label: 'Машина в пути' },
-                    // { value: 'canceled', label: 'Отменен' },
-                    // { value: 'headingToLoading', label: 'Еду на погрузку"' },
-                    // { value: 'loading', label: 'На погрузке' },
-                    // { value: 'unloading', label: 'На выгрузке' },
-                    // { value: 'delivered', label: 'Груз сдан' },
-
-                    // { value: 'allExceptCanceled', label: 'Все (кроме отм.)' }
+                   
                 ]
             },
             {

@@ -7,6 +7,8 @@ import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import AuctionTimer from '@/hooks/use-action-timer'
 import BidsInfoModal from './bids-info-modal'
+import BidCreateForm from './bid-create-form'
+import PopupModal from '@/components/shared/popup-modal'
 
 //@ts-ignore
 interface Bid {
@@ -135,9 +137,9 @@ function BidsTableMobile({ bids }: BidsTableMobileProps) {
                 ))}
             </ScrollArea>
 
-            {/* <div className='flex gap-3 fixed bottom-3 px-6 py-6 text-[24px] left-1/2 -translate-x-1/2 w-full'>
+            <div className='flex gap-3 fixed bottom-3 px-6 py-6 text-[24px] left-1/2 -translate-x-1/2 w-full'>
                 <PopupModal renderModal={onClose => <BidCreateForm modalClose={onClose} />} />
-            </div> */}
+            </div>
 
             {selectedBid && (
                 <BidsInfoModal
