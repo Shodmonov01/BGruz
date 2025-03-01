@@ -17,10 +17,10 @@ import { deleteData, postData2 } from '@/api/api'
 import loader from '../../../../public/gear-spinner.svg'
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
 import { useFilter } from '@/context/filter-context'
-import { renderFilterInput } from '@/components/shared/render-filter-input'
+import { FilterInput } from '@/components/shared/render-filter-input'
 
 interface Bid {
-    _id?: string
+    id?: string
     client: { organizationName: string }
     cargoTitle: string
     price: number | null
@@ -172,7 +172,9 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
                                                     //@ts-ignore
                                                     header.column.columnDef.filterType !== 'range' ? (
                                                         <div className='text-center'>
-                                                            {renderFilterInput(header.column, handleFilterChange)}
+                                                            {/* {renderFilterInput(header.column, handleFilterChange, bids)} */}
+                                                            <FilterInput column={header.column} handleFilterChange={handleFilterChange} pageType={bids} />
+
                                                         </div>
                                                     ) : (
                                                         <div

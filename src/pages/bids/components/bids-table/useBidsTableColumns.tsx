@@ -8,7 +8,7 @@ import { ru } from 'date-fns/locale'
 import AuctionTimer from '@/hooks/use-action-timer'
 
 interface Bid {
-    _id: string
+    id: string
     persistentId: string
     cargoTitle: string
     clientName: { organizationName: string }
@@ -41,7 +41,7 @@ interface ColumnsProps {
     isShortTable?: boolean
     onApprove?: (bidId: string) => void
     onDelete?: (bidId: string) => void
-    onOpenModal?: (bid: Bid) => void
+    onOpenModal?: (bidId: string) => void
 }
 
 export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenModal, isMobile }: ColumnsProps) => {
@@ -149,7 +149,9 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 accessorFn: row => row.warehouses?.[0]?.cityName ?? '—',
                 isShortVersion: true,
                 searchable: true,
-                filterType: 'fuzzy'
+                filterType: 'fuzzy',
+                isMobile: true
+
             },
             {
                 accessorKey: 'terminal2',
@@ -224,23 +226,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                     { value: 'waiting', label: 'На ожидании' },
                     { value: 'executed', label: 'Выполнена' },
                     { value: 'canceled', label: 'Отменены' }
-                    // { value: 'all', label: 'Все' },
-                    // { value: 'new', label: 'Новый' },
-                    // { value: 'canceledByCarrierWithPenalty', label: 'Отменяется перевозчиком (половина ГО)' },
-                    // { value: 'canceledByCustomerWithPenalty', label: 'Отменяется заказчиком (половина ГО)' },
-                    // { value: 'canceledByCarrier', label: 'Отменяется перевозчиком' },
-                    // { value: 'canceledByCustomer', label: 'Отменяется заказчиком' },
-                    // { value: 'failed', label: 'Сорван' },
-                    // { value: 'failing', label: 'Срывается' },
-                    // { value: 'completed', label: 'Выполнен' },
-                    // { value: 'inTransit', label: 'Машина в пути' },
-                    // { value: 'canceled', label: 'Отменен' },
-                    // { value: 'headingToLoading', label: 'Еду на погрузку"' },
-                    // { value: 'loading', label: 'На погрузке' },
-                    // { value: 'unloading', label: 'На выгрузке' },
-                    // { value: 'delivered', label: 'Груз сдан' },
-
-                    // { value: 'allExceptCanceled', label: 'Все (кроме отм.)' }
+                   
                 ]
             },
             {
@@ -307,7 +293,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
             },
             {
                 accessorKey: 'fullPrice',
-                header: 'Цена + доп усл',
+                header: 'Цена + доп',
                 size: 150,
                 searchable: true,
                 cell: ({ getValue }) => {
@@ -376,7 +362,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 header: 'Согласовано',
                 size: 150,
                 cell: ({ row }) => {
-                    return <Button onClick={() => onApprove?.(row.original._id)}>Согласовать</Button>
+                    return <Button onClick={() => onApprove?.(row.original.id)}>Согласовать</Button>
                 },
                 isShortVersion: true
             },
@@ -385,10 +371,10 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 size: 80,
                 cell: ({ row }) => (
                     <div className='flex justify-center'>
-                        <Eye className='mr-2 h-5 w-5 cursor-pointer' onClick={() => onOpenModal?.(row.original)} />
+                        <Eye className='mr-2 h-5 w-5 cursor-pointer' onClick={() => onOpenModal?.(row.original.id)} />
                         <Trash
                             className='mr-2 h-5 w-5 cursor-pointer text-red-500'
-                            onClick={() => onDelete?.(row.original._id)}
+                            onClick={() => onDelete?.(row.original.id)}
                         />
                     </div>
                 )

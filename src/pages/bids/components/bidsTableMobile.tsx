@@ -7,8 +7,8 @@ import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import AuctionTimer from '@/hooks/use-action-timer'
 import BidsInfoModal from './bids-info-modal'
-import PopupModal from '@/components/shared/popup-modal'
 import BidCreateForm from './bid-create-form'
+import PopupModal from '@/components/shared/popup-modal'
 
 //@ts-ignore
 interface Bid {

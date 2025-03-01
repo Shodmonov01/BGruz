@@ -2,14 +2,14 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import BgruzHeader from '@/components/shared/bgruz-header'
 import OrdersTable from './components/orders-table'
 import { useSearchParams } from 'react-router-dom'
-import OrderTableMobile from './components/ordersTableMobile'
+import OrderTableMobile from './components/orders-table-mobile'
 import { useWebSocket } from '@/api/use-websocket'
 import { useGetOrders } from '@/api/use-get-orders'
 import { TotalsProvider } from '@/context/totals-context'
 
 export default function OrderPage() {
     const [searchParams] = useSearchParams()
-    const [size, setSize] = useState(Number(searchParams.get('size')) || 50)
+    const [size, setSize] = useState(Number(searchParams.get('size')) || 500)
     const [localFilters, setLocalFilters] = useState<{ [key: string]: string }>({})
 
     const debounceRef = useRef<NodeJS.Timeout | null>(null)

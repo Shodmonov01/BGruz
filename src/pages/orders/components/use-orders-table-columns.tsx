@@ -2,13 +2,10 @@ import { useMemo } from 'react'
 
 import { ColumnDef } from '@tanstack/react-table'
 
-
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import loading from '../../../../public/gear-spinner.svg'
 import useNumberFormatter from '@/hooks/use-format-number'
-
-
 
 interface Bid {
     _id: string
@@ -50,14 +47,14 @@ interface Bid {
 }
 
 interface ColumnsProps {
+    isMobile?: boolean
     isShortTable: boolean
     onApprove: (bidId: string) => void
     onDelete: (bidId: string) => void
     onOpenModal: (bid: any) => void
 }
 
-export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpenModal }: ColumnsProps) => {
-
+export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpenModal, isMobile }: ColumnsProps) => {
     const { formatNumber } = useNumberFormatter()
     return useMemo<ColumnDef<Bid>[]>(() => {
         const allColumns: (ColumnDef<Bid> & {
@@ -66,14 +63,16 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
             filterType?: string
             filterOptions?: { value: string | string[]; label: string }[]
             accessorFn?: any
+            isMobile?: boolean
         })[] = [
             {
-                accessorKey: '_id',
+                accessorKey: 'id',
                 header: 'ID',
                 size: 100,
                 isShortVersion: false,
                 searchable: true,
-                filterType: 'exact'
+                filterType: 'exact',
+                isMobile: false
             },
             {
                 accessorKey: 'persistentId',
@@ -81,7 +80,8 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 size: 100,
                 isShortVersion: false,
                 searchable: true,
-                filterType: 'exact'
+                filterType: 'exact',
+                isMobile: false
             },
             {
                 header: 'Вагон/Конт',
@@ -137,7 +137,9 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                     row.buyBid?.loadingDate
                         ? format(new Date(row.buyBid.loadingDate), 'dd.MM.yyyy', { locale: ru })
                         : '—',
-                filterType: 'dateRange'
+                filterType: 'dateRange',
+                isMobile: true
+
             },
 
             {
@@ -148,8 +150,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 accessorFn: (row: Bid) => row.buyBid?.filingTime ?? '—',
                 filterType: 'dateRange'
             },
-            
-            
+
             {
                 accessorKey: 'terminal1',
                 header: 'Терминал 1',
@@ -157,7 +158,8 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 accessorFn: row => row.buyBid?.terminal1?.cityName ?? '—',
                 isShortVersion: true,
                 searchable: true,
-                filterType: 'fuzzy'
+                filterType: 'fuzzy',
+                isMobile: true
             },
             {
                 accessorKey: 'warehouses',
@@ -166,7 +168,8 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 accessorFn: row => row.buyBid?.warehouses?.[0]?.cityName ?? '—',
                 isShortVersion: true,
                 searchable: true,
-                filterType: 'fuzzy'
+                filterType: 'fuzzy',
+                isMobile: true
             },
             {
                 accessorKey: 'terminal2',
@@ -175,7 +178,8 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 size: 120,
                 accessorFn: row => row.buyBid?.terminal2?.cityName ?? '—',
                 searchable: true,
-                filterType: 'fuzzy'
+                filterType: 'fuzzy',
+                isMobile: true
             },
             {
                 accessorKey: 'vehicleProfile',
@@ -211,17 +215,72 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 },
                 searchable: true,
                 filterType: 'select',
+                isMobile: true,
                 isShortVersion: true,
                 filterOptions: [
-                    { value: ['active', 'waiting', 'executed', 'canceled'], label: 'Все' },
-                    { value: ['active', 'waiting'], label: 'Акт.+ожид.' },
-                    { value: 'active', label: 'Активна' },
-                    { value: 'waiting', label: 'На ожидании' },
-                    { value: 'executed', label: 'Выполнена' },
-                    { value: 'canceled', label: 'Отменены' }
-                ]
+                    {
+                        value: [
+                            'new',
+                            'inTransit',
+                            'completed',
+                            'failing',
+                            'failed',
+                            'canceledByCustomer',
+                            'canceledByCarrier',
+                            'canceledByCustomerWithPenalty',
+                            'canceledByCarrierWithPenalty',
+                            'headingToLoading',
+                            'loading',
+                            'unloading',
+                            'delivered',
+                        ],
+                        label: 'Все (кроме отм.)'
+                    },
+                    {
+                        value: [
+                            'new',
+                            'inTransit',
+                            'completed',
+                            'failing',
+                            'failed',
+                            'canceledByCustomer',
+                            'canceledByCarrier',
+                            'canceledByCustomerWithPenalty',
+                            'canceledByCarrierWithPenalty',
+                            'headingToLoading',
+                            'loading',
+                            'unloading',
+                            'delivered',
+                            'canceled'
+                        ],
+                        label: 'Все'
+                    },
+   
+                    { value: 'new', label: 'Новый' },
+                    { value: 'canceledByCarrierWithPenalty', label: 'Отменяется перевозчиком (половина ГО)' },
+                    { value: 'canceledByCustomerWithPenalty', label: 'Отменяется заказчиком (половина ГО)' },
+                    { value: 'canceledByCarrier', label: 'Отменяется перевозчиком' },
+                    { value: 'canceledByCustomer', label: 'Отменяется заказчиком' },
+                    { value: 'failed', label: 'Сорван' },
+                    { value: 'failing', label: 'Срывается' },
+                    { value: 'completed', label: 'Выполнен' },
+                    { value: 'inTransit', label: 'Машина в пути' },
+                    { value: 'canceled', label: 'Отменен' },
+                    { value: 'headingToLoading', label: 'Еду на погрузку"' },
+                    { value: 'loading', label: 'На погрузке' },
+                    { value: 'unloading', label: 'На выгрузке' },
+                    { value: 'delivered', label: 'Груз сдан' },
+                                ]
             },
-
+            {
+                accessorKey: 'docSubmissionDate',
+                header: 'Документы',
+                size: 100,
+                isShortVersion: false,
+                searchable: true,
+                filterType: 'exact',
+                isMobile: false
+            },
             {
                 accessorKey: 'price',
                 header: 'Моя цена',
@@ -255,7 +314,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
             },
             {
                 accessorKey: 'fullPrice',
-                header: 'Цена + доп услуги',
+                header: 'Цена + доп',
                 size: 150,
                 isShortVersion: true,
                 cell: ({ getValue }) => {
@@ -347,7 +406,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 searchable: true,
                 accessorFn: (row: Bid) => row.carrier?.organizationName ?? '—',
                 filterType: 'fuzzy'
-            },
+            }
         ]
 
         return allColumns.filter(col => (isShortTable ? col.isShortVersion : true))

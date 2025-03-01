@@ -162,7 +162,7 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                 vehicleCount: getValues('vehicleCount'),
                 cargoTitle: data.cargoTitle,
                 //@ts-ignore
-                filingTime: getValues('submissionTime') || '09:00',
+                loadingTime: getValues('submissionTime') || '09:00',
 
                 extraServices: data.extraServices || [],
                 description: data.description
