@@ -288,17 +288,17 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                     { value: 'delivered', label: 'Груз сдан' },
                                 ]
             },
-            {
-                accessorKey: 'docSubmissionDate',
-                header: 'Документы',
-                size: 100,
-              accessorFn: (row: Bid) =>
-                    row.createdAt ? format(new Date(row.createdAt), 'dd.MM.yyyy HH:mm', { locale: ru }) : '—',
-                isShortVersion: false,
-                searchable: true,
-                filterType: 'exact',
-                isMobile: false
-            },
+            // {
+            //     accessorKey: 'docSubmissionDate',
+            //     header: 'Документы',
+            //     size: 100,
+            //   accessorFn: (row: Bid) =>
+            //         row.createdAt ? format(new Date(row.createdAt), 'dd.MM.yyyy HH:mm', { locale: ru }) : '—',
+            //     isShortVersion: false,
+            //     searchable: true,
+            //     filterType: 'exact',
+            //     isMobile: false
+            // },
             {
                 accessorKey: 'docSubmissionDate',
                 header: 'Док сданы',
