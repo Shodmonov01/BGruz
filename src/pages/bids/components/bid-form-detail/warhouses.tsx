@@ -6,7 +6,7 @@ import { useFieldArray, useFormContext } from 'react-hook-form'
 import { Trash } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
-function Warehouses({ warehouses }) {
+function Warehouses({ warehouses, isReadOnly }: { warehouses; isReadOnly?: boolean }) {
     const { control, watch, setValue } = useFormContext()
     const { fields, append, remove } = useFieldArray({
         control,
@@ -52,10 +52,10 @@ function Warehouses({ warehouses }) {
                         render={({ field }) => (
                             <FormItem>
                                 <Select
+                                    disabled={isReadOnly}
                                     onValueChange={field.onChange}
                                     defaultValue={field.value}
                                     open={!!isOpen[index]}
-                                    // onOpenChange={setIsOpen}
                                     onOpenChange={isOpen => setIsOpen(prev => ({ ...prev, [index]: isOpen }))}
                                 >
                                     <FormControl>
@@ -64,7 +64,6 @@ function Warehouses({ warehouses }) {
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
-                                        {/* Поле для поиска */}
                                         <div className='p-2'>
                                             <Input
                                                 placeholder='Поиск склада...'
@@ -75,7 +74,6 @@ function Warehouses({ warehouses }) {
                                                 className='w-full px-3 py-2 border rounded-md'
                                             />
                                         </div>
-                                        {/* Список складов */}
                                         {sortedWarehouses.length > 0 ? (
                                             sortedWarehouses.map(warehouse => (
                                                 <SelectItem key={warehouse.id} value={warehouse.id.toString()}>
@@ -102,9 +100,7 @@ function Warehouses({ warehouses }) {
                                         <Input
                                             placeholder='Адрес'
                                             {...field}
-                                            className={`${
-                                                fields.length > 1 ? 'w-[310px]' : 'w-[345px]'
-                                            }`}
+                                            className={`${fields.length > 1 ? 'w-[310px]' : 'w-[345px]'}`}
                                         />
                                     </FormControl>
                                     <FormMessage />

@@ -277,6 +277,7 @@ const BidsInfoModal = ({
     const [isEdit, setIsEdit] = useState(false)
     //@ts-ignore
     const [isLoading, setIsLoading] = useState(false)
+    //@ts-ignore
     const [originalData, setOriginalData] = useState({})
     const [isReadOnly, setIsReadOnly] = useState<boolean>(true)
     //@ts-ignore
@@ -336,9 +337,10 @@ const BidsInfoModal = ({
 
     useEffect(() => {
         if (selectedBid && Object.keys(selectedBid).length > 0) {
-            setIsEdit(true)
+            setIsEdit(false)
             setOriginalData({ ...selectedBid })
             setFormData({ ...selectedBid })
+            setIsReadOnly(true)
 
             if (selectedBid.client?.organizationId) {
                 setValue('client', selectedBid.client.organizationId.toString())
@@ -400,8 +402,11 @@ const BidsInfoModal = ({
         } else {
             reset()
             setIsEdit(false)
+            setIsReadOnly(false)
         }
     }, [selectedBid, reset, setValue])
+
+    console.log('terminals', terminals)
 
     const handleClientChange = async (clientId: string) => {
         setValue('client', clientId)
@@ -424,31 +429,60 @@ const BidsInfoModal = ({
 
     const handleSave = async () => {
         const token = localStorage.getItem('authToken')
+        const currentFormValues = formMethods.getValues()
 
-        const updatedFields = Object.keys(formData).reduce((acc, key) => {
-            if (JSON.stringify(formData[key]) !== JSON.stringify(originalData[key])) {
-                acc[key] = formData[key]
-            }
-            return acc
-        }, {})
-
-        if (Object.keys(updatedFields).length === 0) {
-            alert('Нет изменений для сохранения.')
-            return
+        // Create updated fields object from form values
+        const updatedFields = {
+            client: { organizationId: Number.parseInt(currentFormValues.client) },
+            loadingMode: currentFormValues.loadingType,
+            cargoType: currentFormValues.transportType,
+            loadingDate: currentFormValues.startDate,
+            endDate: currentFormValues.endDate,
+            filingTime: currentFormValues.filingTime,
+            terminal1: {
+                cityId: currentFormValues.terminal1Id,
+                cityName: currentFormValues.terminal1Name,
+                address: currentFormValues.terminal1Address
+            },
+            terminal2: {
+                cityId: currentFormValues.terminal2Id,
+                cityName: currentFormValues.terminal2Name,
+                address: currentFormValues.terminal2Address
+            },
+            warehouses: currentFormValues.warehouses.map(wh => ({
+                cityName: wh.name,
+                address: wh.address
+            })),
+            vehicleProfileId: currentFormValues.vehicleProfiles,
+            price: currentFormValues.price,
+            priceNds: currentFormValues.priceNds,
+            isPriceRequest: currentFormValues.requestPrice,
+            description: currentFormValues.description,
+            cargoTitle: currentFormValues.cargoTitle,
+            vehicleCount: currentFormValues.vehicleCount,
+            extraServices: currentFormValues.extraServices
         }
 
         try {
-            await postData2(`api/v1/bids/${formData._id}`, updatedFields, token)
+            setIsLoading(true)
+            await postData2(`api/v1/bids/${selectedBid.id}`, updatedFields, token)
             alert('Заявка успешно обновлена!')
             handleCloseModal()
         } catch (error) {
             console.error('Ошибка при обновлении заявки:', error)
+            setErrorMessage('Ошибка при обновлении заявки')
+        } finally {
+            setIsLoading(false)
         }
     }
+    console.log(formData.client)
+
     const handleEdit = () => {
-        handleClientChange(formData.client?.organizationId)
+        if (formData.client?.organizationId) {
+            handleClientChange(formData.client.organizationId.toString())
+        }
         setIsFetched(false)
-        // console.log(data)
+        setIsReadOnly(false)
     }
 
     useEffect(() => {
@@ -456,6 +490,17 @@ const BidsInfoModal = ({
             setIsReadOnly(false)
         }
     }, [data])
+
+    useEffect(() => {
+        const subscription = formMethods.watch(value => {
+            setFormData(prevData => ({
+                ...prevData,
+                ...value
+            }))
+        })
+
+        return () => subscription.unsubscribe()
+    }, [formMethods])
 
     const saveAsNew = async () => {
         setIsEdit(false)
@@ -466,7 +511,7 @@ const BidsInfoModal = ({
         <Modal
             isOpen={open}
             onClose={handleCloseModal}
-            className={'!bg-background !p-0 w-full h-full md:h-[90vh] md:w-[800px] flex justify-center'}
+            className={'!bg-background !p-0 md:w-[800px] w-full h-full md:h-[90vh]  flex justify-center'}
         >
             <FormProvider {...formMethods}>
                 <ScrollArea className='h-[95dvh] md:h-[87dvh] md:px-6 px-0'>
@@ -491,37 +536,44 @@ const BidsInfoModal = ({
                                         handleClientChange={handleClientChange}
                                         setOperationType={setOperationType}
                                         setTransportType={setTransportType}
+                                        isReadOnly={isReadOnly}
                                     />
                                 </div>
                                 <div className={isClientSelected ? '' : 'opacity-50 pointer-events-none'}>
                                     <div className='bg-slate-300 text-center text-[26px] my-3 py-3'>
                                         <p>Маршрут</p>
                                     </div>
-                                    <div className='px-4 md:px-0 flex flex-col gap-6'>
-                                        {!hideTerminal1 && <TerminalOne terminals={terminals} />}
-                                        <Warehouses warehouses={warehouses} />
-                                        {!hideTerminal2 && <TerminalTwo terminals={terminals} />}
+                                    <div className='px-6 md:px-0 flex flex-col gap-6'>
+                                        {!hideTerminal1 && (
+                                            <TerminalOne terminals={terminals} isReadOnly={isReadOnly} />
+                                        )}
+                                        <Warehouses warehouses={warehouses} isReadOnly={isReadOnly} />
+                                        {!hideTerminal2 && (
+                                            <TerminalTwo terminals={terminals} isReadOnly={isReadOnly} />
+                                        )}
                                     </div>
-                                    <BidDate />
+                                    <BidDate isReadOnly={isReadOnly} />
 
                                     {/* @ts-expect-error handle types later */}
-                                    <BidDescribe extraServices={extraServices} />
+                                    <BidDescribe extraServices={extraServices} isReadOnly={isReadOnly} />
                                 </div>
                             </div>
                             {errorMessage && <div className='text-red-500 text-center py-2'>{errorMessage}</div>}
                             {Object.keys(errors).length > 0 && (
                                 <div className='text-red-500 text-center py-2'>Заполните все обязательные поля</div>
                             )}
-                            <div className='flex justify-center gap-4 py-6'>
+                            <div className='flex justify-center h-full md:flex-row flex-col gap-4 px-6 md:px-0 py-6'>
                                 <Button
                                     disabled={isReadOnly || isLoading}
                                     onClick={handleSave}
+                                    type='button'
                                     className='bg-orange-500 hover:bg-orange-600 text-white'
                                 >
                                     {isLoading ? <Loader2 className='mr-2 h-4 w-4 animate-spin' /> : null}
                                     Сохранить изменения
                                 </Button>
                                 <Button
+                                    type='button'
                                     disabled={isReadOnly || isLoading}
                                     onClick={saveAsNew}
                                     className='bg-orange-500 hover:bg-orange-600 text-white'
@@ -530,6 +582,7 @@ const BidsInfoModal = ({
                                     Сохранить заявку как новую
                                 </Button>
                                 <Button
+                                    type='button'
                                     onClick={handleEdit}
                                     disabled={isLoading}
                                     className='bg-orange-500 hover:bg-orange-600 text-white'
