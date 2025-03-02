@@ -5,13 +5,14 @@ import { useFormContext, useWatch } from 'react-hook-form'
 import { Separator } from '@/components/ui/separator'
 import { useState } from 'react'
 
-function TerminalTwo({ terminals }) {
+function TerminalTwo({ terminals, isReadOnly }: { terminals; isReadOnly?: boolean }) {
     const { control, setValue } = useFormContext()
 
     const loadingType = useWatch({ control, name: 'loadingType' })
     const transportType = useWatch({ control, name: 'transportType' })
 
     const [search, setSearch] = useState('')
+    //@ts-ignore
     const [isOpen, setIsOpen] = useState(false)
 
     const getTerminalTitle = () => {
@@ -20,17 +21,25 @@ function TerminalTwo({ terminals }) {
         return 'Терминал 2'
     }
 
-    const sortedTerminals = [...terminals]
-        .sort((a, b) => a.name.localeCompare(b.name)) // Сортировка по алфавиту
-        .filter(t => t.name.toLowerCase().includes(search.toLowerCase())) // Фильтрация по поиску
+    // const sortedTerminals = [...terminals]
+    //     .sort((a, b) => a.name.localeCompare(b.name)) // Сортировка по алфавиту
+    //     .filter(t => t.name.toLowerCase().includes(search.toLowerCase())) // Фильтрация по поиску
+
+    const sortedTerminals = terminals
+        ?.filter(
+            t =>
+                t.name.toLowerCase().includes(search.toLowerCase()) ||
+                t.description?.toLowerCase().includes(search.toLowerCase())
+        )
+        .sort((a, b) => a.name.localeCompare(b.name))
 
     return (
         <div>
             <h1 className='font-bold mb-2'>{getTerminalTitle()}</h1>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-4'>
-                <FormField
+                {/* <FormField
                     control={control}
-                    name='terminal2Name' // хранит ID терминала
+                    name='terminal2Name' 
                     render={({ field }) => (
                         <FormItem>
                             <Select
@@ -40,7 +49,7 @@ function TerminalTwo({ terminals }) {
                                     const selectedTerminal = terminals.find(terminal => terminal.id === Number(value))
                                     if (selectedTerminal) {
                                         setValue('terminal2Address', selectedTerminal.description || '')
-                                        setValue('terminal2Id', selectedTerminal.id) // сохраняем ID терминала
+                                        setValue('terminal2Id', selectedTerminal.id) 
                                     }
                                 }}
                                 value={field.value}
@@ -52,15 +61,7 @@ function TerminalTwo({ terminals }) {
                                         <SelectValue placeholder='Выберите терминал 2' />
                                     </SelectTrigger>
                                 </FormControl>
-                                {/* <SelectContent>
-                                    {terminals.map(terminal => (
-                                        <SelectItem key={terminal.id} value={terminal.id.toString()}>
-                                            {terminal.name}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent> */}
                                 <SelectContent>
-                                    {/* Поле для поиска */}
                                     <div className='p-2'>
                                         <Input
                                             placeholder='Поиск терминала...'
@@ -71,7 +72,6 @@ function TerminalTwo({ terminals }) {
                                             className='w-full border rounded-md'
                                         />
                                     </div>
-                                    {/* Список терминалов */}
                                     {sortedTerminals.length > 0 ? (
                                         sortedTerminals.map(terminal => (
                                             <SelectItem key={terminal.id} value={terminal.id.toString()}>
@@ -86,6 +86,55 @@ function TerminalTwo({ terminals }) {
                             <FormMessage />
                         </FormItem>
                     )}
+                /> */}
+
+                <FormField
+                    control={control}
+                    name='terminal2Id' // Работаем с ID терминала
+                    rules={{ required: 'Пожалуйста, выберите терминал' }}
+                    render={({ field }) => (
+                        <FormItem>
+                            <Select
+                                disabled={isReadOnly}
+                                onValueChange={value => {
+                                    const selectedTerminal = terminals.find(t => t.id === Number(value))
+                                    if (selectedTerminal) {
+                                        field.onChange(selectedTerminal.id) // Сохраняем ID
+                                        setValue('terminal2Name', selectedTerminal.name)
+                                        setValue('terminal2Address', selectedTerminal.description || '')
+                                    }
+                                }}
+                                value={field.value?.toString()} // Значение должно быть строкой
+                            >
+                                <SelectTrigger>
+                                    {/* Отображаем название выбранного терминала */}
+                                    <SelectValue placeholder='Выберите терминал'>
+                                        {terminals.find(t => t.id === field.value)?.name || ''}
+                                    </SelectValue>
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <div className='p-2'>
+                                        <Input
+                                            placeholder='Поиск терминала...'
+                                            value={search}
+                                            onChange={e => setSearch(e.target.value)}
+                                            onFocus={() => setIsOpen(true)}
+                                            onKeyDown={e => e.stopPropagation()}
+                                            className='w-full border rounded-md'
+                                        />
+                                    </div>
+                                    {sortedTerminals.map(terminal => (
+                                        <SelectItem
+                                            key={terminal.id}
+                                            value={terminal.id.toString()} // Значение - ID терминала
+                                        >
+                                            {terminal.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </FormItem>
+                    )}
                 />
 
                 <FormField
@@ -94,7 +143,7 @@ function TerminalTwo({ terminals }) {
                     render={({ field }) => (
                         <FormItem>
                             <FormControl>
-                                <Input placeholder='Адрес' {...field} className='' readOnly />
+                                <Input disabled={isReadOnly} placeholder='Адрес' {...field} className='' readOnly />
                             </FormControl>
                             <FormMessage />
                         </FormItem>

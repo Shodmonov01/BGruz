@@ -23,6 +23,7 @@ interface BidDetailsProps {
     handleClientChange: (value: string) => void
     setOperationType: (value: string) => void
     setTransportType: (value: string) => void
+    isReadOnly?: boolean
 }
 
 const BidDetails: React.FC<BidDetailsProps> = ({
@@ -30,7 +31,8 @@ const BidDetails: React.FC<BidDetailsProps> = ({
     vehicleProfiles,
     handleClientChange,
     setOperationType,
-    setTransportType
+    setTransportType,
+    isReadOnly
 }) => {
     const { control, setValue } = useFormContext()
     // const [open, setOpen] = useState(false)
@@ -51,85 +53,95 @@ const BidDetails: React.FC<BidDetailsProps> = ({
 
     const operationType = useWatch({ control, name: 'loadingType' })
 
-
     return (
         <div>
             <div className='flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-16 my-6 md:px-0 px-4'>
-                <h1 className='font-bold'>Тип перевозки</h1>
-                <FormField
-                    control={control}
-                    name='loadingType'
-                    rules={{ required: 'Заполните это поле.' }}
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormControl>
-                                <RadioGroup
-                                    onValueChange={value => {
-                                        const mappedValue = value === 'Погрузка' ? 'loading' : 'unloading'
-                                        field.onChange(mappedValue)
-                                        setOperationType(mappedValue)
-                                    }}
-                                    defaultValue={field.value}
-                                    className='flex md:gap-6 gap-12 ml-16 md:ml-auto'
-                                >
-                                    <FormItem className='flex items-center space-x-3 space-y-0 '>
-                                        <FormLabel className='font-normal'>Погрузка</FormLabel>
-                                        <FormControl>
-                                            <RadioGroupItem value='Погрузка' className=' size-8' />
-                                        </FormControl>
-                                    </FormItem>
-                                    <FormItem className='flex items-center space-x-3 space-y-0'>
-                                        <FormControl>
-                                            <RadioGroupItem value='Выгрузка' className=' size-8' />
-                                        </FormControl>
-                                        <FormLabel className='font-normal'>Выгрузка</FormLabel>
-                                    </FormItem>
-                                </RadioGroup>
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                <h1 className='font-bold whitespace-nowrap'>Тип перевозки</h1>
+                <div className='w-full md-w-auto flex justify-center md:block'>
+                    <FormField
+                        // disabled={isReadOnly}
+                        control={control}
+                        name='loadingType'
+                        rules={{ required: 'Заполните это поле.' }}
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormControl>
+                                    <RadioGroup
+                                        disabled={isReadOnly}
+                                        onValueChange={value => {
+                                            const mappedValue = value === 'Погрузка' ? 'loading' : 'unloading'
+                                            field.onChange(mappedValue)
+                                            setOperationType(mappedValue)
+                                        }}
+                                        value={field.value === 'loading' ? 'Погрузка' : 'Выгрузка'}
+                                        defaultValue={field.value}
+                                        className='flex md:gap-6 ml-8 gap-12 md:ml-auto '
+                                    >
+                                        <FormItem className='flex items-center space-x-3 space-y-0 '>
+                                            <FormLabel className='font-normal'>Погрузка</FormLabel>
+                                            <FormControl>
+                                                <RadioGroupItem value='Погрузка' className=' size-8' />
+                                            </FormControl>
+                                        </FormItem>
+                                        <FormItem className='flex items-center space-x-3 space-y-0'>
+                                            <FormControl>
+                                                <RadioGroupItem value='Выгрузка' className=' size-8' />
+                                            </FormControl>
+                                            <FormLabel className='font-normal'>Выгрузка</FormLabel>
+                                        </FormItem>
+                                    </RadioGroup>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
 
-                <FormField
-                    control={control}
-                    name='transportType'
-                    rules={{ required: 'Заполните это поле.' }}
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormControl>
-                                <RadioGroup
-                                    onValueChange={value => {
-                                        const mappedValue = value === 'Контейнер' ? 'container' : 'wagon'
-                                        field.onChange(mappedValue)
-                                        setTransportType(value)
-                                    }}
-                                    defaultValue={field.value}
-                                    className='flex md:gap-6 gap-12 ml-[54px] md:ml-auto'
-                                >
-                                    <FormItem className='flex items-center space-x-3 space-y-0'>
-                                        <FormLabel className='font-normal'>Контейнер</FormLabel>
-                                        <FormControl>
-                                            <RadioGroupItem value='Контейнер' className=' size-8' />
-                                        </FormControl>
-                                    </FormItem>
-                                    <FormItem className='flex items-center space-x-3 space-y-0'>
-                                        <FormControl>
-                                            <RadioGroupItem value='Вагон' className=' size-8' />
-                                        </FormControl>
-                                        <FormLabel className='font-normal'>Вагон</FormLabel>
-                                    </FormItem>
-                                </RadioGroup>
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                <div className='min-w-full flex justify-center md:block'>
+                    <FormField
+                        // disabled={isReadOnly}
+                        control={control}
+                        name='transportType'
+                        rules={{ required: 'Заполните это поле.' }}
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormControl>
+                                    <RadioGroup
+                                        disabled={isReadOnly}
+                                        onValueChange={value => {
+                                            const mappedValue = value === 'Контейнер' ? 'container' : 'wagon'
+                                            field.onChange(mappedValue)
+                                            setTransportType(value)
+                                        }}
+                                        value={field.value === 'container' ? 'Контейнер' : 'Вагон'}
+                                        defaultValue={field.value}
+                                        className='flex md:gap-6 gap-12  '
+                                    >
+                                        <FormItem className='flex items-center space-x-3 space-y-0'>
+                                            <FormLabel className='font-normal'>Контейнер</FormLabel>
+                                            <FormControl>
+                                                <RadioGroupItem value='Контейнер' className=' size-8' />
+                                            </FormControl>
+                                        </FormItem>
+                                        <FormItem className='flex items-center space-x-3 space-y-0'>
+                                            <FormControl>
+                                                <RadioGroupItem value='Вагон' className=' size-8' />
+                                            </FormControl>
+                                            <FormLabel className='font-normal'>Вагон</FormLabel>
+                                        </FormItem>
+                                    </RadioGroup>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
             </div>
 
             <Separator className='mb-4' />
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-4 md:px-0 px-4'>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-4 md:px-0 px-6'>
                 <FormField
+                    disabled={isReadOnly}
                     control={control}
                     name='client'
                     rules={{ required: 'Заполните это поле.' }}
@@ -137,6 +149,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                         <FormItem>
                             <FormLabel className='font-bold text-[18px]'>Заказчик</FormLabel>
                             <Select
+                                disabled={isReadOnly}
                                 onValueChange={value => {
                                     field.onChange(Number(value))
                                     handleClientChange(value)
@@ -147,7 +160,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                 onOpenChange={setOpenClient}
                             >
                                 <FormControl>
-                                    <SelectTrigger>
+                                    <SelectTrigger className=''>
                                         <SelectValue placeholder='Выберите клиента' />
                                     </SelectTrigger>
                                 </FormControl>
@@ -177,6 +190,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                 />
                 <div>
                     <FormField
+                        disabled={isReadOnly}
                         control={control}
                         name='recipientOrSender'
                         rules={{ required: 'Заполните это поле.' }}
@@ -186,6 +200,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                     {operationType === 'loading' ? 'Отправитель' : 'Получатель'}
                                 </FormLabel>
                                 <Select
+                                    disabled={isReadOnly}
                                     onValueChange={value => field.onChange(value)}
                                     value={field.value}
                                     open={openRecipient}
@@ -250,7 +265,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
             <div className='bg-slate-300 text-center text-[26px]  my-3 py-3'>
                 <p>Транспорт</p>
             </div>
-            <div className='flex flex-col md:flex-row items-start md:items-center gap-2  my-6 md:px-0 px-4 md:py-0 py-3'>
+            <div className='flex flex-col md:flex-row items-start md:items-center gap-2  my-6 md:px-0 px-6 md:py-0 py-3'>
                 {/* <h1 className='font-bold mr-20'>
                     Профиль <br className='hidden md:block' /> Транспорта
                 </h1> */}
@@ -258,12 +273,14 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                 <div className='flex gap-3 w-full items-center'>
                     <div className='w-2/3'>
                         <FormField
+                            disabled={isReadOnly}
                             control={control}
                             name='vehicleProfiles'
                             rules={{ required: 'Заполните это поле.' }}
                             render={({ field }) => (
                                 <FormItem>
                                     <Select
+                                        disabled={isReadOnly}
                                         onValueChange={value => {
                                             field.onChange(Number(value))
                                             setValue('vehicleProfiles', Number(value))
@@ -301,6 +318,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                     </div>
                                     <div className='flex flex-col border-l'>
                                         <button
+                                            disabled={isReadOnly}
                                             type='button'
                                             className='w-6 h-5 flex items-center justify-center hover:bg-gray-200'
                                             onClick={() => field.onChange(field.value + 1)}
@@ -308,6 +326,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                             <Plus size={14} className='text-green-500' />
                                         </button>
                                         <button
+                                            disabled={isReadOnly}
                                             type='button'
                                             className='w-6 h-5 flex items-center justify-center hover:bg-gray-200'
                                             onClick={() => field.onChange(Math.max(1, field.value - 1))}
