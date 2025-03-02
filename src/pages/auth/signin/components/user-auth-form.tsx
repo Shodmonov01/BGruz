@@ -47,6 +47,8 @@ export default function UserAuthForm() {
                 const userResponse = await fetchPrivateData<{ username: string }>("api/v1/auth/currentuser", token);
 
                 localStorage.setItem('username', userResponse.username)
+                // @ts-ignore
+                localStorage.setItem('organizationName', userResponse.organizationName)
 
                 router.push('/bids')
             }

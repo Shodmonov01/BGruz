@@ -6,6 +6,7 @@ import OrderTableMobile from './components/orders-table-mobile'
 import { useWebSocket } from '@/api/use-websocket'
 import { useGetOrders } from '@/api/use-get-orders'
 import { TotalsProvider } from '@/context/totals-context'
+import PageHead from '@/components/shared/page-head'
 
 export default function OrderPage() {
     const [searchParams] = useSearchParams()
@@ -103,6 +104,7 @@ export default function OrderPage() {
 
     return (
         <div className='p-4'>
+            <PageHead title='Заказы' />
             <TotalsProvider data={orders}>
                 <BgruzHeader />
                 <div className='hidden md:block'>

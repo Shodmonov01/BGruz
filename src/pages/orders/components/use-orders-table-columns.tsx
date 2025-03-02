@@ -2,10 +2,11 @@ import { useMemo } from 'react'
 
 import { ColumnDef } from '@tanstack/react-table'
 
+import useNumberFormatter from '@/hooks/use-format-number'
+
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import loading from '../../../../public/gear-spinner.svg'
-import useNumberFormatter from '@/hooks/use-format-number'
 
 interface Bid {
     _id: string
@@ -83,25 +84,34 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
             {
                 accessorKey: 'id',
                 header: 'ID',
-                size: 100,
+                minSize: 100,
+                maxSize: 500,
+                size: 200,
                 isShortVersion: false,
                 searchable: true,
                 filterType: 'exact',
+                enableResizing: true,
                 isMobile: false
             },
             {
                 accessorKey: 'persistentId',
                 header: 'ЦМ ID',
+                accessorFn: (row: Bid) => row.buyBid?.persistentId ?? '—',
                 size: 100,
+                minSize: 100,
+                maxSize: 500,
                 isShortVersion: false,
                 searchable: true,
                 filterType: 'exact',
+                enableResizing: true,
                 isMobile: false
             },
             {
                 header: 'Вагон/Конт',
                 accessorKey: 'cargoType',
                 size: 200,
+                minSize: 100,
+                maxSize: 500,
                 accessorFn: row => {
                     let cargoTypeLabel = ''
                     if (row.buyBid?.cargoType === 'wagon') {
@@ -114,6 +124,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
 
                 searchable: true,
                 filterType: 'select',
+                enableResizing: true,
                 filterOptions: [
                     { value: ['wagon', 'container'], label: 'Все' },
                     { value: 'wagon', label: 'Вагон' },
@@ -124,6 +135,8 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 accessorKey: 'loadingMode',
                 header: 'Операция',
                 size: 100,
+                minSize: 100,
+                maxSize: 500,
                 accessorFn: row => {
                     let loadingModeLabel = ''
                     if (row.loadingMode === 'loading') {
@@ -146,6 +159,8 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 accessorKey: 'loadingDate',
                 header: 'Дата подачи',
                 size: 120,
+                minSize: 100,
+                maxSize: 500,
                 isShortVersion: true,
                 searchable: true,
                 accessorFn: row =>
@@ -157,14 +172,19 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
 
             },
 
-            {
-                accessorKey: 'loadingTime',
-                header: 'Время подачи',
-                size: 120,
-                searchable: true,
-                accessorFn: (row: Bid) => row.buyBid?.filingTime ?? '—',
-                filterType: 'dateRange'
-            },
+            // {
+            //     accessorKey: 'loadingTime',
+            //     header: 'Время подачи',
+            //     size: 120,
+            //     minSize: 100,
+            //     maxSize: 500,
+            //     searchable: true,
+            //     accessorFn: row =>
+            //         row.buyBid?.loadingDate
+            //             ? format(new Date(row.buyBid.loadingDate), 'dd.MM.yyyy', { locale: ru })
+            //             : '—',
+            //     filterType: 'dateRange'
+            // },
 
             {
                 accessorKey: 'terminal1',
@@ -425,7 +445,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 header: 'Заказчик',
                 size: 150,
                 searchable: true,
-                accessorFn: (row: Bid) => row.customerName?.organizationName ?? '—',
+                accessorFn: (row: Bid) => row.buyBid?.customer?.organizationName ?? '—',
                 filterType: 'fuzzy'
             },
             {
@@ -477,19 +497,19 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 filterType: 'fuzzy'
             },
             {
-                accessorKey: 'carrier.organizationName',
+                accessorKey: 'saleBid.author.fio',
                 header: 'Автор заявки',
                 size: 150,
                 searchable: true,
-                accessorFn: (row: Bid) => row.carrier?.organizationName ?? '—',
+                accessorFn: (row: Bid) => row.saleBid?.author?.fio ?? '—',
                 filterType: 'fuzzy'
             },
             {
-                accessorKey: 'carrier.organizationName',
+                accessorKey: 'buyBid.author.fio',
                 header: 'Автор предложения',
                 size: 150,
                 searchable: true,
-                accessorFn: (row: Bid) => row.carrier?.organizationName ?? '—',
+                accessorFn: (row: Bid) => row.buyBid?.author?.fio ?? '—',
                 filterType: 'fuzzy'
             }
         ]
