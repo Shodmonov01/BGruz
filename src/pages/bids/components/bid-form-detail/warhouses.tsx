@@ -48,7 +48,7 @@ function Warehouses({ warehouses }) {
                     <FormField
                         control={control}
                         name={`warehouses.${index}.name`}
-                        rules={{ required: 'Заполните это поле.' }}
+                        // rules={{ required: 'Заполните это поле.' }}
                         render={({ field }) => (
                             <FormItem>
                                 <Select

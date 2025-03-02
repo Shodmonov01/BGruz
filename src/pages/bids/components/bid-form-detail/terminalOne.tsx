@@ -30,7 +30,7 @@ function TerminalOne({ terminals }) {
                 <FormField
                     control={control}
                     name='terminal1Name'
-                    rules={{ required: 'Пожалуйста, выберите терминал' }}
+                    // rules={{ required: 'Пожалуйста, выберите терминал' }}
                     render={({ field }) => (
                         <FormItem>
                             <Select

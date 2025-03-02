@@ -1,9 +1,11 @@
-import { FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Input } from '@/components/ui/input'
-import { useFormContext, useWatch } from 'react-hook-form'
-import { Separator } from '@/components/ui/separator'
 import { useState } from 'react'
+
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
+import { Separator } from '@/components/ui/separator'
+import { Input } from '@/components/ui/input'
+
+import { useFormContext, useWatch } from 'react-hook-form'
 
 function TerminalTwo({ terminals }) {
     const { control, setValue } = useFormContext()
@@ -22,8 +24,8 @@ function TerminalTwo({ terminals }) {
     }
 
     const sortedTerminals = [...terminals]
-        .sort((a, b) => a.name.localeCompare(b.name)) // Сортировка по алфавиту
-        .filter(t => t.name.toLowerCase().includes(search.toLowerCase())) // Фильтрация по поиску
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .filter(t => t.name.toLowerCase().includes(search.toLowerCase()))
 
     return (
         <div>
@@ -31,7 +33,7 @@ function TerminalTwo({ terminals }) {
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-4'>
                 <FormField
                     control={control}
-                    name='terminal2Name' // хранит ID терминала
+                    name='terminal2Name'
                     render={({ field }) => (
                         <FormItem>
                             <Select
@@ -41,7 +43,7 @@ function TerminalTwo({ terminals }) {
                                     const selectedTerminal = terminals.find(terminal => terminal.id === Number(value))
                                     if (selectedTerminal) {
                                         setValue('terminal2Address', selectedTerminal.description || '')
-                                        setValue('terminal2Id', selectedTerminal.id) // сохраняем ID терминала
+                                        setValue('terminal2Id', selectedTerminal.id)
                                     }
                                 }}
                                 value={field.value}
@@ -53,15 +55,8 @@ function TerminalTwo({ terminals }) {
                                         <SelectValue placeholder='Выберите терминал 2' />
                                     </SelectTrigger>
                                 </FormControl>
-                                {/* <SelectContent>
-                                    {terminals.map(terminal => (
-                                        <SelectItem key={terminal.id} value={terminal.id.toString()}>
-                                            {terminal.name}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent> */}
                                 <SelectContent>
-                                    {/* Поле для поиска */}
+                                  
                                     <div className='p-2'>
                                         <Input
                                             placeholder='Поиск терминала...'
@@ -72,7 +67,6 @@ function TerminalTwo({ terminals }) {
                                             className='w-full border rounded-md'
                                         />
                                     </div>
-                                    {/* Список терминалов */}
                                     {sortedTerminals.length > 0 ? (
                                         sortedTerminals.map(terminal => (
                                             <SelectItem key={terminal.id} value={terminal.id.toString()}>
