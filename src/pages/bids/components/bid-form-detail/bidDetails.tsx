@@ -34,6 +34,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
     setTransportType,
     isReadOnly
 }) => {
+    // const { fields, append, remove } = useFieldArray()
     const { control, setValue } = useFormContext()
     // const [open, setOpen] = useState(false)
     // const [search, setSearch] = useState('')
@@ -46,6 +47,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
     const filteredClientList = filteredClients.filter(client =>
         client.organizationName.toLowerCase().includes(searchClient.toLowerCase())
     )
+    // console.log('fields', fields)
 
     const filteredRecipientList = filteredClients.filter(client =>
         client.organizationName.toLowerCase().includes(searchRecipient.toLowerCase())
@@ -201,8 +203,12 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                 </FormLabel>
                                 <Select
                                     disabled={isReadOnly}
-                                    onValueChange={value => field.onChange(value)}
-                                    value={field.value}
+                                    onValueChange={value => {
+                                        field.onChange(Number(value))
+                                        handleClientChange(value)
+                                        // setOpenClient(false)
+                                    }}
+                                    value={field.value?.toString()}
                                     open={openRecipient}
                                     onOpenChange={setOpenRecipient}
                                 >
