@@ -57,7 +57,8 @@ interface Bid {
         docModel: string;
     };
     assignedTrailer?: {
-        docModel: string;
+        docModel?: string;
+        plateNum: string
     };
     statusUpdatedUser?: {
         username: string;
@@ -66,6 +67,7 @@ interface Bid {
         fio: string;
     };
     docSubmissionDate?: string
+    
     [key: string]: unknown;
 }
 
@@ -490,25 +492,25 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 accessorFn: (row: Bid) => row.assignedVehicle?.docModel ?? '—',
                 filterType: 'fuzzy'
             },
+            {
+                accessorKey: 'assignedTrailer.plateNum',
+                header: 'Прицеп',
+                size: 150,
+                searchable: true,
+                accessorFn: (row: Bid) => row.assignedTrailer?.plateNum ?? '—',
+                filterType: 'fuzzy'
+            },
             // {
             //     accessorKey: 'assignedTrailer.docModel',
             //     header: 'Прицеп',
             //     size: 150,
             //     searchable: true,
-            //     accessorFn: (row: Bid) => row.assignedTrailer?.docModel ?? '—',
+            //     accessorFn: (row: Bid) => 
+            //         [row.assignedTrailer?.docModel, row.assignedTrailer?.plateNum]
+            //             .filter(Boolean)
+            //             .join(' | ') || '—',
             //     filterType: 'fuzzy'
             // },
-            {
-                accessorKey: 'assignedTrailer.docModel',
-                header: 'Прицеп',
-                size: 150,
-                searchable: true,
-                accessorFn: (row: Bid) => 
-                    [row.assignedTrailer?.docModel, row.assignedTrailer?.plateNum]
-                        .filter(Boolean)
-                        .join(' | ') || '—',
-                filterType: 'fuzzy'
-            },
             
             {
                 accessorKey: 'docSubmissionUser.fio',
