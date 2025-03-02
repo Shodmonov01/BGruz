@@ -544,19 +544,20 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
             },
 
             {
-                accessorKey: 'saleBid.author.fio',
+                accessorKey: 'buyBid.author.fio',
                 header: 'Автор заявки',
                 size: 150,
                 searchable: true,
-                accessorFn: (row: Bid) => row.saleBid?.author?.fio ?? '—',
+                accessorFn: (row: Bid) => row.buyBid?.author?.fio ?? '—',
                 filterType: 'fuzzy'
             },
             {
-                accessorKey: 'buyBid.author.fio',
+                accessorKey: 'saleBid.author.fio',
                 header: 'Автор предложения',
                 size: 150,
                 searchable: true,
-                accessorFn: (row: Bid) => row.buyBid?.author?.fio ?? '—',
+                accessorFn: (row: Bid) => row.saleBid?.author?.fio ?? '—',
+
                 filterType: 'fuzzy'
             }
         ]
