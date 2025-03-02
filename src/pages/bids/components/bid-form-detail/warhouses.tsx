@@ -62,8 +62,8 @@ function Warehouses({ warehouses, isReadOnly }: { warehouses; isReadOnly?: boole
                 <div key={field.id} className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-4 mb-2'>
                     <FormField
                         control={control}
-                        name={`warehouses.${index}.id`}
-                        rules={{ required: 'Заполните это поле.' }}
+                        name={`warehouses.${index}.name`}
+                        // rules={{ required: 'Заполните это поле.' }}
                         render={({ field }) => (
                             <FormItem>
                                 <Select

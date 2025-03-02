@@ -12,30 +12,34 @@ import {
 import { useEffect, useState } from 'react'
 import { LogIn } from 'lucide-react'
 
-    export default function UserNav({ isMinimized = false }: { isMinimized?: boolean }) {
-
+export default function UserNav({ isMinimized = false }: { isMinimized?: boolean }) {
     const [username, setUsername] = useState('')
+    const [organizationName, setOrganizationName] = useState('')
 
     useEffect(() => {
         setUsername(localStorage.getItem('username') || 'Гость')
+        setOrganizationName(localStorage.getItem('organizationName') || 'Гость')
     }, [])
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <div className='flex items-center mr-8 md:mr-0'>
-                    <Button variant='ghost' className='relative h-14 w-14 rounded-full mr-3'>
-                        <Avatar className='h-14 w-14 mr-[14px]'>
-                            <AvatarImage
-                                src={
-                                    'https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001882.png'
-                                }
-                                alt={''}
-                            />
-                            <AvatarFallback>{username}</AvatarFallback>
-                        </Avatar>
-                    </Button>
-                    <div>
-                        <div className={isMinimized ? 'hidden' : 'inline-block'}>{username}</div>
+                <div className='flex flex-col items-start mr-8 md:mr-0'>
+                    <div className={isMinimized ? 'md:hidden' : 'md:inline-block whitespace-nowrap hidden'} >{organizationName}</div>
+                    <div className='flex items-center mr-8 md:mr-0'>
+                        <Button variant='ghost' className='relative h-14 w-14 rounded-full mr-3'>
+                            <Avatar className='h-14 w-14 mr-[14px]'>
+                                <AvatarImage
+                                    src={
+                                        'https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001882.png'
+                                    }
+                                    alt={''}
+                                />
+                                <AvatarFallback>{username}</AvatarFallback>
+                            </Avatar>
+                        </Button>
+                        <div>
+                            <div className={isMinimized ? 'hidden' : 'inline-block'}>{username}</div>
+                        </div>
                     </div>
                 </div>
             </DropdownMenuTrigger>
@@ -48,9 +52,16 @@ import { LogIn } from 'lucide-react'
                 <DropdownMenuSeparator />
 
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => console.log('logout')}>
+                <DropdownMenuItem
+                    onClick={() => {
+                        localStorage.removeItem('username')
+                        localStorage.removeItem('organizationName')
+                        window.location.href = '/login'
+                    }}
+                >
                     Выход
-                    <DropdownMenuShortcut><LogIn/>
+                    <DropdownMenuShortcut>
+                        <LogIn />
                     </DropdownMenuShortcut>
                 </DropdownMenuItem>
             </DropdownMenuContent>

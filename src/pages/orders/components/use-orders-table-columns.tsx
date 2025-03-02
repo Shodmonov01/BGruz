@@ -2,10 +2,11 @@ import { useMemo } from 'react'
 
 import { ColumnDef } from '@tanstack/react-table'
 
+import useNumberFormatter from '@/hooks/use-format-number'
+
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import loading from '../../../../public/gear-spinner.svg'
-import useNumberFormatter from '@/hooks/use-format-number'
 
 interface Bid {
     _id: string
@@ -34,6 +35,7 @@ interface Bid {
     fullPrice?: number
     commission?: number
     buyBid?: {
+        persistentId?: string
         loadingMode: string
         cargoType: string
         loadingDate: number
@@ -42,9 +44,30 @@ interface Bid {
         warehouses: Array<{ cityName: string }>
         vehicleProfile: { name: string }
         filingTime: string
+        customer?: { organizationName: string }
+        author?: { fio: string }
     }
-    [key: string]: unknown
+    saleBid?: {
+        author?: { fio: string }
+    }
+    driverUser?: {
+        fio: string;
+    };
+    assignedVehicle?: {
+        docModel: string;
+    };
+    assignedTrailer?: {
+        docModel: string;
+    };
+    statusUpdatedUser?: {
+        username: string;
+    };
+    docSubmissionUser?: {
+        fio: string;
+    };
+    [key: string]: unknown;
 }
+
 
 interface ColumnsProps {
     isMobile?: boolean
@@ -68,25 +91,34 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
             {
                 accessorKey: 'id',
                 header: 'ID',
-                size: 100,
+                minSize: 100,
+                maxSize: 500,
+                size: 200,
                 isShortVersion: false,
                 searchable: true,
                 filterType: 'exact',
+                enableResizing: true,
                 isMobile: false
             },
             {
                 accessorKey: 'persistentId',
                 header: 'ЦМ ID',
+                accessorFn: (row: Bid) => row.buyBid?.persistentId ?? '—',
                 size: 100,
+                minSize: 100,
+                maxSize: 500,
                 isShortVersion: false,
                 searchable: true,
                 filterType: 'exact',
+                enableResizing: true,
                 isMobile: false
             },
             {
                 header: 'Вагон/Конт',
                 accessorKey: 'cargoType',
                 size: 200,
+                minSize: 100,
+                maxSize: 500,
                 accessorFn: row => {
                     let cargoTypeLabel = ''
                     if (row.buyBid?.cargoType === 'wagon') {
@@ -99,6 +131,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
 
                 searchable: true,
                 filterType: 'select',
+                enableResizing: true,
                 filterOptions: [
                     { value: ['wagon', 'container'], label: 'Все' },
                     { value: 'wagon', label: 'Вагон' },
@@ -109,6 +142,8 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 accessorKey: 'loadingMode',
                 header: 'Операция',
                 size: 100,
+                minSize: 100,
+                maxSize: 500,
                 accessorFn: row => {
                     let loadingModeLabel = ''
                     if (row.loadingMode === 'loading') {
@@ -131,6 +166,8 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 accessorKey: 'loadingDate',
                 header: 'Дата подачи',
                 size: 120,
+                minSize: 100,
+                maxSize: 500,
                 isShortVersion: true,
                 searchable: true,
                 accessorFn: row =>
@@ -142,14 +179,19 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
 
             },
 
-            {
-                accessorKey: 'loadingTime',
-                header: 'Время подачи',
-                size: 120,
-                searchable: true,
-                accessorFn: (row: Bid) => row.buyBid?.filingTime ?? '—',
-                filterType: 'dateRange'
-            },
+            // {
+            //     accessorKey: 'loadingTime',
+            //     header: 'Время подачи',
+            //     size: 120,
+            //     minSize: 100,
+            //     maxSize: 500,
+            //     searchable: true,
+            //     accessorFn: row =>
+            //         row.buyBid?.loadingDate
+            //             ? format(new Date(row.buyBid.loadingDate), 'dd.MM.yyyy', { locale: ru })
+            //             : '—',
+            //     filterType: 'dateRange'
+            // },
 
             {
                 accessorKey: 'terminal1',
@@ -200,8 +242,19 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                         cancelledByCustomer: 'Отменено клиентом',
                         new: 'Новый',
                         executed: 'Выполнена',
-                        canceled: 'Отменена'
+                        canceled: 'Отменена',
+                        canceledByCarrierWithPenalty: 'Отменяется перевозчиком (половина ГО)',
+                        canceledByCustomerWithPenalty: 'Отменяется заказчиком (половина ГО)',
+                        canceledByCarrier: 'Отменяется перевозчиком',
+                        failed: 'Сорван',
+                        failing: 'Срывается',
+                        inTransit: 'Выполнен',
+                        headingToLoading: 'Еду на погрузку',
+                        loading: 'На погрузке',
+                        unloading: 'На выгрузке',
+                        delivered: 'Груз сдан',
                     }
+
 
                     const status = row.original.status
 
@@ -266,16 +319,29 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                     { value: 'completed', label: 'Выполнен' },
                     { value: 'inTransit', label: 'Машина в пути' },
                     { value: 'canceled', label: 'Отменен' },
-                    { value: 'headingToLoading', label: 'Еду на погрузку"' },
+                    { value: 'headingToLoading', label: 'Еду на погрузку' },
                     { value: 'loading', label: 'На погрузке' },
                     { value: 'unloading', label: 'На выгрузке' },
                     { value: 'delivered', label: 'Груз сдан' },
                                 ]
             },
+            // {
+            //     accessorKey: 'docSubmissionDate',
+            //     header: 'Документы',
+            //     size: 100,
+            //   accessorFn: (row: Bid) =>
+            //         row.createdAt ? format(new Date(row.createdAt), 'dd.MM.yyyy HH:mm', { locale: ru }) : '—',
+            //     isShortVersion: false,
+            //     searchable: true,
+            //     filterType: 'exact',
+            //     isMobile: false
+            // },
             {
                 accessorKey: 'docSubmissionDate',
-                header: 'Документы',
+                header: 'Док сданы',
                 size: 100,
+              accessorFn: (row: Bid) =>
+                    row.createdAt ? format(new Date(row.createdAt), 'dd.MM.yyyy HH:mm', { locale: ru }) : '—',
                 isShortVersion: false,
                 searchable: true,
                 filterType: 'exact',
@@ -396,7 +462,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 header: 'Заказчик',
                 size: 150,
                 searchable: true,
-                accessorFn: (row: Bid) => row.customerName?.organizationName ?? '—',
+                accessorFn: (row: Bid) => row.buyBid?.customer?.organizationName ?? '—',
                 filterType: 'fuzzy'
             },
             {
@@ -405,6 +471,62 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 size: 150,
                 searchable: true,
                 accessorFn: (row: Bid) => row.carrier?.organizationName ?? '—',
+                filterType: 'fuzzy'
+            },
+            {
+                accessorKey: 'driverUser.fio',
+                header: 'Водитель',
+                size: 150,
+                searchable: true,
+                accessorFn: (row: Bid) => row.driverUser?.fio ?? '—',
+                filterType: 'fuzzy'
+            },
+            {
+                accessorKey: 'assignedVehicle.docModel',
+                header: 'Машина',
+                size: 150,
+                searchable: true,
+                accessorFn: (row: Bid) => row.assignedVehicle?.docModel ?? '—',
+                filterType: 'fuzzy'
+            },
+            {
+                accessorKey: 'assignedTrailer.docModel',
+                header: 'Прицеп',
+                size: 150,
+                searchable: true,
+                accessorFn: (row: Bid) => row.assignedTrailer?.docModel ?? '—',
+                filterType: 'fuzzy'
+            },
+            {
+                accessorKey: 'statusUpdatedUser.username',
+                header: 'Автор статуса',
+                size: 150,
+                searchable: true,
+                accessorFn: (row: Bid) => row.statusUpdatedUser?.username ?? '—',
+                filterType: 'fuzzy'
+            },
+            {
+                accessorKey: 'docSubmissionUser.fio',
+                header: 'Бухгалтер',
+                size: 150,
+                searchable: true,
+                accessorFn: (row: Bid) => row.docSubmissionUser?.fio ?? '—',
+                filterType: 'fuzzy'
+            },
+            {
+                accessorKey: 'saleBid.author.fio',
+                header: 'Автор заявки',
+                size: 150,
+                searchable: true,
+                accessorFn: (row: Bid) => row.saleBid?.author?.fio ?? '—',
+                filterType: 'fuzzy'
+            },
+            {
+                accessorKey: 'buyBid.author.fio',
+                header: 'Автор предложения',
+                size: 150,
+                searchable: true,
+                accessorFn: (row: Bid) => row.buyBid?.author?.fio ?? '—',
                 filterType: 'fuzzy'
             }
         ]

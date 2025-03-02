@@ -27,7 +27,7 @@ function BidHeader({ setIsShortTable, isShortTable }) {
                         <Input
                             type='text'
                             placeholder='Поиск заявки'
-                            className='!pl-10 border border-border rounded-lg focus:ring-2 focus:ring-primary'
+                            className='!pl-10 !py-5 border border-border rounded-lg focus:ring-2 focus:ring-primary'
                         />
                     </div>
                 </div>

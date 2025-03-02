@@ -128,12 +128,14 @@ function OrdersTable({
         columns,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
+        columnResizeMode: 'onChange',
         state: {
             columnFilters,
             sorting
         },
         onColumnFiltersChange: setColumnFilters,
         onSortingChange: setSorting,
+        enableColumnResizing: true,
         enableSorting: true
     })
 
@@ -154,11 +156,21 @@ function OrdersTable({
                                     {headerGroup.headers.map(header => (
                                         <TableHead
                                             key={header.id}
-                                            className='bg-[#EDEDED] font-bold text-[20px] border border-gray-300 whitespace-nowrap'
+                                            className='relative bg-[#EDEDED] font-bold text-[20px] border border-gray-300 whitespace-nowrap'
+                                            style={{ width: header.getSize() }}
                                         >
                                             <div className='text-center'>
                                                 {flexRender(header.column.columnDef.header, header.getContext())}
                                             </div>
+                                            {header.column.getCanResize() && (
+                                                <div
+                                                    {...{
+                                                        onMouseDown: header.getResizeHandler(),
+                                                        onTouchStart: header.getResizeHandler(),
+                                                        className: `absolute right-0 top-0 h-full w-1  cursor-col-resize`
+                                                    }}
+                                                />
+                                            )}
                                         </TableHead>
                                     ))}
                                 </TableRow>
@@ -176,8 +188,12 @@ function OrdersTable({
                                                     header.column.columnDef.filterType !== 'range' ? (
                                                         <div className='text-center'>
                                                             {/* {renderFilterInput(header.column, handleFilterChange, orders)} */}
-                                                            <FilterInput column={header.column} handleFilterChange={handleFilterChange} pageType="orders" />
-                                                            </div>
+                                                            <FilterInput
+                                                                column={header.column}
+                                                                handleFilterChange={handleFilterChange}
+                                                                pageType='orders'
+                                                            />
+                                                        </div>
                                                     ) : (
                                                         <div
                                                             className='flex  items-center gap-1 cursor-pointer px-3 py-5 md:px-3 md:py-2 text-base md:text-xl rounded-md bg-white'

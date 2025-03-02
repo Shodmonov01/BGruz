@@ -1,39 +1,35 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
-import { Button } from '@/components/ui/button'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { ListFilter } from 'lucide-react'
-import { useGetBids } from '@/api/use-get-bids'
-import { useFilter } from '@/context/filter-context'
-import { useSearchParams } from 'react-router-dom'
+import { useLocation, useSearchParams } from 'react-router-dom'
+
 import { useBidsTableColumns } from '@/pages/bids/components/bids-table/useBidsTableColumns'
+
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { Button } from '@/components/ui/button'
+
+import { useFilter } from '@/context/filter-context'
+import { useGetBids } from '@/api/use-get-bids'
+
 import { FilterInput } from './render-filter-input'
+import { ListFilter } from 'lucide-react'
+import { useOrdersTableColumns } from '@/pages/orders/components/use-orders-table-columns'
+import { useGetOrders } from '@/api/use-get-orders'
 
-interface IColumn {
-    accessorKey: string
-    header: string
-    size?: number
-    searchable?: boolean
-    filterType?: 'dateRange' | 'fuzzy' | 'select'
-    filterOptions?: { value: string | string[]; label: string }[]
-    isMobile: boolean
-}
-
-// interface FilterColumn {
-//     id: string
-//     columnDef: {
-//         filterType?: 'dateRange' | 'fuzzy' | 'select'
-//         filterOptions?: { value: string | string[]; label: string }[]
-//         header: string
-//     }
-//     getFilterValue: () => any
-//     setFilterValue: (value: any) => void
+// interface IColumn {
+//     accessorKey: string
+//     header: string
+//     size?: number
+//     searchable?: boolean
+//     filterType?: 'dateRange' | 'fuzzy' | 'select'
+//     filterOptions?: { value: string | string[]; label: string }[]
+//     isMobile: boolean
 // }
 
+
 export function RenderFilterMobile() {
+    const location = useLocation()
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [searchParams] = useSearchParams()
     const size = useMemo(() => Number(searchParams.get('size')) || 200, [searchParams])
-    const { loading, refreshBids, setFilters } = useGetBids(size)
     const { filters, handleFilterChange } = useFilter()
     const [localFilters, setLocalFilters] = useState(filters)
 
@@ -41,12 +37,31 @@ export function RenderFilterMobile() {
         setLocalFilters(filters)
     }, [filters])
 
-    // const handleLocalFilterChange = useCallback((key: string, value: any) => {
-    //     setLocalFilters(prev => ({
-    //         ...prev,
-    //         [key]: value
-    //     }))
-    // }, [])
+    const pageType = useMemo(() => (location.pathname.includes('/orders') ? 'orders' : 'bids'), [location.pathname]);
+
+    // const pageType = useMemo(() => (location.pathname.includes('/orders') ? 'orders' : 'bids'), [location.pathname])
+    // const pageType = useMemo(() => {
+    //     return location.pathname.startsWith('/orders') ? 'orders' : 'bids';
+    // }, [location.pathname]);
+    
+
+    // Вызываем оба хука, но используем только нужный
+    const { loading: loadingBids, refreshBids, setFilters: setBidsFilters } = useGetBids(size)
+
+    const { loading: loadingOrders, refreshOrders, setFilters: setOrdersFilters } = useGetOrders(size)
+
+    // Определяем, какие данные использовать
+    const loading = pageType === 'orders' ? loadingOrders : loadingBids
+    // const refreshData = pageType === 'orders' ? refreshOrders : refreshBids
+    // const setFilters = pageType === 'orders' ? setOrdersFilters : setBidsFilters
+
+    const setFilters = pageType === 'orders' ? setOrdersFilters : setBidsFilters
+    const refreshData = pageType === 'orders' ? refreshOrders : refreshBids
+
+    console.log('Current pathname:', location.pathname)
+    console.log('Detected pageType:', pageType)
+    console.log('Using setFilters:', setFilters === setOrdersFilters ? 'Orders' : 'Bids')
+    console.log('Using refreshData:', refreshData === refreshOrders ? 'Orders' : 'Bids')
 
     const applyFilters = useCallback(() => {
         Object.entries(localFilters).forEach(([key, value]) => {
@@ -55,38 +70,55 @@ export function RenderFilterMobile() {
             }
         })
 
-        // setFilters(localFilters)
-        refreshBids()
+        refreshData()
         setIsOpen(false)
-    }, [localFilters, setFilters, handleFilterChange])
+    }, [localFilters, refreshData, handleFilterChange])
 
     const resetFilters = useCallback(() => {
         const emptyFilters = {}
         setLocalFilters(emptyFilters)
         setFilters(emptyFilters)
-        refreshBids()
+        refreshData()
         setIsOpen(false)
-    }, [setFilters, refreshBids])
+    }, [setFilters, refreshData])
 
-    const originalColumns = useBidsTableColumns({
+    // Вызываем хуки колонок
+    const ordersColumns = useOrdersTableColumns({
+        onApprove: applyFilters,
+        isMobile: true,
+        isShortTable: false,
+        onDelete: () => {},
+        onOpenModal: () => {}
+    })
+
+    const bidsColumns = useBidsTableColumns({
         onApprove: applyFilters,
         isMobile: true
     })
 
+    // Выбираем нужные колонки
+    const originalColumns = pageType === 'orders' ? ordersColumns : bidsColumns
+
     const memoizedColumns = useMemo(() => {
-        return (originalColumns as IColumn[])
+        return originalColumns
+        // @ts-ignore
             .filter(column => column.isMobile === true)
             .map(column => ({
+                // @ts-ignore
                 id: column.accessorKey,
                 columnDef: {
+                    // @ts-ignore
                     filterType: column.filterType,
+                    // @ts-ignore 
                     filterOptions: column.filterOptions,
                     header: column.header
                 },
+                // @ts-ignore
                 getFilterValue: () => localFilters[column.accessorKey] || null,
                 setFilterValue: (value: any) => {
                     setLocalFilters(prev => ({
                         ...prev,
+                        // @ts-ignore
                         [column.accessorKey]: value
                     }))
                 }
@@ -99,23 +131,19 @@ export function RenderFilterMobile() {
                 <PopoverTrigger asChild>
                     <Button variant='outline' size='icon' className='relative'>
                         <ListFilter className='h-[1.2rem] w-[1.2rem]' />
-                        {/* {hasActiveFilters && (
-                            <span className='absolute -top-1 -right-1 h-3 w-3 rounded-full bg-primary'></span>
-                        )} */}
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className='p-4 w-72'>
                     <div className='space-y-4'>
-                        {memoizedColumns.map((column, index) => (
+                        {memoizedColumns.map(column => (
                             <div key={column.id} className='space-y-2'>
-                                <label className='text-xs font-medium'>{column.columnDef.header}</label>
-                                {/* <div>{renderFilterInput(column, handleFilterChange)}</div> */}
-                                <div>
                                 {/* @ts-ignore */}
+                                <label className='text-xs font-medium'>{column.columnDef.header}</label>
+                                <div>
                                     <FilterInput
                                         column={column}
                                         handleFilterChange={handleFilterChange}
-                                        // pageType='orders'
+                                        pageType={pageType}
                                     />
                                 </div>
                             </div>

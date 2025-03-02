@@ -1,10 +1,13 @@
-import { FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Input } from '@/components/ui/input'
-import { useFormContext, useWatch } from 'react-hook-form'
-import { Separator } from '@/components/ui/separator'
 import { useState } from 'react'
 
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
+import { Separator } from '@/components/ui/separator'
+import { Input } from '@/components/ui/input'
+
+import { useFormContext, useWatch } from 'react-hook-form'
+
+// function TerminalTwo({ terminals }) {
 function TerminalTwo({ terminals, isReadOnly }: { terminals; isReadOnly?: boolean }) {
     const { control, setValue } = useFormContext()
 
