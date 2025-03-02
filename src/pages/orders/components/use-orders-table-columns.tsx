@@ -242,7 +242,17 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                         cancelledByCustomer: 'Отменено клиентом',
                         new: 'Новый',
                         executed: 'Выполнена',
-                        canceled: 'Отменена'
+                        canceled: 'Отменена',
+                        canceledByCarrierWithPenalty: 'Отменяется перевозчиком (половина ГО)',
+                        canceledByCustomerWithPenalty: 'Отменяется заказчиком (половина ГО)',
+                        canceledByCarrier: 'Отменяется перевозчиком',
+                        failed: 'Сорван',
+                        failing: 'Срывается',
+                        inTransit: 'Выполнен',
+                        headingToLoading: 'Еду на погрузку',
+                        loading: 'На погрузке',
+                        unloading: 'На выгрузке',
+                        delivered: 'Груз сдан',
                     }
 
 
@@ -309,7 +319,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                     { value: 'completed', label: 'Выполнен' },
                     { value: 'inTransit', label: 'Машина в пути' },
                     { value: 'canceled', label: 'Отменен' },
-                    { value: 'headingToLoading', label: 'Еду на погрузку"' },
+                    { value: 'headingToLoading', label: 'Еду на погрузку' },
                     { value: 'loading', label: 'На погрузке' },
                     { value: 'unloading', label: 'На выгрузке' },
                     { value: 'delivered', label: 'Груз сдан' },
