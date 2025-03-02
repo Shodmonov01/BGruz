@@ -37,7 +37,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
             <DialogTrigger asChild>
                 <Button variant='outline'>Open Order</Button>
             </DialogTrigger>
-            <DialogContent className='max-h-[90vh] max-w-[1500px] overflow-y-auto !p-0'>
+            <DialogContent className='max-h-[90vh] max-w-[1000px] overflow-y-auto !p-0'>
                 <DialogHeader>
                     <div className=''>
                         <div className='mb-6 mt-3 px-6'>

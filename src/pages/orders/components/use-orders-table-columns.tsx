@@ -55,6 +55,7 @@ interface Bid {
     };
     assignedVehicle?: {
         docModel: string;
+        plateNum: string
     };
     assignedTrailer?: {
         docModel?: string;
@@ -62,6 +63,7 @@ interface Bid {
     };
     statusUpdatedUser?: {
         username: string;
+        fio: string
     };
     docSubmissionUser?: {
         fio: string;
@@ -484,13 +486,25 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 accessorFn: (row: Bid) => row.driverUser?.fio ?? '—',
                 filterType: 'fuzzy'
             },
+            // {
+            //     accessorKey: 'assignedVehicle.docModel',
+            //     header: 'Машина',
+            //     size: 150,
+            //     searchable: true,
+            //     accessorFn: (row: Bid) => row.assignedVehicle?.docModel ?? '—',
+            //     filterType: 'fuzzy'
+            // },
+
             {
-                accessorKey: 'assignedVehicle.docModel',
+                accessorKey: 'assignedVehicle',
                 header: 'Машина',
                 size: 150,
                 searchable: true,
-                accessorFn: (row: Bid) => row.assignedVehicle?.docModel ?? '—',
-                filterType: 'fuzzy'
+                accessorFn: (row: Bid) =>
+                    row.assignedVehicle
+                        ? `${row.assignedVehicle.docModel ?? '—'} | ${row.assignedVehicle.plateNum ?? '—'}`
+                        : '—',
+                filterType: 'fuzzy',
             },
             {
                 accessorKey: 'assignedTrailer.plateNum',
@@ -498,6 +512,14 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 size: 150,
                 searchable: true,
                 accessorFn: (row: Bid) => row.assignedTrailer?.plateNum ?? '—',
+                filterType: 'fuzzy'
+            },
+            {
+                accessorKey: 'statusUpdatedUser.fio',
+                header: 'Автор статуса',
+                size: 150,
+                searchable: true,
+                accessorFn: (row: Bid) => row.statusUpdatedUser?.fio ?? '—',
                 filterType: 'fuzzy'
             },
             // {
@@ -520,6 +542,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 accessorFn: (row: Bid) => row.docSubmissionUser?.fio ?? '—',
                 filterType: 'fuzzy'
             },
+
             {
                 accessorKey: 'saleBid.author.fio',
                 header: 'Автор заявки',
