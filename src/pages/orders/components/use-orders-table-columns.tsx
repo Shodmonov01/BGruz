@@ -65,6 +65,7 @@ interface Bid {
     docSubmissionUser?: {
         fio: string;
     };
+    docSubmissionDate?: string
     [key: string]: unknown;
 }
 
@@ -341,7 +342,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 header: 'Док сданы',
                 size: 100,
               accessorFn: (row: Bid) =>
-                    row.createdAt ? format(new Date(row.createdAt), 'dd.MM.yyyy HH:mm', { locale: ru }) : '—',
+                    row.docSubmissionDate ? format(new Date(row.docSubmissionDate), 'dd.MM.yyyy HH:mm', { locale: ru }) : '—',
                 isShortVersion: false,
                 searchable: true,
                 filterType: 'exact',
@@ -489,22 +490,26 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 accessorFn: (row: Bid) => row.assignedVehicle?.docModel ?? '—',
                 filterType: 'fuzzy'
             },
+            // {
+            //     accessorKey: 'assignedTrailer.docModel',
+            //     header: 'Прицеп',
+            //     size: 150,
+            //     searchable: true,
+            //     accessorFn: (row: Bid) => row.assignedTrailer?.docModel ?? '—',
+            //     filterType: 'fuzzy'
+            // },
             {
                 accessorKey: 'assignedTrailer.docModel',
                 header: 'Прицеп',
                 size: 150,
                 searchable: true,
-                accessorFn: (row: Bid) => row.assignedTrailer?.docModel ?? '—',
+                accessorFn: (row: Bid) => 
+                    [row.assignedTrailer?.docModel, row.assignedTrailer?.plateNum]
+                        .filter(Boolean)
+                        .join(' | ') || '—',
                 filterType: 'fuzzy'
             },
-            {
-                accessorKey: 'statusUpdatedUser.username',
-                header: 'Автор статуса',
-                size: 150,
-                searchable: true,
-                accessorFn: (row: Bid) => row.statusUpdatedUser?.username ?? '—',
-                filterType: 'fuzzy'
-            },
+            
             {
                 accessorKey: 'docSubmissionUser.fio',
                 header: 'Бухгалтер',
