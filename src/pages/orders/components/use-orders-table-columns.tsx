@@ -35,6 +35,7 @@ interface Bid {
     fullPrice?: number
     commission?: number
     buyBid?: {
+        persistentId?: string
         loadingMode: string
         cargoType: string
         loadingDate: number
@@ -43,6 +44,11 @@ interface Bid {
         warehouses: Array<{ cityName: string }>
         vehicleProfile: { name: string }
         filingTime: string
+        customer?: { organizationName: string }
+        author?: { fio: string }
+    }
+    saleBid?: {
+        author?: { fio: string }
     }
     driverUser?: {
         fio: string;
@@ -61,6 +67,7 @@ interface Bid {
     };
     [key: string]: unknown;
 }
+
 
 interface ColumnsProps {
     isMobile?: boolean
