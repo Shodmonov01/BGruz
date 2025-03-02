@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import { useForm, FormProvider } from 'react-hook-form'
+import { useForm, FormProvider, SubmitHandler } from 'react-hook-form'
 
 import Heading from '@/components/shared/heading'
 import { Button } from '@/components/ui/button'
 
-import { fetchPrivateData, postData2 } from '@/api/api'
+import { fetchPrivateData, postData, postData2 } from '@/api/api'
 
 import BidDetails from './bid-form-detail/bidDetails'
 import BidDate from './bid-form-detail/bidDate'
@@ -50,6 +50,7 @@ interface BidFormData {
     extraServices: Array<{ id: number; count: number }>
     filingTime: string
     priceNds: number
+    recipientOrSender: string
 }
 
 interface ClientData {
@@ -86,8 +87,8 @@ const BidsInfoModal = ({
     const [transportType, setTransportType] = useState('')
     const [isClientSelected, setIsClientSelected] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
-    //@ts-ignore
     const [isLoading, setIsLoading] = useState(false)
+    const [isLoadingAdd, setIsLoadingAdd] = useState(false)
     //@ts-ignore
     const [originalData, setOriginalData] = useState({})
     const [isReadOnly, setIsReadOnly] = useState<boolean>(true)
@@ -157,6 +158,10 @@ const BidsInfoModal = ({
             if (selectedBid.client?.organizationId) {
                 setValue('client', selectedBid.client.organizationId.toString())
                 handleClientChange(selectedBid.client.organizationId.toString())
+            }
+
+            if (selectedBid.customer) {
+                setValue('recipientOrSender', selectedBid.customer.organizationId.toString())
             }
 
             setValue('loadingType', selectedBid.loadingMode || '')
@@ -322,9 +327,75 @@ const BidsInfoModal = ({
         return () => subscription.unsubscribe()
     }, [formMethods])
 
+    const onSubmit: SubmitHandler<BidFormData> = async data => {
+        setIsLoadingAdd(true)
+        try {
+            setErrorMessage(null) // Очистка ошибки перед отправкой
+            const payload = {
+                cargoType: data.transportType,
+                loadingMode: data.loadingType,
+                //@ts-ignore
+                clientId: Number(data.recipientOrSender),
+                startDate: getValues('startDate'),
+                slideDayTotal: 0,
+                customerId: Number(data.client),
+                terminal1: {
+                    cityId: data.terminal1Id,
+                    cityName: data.terminal1Name,
+                    address: data.terminal1Address
+                },
+                terminal2: {
+                    cityId: data.terminal2Id,
+                    cityName: data.terminal2Name,
+                    address: data.terminal2Address
+                },
+
+                warehouses: data.warehouses.map(warehouse => ({
+                    cityId: warehouse.id,
+                    cityName: warehouse.name,
+                    address: warehouse.address
+                })),
+
+                isPriceRequest: data.requestPrice,
+                price: data.price || 0,
+                vehicleProfileId: Number(data.vehicleProfiles),
+                vehicleCount: getValues('vehicleCount'),
+                cargoTitle: data.cargoTitle,
+                //@ts-ignore
+                loadingTime: getValues('submissionTime') || '09:00',
+
+                extraServices: data.extraServices || [],
+                description: data.description
+            }
+            console.log('Отправка данных:', payload)
+            const token = localStorage.getItem('authToken')
+            if (!token) {
+                console.error('Не найден токен авторизации')
+                return
+            }
+
+            const res = await postData('api/v1/bids', payload, token)
+            handleCloseModal()
+            // refreshBids()
+            // window.location.reload()
+            console.log('res', res)
+        } catch (error: any) {
+            console.error('Ошибка при создании заявки:', error)
+
+            if (error.response?.status === 404) {
+                const detailMessage = error.response.data?.detail
+                if (detailMessage?.includes('Destination')) {
+                    setErrorMessage(detailMessage)
+                }
+            }
+        } finally {
+            setIsLoadingAdd(false)
+        }
+    }
+
     const saveAsNew = async () => {
         setIsEdit(false)
-        // handleSubmit(onSubmit)()
+        handleSubmit(onSubmit)
     }
 
     return (
@@ -347,7 +418,7 @@ const BidsInfoModal = ({
                             </h2>
                         </div>
                         {errorMessage && <div className='text-red-500 text-center py-2'>{errorMessage}</div>}
-                        <form className='space-y-4'>
+                        <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
                             <div className='space-y-4'>
                                 <div>
                                     <BidDetails
@@ -393,12 +464,12 @@ const BidsInfoModal = ({
                                     Сохранить изменения
                                 </Button>
                                 <Button
-                                    type='button'
+                                    type='submit'
                                     disabled={isReadOnly || isLoading}
                                     onClick={saveAsNew}
                                     className='bg-orange-500 hover:bg-orange-600 text-white'
                                 >
-                                    {isLoading ? <Loader2 className='mr-2 h-4 w-4 animate-spin' /> : null}
+                                    {isLoadingAdd ? <Loader2 className='mr-2 h-4 w-4 animate-spin' /> : null}
                                     Сохранить заявку как новую
                                 </Button>
                                 <Button
