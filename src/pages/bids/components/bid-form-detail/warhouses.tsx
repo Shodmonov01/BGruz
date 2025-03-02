@@ -7,18 +7,28 @@ import { Trash } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 function Warehouses({ warehouses, isReadOnly }: { warehouses; isReadOnly?: boolean }) {
-    const { control, watch, setValue } = useFormContext()
+    const { control, setValue } = useFormContext()
     const { fields, append, remove } = useFieldArray({
         control,
         name: 'warehouses'
     })
+
     const [search, setSearch] = useState('')
     const [isOpen, setIsOpen] = useState<Record<number, boolean>>({})
-    // console.log(warehouses)
+    console.log('fields', fields)
+    console.log('warehouses', warehouses)
 
-    const sortedWarehouses = [...warehouses]
-        .sort((a, b) => a.name.localeCompare(b.name)) // Сортировка по алфавиту
-        .filter(w => w.name.toLowerCase().includes(search.toLowerCase())) // Фильтрация
+    // const sortedWarehouses = [...warehouses]
+    //     .sort((a, b) => a.name.localeCompare(b.name)) // Сортировка по алфавиту
+    //     .filter(w => w.name.toLowerCase().includes(search.toLowerCase())) // Фильтрация
+
+    const sortedWarehouses = warehouses
+        ?.filter(
+            t =>
+                t.name.toLowerCase().includes(search.toLowerCase()) ||
+                t.description?.toLowerCase().includes(search.toLowerCase())
+        )
+        .sort((a, b) => a.name.localeCompare(b.name))
 
     useEffect(() => {
         if (fields.length === 0) {
@@ -26,16 +36,21 @@ function Warehouses({ warehouses, isReadOnly }: { warehouses; isReadOnly?: boole
         }
     }, [fields.length, append])
 
-    useEffect(() => {
-        fields.forEach((field, index) => {
-            const selectedWarehouseId = watch(`warehouses.${index}.name`)
-            const selectedWarehouse = warehouses.find(w => w.id.toString() === selectedWarehouseId)
+    // useEffect(() => {
+    //     fields.forEach((field, index) => {
+    //         const selectedWarehouseId = watch(`warehouses.${index}.id`)
+    //         const selectedWarehouse = warehouses?.find(w => w.id === selectedWarehouseId)
+    //         console.log('selectedWarehouse', selectedWarehouse)
+    //         console.log('field.selectedWarehouseId', selectedWarehouseId)
+    //         console.log('selectedWarehouse.id', selectedWarehouse.id)
 
-            if (selectedWarehouse) {
-                setValue(`warehouses.${index}.address`, selectedWarehouse.description || '')
-            }
-        })
-    }, [watch, fields, warehouses, setValue])
+    //         if (selectedWarehouse) {
+    //             setValue(`warehouses.${index}.id`, selectedWarehouse.id)
+    //             setValue(`warehouses.${index}.name`, selectedWarehouse.name)
+    //             setValue(`warehouses.${index}.address`, selectedWarehouse.description || '')
+    //         }
+    //     })
+    // }, [fields, warehouses, setValue, watch])
 
     const addWarehouse = () => append({ name: '', address: '' })
     const removeWarehouse = index => remove(index)
@@ -53,9 +68,17 @@ function Warehouses({ warehouses, isReadOnly }: { warehouses; isReadOnly?: boole
                             <FormItem>
                                 <Select
                                     disabled={isReadOnly}
-                                    onValueChange={field.onChange}
+                                    onValueChange={value => {
+                                        const selectedWarehouse = warehouses.find(w => w.id === Number(value))
+                                        if (selectedWarehouse) {
+                                            field.onChange(selectedWarehouse.id) // Сохраняем ID
+                                            setValue(`warehouses.${index}.name`, selectedWarehouse.name)
+                                            setValue(`warehouses.${index}.address`, selectedWarehouse.description || '')
+                                        }
+                                    }}
                                     defaultValue={field.value}
                                     open={!!isOpen[index]}
+                                    value={field.value?.toString()}
                                     onOpenChange={isOpen => setIsOpen(prev => ({ ...prev, [index]: isOpen }))}
                                 >
                                     <FormControl>

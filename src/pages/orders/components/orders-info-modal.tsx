@@ -104,9 +104,8 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                     onChange={e => {
                                         setFormData(prev => ({
                                             ...prev,
-                                            docSubmissionDate: e.target.
                                             //@ts-ignore
-                                            checked ? new Date().toISOString() : null
+                                            docSubmissionDate: e.target.checked ? new Date().toISOString() : null
                                         }))
                                     }}
                                 />
@@ -259,9 +258,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                         <div className='space-y-2'>
                             <div className='flex items-center justify-between'>
                                 <p className='font-bold'>Файлы</p>
-                                <button
-                                    value='Ссылка на файл'
-                                >
+                                <button value='Ссылка на файл'>
                                     <a
                                         href={`mailto:${formData.customer.email}`}
                                         className='border ml-3 border-gray-300 w-[185px] rounded px-2 py-1 text-sm flex justify-center text-primary underline'
@@ -272,9 +269,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                             </div>
                             <div className='flex items-center justify-between'>
                                 <p className='font-bold'>Файлы</p>
-                                <button
-                                    value='Ссылка на файл'
-                                >
+                                <button value='Ссылка на файл'>
                                     <a
                                         href={`mailto:${formData.customer.email}`}
                                         className='border ml-3 border-gray-300 w-[185px] rounded px-2 py-1 text-sm flex justify-center text-primary underline'
@@ -285,9 +280,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                             </div>
                             <div className='flex items-center justify-between'>
                                 <p className='font-bold'>Файлы</p>
-                                <button
-                                    value='Ссылка на файл'
-                                >
+                                <button value='Ссылка на файл'>
                                     <a
                                         href={`mailto:${formData.customer.email}`}
                                         className='border ml-3 border-gray-300 w-[185px] rounded px-2 py-1 text-sm flex justify-center text-primary underline'
@@ -361,7 +354,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                                     <Input
                                                         type='number'
                                                         className='w-20 '
-                                                        value={service.count}
+                                                        value={formatNumber(String(service.count))}
                                                         onChange={e => {
                                                             const newExtraServices = [...formData.extraServices]
                                                             newExtraServices[index] = {
@@ -376,12 +369,12 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                                     />
                                                     <Input
                                                         className=' text-right'
-                                                        value={service.priceNds.toFixed(2)}
+                                                        value={formatNumber(String(service.priceNds.toFixed(2)))}
                                                         readOnly
                                                     />
                                                     <Input
                                                         className=' text-right'
-                                                        value={service.price.toFixed(2)}
+                                                        value={formatNumber(String(service.price.toFixed(2)))}
                                                         readOnly
                                                     />
                                                 </div>
@@ -405,13 +398,13 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                             </p>
                             <Input
                                 className=' text-right'
-                                value={formData.fullPriceNds.toFixed(2)}
+                                value={formatNumber(String(formData.fullPriceNds.toFixed(2)))}
                                 placeholder='Полная стоимость с НДС'
                                 readOnly
                             />
                             <Input
                                 className=' text-right'
-                                value={formData.fullPrice.toFixed(2)}
+                                value={formatNumber(String(formData.fullPrice.toFixed(2)))}
                                 placeholder='Полная стоимость без НДС'
                                 readOnly
                             />
