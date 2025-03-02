@@ -14,15 +14,6 @@ import { ListFilter } from 'lucide-react'
 import { useOrdersTableColumns } from '@/pages/orders/components/use-orders-table-columns'
 import { useGetOrders } from '@/api/use-get-orders'
 
-// interface IColumn {
-//     accessorKey: string
-//     header: string
-//     size?: number
-//     searchable?: boolean
-//     filterType?: 'dateRange' | 'fuzzy' | 'select'
-//     filterOptions?: { value: string | string[]; label: string }[]
-//     isMobile: boolean
-// }
 
 
 export function RenderFilterMobile() {
@@ -39,29 +30,23 @@ export function RenderFilterMobile() {
 
     const pageType = useMemo(() => (location.pathname.includes('/orders') ? 'orders' : 'bids'), [location.pathname]);
 
-    // const pageType = useMemo(() => (location.pathname.includes('/orders') ? 'orders' : 'bids'), [location.pathname])
-    // const pageType = useMemo(() => {
-    //     return location.pathname.startsWith('/orders') ? 'orders' : 'bids';
-    // }, [location.pathname]);
+
     
 
-    // Вызываем оба хука, но используем только нужный
     const { loading: loadingBids, refreshBids, setFilters: setBidsFilters } = useGetBids(size)
 
     const { loading: loadingOrders, refreshOrders, setFilters: setOrdersFilters } = useGetOrders(size)
 
-    // Определяем, какие данные использовать
     const loading = pageType === 'orders' ? loadingOrders : loadingBids
-    // const refreshData = pageType === 'orders' ? refreshOrders : refreshBids
-    // const setFilters = pageType === 'orders' ? setOrdersFilters : setBidsFilters
+
 
     const setFilters = pageType === 'orders' ? setOrdersFilters : setBidsFilters
     const refreshData = pageType === 'orders' ? refreshOrders : refreshBids
 
-    console.log('Current pathname:', location.pathname)
-    console.log('Detected pageType:', pageType)
-    console.log('Using setFilters:', setFilters === setOrdersFilters ? 'Orders' : 'Bids')
-    console.log('Using refreshData:', refreshData === refreshOrders ? 'Orders' : 'Bids')
+    // console.log('Current pathname:', location.pathname)
+    // console.log('Detected pageType:', pageType)
+    // console.log('Using setFilters:', setFilters === setOrdersFilters ? 'Orders' : 'Bids')
+    // console.log('Using refreshData:', refreshData === refreshOrders ? 'Orders' : 'Bids')
 
     const applyFilters = useCallback(() => {
         Object.entries(localFilters).forEach(([key, value]) => {

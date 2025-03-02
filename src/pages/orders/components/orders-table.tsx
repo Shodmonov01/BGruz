@@ -20,6 +20,7 @@ import OrderInfoModal from './orders-info-modal'
 import OrdersHeader from './orders-header'
 import { FilterInput } from '@/components/shared/render-filter-input'
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
+import { useFilter } from '@/context/filter-context'
 
 interface Bid {
     _id?: string
@@ -41,21 +42,29 @@ interface BidsTableProps {
 
 function OrdersTable({
     orders,
-    setFilters,
-    handleFilterChange,
+    // setFilters,
     loadMore,
     hasMore,
     loading,
-    localFilters
+    // localFilters
 }: BidsTableProps) {
     const [selectedBid, setSelectedBid] = useState<Partial<Bid> | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isShortTable, setIsShortTable] = useState(() => {
         return localStorage.getItem('isShortTable') === 'true'
     })
+    // const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
+    //     Object.entries(localFilters).map(([id, value]) => ({ id, value }))
+    // )
+
+    const { filters, handleFilterChange } = useFilter()
+
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
-        Object.entries(localFilters).map(([id, value]) => ({ id, value }))
-    )
+        Object.entries(filters || {}).map(([id, value]) => ({ id, value }))
+    );
+
+  
+    
     const [sorting, setSorting] = useState<SortingState>([])
 
     const scrollRef = useRef<HTMLDivElement | null>(null)
@@ -139,10 +148,10 @@ function OrdersTable({
         enableSorting: true
     })
 
-    useEffect(() => {
-        const newColumnFilters = Object.entries(localFilters).map(([id, value]) => ({ id, value }))
-        setColumnFilters(newColumnFilters)
-    }, [localFilters])
+    // useEffect(() => {
+    //     const newColumnFilters = Object.entries(localFilters).map(([id, value]) => ({ id, value }))
+    //     setColumnFilters(newColumnFilters)
+    // }, [localFilters])
 
     return (
         <div>

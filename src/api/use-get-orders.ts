@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { postData2 } from '@/api/api'
+import { useFilter } from '@/context/filter-context'
 
 interface OrderFilter {
     number?: number
@@ -25,8 +26,10 @@ export const useGetOrders = (size: number) => {
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
     const [hasMore, setHasMore] = useState<boolean>(true)
-    const [filters, setFilters] = useState<OrderFilter>({})
+    const [_, setFilters] = useState<OrderFilter>({})
     const [refreshTrigger, setRefreshTrigger] = useState<number>(0)
+    const { filters } = useFilter()
+
 
     // useEffect(() => {
     //     const fetchOrders = async () => {
