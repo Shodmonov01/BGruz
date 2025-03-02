@@ -112,7 +112,9 @@ function BidsTableMobile({ bids }: BidsTableMobileProps) {
                                             <span className='font-semibold'>{bid.vehicleProfile?.name || '—'}</span>
                                         </div>
                                         <div className='flex justify-between items-center'>
-                                            <span className='text-lg font-semibold'>{bid.terminal1?.cityName || '—'}</span>
+                                            <span className='text-lg font-semibold'>
+                                                {bid.terminal1?.cityName || '—'}
+                                            </span>
                                         </div>
                                         <div className='flex justify-between items-center'>
                                             <span className='text-lg font-semibold'>
@@ -120,7 +122,9 @@ function BidsTableMobile({ bids }: BidsTableMobileProps) {
                                             </span>
                                         </div>
                                         <div>
-                                            <span className='text-lg font-semibold'>{bid.terminal2?.cityName || '—'}</span>
+                                            <span className='text-lg font-semibold'>
+                                                {bid.terminal2?.cityName || '—'}
+                                            </span>
                                         </div>
                                     </div>
                                     <div className='ml-auto flex flex-col'>
