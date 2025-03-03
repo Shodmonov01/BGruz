@@ -152,7 +152,8 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                 },
 
                 warehouses: data.warehouses.map(warehouse => ({
-                    cityId: warehouse.name,
+                    cityId: warehouse.id,
+                    cityName: warehouse.name,
                     address: warehouse.address
                 })),
 

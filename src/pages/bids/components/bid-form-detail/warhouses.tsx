@@ -15,8 +15,8 @@ function Warehouses({ warehouses, isReadOnly }: { warehouses; isReadOnly?: boole
 
     const [search, setSearch] = useState('')
     const [isOpen, setIsOpen] = useState<Record<number, boolean>>({})
-    console.log('fields', fields)
-    console.log('warehouses', warehouses)
+    // console.log('fields', fields)
+    // console.log('warehouses', warehouses)
 
     // const sortedWarehouses = [...warehouses]
     //     .sort((a, b) => a.name.localeCompare(b.name)) // Сортировка по алфавиту
@@ -114,7 +114,7 @@ function Warehouses({ warehouses, isReadOnly }: { warehouses; isReadOnly?: boole
                     />
 
                     <div className='flex gap-1'>
-                        <FormField
+                        {/* <FormField
                             control={control}
                             name={`warehouses.${index}.address`}
                             render={({ field }) => (
@@ -123,13 +123,31 @@ function Warehouses({ warehouses, isReadOnly }: { warehouses; isReadOnly?: boole
                                         <Input
                                             placeholder='Адрес'
                                             {...field}
-                                            className={`${fields.length > 1 ? 'w-[310px]' : 'w-[345px]'}`}
+                                            className={`${fields.length > 1 ? 'w-[520px]' : 'w-[555px]'}`}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        /> */}
+                        <FormField
+                            control={control}
+                            name={`warehouses.${index}.address`}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <Input
+                                            disabled={isReadOnly}
+                                            placeholder='Адрес'
+                                            {...field}
+                                            className={`md:w-[555px] ${fields.length > 1 ? 'md:w-[520px]' : ''} w-[345px] ${fields.length > 1 ? 'w-[310px]' : ''}`}
                                         />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
+
                         {fields.length > 1 && (
                             <Button
                                 type='button'

@@ -29,7 +29,7 @@ function BidDate({ isReadOnly }: { isReadOnly?: boolean }) {
                 <p>Дата и время подачи</p>
             </div>
             <div className='flex flex-col md:flex-row items-start md:items-center py-6 md:px-0 px-6 '>
-                <p className='w-full md:w-1/6 mr-8 whitespace-nowrap'>Дата подачи</p>
+                <p className='w-full md:w-1/6  whitespace-nowrap'>Дата подачи</p>
                 <div className='flex items-center gap-3'>
                     <FormField
                         control={control}

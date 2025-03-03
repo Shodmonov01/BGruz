@@ -123,7 +123,7 @@ const BidsInfoModal = ({
             warehouses: [{ name: '', address: '' }]
         }
     })
-    console.log('selectedBid', selectedBid)
+    // console.log('selectedBid', selectedBid)
 
     const {
         //@ts-ignore
@@ -224,7 +224,7 @@ const BidsInfoModal = ({
         }
     }, [selectedBid, reset, setValue])
 
-    console.log('terminals', terminals)
+    // console.log('terminals', terminals)
 
     const handleClientChange = async (clientId: string) => {
         setValue('client', clientId)
@@ -234,7 +234,7 @@ const BidsInfoModal = ({
                 `api/v1/organization/?organization_id=${clientId}`,
                 token
             )
-            console.log('data.extraServices', data.extraServices)
+            // console.log('data.extraServices', data.extraServices)
 
             setTerminals(data.terminals || [])
             setWarehouses(data.warehouses || [])
@@ -300,7 +300,7 @@ const BidsInfoModal = ({
             setIsLoading(false)
         }
     }
-    console.log(formData.client)
+    // console.log(formData.client)
 
     const handleEdit = () => {
         if (formData.client?.organizationId) {
@@ -367,7 +367,7 @@ const BidsInfoModal = ({
                 extraServices: data.extraServices || [],
                 description: data.description
             }
-            console.log('Отправка данных:', payload)
+            // console.log('Отправка данных:', payload)
             const token = localStorage.getItem('authToken')
             if (!token) {
                 console.error('Не найден токен авторизации')
@@ -378,7 +378,7 @@ const BidsInfoModal = ({
             handleCloseModal()
             // refreshBids()
             // window.location.reload()
-            console.log('res', res)
+            // console.log('res', res)
         } catch (error: any) {
             console.error('Ошибка при создании заявки:', error)
 
@@ -402,7 +402,7 @@ const BidsInfoModal = ({
         <Modal
             isOpen={open}
             onClose={handleCloseModal}
-            className={'!bg-background !p-0 md:w-[800px] w-full h-full md:h-[90vh]  flex justify-center'}
+            className={'!bg-background !p-0 md:w-[1200px] w-full h-full md:h-[90vh]  flex justify-center'}
         >
             <FormProvider {...formMethods}>
                 <ScrollArea className='h-[95dvh] md:h-[87dvh] md:px-6 px-0'>

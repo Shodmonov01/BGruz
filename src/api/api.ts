@@ -42,11 +42,11 @@ export const postData2 = async <T>(endpoint: string, data: any, token: string | 
         return response.data
     } catch (error: any) {
         console.error('Ошибка запроса:', error)
-        if (error.response) {
-            console.error('Ответ сервера:', error.response.data)
-            console.error('Статус:', error.response.status)
-            console.error('Заголовки:', error.response.headers)
-        }
+        // if (error.response) {
+        //     console.error('Ответ сервера:', error.response.data)
+        //     console.error('Статус:', error.response.status)
+        //     console.error('Заголовки:', error.response.headers)
+        // }
         throw error
     }
 }
