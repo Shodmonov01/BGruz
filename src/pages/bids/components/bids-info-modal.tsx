@@ -378,7 +378,7 @@ const BidsInfoModal = ({
             handleCloseModal()
             // refreshBids()
             // window.location.reload()
-            // console.log('res', res)
+            console.log('res', res)
         } catch (error: any) {
             console.error('Ошибка при создании заявки:', error)
 
