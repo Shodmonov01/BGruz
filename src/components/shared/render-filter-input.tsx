@@ -1,16 +1,156 @@
-// import { Input } from '../ui/input'
-// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-// import { DateRangePicker } from '@/pages/bids/components/bid-form-detail/rangePicker'
+// // import { Input } from '../ui/input'
+// // import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+// // import { DateRangePicker } from '@/pages/bids/components/bid-form-detail/rangePicker'
 
-// export function renderFilterInput(column, handleFilterChange, pageType) {
+// // export function renderFilterInput(column, handleFilterChange, pageType) {
+// //     const filterType = column.columnDef.filterType
+// //     const filterOptions = column.columnDef.filterOptions
+
+// //     const getDefaultValue = columnId => {
+// //         if (pageType === 'orders') {
+// //             switch (columnId) {
+// //                 case 'cargoType':
+// //                     return ['bulk', 'liquid']
+// //                 case 'status':
+// //                     return [
+// //                         'new',
+// //                         'inTransit',
+// //                         'completed',
+// //                         'failing',
+// //                         'failed',
+// //                         'canceledByCustomer',
+// //                         'canceledByCarrier',
+// //                         'canceledByCustomerWithPenalty',
+// //                         'canceledByCarrierWithPenalty',
+// //                         'canceled',
+// //                         'headingToLoading',
+// //                         'loading',
+// //                         'unloading',
+// //                         'delivered'
+// //                     ]
+// //                 case 'loadingMode':
+// //                     return ['pickup', 'delivery']
+// //                 default:
+// //                     return []
+// //             }
+// //         } else {
+// //             switch (columnId) {
+// //                 case 'cargoType':
+// //                     return ['wagon', 'container']
+// //                 case 'status':
+// //                     return ['active', 'waiting']
+// //                 case 'loadingMode':
+// //                     return ['loading', 'unloading']
+// //                 default:
+// //                     return []
+// //             }
+// //         }
+// //     }
+
+// //     const initializeFilter = () => {
+// //         const currentValue = column.getFilterValue()
+// //         if (!currentValue) {
+// //             const defaultValue = getDefaultValue(column.id)
+// //             if (defaultValue.length > 0) {
+// //                 column.setFilterValue(defaultValue)
+// //                 handleFilterChange(column.id, defaultValue)
+// //             }
+// //         }
+// //     }
+
+// //     initializeFilter()
+
+// //     const handleChange = value => {
+// //         column.setFilterValue(value)
+// //         handleFilterChange(column.id, value)
+// //     }
+
+// //     const getStringValue = (value: string | string[] | null): string => {
+// //         if (Array.isArray(value)) {
+// //             return value.join(',')
+// //         }
+// //         return value ?? ''
+// //     }
+
+// //     switch (filterType) {
+// //         case 'exact':
+// //             return (
+// //                 <Input
+// //                     value={(column.getFilterValue() as string) ?? ''}
+// //                     onChange={e => handleChange(e.target.value)}
+// //                     placeholder='Точное совпадение'
+// //                     className='text-xs min-w-16 h-7 bg-white'
+// //                 />
+// //             )
+// //         case 'select':
+// //             return (
+// //                 <Select
+// //                     value={getStringValue(column.getFilterValue())}
+// //                     onValueChange={value => {
+// //                         const selectedOption = filterOptions?.find(option =>
+// //                             Array.isArray(option.value) ? option.value.join(',') === value : option.value === value
+// //                         )
+// //                         const newValue = selectedOption ? selectedOption.value : getDefaultValue(column.id)
+// //                         column.setFilterValue(newValue)
+// //                         handleFilterChange(column.id, newValue)
+// //                     }}
+// //                 >
+// //                     <SelectTrigger className='text-xs min-w-full h-7 bg-white'>
+// //                         <SelectValue placeholder='Выберите' />
+// //                     </SelectTrigger>
+// //                     <SelectContent>
+// //                         {filterOptions?.map(option => (
+// //                             <SelectItem
+// //                                 key={Array.isArray(option.value) ? option.value.join(',') : option.value}
+// //                                 value={Array.isArray(option.value) ? option.value.join(',') : option.value}
+// //                             >
+// //                                 {option.label}
+// //                             </SelectItem>
+// //                         ))}
+// //                     </SelectContent>
+// //                 </Select>
+// //             )
+// //         case 'dateRange':
+// //             return (
+// //                 <DateRangePicker
+// //                     value={column.getFilterValue() as { from: Date; to?: Date } | undefined}
+// //                     onChange={range => handleChange(range)}
+// //                     placeholder='Выберите даты'
+// //                     className='text-xs'
+// //                 />
+// //             )
+// //         case 'fuzzy':
+// //             return (
+// //                 <Input
+// //                     value={(column.getFilterValue() as string) ?? ''}
+// //                     onChange={e => handleChange(e.target.value)}
+// //                     placeholder='Поиск...'
+// //                     className='text-xs h-7 min-w-16 bg-white'
+// //                 />
+// //             )
+// //         case 'range':
+// //             return <button className='text-xs h-7 bg-white px-2'>{column.columnDef.header}</button>
+// //         default:
+// //             return null
+// //     }
+// // }
+
+import { useEffect, useState } from 'react'
+import { Input } from '../ui/input'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { DateRangePicker } from '@/pages/bids/components/bid-form-detail/rangePicker'
+
+// export function FilterInput({ column, handleFilterChange, pageType }) {
 //     const filterType = column.columnDef.filterType
 //     const filterOptions = column.columnDef.filterOptions
+//     console.log('Current Page Type:', pageType)
+    
 
 //     const getDefaultValue = columnId => {
 //         if (pageType === 'orders') {
 //             switch (columnId) {
 //                 case 'cargoType':
-//                     return ['bulk', 'liquid']
+//                     return ['wagon', 'container']
 //                 case 'status':
 //                     return [
 //                         'new',
@@ -22,18 +162,17 @@
 //                         'canceledByCarrier',
 //                         'canceledByCustomerWithPenalty',
 //                         'canceledByCarrierWithPenalty',
-//                         'canceled',
 //                         'headingToLoading',
 //                         'loading',
 //                         'unloading',
 //                         'delivered'
 //                     ]
 //                 case 'loadingMode':
-//                     return ['pickup', 'delivery']
+//                     return ['loading', 'unloading']
 //                 default:
 //                     return []
 //             }
-//         } else {
+//         } else  {
 //             switch (columnId) {
 //                 case 'cargoType':
 //                     return ['wagon', 'container']
@@ -47,7 +186,7 @@
 //         }
 //     }
 
-//     const initializeFilter = () => {
+//     useEffect(() => {
 //         const currentValue = column.getFilterValue()
 //         if (!currentValue) {
 //             const defaultValue = getDefaultValue(column.id)
@@ -56,9 +195,7 @@
 //                 handleFilterChange(column.id, defaultValue)
 //             }
 //         }
-//     }
-
-//     initializeFilter()
+//     }, [column, handleFilterChange, pageType])
 
 //     const handleChange = value => {
 //         column.setFilterValue(value)
@@ -115,7 +252,7 @@
 //                 <DateRangePicker
 //                     value={column.getFilterValue() as { from: Date; to?: Date } | undefined}
 //                     onChange={range => handleChange(range)}
-//                     placeholder='Выберите даты'
+//                     placeholder='Дата'
 //                     className='text-xs'
 //                 />
 //             )
@@ -135,17 +272,33 @@
 //     }
 // }
 
-import { useEffect } from 'react'
-import { Input } from '../ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { DateRangePicker } from '@/pages/bids/components/bid-form-detail/rangePicker'
+// import { useEffect } from 'react'
 
 export function FilterInput({ column, handleFilterChange, pageType }) {
     const filterType = column.columnDef.filterType
     const filterOptions = column.columnDef.filterOptions
 
+    // Логирование для диагностики
+    console.log('Current Page Type:', pageType)
+
+    // Стейт для отслеживания актуального типа страницы
+    const [effectivePageType, setEffectivePageType] = useState(pageType)
+
+    // Если pageType меняется, обновляем стейт
+    useEffect(() => {
+        if (pageType === 'orders' || pageType === 'bids') {
+            setEffectivePageType(pageType)
+        } else {
+            setEffectivePageType('orders')
+        }
+    }, [pageType]) // Эта зависимость будет следить за изменениями pageType
+
+    // Логирование для того, чтобы отслеживать, какой pageType используется
+    console.log('Effective Page Type:', effectivePageType)
+
+    // Функция для получения дефолтных значений
     const getDefaultValue = columnId => {
-        if (pageType === 'orders') {
+        if (effectivePageType === 'orders') {
             switch (columnId) {
                 case 'cargoType':
                     return ['wagon', 'container']
@@ -170,7 +323,7 @@ export function FilterInput({ column, handleFilterChange, pageType }) {
                 default:
                     return []
             }
-        } else {
+        } else if (effectivePageType === 'bids') {
             switch (columnId) {
                 case 'cargoType':
                     return ['wagon', 'container']
@@ -182,24 +335,29 @@ export function FilterInput({ column, handleFilterChange, pageType }) {
                     return []
             }
         }
+        return []
     }
 
+    // Проверка и установка дефолтного фильтра при монтировании
     useEffect(() => {
         const currentValue = column.getFilterValue()
         if (!currentValue) {
             const defaultValue = getDefaultValue(column.id)
+            console.log(`Setting default value for ${column.id}:`, defaultValue) // Логирование дефолтного значения
             if (defaultValue.length > 0) {
                 column.setFilterValue(defaultValue)
                 handleFilterChange(column.id, defaultValue)
             }
         }
-    }, [column, handleFilterChange, pageType])
+    }, [column, handleFilterChange, effectivePageType]) // Используем effectivePageType вместо pageType
 
+    // Обработчик изменения фильтра
     const handleChange = value => {
         column.setFilterValue(value)
         handleFilterChange(column.id, value)
     }
 
+    // Преобразование значения фильтра для строки
     const getStringValue = (value: string | string[] | null): string => {
         if (Array.isArray(value)) {
             return value.join(',')

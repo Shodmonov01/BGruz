@@ -26,18 +26,18 @@ export default function OrderPage() {
     }
 
 
-    useEffect(() => {
-        const handleScroll = () => {
-            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
-                if (hasMore && !loading) {
-                    loadMore()
-                }
-            }
-        }
+    // useEffect(() => {
+    //     const handleScroll = () => {
+    //         if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+    //             if (hasMore && !loading) {
+    //                 loadMore()
+    //             }
+    //         }
+    //     }
 
-        window.addEventListener('scroll', handleScroll)
-        return () => window.removeEventListener('scroll', handleScroll)
-    }, [hasMore, loading])
+    //     window.addEventListener('scroll', handleScroll)
+    //     return () => window.removeEventListener('scroll', handleScroll)
+    // }, [hasMore, loading])
 
     useEffect(() => {
         setFilters({});  // Очистить фильтры при загрузке страницы
