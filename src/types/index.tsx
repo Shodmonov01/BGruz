@@ -130,6 +130,9 @@ export interface IOrder {
             userId?: number
         }
     }
+    driverUser?: {
+        fio?: string
+    }
     createdAt?: string
     customer?: {
         fio?: string

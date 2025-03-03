@@ -234,7 +234,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                                 <p className='font-bold'>Водитель</p>
                                 <input
                                     type='text'
-                                    value={formData.assignedVehicle?.driverName}
+                                    value={formData.driverUser?.fio}
                                     className='border ml-3 border-gray-300 rounded px-2 py-1 text-sm'
                                     readOnly
                                 />
