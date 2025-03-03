@@ -479,7 +479,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 filterType: 'fuzzy'
             },
             {
-                accessorKey: 'driverUser.fio',
+                accessorKey: 'driver',
                 header: 'Водитель',
                 size: 150,
                 searchable: true,
@@ -496,7 +496,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
             // },
 
             {
-                accessorKey: 'assignedVehicle',
+                accessorKey: 'vehiclePlateNumberAndModel',
                 header: 'Машина',
                 size: 150,
                 searchable: true,
@@ -507,7 +507,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 filterType: 'fuzzy',
             },
             {
-                accessorKey: 'assignedTrailer.plateNum',
+                accessorKey: 'trailerPlateNumberAndModel',
                 header: 'Прицеп',
                 size: 150,
                 searchable: true,
@@ -515,7 +515,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 filterType: 'fuzzy'
             },
             {
-                accessorKey: 'statusUpdatedUser.fio',
+                accessorKey: 'statusUpdatedUser',
                 header: 'Автор статуса',
                 size: 150,
                 searchable: true,
@@ -535,7 +535,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
             // },
             
             {
-                accessorKey: 'docSubmissionUser.fio',
+                accessorKey: 'docSubmissionUser',
                 header: 'Бухгалтер',
                 size: 150,
                 searchable: true,
@@ -544,7 +544,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
             },
 
             {
-                accessorKey: 'buyBid.author.fio',
+                accessorKey: 'buyBidAuthor',
                 header: 'Автор заявки',
                 size: 150,
                 searchable: true,
@@ -552,7 +552,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 filterType: 'fuzzy'
             },
             {
-                accessorKey: 'saleBid.author.fio',
+                accessorKey: 'saleBidAuthor',
                 header: 'Автор предложения',
                 size: 150,
                 searchable: true,
