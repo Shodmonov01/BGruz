@@ -173,7 +173,7 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
                                                     header.column.columnDef.filterType !== 'range' ? (
                                                         <div className='text-center'>
                                                             {/* {renderFilterInput(header.column, handleFilterChange, bids)} */}
-                                                            <FilterInput column={header.column} handleFilterChange={handleFilterChange} pageType='bids'  />
+                                                            <FilterInput column={header.column} handleFilterChange={handleFilterChange}   />
 
                                                         </div>
                                                     ) : (

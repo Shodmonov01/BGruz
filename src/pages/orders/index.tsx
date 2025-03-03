@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import BgruzHeader from '@/components/shared/bgruz-header'
 import OrdersTable from './components/orders-table'
 import { useSearchParams } from 'react-router-dom'

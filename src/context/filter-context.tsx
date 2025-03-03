@@ -1,4 +1,3 @@
-import type React from 'react'
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
 
@@ -13,11 +12,12 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState } f
 
 // const FilterContext = createContext<FilterContextProps | undefined>(undefined)
 
-// interface FilterProviderProps {
-//     children: React.ReactNode
-//     onFiltersChange?: (filters: { [key: string]: any }) => void
-//     initialFilters?: { [key: string]: any }
-// }
+interface FilterProviderProps {
+    children: React.ReactNode
+    onFiltersChange?: (filters: { [key: string]: any }) => void
+    initialFilters?: { [key: string]: any }
+    pageType: 'orders' | 'bids'
+}
 
 // export function FilterProvider({ children, onFiltersChange, initialFilters = {}, pageType }: FilterProviderProps) {
 //     const [filters, setLocalFilters] = useState<{ [key: string]: any }>(initialFilters)

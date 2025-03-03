@@ -285,7 +285,6 @@ export function RenderFilterMobile() {
                                     <FilterInput
                                         column={column}
                                         handleFilterChange={handleFilterChange}
-                                        pageType={pageType}
                                     />
                                 </div>
                             </div>

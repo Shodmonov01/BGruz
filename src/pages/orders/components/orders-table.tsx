@@ -200,7 +200,6 @@ function OrdersTable({
                                                             <FilterInput
                                                                 column={header.column}
                                                                 handleFilterChange={handleFilterChange}
-                                                                pageType='orders'
                                                             />
                                                         </div>
                                                     ) : (
