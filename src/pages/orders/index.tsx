@@ -7,7 +7,7 @@ import { useWebSocket } from '@/api/use-websocket'
 import { useGetOrders } from '@/api/use-get-orders'
 import { TotalsProvider } from '@/context/totals-context'
 import PageHead from '@/components/shared/page-head'
-import { useFilter } from '@/context/filter-context'
+import { FilterProvider, useFilter } from '@/context/filter-context'
 
 export default function OrderPage() {
     const [searchParams] = useSearchParams()
@@ -39,9 +39,9 @@ export default function OrderPage() {
     //     return () => window.removeEventListener('scroll', handleScroll)
     // }, [hasMore, loading])
 
-    useEffect(() => {
-        setFilters({});  // Очистить фильтры при загрузке страницы
-      }, [setFilters]);
+    // useEffect(() => {
+    //     setFilters({});  // Очистить фильтры при загрузке страницы
+    //   }, [setFilters]);
 
       
     useWebSocket(() => {}, refreshOrders);
@@ -52,6 +52,8 @@ export default function OrderPage() {
             <PageHead title='Заказы' />
             <TotalsProvider data={orders}>
                 <BgruzHeader />
+                <FilterProvider pageType="orders" onFiltersChange={setFilters}>
+
                 <div className='hidden md:block'>
                     {/* @ts-ignore */}
                     <OrdersTable
@@ -67,6 +69,7 @@ export default function OrderPage() {
                 <div className='md:hidden'>
                     <OrderTableMobile orders={orders || []} />
                 </div>
+                </FilterProvider>
             </TotalsProvider>
         </div>
     )

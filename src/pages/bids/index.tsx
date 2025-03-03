@@ -32,7 +32,9 @@ export default function BidsPage() {
             <PageHead title='Заявки' />
             <TotalsProvider data={bids}>
                 <BgruzHeader />
-                <FilterProvider onFiltersChange={setFilters}>
+                {/* <FilterProvider onFiltersChange={setFilters}> */}
+                <FilterProvider pageType="bids" onFiltersChange={setFilters}>
+
                     <div>
                         <div className='hidden md:block'>
                             <BidsTable bids={bids || []} loading={loading} loadMore={loadMore} hasMore={hasMore} />
