@@ -19,68 +19,6 @@ export default function OrderPage() {
     const { orders, hasMore, loading,  refreshOrders } = useGetOrders(size)
     const { setFilters } = useFilter()
 
-    // const handleFilterChange = useCallback(
-    //     (columnId: string, value: any) => {
-    //         let formattedValue = value
-
-    //         if (columnId === 'loadingMode' || columnId === 'cargoType' || columnId === 'status') {
-    //             formattedValue = Array.isArray(value) ? value : [value]
-    //         } else if ((columnId === 'loadingDate' || columnId === 'createdAt') && value) {
-    //             formattedValue = {
-    //                 start: new Date(value.from.setHours(23, 59, 59, 999)).toISOString(),
-    //                 end: new Date(value.to.setHours(23, 59, 59, 999)).toISOString()
-    //             }
-    //         } else if (['number', 'fullPrice', 'comission', 'extraServicesPrice'].includes(columnId)) {
-    //             formattedValue = Number(value)
-    //         }
-
-    //         const newFilters = {
-    //             ...localFilters,
-    //             [columnId]: formattedValue
-    //         }
-
-    //         setLocalFilters(newFilters)
-    //         setFilters(newFilters)
-
-    //         if (debounceRef.current) clearTimeout(debounceRef.current)
-    //         debounceRef.current = setTimeout(async () => {
-    //             const filterPayload = {
-    //                 filter: {
-    //                     ...newFilters
-    //                 },
-    //                 sort: {
-    //                     filterFieldName: 'createdAt',
-    //                     direction: 'descending'
-    //                 },
-    //                 size: size
-    //             }
-
-    //             try {
-    //                 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-    //                 const token = localStorage.getItem('authToken') || ''
-    //                 const response = await fetch(`${API_BASE_URL}/api/v1/orders/getbatch`, {
-    //                     method: 'POST',
-    //                     headers: {
-    //                         'Content-Type': 'application/json',
-    //                         Authorization: `Bearer ${token}`
-    //                     },
-    //                     body: JSON.stringify(filterPayload)
-    //                 })
-
-    //                 if (!response.ok) {
-    //                     throw new Error(`HTTP error! status: ${response.status}`)
-    //                 }
-
-    //                 await response.json()
-    //                 refreshTable()
-    //             } catch (error) {
-    //                 console.error('Error in filter change:', error)
-    //             }
-    //         }, 500)
-    //     },
-    //     [localFilters, size, refreshTable]
-    // )
-
     const loadMore = () => {
         if (hasMore) {
             setSize(prev => prev + 50)
@@ -101,6 +39,11 @@ export default function OrderPage() {
         return () => window.removeEventListener('scroll', handleScroll)
     }, [hasMore, loading])
 
+    useEffect(() => {
+        setFilters({});  // Очистить фильтры при загрузке страницы
+      }, [setFilters]);
+
+      
     useWebSocket(() => {}, refreshOrders);
 
 
