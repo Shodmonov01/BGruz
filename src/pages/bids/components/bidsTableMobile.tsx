@@ -9,7 +9,12 @@ import AuctionTimer from '@/hooks/use-action-timer'
 import BidsInfoModal from './bids-info-modal'
 import BidCreateForm from './bid-create-form'
 import PopupModal from '@/components/shared/popup-modal'
-
+const statusTranslations = {
+    active: 'Активна',
+    waiting: 'На ожидании',
+    executed: 'Выполнена',
+    canceled: 'Отменена',
+}
 //@ts-ignore
 interface Bid {
     _id: string
@@ -128,7 +133,10 @@ function BidsTableMobile({ bids }: BidsTableMobileProps) {
                                         </div>
                                     </div>
                                     <div className='ml-auto flex flex-col'>
-                                        <p className='text-green-600 font-semibold'>{bid.status}</p>
+                                        {/* <p className='text-green-600 font-semibold'>{bid.status}</p> */}
+                                        <p className='text-green-600 font-semibold'>
+                                            {statusTranslations[bid.status] || bid.status || '—'}
+                                        </p>
                                         <p className='text-green-600 font-semibold'>
                                             {bid.price ? `${formatNumber(bid.price)} ₽` : '—'}
                                         </p>

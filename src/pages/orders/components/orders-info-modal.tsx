@@ -9,6 +9,23 @@ import { Textarea } from '@/components/ui/textarea'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import useNumberFormatter from '@/hooks/use-format-number'
 
+const statusTranslations = {
+    new: 'Новый',
+    canceledByCarrierWithPenalty: 'Отменяется перевозчиком (половина ГО)',
+    canceledByCustomerWithPenalty: 'Отменяется заказчиком (половина ГО)',
+    canceledByCarrier: 'Отменяется перевозчиком',
+    canceledByCustomer: 'Отменяется заказчиком',
+    failed: 'Сорван',
+    failing: 'Срывается',
+    completed: 'Выполнен',
+    inTransit: 'Машина в пути',
+    canceled: 'Отменен',
+    headingToLoading: 'Еду на погрузку',
+    loading: 'На погрузке',
+    unloading: 'На выгрузке',
+    delivered: 'Груз сдан'
+}
+
 function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
     const { formatNumber } = useNumberFormatter()
     const [formData, setFormData] = useState({
@@ -42,11 +59,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                     <div className=''>
                         <div className='mb-6 mt-3 px-6'>
                             <span className='rounded bg-orange-500 px-4 py-2 text-sm text-white mt-3 '>
-                                {formData.status === 'new'
-                                    ? 'Новый'
-                                    : formData.status === 'cancelledByCustomer'
-                                      ? 'Отменено клиентом'
-                                      : formData.status}
+                                {statusTranslations[formData.status] || formData.status || '—'}
                             </span>
                         </div>
                         <div className='flex justify-center items-center w-full'>
@@ -78,13 +91,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                             <input
                                 type='text'
                                 name='status'
-                                value={
-                                    formData.status === 'new'
-                                        ? 'Новый'
-                                        : formData.status === 'cancelledByCustomer'
-                                          ? 'Отменено клиентом'
-                                          : formData.status
-                                }
+                                value={statusTranslations[formData.status] || formData.status || '—'}
                                 onChange={handleChange}
                                 className='border border-gray-300 rounded px-2 py-1'
                             />
