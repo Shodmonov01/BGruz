@@ -239,7 +239,17 @@ export function FilterInput({ column, handleFilterChange }) {
                 //         ))}
                 //     </SelectContent>
                 // </Select>
-                <Select value={getStringValue(column.getFilterValue())} onValueChange={value => handleChange(value)}>
+                <Select
+                    value={getStringValue(column.getFilterValue())}
+                    onValueChange={value => {
+                        const selectedOption = column.columnDef.filterOptions?.find(option =>
+                            Array.isArray(option.value) ? option.value.join(',') === value : option.value === value
+                        )
+                        const newValue = selectedOption ? selectedOption.value : getDefaultValue(column.id)
+                        column.setFilterValue(newValue)
+                        handleFilterChange(column.id, newValue)
+                    }}
+                >
                     <SelectTrigger className='text-xs min-w-full h-7 bg-white'>
                         <SelectValue placeholder='Выберите' />
                     </SelectTrigger>
