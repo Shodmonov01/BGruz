@@ -151,7 +151,6 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 searchable: true,
                 filterType: 'fuzzy',
                 isMobile: true
-
             },
             {
                 accessorKey: 'terminal2',
@@ -226,7 +225,6 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                     { value: 'waiting', label: 'На ожидании' },
                     { value: 'executed', label: 'Выполнена' },
                     { value: 'canceled', label: 'Отменены' }
-                   
                 ]
             },
             {
@@ -366,28 +364,46 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
             //     },
             //     isShortVersion: true
             // },
+            // {
+            //     accessorKey: 'isPriceRequest',
+            //     header: 'Согласовано',
+            //     size: 150,
+            //     cell: ({ row }) => {
+            //         const { bestSalePrice, status } = row.original;
+            //         const isDisabled = !bestSalePrice || status === 'canceled';
+
+            //         return (
+            //             <Button
+            //                 onClick={() => onApprove?.(row.original.id)}
+            //                 disabled={isDisabled}
+            //             >
+            //                 Согласовать
+            //             </Button>
+            //         );
+            //     },
+            //     isShortVersion: true
+            // }
             {
                 accessorKey: 'isPriceRequest',
                 header: 'Согласовано',
                 size: 150,
                 cell: ({ row }) => {
-                    const { bestSalePrice, status } = row.original;
-                    const isDisabled = !bestSalePrice || status === 'canceled';
-            
+                    const { bestSalePrice, status, ownState } = row.original
+                    const isDisabled = !bestSalePrice || status === 'canceled' || ownState === 'approved'
+
                     return (
-                        <Button 
-                            onClick={() => onApprove?.(row.original.id)} 
+                        <Button
+                            onClick={() => onApprove?.(row.original.id)}
                             disabled={isDisabled}
+                            className={isDisabled ? 'bg-gray-400 text-white' : ''}
                         >
                             Согласовать
                         </Button>
-                    );
+                    )
                 },
                 isShortVersion: true
-            }
-            
-            ,
-            
+            },
+
             {
                 header: 'Действия',
                 size: 80,
