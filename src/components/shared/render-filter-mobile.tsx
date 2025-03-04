@@ -206,12 +206,26 @@ export function RenderFilterMobile() {
     }, [localFilters, refreshData, handleFilterChange])
 
     // Сброс фильтров
+    // const resetFilters = useCallback(() => {
+    //     const emptyFilters = {}
+    //     setLocalFilters(emptyFilters)
+    //     refreshData()
+    //     setIsOpen(false)
+    // }, [refreshData])
+
     const resetFilters = useCallback(() => {
-        const emptyFilters = {}
-        setLocalFilters(emptyFilters)
-        refreshData()
-        setIsOpen(false)
-    }, [refreshData])
+        const emptyFilters = {};
+        setLocalFilters(emptyFilters);
+    
+        // Сбрасываем фильтры в глобальном состоянии
+        Object.keys(filters).forEach((key) => {
+            handleFilterChange(key, undefined); // или handleFilterChange(key, '') если API требует строку
+        });
+    
+        refreshData();
+        setIsOpen(false);
+    }, [filters, refreshData, handleFilterChange]);
+    
 
     // Хуки для колонок таблицы
     const ordersColumns = useOrdersTableColumns({
