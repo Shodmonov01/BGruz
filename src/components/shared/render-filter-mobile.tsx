@@ -14,8 +14,6 @@
 // import { useOrdersTableColumns } from '@/pages/orders/components/use-orders-table-columns'
 // import { useGetOrders } from '@/api/use-get-orders'
 
-
-
 // export function RenderFilterMobile() {
 //     const location = useLocation()
 //     const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -30,19 +28,14 @@
 
 //     const pageType = useMemo(() => (location.pathname.includes('/orders') ? 'orders' : 'bids'), [location.pathname]);
 
-
-    
-
 //     const { loading: loadingBids, refreshBids, setFilters: setBidsFilters } = useGetBids(size)
 
 //     const { loading: loadingOrders, refreshOrders, setFilters: setOrdersFilters } = useGetOrders(size)
 
 //     const loading = pageType === 'orders' ? loadingOrders : loadingBids
 
-
 //     const setFilters = pageType === 'orders' ? setOrdersFilters : setBidsFilters
 //     const refreshData = pageType === 'orders' ? refreshOrders : refreshBids
-
 
 //     const applyFilters = useCallback(() => {
 //         Object.entries(localFilters).forEach(([key, value]) => {
@@ -90,7 +83,7 @@
 //                 columnDef: {
 //                     // @ts-ignore
 //                     filterType: column.filterType,
-//                     // @ts-ignore 
+//                     // @ts-ignore
 //                     filterOptions: column.filterOptions,
 //                     header: column.header
 //                 },
@@ -145,11 +138,10 @@
 //     )
 // }
 
-
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { useLocation, useSearchParams } from 'react-router-dom'
 
-import { useBidsTableColumns } from '@/pages/bids/components/bids-table/useBidsTableColumns'
+import { useBidsTableColumns } from '@/pages/bids/components/bids-table/bids-table-columns'
 import { useOrdersTableColumns } from '@/pages/orders/components/use-orders-table-columns'
 
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
@@ -239,29 +231,31 @@ export function RenderFilterMobile() {
     const originalColumns = pageType === 'orders' ? ordersColumns : bidsColumns
 
     const memoizedColumns = useMemo(() => {
-        return originalColumns
-        // @ts-ignore
-            .filter(column => column.isMobile === true)
-            .map(column => ({
+        return (
+            originalColumns
                 // @ts-ignore
-                id: column.accessorKey,
-                columnDef: {
+                .filter(column => column.isMobile === true)
+                .map(column => ({
                     // @ts-ignore
-                    filterType: column.filterType,
-                    // @ts-ignore 
-                    filterOptions: column.filterOptions,
-                    header: column.header
-                },
-                // @ts-ignore
-                getFilterValue: () => localFilters[column.accessorKey] || null,
-                setFilterValue: (value: any) => {
-                    setLocalFilters(prev => ({
-                        ...prev,
+                    id: column.accessorKey,
+                    columnDef: {
                         // @ts-ignore
-                        [column.accessorKey]: value
-                    }))
-                }
-            }))
+                        filterType: column.filterType,
+                        // @ts-ignore
+                        filterOptions: column.filterOptions,
+                        header: column.header
+                    },
+                    // @ts-ignore
+                    getFilterValue: () => localFilters[column.accessorKey] || null,
+                    setFilterValue: (value: any) => {
+                        setLocalFilters(prev => ({
+                            ...prev,
+                            // @ts-ignore
+                            [column.accessorKey]: value
+                        }))
+                    }
+                }))
+        )
     }, [originalColumns, localFilters])
 
     // Не выполняем запросы, если не мобильная версия
@@ -282,10 +276,7 @@ export function RenderFilterMobile() {
                                 {/* @ts-ignore */}
                                 <label className='text-xs font-medium'>{column.columnDef.header}</label>
                                 <div>
-                                    <FilterInput
-                                        column={column}
-                                        handleFilterChange={handleFilterChange}
-                                    />
+                                    <FilterInput column={column} handleFilterChange={handleFilterChange} />
                                 </div>
                             </div>
                         ))}

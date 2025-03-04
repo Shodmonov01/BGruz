@@ -59,7 +59,7 @@ export function useWebSocket(refreshBids: () => void = () => {}, refreshOrders: 
                     ws.current?.close();
                 }, 30500);
             }
-        }, 30000);
+        }, 28000);
     };
 
     const stopHeartbeat = () => {

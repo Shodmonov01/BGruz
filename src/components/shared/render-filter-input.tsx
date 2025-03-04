@@ -136,9 +136,10 @@
 // // }
 
 // import { useEffect, useState } from 'react'
+import { useEffect } from 'react';
+import { DateRangePicker } from './range-picker'
 import { Input } from '../ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { DateRangePicker } from '@/pages/bids/components/bid-form-detail/rangePicker'
 import { useFilter } from '@/context/filter-context'
 
 // export function FilterInput({ column, handleFilterChange, pageType }) {
@@ -290,4 +291,5 @@ export function FilterInput({ column, handleFilterChange }) {
     }
 }
 
-import { useEffect } from 'react'
+
+

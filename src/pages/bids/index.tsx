@@ -5,12 +5,12 @@ import { useSearchParams } from 'react-router-dom'
 import BgruzHeader from '@/components/shared/bgruz-header'
 import PageHead from '@/components/shared/page-head'
 
-import BidsTable from './components/BidsTable'
+import BidsTable from './components/bids-table/bids-table'
 import { useGetBids } from '@/api/use-get-bids'
 import { useWebSocket } from '@/api/use-websocket'
 import { TotalsProvider } from '@/context/totals-context'
+import BidsTableMobile from './components/bids-table/bids-table-mobile'
 import { FilterProvider, useFilter } from '@/context/filter-context'
-import BidsTableMobile from './components/bidsTableMobile'
 
 export default function BidsPage() {
     const [searchParams] = useSearchParams()
@@ -24,17 +24,15 @@ export default function BidsPage() {
             setSize(prev => prev + 50)
         }
     }
-
     useWebSocket(refreshBids, () => {})
 
+    // ! если что тут надо попробовать добавить ScrollArea
     return (
         <div className='py-4 md:px-4'>
             <PageHead title='Заявки' />
             <TotalsProvider data={bids}>
                 <BgruzHeader />
-                {/* <FilterProvider onFiltersChange={setFilters}> */}
-                <FilterProvider pageType="bids" onFiltersChange={setFilters}>
-
+                <FilterProvider pageType='bids' onFiltersChange={setFilters}>
                     <div>
                         <div className='hidden md:block'>
                             <BidsTable bids={bids || []} loading={loading} loadMore={loadMore} hasMore={hasMore} />

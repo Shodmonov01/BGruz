@@ -7,12 +7,12 @@ import { Button } from '@/components/ui/button'
 
 import { fetchPrivateData, postData } from '@/api/api'
 
-import BidDetails from './bid-form-detail/bidDetails'
-import BidDate from './bid-form-detail/bidDate'
-import TerminalOne from './bid-form-detail/terminalOne'
-import Warehouses from './bid-form-detail/warhouses'
-import TerminalTwo from './bid-form-detail/terminalTwo'
-import BidDescribe from './bid-form-detail/bidDescribe'
+import BidDetails from './bid-form-detail/bid-details'
+import BidDate from './bid-form-detail/bid-date'
+import TerminalOne from './bid-form-detail/bid-terminal-one'
+import Warehouses from './bid-form-detail/bid-warhouses'
+import TerminalTwo from './bid-form-detail/bid-terminal-two'
+import BidDescribe from './bid-form-detail/bid-describe'
 import { Loader2 } from 'lucide-react'
 // import { ChevronLeft } from 'lucide-react'
 
@@ -20,6 +20,7 @@ interface BidFormData {
     client: string
     loadingType: string
     transportType: string
+    recipientOrSender: string
     startDate: string
     endDate: string
     terminal1Id: number | null
@@ -37,6 +38,7 @@ interface BidFormData {
     requestPrice: boolean
     cargoTitle: string
     vehicleCount: number
+    submissionTime: string
     extraServices: Array<{ id: number; count: number }>
 }
 
@@ -135,7 +137,6 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
             const payload = {
                 cargoType: data.transportType,
                 loadingMode: data.loadingType,
-                //@ts-ignore
                 clientId: Number(data.recipientOrSender),
                 startDate: getValues('startDate'),
                 slideDayTotal: 0,
@@ -162,7 +163,6 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                 vehicleProfileId: Number(data.vehicleProfiles),
                 vehicleCount: getValues('vehicleCount'),
                 cargoTitle: data.cargoTitle,
-                //@ts-ignore
                 loadingTime: getValues('submissionTime') || '09:00',
 
                 extraServices: data.extraServices || [],
@@ -174,7 +174,7 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                 console.error('Не найден токен авторизации')
                 return
             }
-            // @ts-expect-error dfdfdsd fd
+            // @ts-expect-error надо исправить
             const res = await postData('api/v1/bids', payload, token)
             modalClose()
             // refreshBids()

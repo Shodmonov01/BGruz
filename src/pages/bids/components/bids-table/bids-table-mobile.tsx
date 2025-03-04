@@ -1,40 +1,39 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { useCallback, useMemo, useState } from 'react'
 import { ScrollArea } from '@radix-ui/react-scroll-area'
-import info from '../../../../public/info.svg'
+import info from '../../../../../public/info.svg'
 import useNumberFormatter from '@/hooks/use-format-number'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import AuctionTimer from '@/hooks/use-action-timer'
-import BidsInfoModal from './bids-info-modal'
-import BidCreateForm from './bid-create-form'
+import BidsInfoModal from '../bids-info-modal'
+import BidCreateForm from '../bid-create-form'
 import PopupModal from '@/components/shared/popup-modal'
 const statusTranslations = {
     active: 'Активна',
     waiting: 'На ожидании',
     executed: 'Выполнена',
-    canceled: 'Отменена',
+    canceled: 'Отменена'
 }
-//@ts-ignore
-interface Bid {
-    _id: string
-    persistentId: string
-    cargoTitle: string
-    client: { organizationName: string }
-    price: number | null
-    status: string | null
-    filingTime: string
-    createdBy: string
-    createdAt: string
-    isPriceRequest?: boolean
-    loadingDate: string
-    customer?: { name: string }
-    terminal1?: { cityName: string }
-    terminal2?: { cityName: string }
-    warehouses?: { cityName: string }[]
-    vehicleProfile?: { name: string }
-    [key: string]: unknown
-}
+// interface Bid {
+//     _id: string
+//     persistentId: string
+//     cargoTitle: string
+//     client: { organizationName: string }
+//     price: number | null
+//     status: string | null
+//     filingTime: string
+//     createdBy: string
+//     createdAt: string
+//     isPriceRequest?: boolean
+//     loadingDate: string
+//     customer?: { name: string }
+//     terminal1?: { cityName: string }
+//     terminal2?: { cityName: string }
+//     warehouses?: { cityName: string }[]
+//     vehicleProfile?: { name: string }
+//     [key: string]: unknown
+// }
 
 interface BidsTableMobileProps {
     bids: any[]
@@ -43,8 +42,6 @@ interface BidsTableMobileProps {
 function BidsTableMobile({ bids }: BidsTableMobileProps) {
     const [selectedBid, setSelectedBid] = useState(null)
     const [open, setOpen] = useState(false)
-    // const { filters } = useFilter()
-    // const { refreshBids } = useGetBids(200)
 
     const handleCloseModal = useCallback(() => {
         setOpen(false)
@@ -56,22 +53,10 @@ function BidsTableMobile({ bids }: BidsTableMobileProps) {
     }, [])
 
     const { formatNumber } = useNumberFormatter()
-
-    // useEffect(() => {
-    //     console.log('BidsTableMobile received new bids:', bids)
-    //     console.log('Current filters:', filters)
-    // }, [bids, filters])
-
-    // useEffect(() => {
-    //     refreshBids()
-    // }, [refreshBids])
-
-    // Группировка заявок по дате
     const groupedBids = useMemo(() => {
         const groups = {}
         const today = format(new Date(), 'dd.MM.yyyy', { locale: ru })
 
-        //@ts-ignore
         bids.forEach(bid => {
             const date = format(new Date(bid.loadingDate), 'dd.MM.yyyy', { locale: ru })
             const label = date === today ? 'Сегодня' : date
@@ -81,7 +66,7 @@ function BidsTableMobile({ bids }: BidsTableMobileProps) {
             groups[label].push(bid)
         })
         return Object.entries(groups).sort(([a], [b]) =>
-            //@ts-ignore
+            //@ts-expect-error надо разобраться
             a === 'Сегодня' ? -1 : b === 'Сегодня' ? 1 : new Date(b) - new Date(a)
         )
     }, [bids])
@@ -92,7 +77,7 @@ function BidsTableMobile({ bids }: BidsTableMobileProps) {
                 {groupedBids.map(([date, bids]) => (
                     <div key={date}>
                         <h2 className='text-lg font-semibold p-2'>{date}</h2>
-                        {/* @ts-ignore */}
+                        {/* @ts-expect-error надо разобраться */}
                         {bids.map(bid => (
                             <Card key={bid.persistentId} className='p-4 shadow-md rounded-lg'>
                                 <CardContent className='w-full !p-0 flex items-center gap-2'>

@@ -10,11 +10,11 @@ import {
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 // import type { DateRange } from 'react-day-picker'
-import { useBidsTableColumns } from './bids-table/useBidsTableColumns'
-import BidsInfoModal from './bids-info-modal'
-import BidHeader from './bids-header'
+import { useBidsTableColumns } from './bids-table-columns'
+import BidsInfoModal from '../bids-info-modal'
+import BidHeader from '../bids-header'
 import { deleteData, postData2 } from '@/api/api'
-import loader from '../../../../public/gear-spinner.svg'
+import loader from '../../../../../public/gear-spinner.svg'
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
 import { useFilter } from '@/context/filter-context'
 import { FilterInput } from '@/components/shared/render-filter-input'
@@ -25,6 +25,7 @@ interface Bid {
     cargoTitle: string
     price: number | null
     status: string | null
+    columns: string
 }
 
 interface BidsTableProps {
@@ -36,10 +37,8 @@ interface BidsTableProps {
     loading: boolean
     // localFilters: Record<string, string | any[]>
 }
-//@ts-ignore
 function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
-    //@ts-ignore
-    const { filters, handleFilterChange, clearFilters } = useFilter()
+    const { filters, handleFilterChange } = useFilter()
 
     const [selectedBid, setSelectedBid] = useState<Partial<Bid> | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -112,15 +111,13 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
     const columns = useBidsTableColumns({
         isShortTable,
         onApprove: handleApprove,
-        onDelete: handleDelete,
-        //@ts-ignore
-        onOpenModal: handleOpenModal
+        onDelete: handleDelete
+        // //@ts-ignore
+        // onOpenModal: handleOpenModal
     })
 
     const table = useReactTable({
-        //@ts-ignore
         data: bids || [],
-        //@ts-ignore
         columns,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
@@ -169,12 +166,14 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
                                         >
                                             <div>
                                                 {
-                                                    //@ts-ignore
+                                                    // @ts-expect-error я сам не знаю
                                                     header.column.columnDef.filterType !== 'range' ? (
                                                         <div className='text-center'>
                                                             {/* {renderFilterInput(header.column, handleFilterChange, bids)} */}
-                                                            <FilterInput column={header.column} handleFilterChange={handleFilterChange}   />
-
+                                                            <FilterInput
+                                                                column={header.column}
+                                                                handleFilterChange={handleFilterChange}
+                                                            />
                                                         </div>
                                                     ) : (
                                                         <div
@@ -209,7 +208,6 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
                         <TableBody>
                             {table.getRowModel().rows.map((row, index) => (
                                 <TableRow
-                                    //@ts-ignore
                                     onDoubleClick={() => handleOpenModal(row.original)}
                                     key={row.id}
                                     className={`cursor-pointer text-[16px] hover:bg-gray-100 ${
