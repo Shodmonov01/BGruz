@@ -240,7 +240,7 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                     className='hidden md:block space-y-2 py-0 md:py-4 text-center text-[#fff]'
                 />
                 <div className='fixed w-full top-0 z-10 flex md:hidden items-center gap-2 bg-primary text-white p-4'>
-                <Button variant='ghost' size='icon' className='hover:bg-white/20' onClick={modalClose}>
+                    <Button variant='ghost' size='icon' className='hover:bg-white/20' onClick={modalClose}>
                         <ChevronLeft className='h-6 w-6' />
                     </Button>
                     <h2 className='text-lg font-medium'>Создать новую заявку</h2>

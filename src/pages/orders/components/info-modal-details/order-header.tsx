@@ -154,7 +154,7 @@ export function OrderHeader({ formData, handleChange, setFormData }: OrderHeader
                 <div className='flex justify-between items-center gap-4 relative -left-14'>
                     <p className='font-bold'>Изменено</p>
                     <p>
-                        <p>{formData.docSubmissionUser ? formData.docSubmissionUser : 'Не изменено'}</p>
+                        <p>{formData.docSubmissionUser?.fio ? formData.docSubmissionUser?.fio : 'Не изменено'}</p>
                     </p>
                 </div>
             </div>
