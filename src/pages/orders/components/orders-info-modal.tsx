@@ -43,7 +43,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                 <Button variant='outline'>Open Order</Button>
             </DialogTrigger>
             <DialogContent className='max-h-[90vh] max-w-[1000px] overflow-y-auto !p-0'>
-                <OrderHeader formData={formData} handleChange={handleChange} />
+                <OrderHeader formData={formData} handleChange={handleChange} setFormData={setFormData} />
 
                 <div className='grid gap-6'>
                     <OrderRoute formData={formData} />
