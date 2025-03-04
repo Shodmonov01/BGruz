@@ -163,45 +163,52 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                         <FormItem>
                             <FormLabel className='font-bold text-[18px]'>Заказчик</FormLabel>
                             <Select
-                                disabled={isReadOnly}
-                                onValueChange={value => {
-                                    field.onChange(Number(value))
+    disabled={isReadOnly}
+    onValueChange={value => {
+        field.onChange(Number(value))
+        // @ts-expect-error надо посмотреть
+        handleClientChange(value, 'client')
+        setOpenClient(false)
+    }}
+    value={field.value?.toString()}
+    open={openClient}
+    onOpenChange={setOpenClient}
+>
+    <FormControl>
+        <SelectTrigger>
+            <SelectValue placeholder='Выберите клиента' />
+        </SelectTrigger>
+    </FormControl>
+    <SelectContent 
+        onPointerDownOutside={e => e.preventDefault()} 
+        onCloseAutoFocus={e => e.preventDefault()}
+    >
+        <div className='p-2'>
+            <Input
+                placeholder='Поиск клиента...'
+                value={searchClient}
+                onChange={e => setSearchClient(e.target.value)}
+                onFocus={() => {
+                    // Принудительное открытие Select при фокусе на Input
+                    setTimeout(() => setOpenClient(true), 100)
+                }}
+                onKeyDown={e => {
+                    e.stopPropagation()
+                    e.preventDefault()
+                }}
+            />
+        </div>
+        {filteredClientList.map(client => (
+            <SelectItem
+                key={client.organizationId}
+                value={client.organizationId.toString()}
+            >
+                {client.organizationName}
+            </SelectItem>
+        ))}
+    </SelectContent>
+</Select>
 
-                                    /* @ts-ignore */
-
-                                    handleClientChange(value, 'client')
-                                    setOpenClient(false)
-                                }}
-                                value={field.value?.toString()}
-                                open={openClient}
-                                onOpenChange={setOpenClient}
-                            >
-                                <FormControl>
-                                    <SelectTrigger className=''>
-                                        <SelectValue placeholder='Выберите клиента' />
-                                    </SelectTrigger>
-                                </FormControl>
-                                {/* <SelectContent onCloseAutoFocus={e => e.preventDefault()}> */}
-                                <SelectContent>
-                                    <div className='p-2'>
-                                        <Input
-                                            placeholder='Поиск клиента...'
-                                            value={searchClient}
-                                            onChange={e => setSearchClient(e.target.value)}
-                                            // onFocus={() => setOpenClient(true)}
-                                            onKeyDown={e => e.stopPropagation()}
-                                        />
-                                    </div>
-                                    {filteredClientList.map(client => (
-                                        <SelectItem
-                                            key={client.organizationId}
-                                            value={client.organizationId.toString()}
-                                        >
-                                            {client.organizationName}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
                             <FormMessage />
                         </FormItem>
                     )}
