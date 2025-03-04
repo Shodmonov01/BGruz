@@ -105,6 +105,8 @@ export interface IOrder {
         loadingMode?: string
         cargoType?: string
         loadingDate: string
+        description: string
+        cargoTitle: string
         terminal1: {
             cityId?: number
             cityName?: string

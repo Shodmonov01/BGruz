@@ -150,7 +150,7 @@ const BidsInfoModal = ({
 
     useEffect(() => {
         if (selectedBid && Object.keys(selectedBid).length > 0) {
-            setIsEdit(false)
+            setIsEdit(true)
             setOriginalData({ ...selectedBid })
             setFormData({ ...selectedBid })
             setIsReadOnly(true)
@@ -221,6 +221,7 @@ const BidsInfoModal = ({
             reset()
             setIsEdit(false)
             setIsReadOnly(false)
+            setValue('requestPrice', false)
         }
     }, [selectedBid, reset, setValue])
 
