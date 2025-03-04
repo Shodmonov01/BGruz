@@ -57,7 +57,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
 
     return (
         <div>
-            <div className='flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-16 my-6 md:px-0 px-4'>
+            <div className='flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-16 mt-20 mb-6 md:my-6 md:px-0 px-4'>
                 <h1 className='font-bold whitespace-nowrap'>Тип перевозки</h1>
                 <div className='w-full md-w-auto flex justify-center md:block'>
                     <FormField

@@ -239,7 +239,7 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                     description={''}
                     className='hidden md:block space-y-2 py-0 md:py-4 text-center text-[#fff]'
                 />
-                <div className='flex md:hidden items-center gap-2 bg-primary text-white p-4'>
+                <div className='fixed w-full top-0 z-10 flex md:hidden items-center gap-2 bg-primary text-white p-4'>
                     <h2 className='text-lg font-medium'>Создать новую заявку</h2>
                 </div>
                 {errorMessage && <div className='text-red-500 text-center py-2'>{errorMessage}</div>}
