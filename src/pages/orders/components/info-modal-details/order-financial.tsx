@@ -35,11 +35,13 @@ export function OrderFinancial({ formData, formatNumber, setFormData }: OrderFin
                 return
             }
 
-            const payload = {
-                id: service.id,
-                vehicleProfileId: formData.assignedVehicle.vehicleProfileId,
-                count: newCount
-            }
+            const payload = [
+                {
+                    id: service.id,
+                    vehicleProfileId: formData.assignedVehicle.vehicleProfileId,
+                    count: newCount
+                }
+            ]
 
             const response = await postData2(`api/v1/orders/${formData.id}/extra_services`, payload, token)
             console.log('response', response)
