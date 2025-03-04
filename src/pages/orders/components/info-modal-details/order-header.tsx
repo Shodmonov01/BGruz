@@ -1,6 +1,7 @@
 import type React from 'react'
 import { DialogHeader } from '@/components/ui/dialog'
 import { Checkbox } from '@/components/ui/checkbox'
+import { useState } from 'react'
 
 const statusTranslations = {
     new: 'Новый',
@@ -26,6 +27,41 @@ interface OrderHeaderProps {
 }
 
 export function OrderHeader({ formData, handleChange, setFormData }: OrderHeaderProps) {
+    const [isSubmitting, setIsSubmitting] = useState(false)
+
+    const handleDocSubmissionChange = async (checked: boolean) => {
+        try {
+            setIsSubmitting(true)
+
+            const token = localStorage.getItem('authToken')
+            if (!token) {
+                console.error('Не найден токен авторизации')
+                return
+            }
+
+            await fetch(
+                `https://portal.bgruz.com/api/v1/orders/${formData.id}/doc_submission_status?doc_submitted=${checked}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            )
+
+            setFormData(prev => ({
+                ...prev,
+                docSubmissionDate: checked ? new Date().toISOString() : null,
+                docSubmissionUserId: checked ? new Date().toISOString() : null
+            }))
+        } catch (error) {
+            console.error('Error updating document submission:', error)
+        } finally {
+            setIsSubmitting(false)
+        }
+    }
+
     return (
         <>
             <DialogHeader>
@@ -82,13 +118,8 @@ export function OrderHeader({ formData, handleChange, setFormData }: OrderHeader
                     <p className='flex items-center gap-2'>
                         <Checkbox
                             checked={!!formData.docSubmissionDate}
-                            onChange={e => {
-                                setFormData(prev => ({
-                                    ...prev,
-                                    //@ts-ignore
-                                    docSubmissionDate: e.target.checked ? new Date().toISOString() : null
-                                }))
-                            }}
+                            disabled={isSubmitting}
+                            onCheckedChange={handleDocSubmissionChange}
                         />
                         {formData.docSubmissionDate
                             ? new Date(formData.docSubmissionDate).toLocaleString('ru-RU')
@@ -97,7 +128,11 @@ export function OrderHeader({ formData, handleChange, setFormData }: OrderHeader
                 </div>
                 <div className='flex justify-between items-center gap-4 relative -left-14'>
                     <p className='font-bold'>Изменено</p>
-                    <p>{formData.docSubmissionUserId ? 'ID: ' + formData.docSubmissionUserId : 'Не изменено'}</p>
+                    <p>
+                        {formData.docSubmissionUserId
+                            ? new Date(formData.docSubmissionDate).toLocaleString('ru-RU')
+                            : 'Не изменено'}
+                    </p>
                 </div>
             </div>
         </>
