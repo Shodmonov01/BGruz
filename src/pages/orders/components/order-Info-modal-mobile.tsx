@@ -41,7 +41,7 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                         <ChevronLeft className='h-6 w-6' />
                     </Button>
                     {/* @ts-ignore */}
-                    <h2 className='text-lg font-medium'>Заказ №{selectedOrder.id}</h2>
+                    <h2 className='text-lg font-medium'>Заказ №{selectedOrder?.id || '—'}</h2>
                 </div>
 
                 <div className='overflow-y-auto flex-1'>
@@ -53,24 +53,24 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                             <p className='text-gray-600'>Статус заказа</p>
                             <p className='font-bold text-[#1E293B]'>
                                 {/* @ts-ignore */}
-                                {statusTranslations[selectedOrder?.status] || selectedOrder.status || '—'}
+                                {statusTranslations[selectedOrder?.status] || selectedOrder?.status || '—'}
                             </p>
                         </div>
                         <div className='flex gap-6 items-center text-[18px]  px-6 py-2 '>
                             <p className='text-gray-600'>Автор статуса</p>
                             {/* @ts-ignore */}
-                            <p className='font-bold text-[#1E293B]'>{selectedOrder.statusUpdatedUser}</p>
+                            <p className='font-bold text-[#1E293B]'>{selectedOrder?.statusUpdatedUser?.fio || '—'}</p>
                         </div>
                         <div className='flex gap-6 items-center text-[18px] bg-[#E6E6E6] px-6 py-2 '>
                             <p className='text-gray-600 '>Дата погрузки</p>
                             <p className='font-bold text-[#1E293B]'>
-                                {new Date(selectedOrder?.buyBid.loadingDate).toLocaleDateString('ru-RU')}
+                                {new Date(selectedOrder?.buyBid?.loadingDate || '—').toLocaleDateString('ru-RU')}
                             </p>
                         </div>
                         <div className='flex gap-6 items-center text-[18px]   px-6 py-2 '>
                             <p className='text-gray-600'>Срок доставки</p>
                             <p className='font-bold text-[#1E293B]'>
-                                {new Date(selectedOrder?.buyBid.loadingDate).toLocaleDateString('ru-RU')}
+                                {new Date(selectedOrder?.buyBid?.loadingDate || '—').toLocaleDateString('ru-RU')}
                             </p>
                         </div>
                     </div>
@@ -78,7 +78,7 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                     <div className='flex overflow-auto gap-6 items-center text-[18px] bg-[#E6E6E6] px-6 py-2 '>
                         <p className='text-gray-600'>Маршрут</p>
                         <p className='font-bold text-[#1E293B]'>
-                            {selectedOrder.buyBid?.terminal1.cityName} - {selectedOrder.buyBid?.terminal2?.cityName}
+                            {selectedOrder.buyBid?.terminal1?.cityName} - {selectedOrder.buyBid?.terminal2?.cityName}
                         </p>
                     </div>
 
@@ -89,7 +89,7 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                                 <div>
                                     <MapPin className='max-h-[20px] min-h-[20px]' />
                                 </div>
-                                {selectedOrder.buyBid?.terminal1.address}
+                                {selectedOrder.buyBid?.terminal1?.address || '—'}
                             </p>
                         </div>
                         <div className='border-b-2 border-[#E6E6E6]  px-6 py-2'>
@@ -99,7 +99,7 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                                 <div>
                                     <MapPin className='max-h-[20px] min-h-[20px]' />
                                 </div>
-                                {selectedOrder?.buyBid?.warehouses[0]?.cityName},{' '}
+                                {selectedOrder?.buyBid?.warehouses[0]?.cityName || '—'},{' '}
                                 {selectedOrder?.buyBid?.warehouses[0]?.address || 'Адрес не указан'}
                             </p>
                         </div>
@@ -109,7 +109,7 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                                 <span>
                                     <MapPin className='max-h-[20px] min-h-[20px]' />
                                 </span>
-                                {selectedOrder.buyBid?.terminal2?.address}
+                                {selectedOrder.buyBid?.terminal2?.address || '—'}
                             </p>
                         </div>
                     </div>
@@ -117,7 +117,7 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                     <div>
                         <div className='flex gap-6 items-center text-[18px]  px-6 py-2 '>
                             <p className='text-gray-600'>Время подачи</p>
-                            <p className='font-bold text-[#1E293B]'>{selectedOrder.buyBid.loadingDate}</p>
+                            <p className='font-bold text-[#1E293B]'>{selectedOrder.buyBid?.loadingDate || '—'}</p>
                         </div>
                         <div className='flex gap-6 items-center text-[18px] bg-[#E6E6E6] px-6 py-2 '>
                             <p className='text-gray-600'>Транспорт</p>
@@ -147,7 +147,7 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                             {/* @ts-ignore */}
                             <p className='font-bold text-[#1E293B]'>
                                 {/* @ts-ignore */}
-                                {selectedOrder.driverUser ? selectedOrder.driverUser.email : '-'}
+                                {selectedOrder.driverUser ? selectedOrder.driverUser?.email : '-'}
                             </p>
                         </div>
                         <div className='flex gap-6 items-center text-[18px] px-6 py-2 '>
@@ -155,7 +155,7 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                             {/* @ts-ignore */}
                             <p className='font-bold text-[#1E293B]'>
                                 {/* @ts-ignore */}
-                                {selectedOrder.driverUser ? selectedOrder.driverUser.phone : '-'}
+                                {selectedOrder.driverUser ? selectedOrder.driverUser?.phone : '-'}
                             </p>
                         </div>
                     </div>
@@ -163,14 +163,15 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                     <div className='space-y-4'>
                         <div className='flex gap-6 items-center text-[18px] bg-[#E6E6E6] px-6 py-2 '>
                             <p className='text-gray-600'>Груз</p>
-                            <p className='font-bold text-[#1E293B]'>{selectedOrder.buyBid.cargoTitle}</p>
+                            <p className='font-bold text-[#1E293B]'>{selectedOrder.buyBid?.cargoTitle || '—'}</p>
                         </div>
                         <div className='flex gap-6 items-center text-[18px] px-6 py-2 '>
                             <p className='text-gray-600'>Комментарии заказчика</p>
-                            <p className='font-bold text-[#1E293B]'>{selectedOrder.buyBid.description}</p>
+                            <p className='font-bold text-[#1E293B]'>{selectedOrder.buyBid?.description || '—'}</p>
                         </div>
                         <div>
                             <h3 className='font-medium bg-[#E6E6E6] px-6 py-2 text-[18px]'>Финансы:</h3>
+                            <h3 className='font-medium px-6 py-2 text-[18px]'>Все цены указаны без НДС</h3>
                             <div className='grid grid-cols-3 gap-2 px-6 py-2 text-[18px]'>
                                 <div className='font-bold text-[#1E293B] text-left mb-8'>Услуга</div>
                                 <div className='font-bold text-[#1E293B] text-center mb-8'>Кол-во</div>
@@ -179,32 +180,32 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                                 <div>Перевозка</div>
                                 <div className='text-center'>-</div>
                                 <div className='text-right font-bold text-[#1E293B]'>
-                                    {formatNumber(String(selectedOrder.price))}
+                                    {formatNumber(String(selectedOrder.price || '—'))}
                                 </div>
                                 {selectedOrder?.extraServices?.map((service, index) => (
                                     <React.Fragment key={index}>
                                         <div>{service.name}</div>
                                         <div className='text-center font-bold text-[#1E293B]'>
-                                            {formatNumber(String(service.count))}
+                                            {formatNumber(String(service.count || '—'))}
                                         </div>
                                         <div className='text-right font-bold text-[#1E293B]'>
-                                            {formatNumber(String(service.totalPrice))}
+                                            {formatNumber(String(service.totalPrice || '—'))}
                                         </div>
                                     </React.Fragment>
                                 ))}
 
                                 <div className='col-span-2 font-bold text-[#1E293B]'>ИТОГО СУММА ЗАКАЗA</div>
                                 <div className='font-bold text-[#1E293B] text-right'>
-                                    {formatNumber(String(selectedOrder.fullPrice))}
+                                    {formatNumber(String(selectedOrder.fullPrice || '—'))}
                                 </div>
-                                <div className='col-span-2 text-[#1E293B]'>Цена с НДС</div>
+                                {/* <div className='col-span-2 text-[#1E293B]'>Цена с НДС</div>
                                 <div className='font-bold text-[#1E293B] text-right'>
                                     {formatNumber(Number(selectedOrder.priceNds))}
                                 </div>
                                 <div className='col-span-2 text-[#1E293B]'>Цена без НДС</div>
                                 <div className='font-bold text-[#1E293B] text-right'>
                                     {formatNumber(String(selectedOrder.price))}
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>
@@ -213,28 +214,28 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                     <div className='mt-4 space-y-2'>
                         <div className='flex gap-6 items-center text-[18px] border-b-2  border-[#E6E6E6] px-6 py-2 '>
                             <p className='text-gray-600'>Перевозчик</p>
-                            <p className='font-bold text-[#1E293B]'>{selectedOrder.carrier?.organizationName}</p>
+                            <p className='font-bold text-[#1E293B]'>{selectedOrder.carrier?.organizationName || '—'}</p>
                         </div>
                         <div className='flex gap-6 items-center text-[18px] border-b-2  border-[#E6E6E6] px-6 py-2 '>
                             <p className='text-gray-600'>ИНН</p>
-                            <p className='font-bold text-[#1E293B]'>{selectedOrder.carrier?.inn}</p>
+                            <p className='font-bold text-[#1E293B]'>{selectedOrder.carrier?.inn || '—'}</p>
                         </div>
                         <div className='flex gap-6 items-center text-[18px] border-b-2  border-[#E6E6E6] px-6 py-2 '>
                             <p className='text-gray-600'>Контактное лицо</p>
-                            <p className='font-bold text-[#1E293B]'>{selectedOrder.carrier?.fio}</p>
+                            <p className='font-bold text-[#1E293B]'>{selectedOrder.carrier?.fio || '—'}</p>
                         </div>
                         <div className='flex gap-6 items-center text-[18px] border-b-2  border-[#E6E6E6] px-6 py-2 '>
                             <p className='text-gray-600'>Ответственный</p>
-                            <p className='font-bold text-[#1E293B]'>{selectedOrder.carrier?.fio}</p>
+                            <p className='font-bold text-[#1E293B]'>{selectedOrder.carrier?.fio || '—'}</p>
                         </div>
                         <div className='flex gap-6 items-center text-[18px] border-b-2  border-[#E6E6E6] px-6 py-2 '>
                             <p className='text-gray-600'>Раб. телефон</p>
-                            <p className='font-bold text-[#1E293B]'>{selectedOrder.carrier?.phone}</p>
+                            <p className='font-bold text-[#1E293B]'>{selectedOrder.carrier?.phone || '—'}</p>
                         </div>
 
                         <div className='flex gap-6 items-center text-[18px] border-b-2  border-[#E6E6E6] px-6 py-2 '>
                             <p className='text-gray-600'>Почта</p>
-                            <p className='font-bold text-[#1E293B]'>{selectedOrder?.carrier?.email}</p>
+                            <p className='font-bold text-[#1E293B]'>{selectedOrder?.carrier?.email || '—'}</p>
                         </div>
                         <div className='flex gap-6 items-center text-[18px] border-b-2  border-[#E6E6E6] px-6 py-2 '>
                             <p className='text-gray-600'>Заказчик</p>
@@ -261,7 +262,7 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                     <h3 className='font-medium bg-[#E6E6E6] px-6 py-2 text-[18px]'>Атрибуты договора:</h3>
                     <div className='flex gap-6 items-center text-[18px] px-6 py-2 '>
                         {/* @ts-ignore */}
-                        <p className='font-bold text-[#1E293B]'>Заказ № {selectedOrder.id}</p>
+                        <p className='font-bold text-[#1E293B]'>Заказ № {selectedOrder.id || '—'}</p>
                     </div>
 
                     <div className='space-y-2 px-6'>
