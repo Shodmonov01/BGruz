@@ -1,6 +1,7 @@
 import type React from 'react'
 import { DialogHeader } from '@/components/ui/dialog'
 import { Checkbox } from '@/components/ui/checkbox'
+import { useEffect, useState } from 'react'
 
 const statusTranslations = {
     new: 'Новый',
@@ -26,6 +27,65 @@ interface OrderHeaderProps {
 }
 
 export function OrderHeader({ formData, handleChange, setFormData }: OrderHeaderProps) {
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [_, setIsChecked] = useState(!!formData.docSubmissionDate)
+    // console.log('formData', formData)
+
+    useEffect(() => {
+        setIsChecked(!!formData.docSubmissionDate)
+    }, [formData.docSubmissionDate])
+
+    const handleDocSubmissionChange = async (checked: boolean) => {
+        if (isSubmitting) return
+
+        setIsChecked(checked)
+
+        try {
+            setIsSubmitting(true)
+            console.log('Submitting document status change:', checked)
+
+            const token = localStorage.getItem('authToken')
+            if (!token) {
+                console.error('Не найден токен авторизации')
+                setIsChecked(!checked)
+                return
+            }
+
+            const response = await fetch(
+                `https://portal.bgruz.com/api/v1/orders/${formData.id}/doc_submission_status?doc_submitted=${checked}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            )
+
+            if (!response.ok) {
+                throw new Error(`Failed to update document submission status: ${response.status}`)
+            }
+
+            const responseData = await response.json()
+            // console.log('responseData', responseData)
+
+            setFormData(prev => {
+                const { responseText } = responseData || {}
+                const newState = {
+                    ...prev,
+                    docSubmissionDate: responseText?.docSubmissionDate ?? prev.docSubmissionDate,
+                    docSubmissionUser: responseText?.fio ?? prev.docSubmissionUser
+                }
+                console.log('Updated form data:', newState)
+                return newState
+            })
+        } catch (error) {
+            console.error('Error updating document submission:', error)
+            setIsChecked(!checked)
+        } finally {
+            setIsSubmitting(false)
+        }
+    }
     return (
         <>
             <DialogHeader>
@@ -82,13 +142,8 @@ export function OrderHeader({ formData, handleChange, setFormData }: OrderHeader
                     <p className='flex items-center gap-2'>
                         <Checkbox
                             checked={!!formData.docSubmissionDate}
-                            onChange={e => {
-                                setFormData(prev => ({
-                                    ...prev,
-                                    //@ts-ignore
-                                    docSubmissionDate: e.target.checked ? new Date().toISOString() : null
-                                }))
-                            }}
+                            disabled={isSubmitting}
+                            onCheckedChange={handleDocSubmissionChange}
                         />
                         {formData.docSubmissionDate
                             ? new Date(formData.docSubmissionDate).toLocaleString('ru-RU')
@@ -97,7 +152,9 @@ export function OrderHeader({ formData, handleChange, setFormData }: OrderHeader
                 </div>
                 <div className='flex justify-between items-center gap-4 relative -left-14'>
                     <p className='font-bold'>Изменено</p>
-                    <p>{formData.docSubmissionUserId ? 'ID: ' + formData.docSubmissionUserId : 'Не изменено'}</p>
+                    <p>
+                        <p>{formData.docSubmissionUser ? formData.docSubmissionUser : 'Не изменено'}</p>
+                    </p>
                 </div>
             </div>
         </>
