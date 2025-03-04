@@ -75,7 +75,13 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                             field.onChange(mappedValue)
                                             setOperationType(mappedValue)
                                         }}
-                                        value={field.value === 'loading' ? 'Погрузка' : 'Выгрузка'}
+                                        value={
+                                            field.value
+                                                ? field.value === 'loading'
+                                                    ? 'Погрузка'
+                                                    : 'Выгрузка'
+                                                : undefined
+                                        }
                                         defaultValue={field.value}
                                         className='flex md:gap-6 ml-8 gap-12 md:ml-auto '
                                     >
@@ -115,7 +121,13 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                             field.onChange(mappedValue)
                                             setTransportType(value)
                                         }}
-                                        value={field.value === 'container' ? 'Контейнер' : 'Вагон'}
+                                        value={
+                                            field.value
+                                                ? field.value === 'container'
+                                                    ? 'Контейнер'
+                                                    : 'Вагон'
+                                                : undefined
+                                        }
                                         defaultValue={field.value}
                                         className='flex md:gap-6 gap-12  '
                                     >
@@ -154,7 +166,10 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                 disabled={isReadOnly}
                                 onValueChange={value => {
                                     field.onChange(Number(value))
-                                    handleClientChange(value)
+
+                                    /* @ts-ignore */
+
+                                    handleClientChange(value, 'client')
                                     setOpenClient(false)
                                 }}
                                 value={field.value?.toString()}
@@ -205,8 +220,11 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                     disabled={isReadOnly}
                                     onValueChange={value => {
                                         field.onChange(Number(value))
-                                        handleClientChange(value)
-                                        // setOpenClient(false)
+
+                                        /* @ts-ignore */
+
+                                        handleClientChange(value, 'recipientOrSender')
+                                        setOpenClient(false)
                                     }}
                                     value={field.value?.toString()}
                                     open={openRecipient}

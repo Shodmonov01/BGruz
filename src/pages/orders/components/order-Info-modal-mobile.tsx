@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { ChevronLeft, Download, MapPin } from 'lucide-react'
 import { IOrder } from '@/types'
 import React from 'react'
+import useNumberFormatter from '@/hooks/use-format-number'
 
 interface ShippingOrderDialogProps {
     open: boolean
@@ -12,7 +13,8 @@ interface ShippingOrderDialogProps {
 }
 
 export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleCloseModal }: ShippingOrderDialogProps) {
-    // console.log('selectedBid', selectedOrder)
+    console.log('selectedOrder', selectedOrder)
+    const { formatNumber } = useNumberFormatter()
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -21,7 +23,8 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                     <Button variant='ghost' size='icon' className='hover:bg-white/20' onClick={handleCloseModal}>
                         <ChevronLeft className='h-6 w-6' />
                     </Button>
-                    <h2 className='text-lg font-medium'>Заказ №{selectedOrder._id}</h2>
+                    {/* @ts-ignore */}
+                    <h2 className='text-lg font-medium'>Заказ №{selectedOrder.id}</h2>
                 </div>
 
                 <div className='overflow-y-auto flex-1'>
@@ -35,7 +38,8 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                         </div>
                         <div className='flex gap-6 items-center text-[18px]  px-6 py-2 '>
                             <p className='text-gray-600'>Автор статуса</p>
-                            <p className='font-bold text-[#1E293B]'>Сидоров С.К.</p>
+                            {/* @ts-ignore */}
+                            <p className='font-bold text-[#1E293B]'>{selectedOrder.statusUpdatedUser}</p>
                         </div>
                         <div className='flex gap-6 items-center text-[18px] bg-[#E6E6E6] px-6 py-2 '>
                             <p className='text-gray-600 '>Дата погрузки</p>
@@ -45,7 +49,9 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                         </div>
                         <div className='flex gap-6 items-center text-[18px]   px-6 py-2 '>
                             <p className='text-gray-600'>Срок доставки</p>
-                            <p className='font-bold text-[#1E293B]'>04.02.2025</p>
+                            <p className='font-bold text-[#1E293B]'>
+                                {new Date(selectedOrder?.buyBid.loadingDate).toLocaleDateString('ru-RU')}
+                            </p>
                         </div>
                     </div>
 
@@ -60,7 +66,9 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                         <div className='border-b-2 border-[#E6E6E6]  px-6 py-2'>
                             <p className='text-gray-600'>Получить контейнер:</p>
                             <p className='font-bold flex gap-1 items-center text-[18px] text-[#1E293B]'>
-                                <MapPin className='max-h-[20px] min-h-[20px]' />
+                                <div>
+                                    <MapPin className='max-h-[20px] min-h-[20px]' />
+                                </div>
                                 {selectedOrder.buyBid?.terminal1.address}
                             </p>
                         </div>
@@ -68,7 +76,9 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                             <p className='text-gray-600'>Адрес погрузки:</p>
                             <p className='font-bold text-[18px] flex gap-1 items-center text-[#1E293B]'>
                                 {' '}
-                                <MapPin />
+                                <div>
+                                    <MapPin className='max-h-[20px] min-h-[20px]' />
+                                </div>
                                 {selectedOrder?.buyBid?.warehouses[0]?.cityName},{' '}
                                 {selectedOrder?.buyBid?.warehouses[0]?.address || 'Адрес не указан'}
                             </p>
@@ -76,7 +86,10 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                         <div className='border-b-2 border-[#E6E6E6]  px-6 py-2'>
                             <p className='text-gray-600'>Сдать контейнер:</p>
                             <p className='font-bold flex gap-1 text-[18px] items-center text-[#1E293B]'>
-                                <MapPin /> {selectedOrder.buyBid?.terminal2?.address}
+                                <span>
+                                    <MapPin className='max-h-[20px] min-h-[20px]' />
+                                </span>
+                                {selectedOrder.buyBid?.terminal2?.address}
                             </p>
                         </div>
                     </div>
@@ -84,7 +97,7 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                     <div>
                         <div className='flex gap-6 items-center text-[18px]  px-6 py-2 '>
                             <p className='text-gray-600'>Время подачи</p>
-                            <p className='font-bold text-[#1E293B]'>16:00</p>
+                            <p className='font-bold text-[#1E293B]'>{selectedOrder.buyBid.loadingDate}</p>
                         </div>
                         <div className='flex gap-6 items-center text-[18px] bg-[#E6E6E6] px-6 py-2 '>
                             <p className='text-gray-600'>Транспорт</p>
@@ -105,26 +118,36 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                     <div className='mt-4 space-y-2'>
                         <div className='flex gap-6 items-center text-[18px] bg-[#E6E6E6] px-6 py-2 '>
                             <p className='text-gray-600'>Водитель</p>
-                            <p className='font-bold text-[#1E293B]'>{selectedOrder.driverUser?.fio}</p>
+                            <p className='font-bold text-[#1E293B]'>
+                                {selectedOrder.driverUser ? selectedOrder.driverUser?.fio : '-'}
+                            </p>
                         </div>
                         <div className='flex gap-6 items-center text-[18px] px-6 py-2 '>
                             <p className='text-gray-600'>E-mail</p>
-                            <p className='font-bold text-[#1E293B]'>ivanov@mail.ru</p>
+                            {/* @ts-ignore */}
+                            <p className='font-bold text-[#1E293B]'>
+                                {/* @ts-ignore */}
+                                {selectedOrder.driverUser ? selectedOrder.driverUser.email : '-'}
+                            </p>
                         </div>
                         <div className='flex gap-6 items-center text-[18px] px-6 py-2 '>
                             <p className='text-gray-600'>Телефон</p>
-                            <p className='font-bold text-[#1E293B]'>+7(999)123-45-67</p>
+                            {/* @ts-ignore */}
+                            <p className='font-bold text-[#1E293B]'>
+                                {/* @ts-ignore */}
+                                {selectedOrder.driverUser ? selectedOrder.driverUser.phone : '-'}
+                            </p>
                         </div>
                     </div>
 
                     <div className='space-y-4'>
                         <div className='flex gap-6 items-center text-[18px] bg-[#E6E6E6] px-6 py-2 '>
                             <p className='text-gray-600'>Груз</p>
-                            <p className='font-bold text-[#1E293B]'>Хрустальные вазы</p>
+                            <p className='font-bold text-[#1E293B]'>{selectedOrder.buyBid.cargoTitle}</p>
                         </div>
                         <div className='flex gap-6 items-center text-[18px] px-6 py-2 '>
                             <p className='text-gray-600'>Комментарии заказчика</p>
-                            <p className='font-bold text-[#1E293B]'>-</p>
+                            <p className='font-bold text-[#1E293B]'>{selectedOrder.buyBid.description}</p>
                         </div>
                         <div>
                             <h3 className='font-medium bg-[#E6E6E6] px-6 py-2 text-[18px]'>Финансы:</h3>
@@ -135,17 +158,33 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
 
                                 <div>Перевозка</div>
                                 <div className='text-center'>-</div>
-                                <div className='text-right font-bold text-[#1E293B]'>{selectedOrder.price}</div>
+                                <div className='text-right font-bold text-[#1E293B]'>
+                                    {formatNumber(String(selectedOrder.price))}
+                                </div>
                                 {selectedOrder?.extraServices?.map((service, index) => (
                                     <React.Fragment key={index}>
                                         <div>{service.name}</div>
-                                        <div className='text-center font-bold text-[#1E293B]'>{service.count}</div>
-                                        <div className='text-right font-bold text-[#1E293B]'>{service.totalPrice}</div>
+                                        <div className='text-center font-bold text-[#1E293B]'>
+                                            {formatNumber(String(service.count))}
+                                        </div>
+                                        <div className='text-right font-bold text-[#1E293B]'>
+                                            {formatNumber(String(service.totalPrice))}
+                                        </div>
                                     </React.Fragment>
                                 ))}
 
                                 <div className='col-span-2 font-bold text-[#1E293B]'>ИТОГО СУММА ЗАКАЗ</div>
-                                <div className='font-bold text-[#1E293B] text-right'>{selectedOrder.fullPrice}</div>
+                                <div className='font-bold text-[#1E293B] text-right'>
+                                    {formatNumber(String(selectedOrder.fullPrice))}
+                                </div>
+                                <div className='col-span-2 text-[#1E293B]'>Цена с НДС</div>
+                                <div className='font-bold text-[#1E293B] text-right'>
+                                    {formatNumber(Number(selectedOrder.priceNds))}
+                                </div>
+                                <div className='col-span-2 text-[#1E293B]'>Цена без НДС</div>
+                                <div className='font-bold text-[#1E293B] text-right'>
+                                    {formatNumber(String(selectedOrder.price))}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -201,14 +240,28 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
 
                     <h3 className='font-medium bg-[#E6E6E6] px-6 py-2 text-[18px]'>Атрибуты договора:</h3>
                     <div className='flex gap-6 items-center text-[18px] px-6 py-2 '>
-                        <p className='font-bold text-[#1E293B]'>Заказ №{selectedOrder._id}</p>
+                        {/* @ts-ignore */}
+                        <p className='font-bold text-[#1E293B]'>Заказ № {selectedOrder.id}</p>
                     </div>
 
                     <div className='space-y-2 px-6'>
-                        <Button className='w-full flex gap-2' variant='outline'>
+                        {/* {selectedOrder?.documentOrderItems?.length > 0 && ( */}
+                        <Button
+                            className='w-full flex gap-2'
+                            variant='outline'
+                            onClick={() => {
+                                const pdfUrl = selectedOrder?.documentOrderItems?.[0]?.uriPdfDownload
+                                if (pdfUrl) {
+                                    window.open(pdfUrl, '_blank')
+                                } else {
+                                    alert('PDF файл не найден')
+                                }
+                            }}
+                        >
                             <Download className='h-4 w-4' />
                             Скачать заказ (PDF)
                         </Button>
+                        {/* )} */}
                         <Button className='w-full' variant='outline' color='red'>
                             Отмена подачи
                         </Button>

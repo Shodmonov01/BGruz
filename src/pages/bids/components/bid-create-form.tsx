@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form'
 
@@ -103,6 +103,41 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
         }
     })
 
+    const resetForm = useCallback(() => {
+        formMethods.reset({
+            client: '',
+            loadingType: '',
+            transportType: '',
+            startDate: '',
+            endDate: '',
+            terminal1Id: null,
+            terminal1Name: '',
+            terminal1Address: '',
+            terminal2Id: null,
+            terminal2Name: '',
+            terminal2Address: '',
+            warehouseName: '',
+            warehouseAddress: '',
+            vehicleProfiles: '',
+            price: 0,
+            description: '',
+            requestPrice: false,
+            extraServices: [],
+            warehouses: [{ name: '', address: '' }],
+            //@ts-ignore
+            recipientOrSender: '',
+            vehicleCount: 1,
+            cargoTitle: ''
+        })
+        setOperationType('')
+        setTransportType('')
+        setIsClientSelected(false)
+    }, [formMethods])
+
+    useEffect(() => {
+        resetForm()
+    }, [resetForm])
+
     const {
         handleSubmit,
         setValue,
@@ -111,22 +146,24 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
     } = formMethods
     // const { handleSubmit, setValue } = formMethods
 
-    const handleClientChange = async (clientId: string) => {
-        setValue('client', clientId)
-        try {
-            const token = localStorage.getItem('authToken') || ''
-            const data = await fetchPrivateData<OrganizationData>(
-                `api/v1/organization/?organization_id=${clientId}`,
-                token
-            )
+    const handleClientChange = async (clientId: string, field: 'client' | 'recipientOrSender' | any) => {
+        setValue(field, clientId)
+        if (field === 'client') {
+            try {
+                const token = localStorage.getItem('authToken') || ''
+                const data = await fetchPrivateData<OrganizationData>(
+                    `api/v1/organization/?organization_id=${clientId}`,
+                    token
+                )
 
-            setTerminals(data.terminals || [])
-            setWarehouses(data.warehouses || [])
-            setVehicleProfiles(data.vehicleProfiles || [])
-            setExtraServices(data.extraServices || [])
-            setIsClientSelected(true)
-        } catch (error) {
-            console.error('Ошибка при загрузке данных организации:', error)
+                setTerminals(data.terminals || [])
+                setWarehouses(data.warehouses || [])
+                setVehicleProfiles(data.vehicleProfiles || [])
+                setExtraServices(data.extraServices || [])
+                setIsClientSelected(true)
+            } catch (error) {
+                console.error('Ошибка при загрузке данных организации:', error)
+            }
         }
     }
 
@@ -212,6 +249,7 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                             <BidDetails
                                 filteredClients={clients}
                                 vehicleProfiles={vehicleProfiles}
+                                /* @ts-ignore */
                                 handleClientChange={handleClientChange}
                                 setOperationType={setOperationType}
                                 setTransportType={setTransportType}
