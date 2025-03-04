@@ -193,7 +193,7 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                                     </React.Fragment>
                                 ))}
 
-                                <div className='col-span-2 font-bold text-[#1E293B]'>ИТОГО СУММА ЗАКАЗ</div>
+                                <div className='col-span-2 font-bold text-[#1E293B]'>ИТОГО СУММА ЗАКАЗA</div>
                                 <div className='font-bold text-[#1E293B] text-right'>
                                     {formatNumber(String(selectedOrder.fullPrice))}
                                 </div>
