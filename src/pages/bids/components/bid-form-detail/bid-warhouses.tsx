@@ -86,7 +86,10 @@ function Warehouses({ warehouses, isReadOnly }: { warehouses; isReadOnly?: boole
                                             <SelectValue placeholder='Выберите склад' />
                                         </SelectTrigger>
                                     </FormControl>
-                                    <SelectContent>
+                                    <SelectContent
+                                        onPointerDownOutside={e => e.preventDefault()}
+                                        onCloseAutoFocus={e => e.preventDefault()}
+                                    >
                                         <div className='p-2'>
                                             <Input
                                                 placeholder='Поиск склада...'

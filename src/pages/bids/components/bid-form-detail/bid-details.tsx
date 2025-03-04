@@ -224,9 +224,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                     disabled={isReadOnly}
                                     onValueChange={value => {
                                         field.onChange(Number(value))
-
-                                        /* @ts-ignore */
-
+                                        // @ts-expect-error надо посмотреть
                                         handleClientChange(value, 'recipientOrSender')
                                         setOpenClient(false)
                                     }}
@@ -252,6 +250,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                         ))}
                                     </SelectContent> */}
                                     <SelectContent
+                                        onPointerDownOutside={e => e.preventDefault()}
                                         onCloseAutoFocus={e => e.preventDefault()}
                                         position='popper'
                                         side='bottom'
@@ -263,7 +262,9 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                                 placeholder='Поиск...'
                                                 value={searchRecipient}
                                                 onChange={e => setSearchRecipient(e.target.value)}
-                                                onFocus={() => setOpenRecipient(true)}
+                                                onFocus={() => {
+                                                    setTimeout(() => setOpenClient(true), 100)
+                                                }}
                                                 onKeyDown={e => e.stopPropagation()}
                                             />
                                         </div>
