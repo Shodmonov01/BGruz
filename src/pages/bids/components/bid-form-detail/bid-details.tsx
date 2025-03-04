@@ -181,13 +181,14 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                         <SelectValue placeholder='Выберите клиента' />
                                     </SelectTrigger>
                                 </FormControl>
-                                <SelectContent >
+                                {/* <SelectContent onCloseAutoFocus={e => e.preventDefault()}> */}
+                                <SelectContent>
                                     <div className='p-2'>
                                         <Input
                                             placeholder='Поиск клиента...'
                                             value={searchClient}
                                             onChange={e => setSearchClient(e.target.value)}
-                                            onFocus={() => setOpenClient(true)}
+                                            // onFocus={() => setOpenClient(true)}
                                             onKeyDown={e => e.stopPropagation()}
                                         />
                                     </div>
