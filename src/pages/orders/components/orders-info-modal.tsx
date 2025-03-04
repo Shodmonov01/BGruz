@@ -35,7 +35,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
         setFormData(prev => ({ ...prev, [name]: value }))
     }
 
-    console.log('selectedBid', selectedBid)
+    // console.log('selectedBid', selectedBid)
 
     return (
         <Dialog open={isModalOpen} onOpenChange={handleCloseModal}>

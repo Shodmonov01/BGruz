@@ -13,7 +13,7 @@ interface ShippingOrderDialogProps {
 }
 
 export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleCloseModal }: ShippingOrderDialogProps) {
-    console.log('selectedOrder', selectedOrder)
+    // console.log('selectedOrder', selectedOrder)
     const { formatNumber } = useNumberFormatter()
 
     const statusTranslations = {

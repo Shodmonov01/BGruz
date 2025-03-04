@@ -258,6 +258,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                         loading: 'На погрузке',
                         unloading: 'На выгрузке',
                         delivered: 'Груз сдан',
+                        completed: 'Выполнен'
                     }
 
 

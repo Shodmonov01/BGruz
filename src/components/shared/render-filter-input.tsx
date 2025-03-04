@@ -191,7 +191,7 @@ export function FilterInput({ column, handleFilterChange }) {
         const currentValue = column.getFilterValue()
         if (!currentValue) {
             const defaultValue = getDefaultValue(column.id)
-            console.log(`Setting default value for ${column.id}:`, defaultValue)
+            // console.log(`Setting default value for ${column.id}:`, defaultValue)
             if (defaultValue.length > 0) {
                 column.setFilterValue(defaultValue)
                 handleFilterChange(column.id, defaultValue)
