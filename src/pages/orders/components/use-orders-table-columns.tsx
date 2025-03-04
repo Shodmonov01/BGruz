@@ -46,33 +46,33 @@ interface Bid {
         filingTime: string
         customer?: { organizationName: string }
         author?: { fio: string }
+        client: { organizationName: string }
     }
     saleBid?: {
         author?: { fio: string }
     }
     driverUser?: {
-        fio: string;
-    };
-    assignedVehicle?: {
-        docModel: string;
-        plateNum: string
-    };
-    assignedTrailer?: {
-        docModel?: string;
-        plateNum: string
-    };
-    statusUpdatedUser?: {
-        username: string;
         fio: string
-    };
+    }
+    assignedVehicle?: {
+        docModel: string
+        plateNum: string
+    }
+    assignedTrailer?: {
+        docModel?: string
+        plateNum: string
+    }
+    statusUpdatedUser?: {
+        username: string
+        fio: string
+    }
     docSubmissionUser?: {
-        fio: string;
-    };
+        fio: string
+    }
     docSubmissionDate?: string
-    
-    [key: string]: unknown;
-}
 
+    [key: string]: unknown
+}
 
 interface ColumnsProps {
     isMobile?: boolean
@@ -181,7 +181,6 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                         : '—',
                 filterType: 'dateRange',
                 isMobile: true
-
             },
 
             // {
@@ -261,7 +260,6 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                         completed: 'Выполнен'
                     }
 
-
                     const status = row.original.status
 
                     return status ? (
@@ -291,7 +289,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                             'headingToLoading',
                             'loading',
                             'unloading',
-                            'delivered',
+                            'delivered'
                         ],
                         label: 'Все (кроме отм.)'
                     },
@@ -314,7 +312,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                         ],
                         label: 'Все'
                     },
-   
+
                     { value: 'new', label: 'Новый' },
                     { value: 'canceledByCarrierWithPenalty', label: 'Отменяется перевозчиком (половина ГО)' },
                     { value: 'canceledByCustomerWithPenalty', label: 'Отменяется заказчиком (половина ГО)' },
@@ -328,8 +326,8 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                     { value: 'headingToLoading', label: 'Еду на погрузку' },
                     { value: 'loading', label: 'На погрузке' },
                     { value: 'unloading', label: 'На выгрузке' },
-                    { value: 'delivered', label: 'Груз сдан' },
-                                ]
+                    { value: 'delivered', label: 'Груз сдан' }
+                ]
             },
             // {
             //     accessorKey: 'docSubmissionDate',
@@ -346,8 +344,10 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 accessorKey: 'docSubmissionDate',
                 header: 'Док сданы',
                 size: 100,
-              accessorFn: (row: Bid) =>
-                    row.docSubmissionDate ? format(new Date(row.docSubmissionDate), 'dd.MM.yyyy HH:mm', { locale: ru }) : '—',
+                accessorFn: (row: Bid) =>
+                    row.docSubmissionDate
+                        ? format(new Date(row.docSubmissionDate), 'dd.MM.yyyy HH:mm', { locale: ru })
+                        : '—',
                 isShortVersion: false,
                 searchable: true,
                 filterType: 'exact',
@@ -456,8 +456,9 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
             },
 
             {
-                accessorKey: 'customer.fio',
+                accessorKey: 'buyBid.client.fio',
                 header: 'Клиент',
+                accessorFn: (row: Bid) => row.buyBid?.client?.organizationName ?? '—',
                 size: 120,
                 searchable: true,
                 isShortVersion: true,
@@ -505,7 +506,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                     row.assignedVehicle
                         ? `${row.assignedVehicle.docModel ?? '—'} | ${row.assignedVehicle.plateNum ?? '—'}`
                         : '—',
-                filterType: 'fuzzy',
+                filterType: 'fuzzy'
             },
             {
                 accessorKey: 'trailerPlateNumberAndModel',
@@ -528,13 +529,13 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
             //     header: 'Прицеп',
             //     size: 150,
             //     searchable: true,
-            //     accessorFn: (row: Bid) => 
+            //     accessorFn: (row: Bid) =>
             //         [row.assignedTrailer?.docModel, row.assignedTrailer?.plateNum]
             //             .filter(Boolean)
             //             .join(' | ') || '—',
             //     filterType: 'fuzzy'
             // },
-            
+
             {
                 accessorKey: 'docSubmissionUser',
                 header: 'Бухгалтер',

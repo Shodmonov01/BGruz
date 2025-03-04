@@ -205,6 +205,21 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                 extraServices: data.extraServices || [],
                 description: data.description
             }
+            // if (!hideTerminal1) {
+            //     payload.terminal1 = {
+            //         cityId: data.terminal1Id,
+            //         cityName: data.terminal1Name,
+            //         address: data.terminal1Address
+            //     }
+            // }
+
+            // if (!hideTerminal2) {
+            //     payload.terminal2 = {
+            //         cityId: data.terminal2Id,
+            //         cityName: data.terminal2Name,
+            //         address: data.terminal2Address
+            //     }
+            // }
             console.log('Отправка данных:', payload)
             const token = localStorage.getItem('authToken')
             if (!token) {
