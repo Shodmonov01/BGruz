@@ -181,7 +181,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                         <SelectValue placeholder='Выберите клиента' />
                                     </SelectTrigger>
                                 </FormControl>
-                                <SelectContent onCloseAutoFocus={e => e.preventDefault()}>
+                                <SelectContent >
                                     <div className='p-2'>
                                         <Input
                                             placeholder='Поиск клиента...'
