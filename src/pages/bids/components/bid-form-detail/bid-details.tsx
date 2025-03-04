@@ -263,7 +263,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                                 value={searchRecipient}
                                                 onChange={e => setSearchRecipient(e.target.value)}
                                                 onFocus={() => {
-                                                    setTimeout(() => setOpenClient(true), 100)
+                                                    setTimeout(() => setOpenRecipient(true), 100)
                                                 }}
                                                 onKeyDown={e => e.stopPropagation()}
                                             />

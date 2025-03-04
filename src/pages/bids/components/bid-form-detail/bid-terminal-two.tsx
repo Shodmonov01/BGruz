@@ -115,13 +115,19 @@ function TerminalTwo({ terminals, isReadOnly }: { terminals; isReadOnly?: boolea
                                         {terminals.find(t => t.id === field.value)?.name || ''}
                                     </SelectValue>
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent
+                                    onPointerDownOutside={e => e.preventDefault()}
+                                    onCloseAutoFocus={e => e.preventDefault()}
+                                >
                                     <div className='p-2'>
                                         <Input
                                             placeholder='Поиск терминала...'
                                             value={search}
                                             onChange={e => setSearch(e.target.value)}
-                                            onFocus={() => setIsOpen(true)}
+                                            // onFocus={() => setIsOpen(true)}
+                                            onFocus={() => {
+                                                setTimeout(() => setIsOpen(true), 100)
+                                            }}
                                             onKeyDown={e => e.stopPropagation()}
                                             className='w-full border rounded-md'
                                         />

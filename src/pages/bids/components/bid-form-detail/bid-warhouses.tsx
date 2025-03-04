@@ -96,7 +96,11 @@ function Warehouses({ warehouses, isReadOnly }: { warehouses; isReadOnly?: boole
                                                 value={search}
                                                 onChange={e => setSearch(e.target.value)}
                                                 onKeyDown={e => e.stopPropagation()}
-                                                onFocus={() => setIsOpen(prev => ({ ...prev, [index]: true }))}
+                                                // onFocus={() => setIsOpen(prev => ({ ...prev, [index]: true }))}
+                                                onFocus={() => {
+                                                    // Убедимся, что выпадающий список остается открытым
+                                                    setTimeout(() => setIsOpen(prev => ({ ...prev, [index]: true })), 100)
+                                                }}
                                                 className='w-full px-3 py-2 border rounded-md'
                                             />
                                         </div>

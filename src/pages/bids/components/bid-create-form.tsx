@@ -270,10 +270,12 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                             <BidDescribe extraServices={extraServices} />
                         </div>
                     </div>
-                    {errorMessage && <div className='text-red-500 text-center py-2'>{errorMessage}</div>}
-                    {Object.keys(errors).length > 0 && (
-                        <div className='text-red-500 text-center py-2'>Заполните все обязательные поля</div>
-                    )}
+                    <div>
+                        {Object.keys(errors).length > 0 && (
+                            <div className='text-red-500 text-center py-2'>Заполните все обязательные поля</div>
+                        )}
+                    </div>
+                    <div>{errorMessage && <div className='text-red-500 text-center py-2'>{errorMessage}</div>}</div>
                     <div className='flex flex-col-reverse md:grid md:grid-cols-2 gap-4'>
                         <Button type='button' variant='secondary' size='lg' onClick={modalClose} disabled={isLoading}>
                             Отмена
