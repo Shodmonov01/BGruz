@@ -121,13 +121,14 @@ export function OrderHeader({ formData, handleChange, setFormData }: OrderHeader
                 <div className='flex justify-between px-10'>
                     <div className='flex justify-between items-center gap-4'>
                         <p className='font-bold'>Статус заказа:</p>
-                        <input
+                        {/* <input
                             type='text'
                             name='status'
                             value={statusTranslations[formData.status] || formData.status || '—'}
                             onChange={handleChange}
                             className='border border-gray-300 rounded px-2 py-1'
-                        />
+                        /> */}
+                        <p>{statusTranslations[formData.status] || formData.status || '—'}</p>
                     </div>
                     <div className='flex justify-between items-center gap-4'>
                         <p className='font-bold'>Изменено</p>

@@ -12,7 +12,7 @@ import TerminalOne from './bid-form-detail/bid-terminal-one'
 import Warehouses from './bid-form-detail/bid-warhouses'
 import TerminalTwo from './bid-form-detail/bid-terminal-two'
 import BidDescribe from './bid-form-detail/bid-describe'
-import { Loader2 } from 'lucide-react'
+import { ChevronLeft, Loader2 } from 'lucide-react'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Modal } from '@/components/ui/modal'
 
@@ -414,6 +414,9 @@ const BidsInfoModal = ({
                             className='hidden md:block space-y-2 py-0 md:py-4 text-center text-[#fff]'
                         />
                         <div className='flex md:hidden items-center gap-2 bg-primary text-white p-4'>
+                            <Button variant='ghost' size='icon' className='hover:bg-white/20' onClick={handleCloseModal}>
+                                <ChevronLeft className='h-6 w-6' />
+                            </Button>
                             <h2 className='text-lg font-medium'>
                                 {isEdit ? 'Редактировать заявку' : 'Создать новую заявку'}
                             </h2>

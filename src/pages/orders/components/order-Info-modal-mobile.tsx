@@ -41,7 +41,7 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                         <ChevronLeft className='h-6 w-6' />
                     </Button>
                     {/* @ts-ignore */}
-                    <h2 className='text-lg font-medium'>Заказ №{selectedOrder?.id || '—'}</h2>
+                    <h2 className='text-lg font-medium'>Заказ № {selectedOrder?.id || '—'}</h2>
                 </div>
 
                 <div className='overflow-y-auto flex-1'>
@@ -77,9 +77,9 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
 
                     <div className='flex overflow-auto gap-6 items-center text-[18px] bg-[#E6E6E6] px-6 py-2 '>
                         <p className='text-gray-600'>Маршрут</p>
-                        <p className='font-bold text-[#1E293B]'>
+                        {/* <p className='font-bold text-[#1E293B]'>
                             {selectedOrder.buyBid?.terminal1?.cityName} - {selectedOrder.buyBid?.terminal2?.cityName}
-                        </p>
+                        </p> */}
                     </div>
 
                     <div className='mt-4  space-y-2'>
@@ -171,7 +171,7 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                         </div>
                         <div>
                             <h3 className='font-medium bg-[#E6E6E6] px-6 py-2 text-[18px]'>Финансы:</h3>
-                            <h3 className='font-medium px-6 py-2 text-[18px]'>Все цены указаны без НДС</h3>
+                            <h3 className='font-medium px-6 py-2 text-[12px]'>Все цены указаны без НДС</h3>
                             <div className='grid grid-cols-3 gap-2 px-6 py-2 text-[18px]'>
                                 <div className='font-bold text-[#1E293B] text-left mb-8'>Услуга</div>
                                 <div className='font-bold text-[#1E293B] text-center mb-8'>Кол-во</div>
@@ -182,7 +182,7 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                                 <div className='text-right font-bold text-[#1E293B]'>
                                     {formatNumber(String(selectedOrder.price || '—'))}
                                 </div>
-                                {selectedOrder?.extraServices?.map((service, index) => (
+                                {/* {selectedOrder?.extraServices?.map((service, index) => (
                                     <React.Fragment key={index}>
                                         <div>{service.name}</div>
                                         <div className='text-center font-bold text-[#1E293B]'>
@@ -190,6 +190,18 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                                         </div>
                                         <div className='text-right font-bold text-[#1E293B]'>
                                             {formatNumber(String(service.totalPrice || '—'))}
+                                        </div>
+                                    </React.Fragment>
+                                ))} */}
+                                {selectedOrder?.extraServices?.map(service => (
+                                    // @ts-expect-error надо что то сделать
+                                    <React.Fragment key={service.id || `${service.name}-${index}`}>
+                                        <div>{service.name}</div>
+                                        <div className='text-center font-bold text-[#1E293B]'>
+                                            {formatNumber(String(service.count ?? '—'))}
+                                        </div>
+                                        <div className='text-right font-bold text-[#1E293B]'>
+                                            {formatNumber(String(service.totalPrice ?? '—'))}
                                         </div>
                                     </React.Fragment>
                                 ))}

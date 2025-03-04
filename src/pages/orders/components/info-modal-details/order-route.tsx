@@ -106,7 +106,7 @@ export function OrderRoute({ formData }: OrderRouteProps) {
                 </div>
             </div>
 
-            <div className='bg-cyan-500 flex py-2 px-6 text-white justify-between'>
+            <div className='bg-cyan-500 flex py-2 px-6 text-white justify-center items-center gap-6'>
                 <p className='text-[20px] font-bold'>Транспорт</p>
                 <p>{formData.buyBid.vehicleProfile.name}</p>
             </div>
