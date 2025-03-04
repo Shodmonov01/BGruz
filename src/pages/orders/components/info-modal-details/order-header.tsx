@@ -1,5 +1,6 @@
 import type React from 'react'
 import { DialogHeader } from '@/components/ui/dialog'
+import { Checkbox } from '@/components/ui/checkbox'
 
 const statusTranslations = {
     new: 'Новый',
@@ -21,9 +22,10 @@ const statusTranslations = {
 interface OrderHeaderProps {
     formData: any
     handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+    setFormData: any
 }
 
-export function OrderHeader({ formData, handleChange }: OrderHeaderProps) {
+export function OrderHeader({ formData, handleChange, setFormData }: OrderHeaderProps) {
     return (
         <>
             <DialogHeader>
@@ -71,6 +73,31 @@ export function OrderHeader({ formData, handleChange }: OrderHeaderProps) {
                         <p className='font-bold'>Изменено</p>
                         <p>{new Date(formData.statusUpdated).toLocaleString('ru-RU')}</p>
                     </div>
+                </div>
+            </div>
+
+            <div className='flex justify-between items-center px-10'>
+                <div className='flex justify-between items-center gap-4'>
+                    <p className='font-bold'>Документы сданы:</p>
+                    <p className='flex items-center gap-2'>
+                        <Checkbox
+                            checked={!!formData.docSubmissionDate}
+                            onChange={e => {
+                                setFormData(prev => ({
+                                    ...prev,
+                                    //@ts-ignore
+                                    docSubmissionDate: e.target.checked ? new Date().toISOString() : null
+                                }))
+                            }}
+                        />
+                        {formData.docSubmissionDate
+                            ? new Date(formData.docSubmissionDate).toLocaleString('ru-RU')
+                            : 'Не сданы'}
+                    </p>
+                </div>
+                <div className='flex justify-between items-center gap-4 relative -left-14'>
+                    <p className='font-bold'>Изменено</p>
+                    <p>{formData.docSubmissionUserId ? 'ID: ' + formData.docSubmissionUserId : 'Не изменено'}</p>
                 </div>
             </div>
         </>

@@ -16,6 +16,23 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
     console.log('selectedOrder', selectedOrder)
     const { formatNumber } = useNumberFormatter()
 
+    const statusTranslations = {
+        new: 'Новый',
+        canceledByCarrierWithPenalty: 'Отменяется перевозчиком (половина ГО)',
+        canceledByCustomerWithPenalty: 'Отменяется заказчиком (половина ГО)',
+        canceledByCarrier: 'Отменяется перевозчиком',
+        canceledByCustomer: 'Отменяется заказчиком',
+        failed: 'Сорван',
+        failing: 'Срывается',
+        completed: 'Выполнен',
+        inTransit: 'Машина в пути',
+        canceled: 'Отменен',
+        headingToLoading: 'Еду на погрузку',
+        loading: 'На погрузке',
+        unloading: 'На выгрузке',
+        delivered: 'Груз сдан'
+    }
+
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className='max-w-full h-full p-0 gap-0'>
@@ -34,7 +51,10 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                         </div>
                         <div className='flex gap-6 items-center text-[18px] bg-[#E6E6E6] px-6 py-2 '>
                             <p className='text-gray-600'>Статус заказа</p>
-                            <p className='font-bold text-[#1E293B]'>{selectedOrder.status}</p>
+                            <p className='font-bold text-[#1E293B]'>
+                                {/* @ts-ignore */}
+                                {statusTranslations[selectedOrder?.status] || selectedOrder.status || '—'}
+                            </p>
                         </div>
                         <div className='flex gap-6 items-center text-[18px]  px-6 py-2 '>
                             <p className='text-gray-600'>Автор статуса</p>
