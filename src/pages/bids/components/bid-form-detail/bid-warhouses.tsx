@@ -87,13 +87,13 @@ function Warehouses({ warehouses, isReadOnly }: { warehouses; isReadOnly?: boole
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent
-                                        onPointerDown={e => e.preventDefault()}
-                                        onPointerDownOutside={e => e.preventDefault()}
-                                        onCloseAutoFocus={e => e.preventDefault()}
+                                        // onPointerDown={e => e.preventDefault()}
+                                        // onPointerDownOutside={e => e.preventDefault()}
+                                        // onCloseAutoFocus={e => e.preventDefault()}
                                     >
                                         <div className='p-2'>
                                             <Input
-                                                autoFocus
+                                                // autoFocus
                                                 placeholder='Поиск склада...'
                                                 value={search}
                                                 onChange={e => setSearch(e.target.value)}
