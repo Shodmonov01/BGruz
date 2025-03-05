@@ -87,11 +87,13 @@ function Warehouses({ warehouses, isReadOnly }: { warehouses; isReadOnly?: boole
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent
+                                        onPointerDown={e => e.preventDefault()}
                                         onPointerDownOutside={e => e.preventDefault()}
                                         onCloseAutoFocus={e => e.preventDefault()}
                                     >
                                         <div className='p-2'>
                                             <Input
+                                                autoFocus
                                                 placeholder='Поиск склада...'
                                                 value={search}
                                                 onChange={e => setSearch(e.target.value)}
@@ -99,7 +101,16 @@ function Warehouses({ warehouses, isReadOnly }: { warehouses; isReadOnly?: boole
                                                 // onFocus={() => setIsOpen(prev => ({ ...prev, [index]: true }))}
                                                 onFocus={() => {
                                                     // Убедимся, что выпадающий список остается открытым
-                                                    setTimeout(() => setIsOpen(prev => ({ ...prev, [index]: true })), 100)
+                                                    setTimeout(
+                                                        () => setIsOpen(prev => ({ ...prev, [index]: true })),
+                                                        300
+                                                    )
+                                                }}
+                                                onBlur={() => {
+                                                    setTimeout(
+                                                        () => setIsOpen(prev => ({ ...prev, [index]: true })),
+                                                        200
+                                                    ) // Добавьте задержку для onBlur
                                                 }}
                                                 className='w-full px-3 py-2 border rounded-md'
                                             />

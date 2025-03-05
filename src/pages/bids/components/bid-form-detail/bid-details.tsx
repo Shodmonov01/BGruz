@@ -180,16 +180,21 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent
+                                    onPointerDown={e => e.preventDefault()}
                                     onPointerDownOutside={e => e.preventDefault()}
                                     onCloseAutoFocus={e => e.preventDefault()}
                                 >
                                     <div className='p-2'>
                                         <Input
+                                            autoFocus
                                             placeholder='Поиск клиента...'
                                             value={searchClient}
                                             onChange={e => setSearchClient(e.target.value)}
                                             onFocus={() => {
-                                                setTimeout(() => setOpenClient(true), 100)
+                                                setTimeout(() => setOpenClient(true), 300)
+                                            }}
+                                            onBlur={() => {
+                                                setTimeout(() => setOpenClient(false), 200) // Добавьте задержку для onBlur
                                             }}
                                             onKeyDown={e => e.stopPropagation()}
                                         />
@@ -250,6 +255,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                         ))}
                                     </SelectContent> */}
                                     <SelectContent
+                                        onPointerDown={e => e.preventDefault()}
                                         onPointerDownOutside={e => e.preventDefault()}
                                         onCloseAutoFocus={e => e.preventDefault()}
                                         position='popper'
@@ -259,11 +265,15 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                     >
                                         <div className='p-2'>
                                             <Input
+                                                autoFocus
                                                 placeholder='Поиск...'
                                                 value={searchRecipient}
                                                 onChange={e => setSearchRecipient(e.target.value)}
                                                 onFocus={() => {
-                                                    setTimeout(() => setOpenRecipient(true), 100)
+                                                    setTimeout(() => setOpenRecipient(true), 300)
+                                                }}
+                                                onBlur={() => {
+                                                    setTimeout(() => setOpenRecipient(false), 200) // Добавьте задержку для onBlur
                                                 }}
                                                 onKeyDown={e => e.stopPropagation()}
                                             />

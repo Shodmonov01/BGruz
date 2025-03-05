@@ -2,12 +2,16 @@ import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
+import { format } from 'date-fns'
+import { ru } from 'date-fns/locale'
 
 interface OrderRouteProps {
     formData: any
 }
 
 export function OrderRoute({ formData }: OrderRouteProps) {
+    console.log('loadingTime:', formData.buyBid?.loadingTime)
+
     return (
         <>
             <div className='bg-cyan-500 text-[20px] flex py-2 px-6 text-white justify-between'>
@@ -50,9 +54,18 @@ export function OrderRoute({ formData }: OrderRouteProps) {
             </div>
 
             <div className='flex justify-between items-center px-10'>
-                <div className='flex justify-between items-center gap-4'>
+                <div className='flex justify-between items-center gap-16'>
                     <p className='font-bold text-[20px]'>Время подачи</p>
-                    <p>{formData.loadingDate}</p>
+                    <p>
+                        {formData.buyBid?.loadingTime
+                            ? (() => {
+                                  const [hours, minutes] = formData.buyBid.loadingTime.split(':').map(Number)
+                                  const date = new Date()
+                                  date.setHours(hours, minutes, 0, 0)
+                                  return format(date, 'HH.mm', { locale: ru })
+                              })()
+                            : '—'}
+                    </p>
                 </div>
                 <div className='flex justify-between items-center gap-4'>
                     <p className='font-bold text-[20px]'>Профиль ТС</p>
@@ -84,12 +97,12 @@ export function OrderRoute({ formData }: OrderRouteProps) {
                     </div>
                     <div>
                         <Input value={formData.buyBid.warehouses[0].address || ''} className='mt-1' readOnly />
-                        <div className='flex justify-between items-center text-[#A7A7A7]'>
+                        {/* <div className='flex justify-between items-center text-[#A7A7A7]'>
                             <p>Иванов Иван Иваныч</p>
                             <a className='underline' href={`tel:+9991234536`}>
                                 + (999) 123-45-36
                             </a>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>
