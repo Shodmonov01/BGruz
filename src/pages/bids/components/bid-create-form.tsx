@@ -174,10 +174,10 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
             const payload = {
                 cargoType: data.transportType,
                 loadingMode: data.loadingType,
-                clientId: Number(data.client),
+                clientId: Number(data.recipientOrSender),
                 startDate: getValues('startDate'),
                 slideDayTotal: 0,
-                customerId: Number(data.recipientOrSender),
+                customerId: Number(data.client),
                 // terminal1: {
                 //     cityId: data.terminal1Id,
                 //     cityName: data.terminal1Name,
