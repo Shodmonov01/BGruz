@@ -100,7 +100,7 @@ const BidsInfoModal = ({
 
     const hideTerminal1 = operationType === 'loading' && transportType === 'Вагон'
     const hideTerminal2 = operationType === 'unloading' && transportType === 'Вагон'
-    // console.log('warehouses1111', warehouses)
+    console.log('selectedBid', selectedBid)
 
     const formMethods = useForm<BidFormData>({
         defaultValues: {
@@ -213,7 +213,8 @@ const BidsInfoModal = ({
                     'extraServices',
                     selectedBid.extraServices.map(es => ({
                         id: es.id,
-                        count: es.count
+                        count: es.count,
+                        vehicleProfileId: es.vehicleProfileId || 0
                     }))
                 )
             }
@@ -235,7 +236,7 @@ const BidsInfoModal = ({
                 `api/v1/organization/?organization_id=${clientId}`,
                 token
             )
-            // console.log('data.extraServices', data.extraServices)
+            console.log('data.extraServices', data.extraServices)
 
             setTerminals(data.terminals || [])
             setWarehouses(data.warehouses || [])
@@ -247,9 +248,13 @@ const BidsInfoModal = ({
         }
     }
 
+    // console.log('formMethods.getValues()', formMethods.getValues())
+
     const handleSave = async () => {
         const token = localStorage.getItem('authToken')
         const currentFormValues = formMethods.getValues()
+
+        // console.log('currentFormValues.vehicleProfiles', currentFormValues.vehicleProfiles)
 
         // Create updated fields object from form values
         const updatedFields = {
