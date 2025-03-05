@@ -180,24 +180,24 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent
-                                 onMouseDown={e => e.preventDefault()}
-                                 onCloseAutoFocus={e => e.preventDefault()}
+                                //  onMouseDown={e => e.preventDefault()}
+                                //  onCloseAutoFocus={e => e.preventDefault()}
                                 >
                                     <div className='p-2'>
                                         <Input
                                             placeholder='Поиск клиента...'
                                             value={searchClient}
                                             onChange={e => setSearchClient(e.target.value)}
-                                            // onFocus={() => {
-                                            //     setTimeout(() => setOpenClient(true), 300)
-                                            // }}
+                                            onFocus={() => {
+                                                setTimeout(() => setOpenClient(true), 300)
+                                            }}
                                             // onBlur={() => {
                                             //     setTimeout(() => setOpenClient(false), 200) // Добавьте задержку для onBlur
                                             // }}
-                                            onFocus={() => {
-                                                // Устанавливаем фокус без потери открытого состояния Select
-                                                setOpenClient(true)
-                                            }}
+                                            // onFocus={() => {
+                                            //     // Устанавливаем фокус без потери открытого состояния Select
+                                            //     setOpenClient(true)
+                                            // }}
                                             onKeyDown={e => e.stopPropagation()}
                                         />
                                     </div>
