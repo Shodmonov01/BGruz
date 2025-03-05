@@ -230,8 +230,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                     disabled={isReadOnly}
                                     onValueChange={value => {
                                         field.onChange(Number(value))
-                                        // @ts-expect-error надо посмотреть
-                                        handleClientChange(value, 'recipientOrSender')
+                                        // handleClientChange(value, 'recipientOrSender')
                                         // setOpenClient(false)
                                         setOpenRecipient(false)
                                     }}
@@ -294,12 +293,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                             </FormItem>
                         )}
                     />
-                    {/* <div className='mt-1'>
-                        <h3>Контактное лицо:</h3>
-                        <h3>
-                            Иванов Иван | <a href='tel:+79988516060'>+79988516060</a>
-                        </h3>
-                    </div> */}
+
                 </div>
             </div>
 
@@ -307,9 +301,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                 <p>Транспорт</p>
             </div>
             <div className='flex flex-col md:flex-row items-start md:items-center gap-2  my-6 md:px-0 px-6 md:py-0 py-3'>
-                {/* <h1 className='font-bold mr-20'>
-                    Профиль <br className='hidden md:block' /> Транспорта
-                </h1> */}
+       
 
                 <div className='flex gap-3 w-full items-center'>
                     <div className='w-2/3'>
@@ -381,37 +373,6 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                     </div>
                 </div>
             </div>
-            {/* <div className='block md:hidden md:px-0 px-4'>
-                <h1 className='font-bold mr-20'>Количество</h1>
-                <FormField
-                    control={control}
-                    name='vehicleCount'
-                    defaultValue={1}
-                    render={({ field }) => (
-                        <div className='flex items-center border rounded-lg overflow-hidden w-24 h-[37px] ml-0 md:ml-4 mt-4 md:mt-0'>
-                            <div className='flex-1 flex items-center justify-center text-xl font-semibold'>
-                                {field.value}
-                            </div>
-                            <div className='flex flex-col border-l'>
-                                <button
-                                    type='button'
-                                    className='w-6 h-5 flex items-center justify-center hover:bg-gray-200'
-                                    onClick={() => field.onChange(field.value + 1)}
-                                >
-                                    <Plus size={14} className='text-green-500' />
-                                </button>
-                                <button
-                                    type='button'
-                                    className='w-6 h-5 flex items-center justify-center hover:bg-gray-200'
-                                    onClick={() => field.onChange(Math.max(1, field.value - 1))}
-                                >
-                                    <Minus size={14} className='text-yellow-500' />
-                                </button>
-                            </div>
-                        </div>
-                    )}
-                />
-            </div> */}
         </div>
     )
 }
