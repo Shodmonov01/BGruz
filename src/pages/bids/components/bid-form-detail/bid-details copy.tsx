@@ -157,7 +157,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                 <FormField
                     disabled={isReadOnly}
                     control={control}
-                    name='recipientOrSender'
+                    name='client'
                     rules={{ required: 'Заполните это поле.' }}
                     render={({ field }) => (
                         <FormItem>
@@ -167,12 +167,12 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                 onValueChange={value => {
                                     field.onChange(Number(value))
                                     // @ts-expect-error надо посмотреть
-                                    handleClientChange(value, 'recipientOrSender')
+                                    handleClientChange(value, 'client')
                                     setOpenClient(false)
                                 }}
                                 value={field.value?.toString()}
-                                    open={openRecipient}
-                                    onOpenChange={setOpenRecipient}
+                                open={openClient}
+                                onOpenChange={setOpenClient}
                             >
                                 <FormControl>
                                     <SelectTrigger>
@@ -183,20 +183,19 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                 >
                                     <div className='p-2'>
                                         <Input
-                                             placeholder='Поиск...'
-                                             value={searchRecipient}
-                                             onChange={e => setSearchRecipient(e.target.value)}
-                                             // onFocus={() => {
-                                             //     // Устанавливаем фокус без потери открытого состояния Select
-                                             //     setOpenRecipient(true)
-                                             // }}
-                                             onFocus={() => {
-                                                 setTimeout(() => setOpenRecipient(true), 300)
-                                             }}
-                                             onBlur={() => {
-                                                 setTimeout(() => setOpenRecipient(false), 200) // Добавьте задержку для onBlur
-                                             }}
-                                             onKeyDown={e => e.stopPropagation()}
+                                            placeholder='Поиск клиента...'
+                                            value={searchClient}
+                                            onChange={e => setSearchClient(e.target.value)}
+                                            // onFocus={() => {
+                                            //     setTimeout(() => setOpenClient(true), 300)
+                                            // }}
+                                            onFocus={() => {
+                                                setTimeout(() => setOpenClient(true), 300)
+                                            }}
+                                            onBlur={() => {
+                                                setTimeout(() => setOpenClient(false), 200) // Добавьте задержку для onBlur
+                                            }}
+                                            onKeyDown={e => e.stopPropagation()}
                                             
                                             // onKeyDown={e => e.stopPropagation()}
                                         />
@@ -220,7 +219,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                     <FormField
                         disabled={isReadOnly}
                         control={control}
-                        name='client'
+                        name='recipientOrSender'
                         rules={{ required: 'Заполните это поле.' }}
                         render={({ field }) => (
                             <FormItem>
@@ -231,12 +230,13 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                     disabled={isReadOnly}
                                     onValueChange={value => {
                                         field.onChange(Number(value))
+                                        // handleClientChange(value, 'recipientOrSender')
                                         // setOpenClient(false)
                                         setOpenRecipient(false)
                                     }}
                                     value={field.value?.toString()}
-                                    open={openClient}
-                                    onOpenChange={setOpenClient}
+                                    open={openRecipient}
+                                    onOpenChange={setOpenRecipient}
                                 >
                                     <FormControl>
                                         <SelectTrigger>
@@ -265,19 +265,18 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                             <Input
                                                 placeholder='Поиск...'
                                                 value={searchRecipient}
-                                                onChange={e => setSearchClient(e.target.value)}
+                                                onChange={e => setSearchRecipient(e.target.value)}
                                                 // onFocus={() => {
-                                                //     setTimeout(() => setOpenClient(true), 300)
+                                                //     // Устанавливаем фокус без потери открытого состояния Select
+                                                //     setOpenRecipient(true)
                                                 // }}
                                                 onFocus={() => {
-                                                    setTimeout(() => setOpenClient(true), 300)
+                                                    setTimeout(() => setOpenRecipient(true), 300)
                                                 }}
                                                 onBlur={() => {
-                                                    setTimeout(() => setOpenClient(false), 200) // Добавьте задержку для onBlur
+                                                    setTimeout(() => setOpenRecipient(false), 200) // Добавьте задержку для onBlur
                                                 }}
                                                 onKeyDown={e => e.stopPropagation()}
-                                                
-                                                // onKeyDown={e => e.stopPropagation()}
                                             />
                                         </div>
                                         {filteredRecipientList.map(client => (

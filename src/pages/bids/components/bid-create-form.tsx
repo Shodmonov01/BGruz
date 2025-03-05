@@ -148,7 +148,7 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
 
     const handleClientChange = async (clientId: string, field: 'client' | 'recipientOrSender' | any) => {
         setValue(field, clientId)
-        if (field === 'client') {
+        if (field === 'recipientOrSender') {
             try {
                 const token = localStorage.getItem('authToken') || ''
                 const data = await fetchPrivateData<OrganizationData>(
@@ -174,10 +174,10 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
             const payload = {
                 cargoType: data.transportType,
                 loadingMode: data.loadingType,
-                clientId: Number(data.recipientOrSender),
+                clientId: Number(data.client),
                 startDate: getValues('startDate'),
                 slideDayTotal: 0,
-                customerId: Number(data.client),
+                customerId: Number(data.recipientOrSender),
                 // terminal1: {
                 //     cityId: data.terminal1Id,
                 //     cityName: data.terminal1Name,
