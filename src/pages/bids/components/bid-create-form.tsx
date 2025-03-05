@@ -178,16 +178,16 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                 startDate: getValues('startDate'),
                 slideDayTotal: 0,
                 customerId: Number(data.client),
-                terminal1: {
-                    cityId: data.terminal1Id,
-                    cityName: data.terminal1Name,
-                    address: data.terminal1Address
-                },
-                terminal2: {
-                    cityId: data.terminal2Id,
-                    cityName: data.terminal2Name,
-                    address: data.terminal2Address
-                },
+                // terminal1: {
+                //     cityId: data.terminal1Id,
+                //     cityName: data.terminal1Name,
+                //     address: data.terminal1Address
+                // },
+                // terminal2: {
+                //     cityId: data.terminal2Id,
+                //     cityName: data.terminal2Name,
+                //     address: data.terminal2Address
+                // },
 
                 warehouses: data.warehouses.map(warehouse => ({
                     cityId: warehouse.id,
@@ -205,21 +205,23 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                 extraServices: data.extraServices || [],
                 description: data.description
             }
-            // if (!hideTerminal1) {
-            //     payload.terminal1 = {
-            //         cityId: data.terminal1Id,
-            //         cityName: data.terminal1Name,
-            //         address: data.terminal1Address
-            //     }
-            // }
+            if (!hideTerminal1) {
+                // @ts-expect-error надо настроить
+                payload.terminal1 = {
+                    cityId: data.terminal1Id,
+                    cityName: data.terminal1Name,
+                    address: data.terminal1Address
+                }
+            }
 
-            // if (!hideTerminal2) {
-            //     payload.terminal2 = {
-            //         cityId: data.terminal2Id,
-            //         cityName: data.terminal2Name,
-            //         address: data.terminal2Address
-            //     }
-            // }
+            if (!hideTerminal2) {
+                // @ts-expect-error надо настроить
+                payload.terminal2 = {
+                    cityId: data.terminal2Id,
+                    cityName: data.terminal2Name,
+                    address: data.terminal2Address
+                }
+            }
             console.log('Отправка данных:', payload)
             const token = localStorage.getItem('authToken')
             if (!token) {
@@ -237,8 +239,8 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
 
             if (error.response?.status === 404) {
                 const detailMessage = error.response.data?.detail
-                if (detailMessage?.includes('Destination')) {
-                    setErrorMessage(detailMessage)
+                if (detailMessage?.includes('Destination') || detailMessage?.includes('Direction not found')) {
+                    setErrorMessage('Такое направление не существует')
                 }
             }
         } finally {

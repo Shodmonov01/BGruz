@@ -110,13 +110,13 @@ function TerminalOne({ terminals, isReadOnly }: { terminals; isReadOnly?: boolea
                                     </SelectValue>
                                 </SelectTrigger>
                                 <SelectContent
-                                    onPointerDown={e => e.preventDefault()}
-                                    onPointerDownOutside={e => e.preventDefault()}
-                                    onCloseAutoFocus={e => e.preventDefault()}
+                                    // onPointerDown={e => e.preventDefault()}
+                                    // onPointerDownOutside={e => e.preventDefault()}
+                                    // onCloseAutoFocus={e => e.preventDefault()}
                                 >
                                     <div className='p-2'>
                                         <Input
-                                            autoFocus
+                                            // autoFocus
                                             placeholder='Поиск терминала...'
                                             value={search}
                                             onChange={e => setSearch(e.target.value)}

@@ -116,13 +116,13 @@ function TerminalTwo({ terminals, isReadOnly }: { terminals; isReadOnly?: boolea
                                     </SelectValue>
                                 </SelectTrigger>
                                 <SelectContent
-                                    onPointerDown={e => e.preventDefault()}
-                                    onPointerDownOutside={e => e.preventDefault()}
-                                    onCloseAutoFocus={e => e.preventDefault()}
+                                    // onPointerDown={e => e.preventDefault()}
+                                    // onPointerDownOutside={e => e.preventDefault()}
+                                    // onCloseAutoFocus={e => e.preventDefault()}
                                 >
                                     <div className='p-2'>
                                         <Input
-                                            autoFocus
+                                            // autoFocus
                                             placeholder='Поиск терминала...'
                                             value={search}
                                             onChange={e => setSearch(e.target.value)}
@@ -131,9 +131,7 @@ function TerminalTwo({ terminals, isReadOnly }: { terminals; isReadOnly?: boolea
                                             onFocus={() => {
                                                 setTimeout(() => setIsOpen(true), 300)
                                             }}
-                                            onBlur={() => {
-                                                setTimeout(() => setIsOpen(false), 200) // Добавьте задержку для onBlur
-                                            }}
+                                        
                                             onKeyDown={e => e.stopPropagation()}
                                             className='w-full border rounded-md'
                                         />

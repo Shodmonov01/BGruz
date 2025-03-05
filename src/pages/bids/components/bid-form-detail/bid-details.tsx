@@ -180,24 +180,23 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent
-                                //  onMouseDown={e => e.preventDefault()}
-                                //  onCloseAutoFocus={e => e.preventDefault()}
                                 >
                                     <div className='p-2'>
                                         <Input
                                             placeholder='Поиск клиента...'
                                             value={searchClient}
                                             onChange={e => setSearchClient(e.target.value)}
+                                            // onFocus={() => {
+                                            //     setTimeout(() => setOpenClient(true), 300)
+                                            // }}
                                             onFocus={() => {
                                                 setTimeout(() => setOpenClient(true), 300)
                                             }}
-                                            // onBlur={() => {
-                                            //     setTimeout(() => setOpenClient(false), 200) // Добавьте задержку для onBlur
-                                            // }}
-                                            // onFocus={() => {
-                                            //     // Устанавливаем фокус без потери открытого состояния Select
-                                            //     setOpenClient(true)
-                                            // }}
+                                            onBlur={() => {
+                                                setTimeout(() => setOpenClient(false), 200) // Добавьте задержку для onBlur
+                                            }}
+                                            onKeyDown={e => e.stopPropagation()}
+                                            
                                             onKeyDown={e => e.stopPropagation()}
                                         />
                                     </div>
@@ -233,7 +232,8 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                         field.onChange(Number(value))
                                         // @ts-expect-error надо посмотреть
                                         handleClientChange(value, 'recipientOrSender')
-                                        setOpenClient(false)
+                                        // setOpenClient(false)
+                                        setOpenRecipient(false)
                                     }}
                                     value={field.value?.toString()}
                                     open={openRecipient}
@@ -257,8 +257,6 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                         ))}
                                     </SelectContent> */}
                                     <SelectContent
-                                       onMouseDown={e => e.preventDefault()} // Заменяем onPointerDownOutside на onMouseDown
-                                       onCloseAutoFocus={e => e.preventDefault()}
                                         position='popper'
                                         side='bottom'
                                         align='start'
@@ -266,14 +264,18 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                     >
                                         <div className='p-2'>
                                             <Input
-                                                
                                                 placeholder='Поиск...'
                                                 value={searchRecipient}
                                                 onChange={e => setSearchRecipient(e.target.value)}
-                                           
+                                                // onFocus={() => {
+                                                //     // Устанавливаем фокус без потери открытого состояния Select
+                                                //     setOpenRecipient(true)
+                                                // }}
                                                 onFocus={() => {
-                                                    // Устанавливаем фокус без потери открытого состояния Select
-                                                    setOpenRecipient(true)
+                                                    setTimeout(() => setOpenRecipient(true), 300)
+                                                }}
+                                                onBlur={() => {
+                                                    setTimeout(() => setOpenRecipient(false), 200) // Добавьте задержку для onBlur
                                                 }}
                                                 onKeyDown={e => e.stopPropagation()}
                                             />
