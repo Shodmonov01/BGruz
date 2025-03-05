@@ -185,7 +185,6 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                 >
                                     <div className='p-2'>
                                         <Input
-                                            autoFocus
                                             placeholder='Поиск клиента...'
                                             value={searchClient}
                                             onChange={e => setSearchClient(e.target.value)}
@@ -267,7 +266,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                     >
                                         <div className='p-2'>
                                             <Input
-                                                autoFocus
+                                                
                                                 placeholder='Поиск...'
                                                 value={searchRecipient}
                                                 onChange={e => setSearchRecipient(e.target.value)}
