@@ -197,7 +197,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                             }}
                                             onKeyDown={e => e.stopPropagation()}
                                             
-                                            onKeyDown={e => e.stopPropagation()}
+                                            // onKeyDown={e => e.stopPropagation()}
                                         />
                                     </div>
                                     {filteredClientList.map(client => (
