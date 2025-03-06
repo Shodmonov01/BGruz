@@ -226,6 +226,10 @@ const BidsInfoModal = ({
         }
     }, [selectedBid, reset, setValue])
 
+    console.log('selectedBid.terminal1:', selectedBid.terminal1)
+    console.log('selectedBid.terminal2:', selectedBid.terminal2)
+    console.log('selectedBid.warehouses:', selectedBid.warehouses)
+
     // console.log('terminals', terminals)
 
     const handleClientChange = async (clientId: string) => {
@@ -248,7 +252,7 @@ const BidsInfoModal = ({
         }
     }
 
-    // console.log('formMethods.getValues()', formMethods.getValues())
+    console.log('formMethods.getValues()', formMethods.getValues())
 
     const handleSave = async () => {
         const token = localStorage.getItem('authToken')

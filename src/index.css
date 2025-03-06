@@ -99,3 +99,6 @@
         white-space: normal !important;
     }
 }
+.relative.w-full.overflow-auto {
+    display: contents !important;
+}
