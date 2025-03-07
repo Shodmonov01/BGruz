@@ -140,9 +140,12 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
             <BidHeader setIsShortTable={setIsShortTable} isShortTable={isShortTable} />
 
             <ScrollArea>
-                <div className='h-[calc(98vh-200px)] overflow-auto !scrollbar-thin !scrollbar-thumb-gray-400 !scrollbar-track-gray-100'>
-                    <Table className='min-w-[1000px] border border-gray-300'>
-                        <TableHeader className='sticky '>
+                <div className='h-[calc(98vh-200px)] relative !scrollbar-thin !scrollbar-thumb-gray-400 !scrollbar-track-gray-100'>
+                    <Table
+                        style={{ overflow: 'visible', display: 'block' }}
+                        className='min-w-[1000px] border  border-gray-300 relative'
+                    >
+                        <TableHeader className='!sticky !top-0 z-50 '>
                             {table.getHeaderGroups().map(headerGroup => (
                                 <TableRow key={headerGroup.id}>
                                     {headerGroup.headers.map(header => (
@@ -169,7 +172,6 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
                                                     // @ts-expect-error я сам не знаю
                                                     header.column.columnDef.filterType !== 'range' ? (
                                                         <div className='text-center'>
-                                                            {/* {renderFilterInput(header.column, handleFilterChange, bids)} */}
                                                             <FilterInput
                                                                 column={header.column}
                                                                 handleFilterChange={handleFilterChange}
