@@ -145,6 +145,7 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
                         style={{ overflow: 'visible', display: 'block' }}
                         className='min-w-[1000px] border  border-gray-300 relative'
                     >
+                        
                         <TableHeader className='!sticky !top-0 z-50 '>
                             {table.getHeaderGroups().map(headerGroup => (
                                 <TableRow key={headerGroup.id}>

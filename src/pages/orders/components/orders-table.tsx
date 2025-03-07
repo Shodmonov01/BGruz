@@ -45,7 +45,7 @@ function OrdersTable({
     // setFilters,
     loadMore,
     hasMore,
-    loading,
+    loading
     // localFilters
 }: BidsTableProps) {
     const [selectedBid, setSelectedBid] = useState<Partial<Bid> | null>(null)
@@ -61,10 +61,8 @@ function OrdersTable({
 
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
         Object.entries(filters || {}).map(([id, value]) => ({ id, value }))
-    );
+    )
 
-  
-    
     const [sorting, setSorting] = useState<SortingState>([])
 
     const scrollRef = useRef<HTMLDivElement | null>(null)
@@ -157,9 +155,12 @@ function OrdersTable({
         <div>
             <OrdersHeader setIsShortTable={setIsShortTable} isShortTable={isShortTable} />
             <ScrollArea>
-                <div className='h-[calc(98vh-200px)] overflow-auto !scrollbar-thin !scrollbar-thumb-gray-400 !scrollbar-track-gray-100'>
-                    <Table className='min-w-[1000px] border border-gray-300'>
-                        <TableHeader className='sticky '>
+                <div className='h-[calc(98vh-200px)] relative !scrollbar-thin !scrollbar-thumb-gray-400 !scrollbar-track-gray-100'>
+                    <Table
+                        style={{ overflow: 'visible', display: 'block' }}
+                        className='min-w-[1000px] border  border-gray-300 relative'
+                    >
+                        <TableHeader className='!sticky !top-0 z-50 '>
                             {table.getHeaderGroups().map(headerGroup => (
                                 <TableRow key={headerGroup.id}>
                                     {headerGroup.headers.map(header => (
