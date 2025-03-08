@@ -182,21 +182,6 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 filterType: 'dateRange',
                 isMobile: true
             },
-
-            // {
-            //     accessorKey: 'loadingTime',
-            //     header: 'Время подачи',
-            //     size: 120,
-            //     minSize: 100,
-            //     maxSize: 500,
-            //     searchable: true,
-            //     accessorFn: row =>
-            //         row.buyBid?.loadingDate
-            //             ? format(new Date(row.buyBid.loadingDate), 'dd.MM.yyyy', { locale: ru })
-            //             : '—',
-            //     filterType: 'dateRange'
-            // },
-
             {
                 accessorKey: 'terminal1',
                 header: 'Терминал 1',
@@ -329,17 +314,6 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                     { value: 'delivered', label: 'Груз сдан' }
                 ]
             },
-            // {
-            //     accessorKey: 'docSubmissionDate',
-            //     header: 'Документы',
-            //     size: 100,
-            //   accessorFn: (row: Bid) =>
-            //         row.createdAt ? format(new Date(row.createdAt), 'dd.MM.yyyy HH:mm', { locale: ru }) : '—',
-            //     isShortVersion: false,
-            //     searchable: true,
-            //     filterType: 'exact',
-            //     isMobile: false
-            // },
             {
                 accessorKey: 'docSubmissionDate',
                 header: 'Док сданы',
@@ -488,15 +462,6 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 accessorFn: (row: Bid) => row.driverUser?.fio ?? '—',
                 filterType: 'fuzzy'
             },
-            // {
-            //     accessorKey: 'assignedVehicle.docModel',
-            //     header: 'Машина',
-            //     size: 150,
-            //     searchable: true,
-            //     accessorFn: (row: Bid) => row.assignedVehicle?.docModel ?? '—',
-            //     filterType: 'fuzzy'
-            // },
-
             {
                 accessorKey: 'vehiclePlateNumberAndModel',
                 header: 'Машина',
@@ -524,18 +489,6 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 accessorFn: (row: Bid) => row.statusUpdatedUser?.fio ?? '—',
                 filterType: 'fuzzy'
             },
-            // {
-            //     accessorKey: 'assignedTrailer.docModel',
-            //     header: 'Прицеп',
-            //     size: 150,
-            //     searchable: true,
-            //     accessorFn: (row: Bid) =>
-            //         [row.assignedTrailer?.docModel, row.assignedTrailer?.plateNum]
-            //             .filter(Boolean)
-            //             .join(' | ') || '—',
-            //     filterType: 'fuzzy'
-            // },
-
             {
                 accessorKey: 'docSubmissionUser',
                 header: 'Бухгалтер',

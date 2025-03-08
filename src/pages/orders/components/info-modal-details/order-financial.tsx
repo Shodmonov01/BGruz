@@ -12,7 +12,7 @@ interface OrderFinancialProps {
 }
 
 export function OrderFinancial({ formData, formatNumber, setFormData }: OrderFinancialProps) {
-    //@ts-ignore
+    //@ts-expect-error надо что то сделать
     const [loading, setLoading] = useState(false)
 
     const handleExtraServiceChange = async (service, index, newCount) => {

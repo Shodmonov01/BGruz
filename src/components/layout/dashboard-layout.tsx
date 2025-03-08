@@ -3,54 +3,15 @@ import Sidebar from '../shared/sidebar'
 import Header from '../shared/header'
 import MobileSidebar from '../shared/mobile-sidebar'
 import { MenuIcon } from 'lucide-react'
-// import { useSearchParams } from 'react-router-dom'
-// import { FilterProvider, useFilter } from '@/context/filter-context'
+
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-    // const { filters, handleFilterChange } = useFilter()
 
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
-    // const [currentStatus, setCurrentStatus] = useState()
-    // const [searchParams] = useSearchParams()
-    // const [size, setSize] = useState(Number(searchParams.get('size')) || 200)
-    // const [localFilters, setLocalFilters] = useState<{ [key: string]: string }>({})
-
-    // const debounceRef = useRef<NodeJS.Timeout | null>(null)
-    // const { setFilters, refreshBids } = useGetBids(size)
-
-    // const handleFilterChange = useCallback(
-    //     (columnId: string, value: any) => {
-    //         let formattedValue = value
-
-    //         if (columnId === 'loadingMode' || columnId === 'cargoType' || columnId === 'status') {
-    //             formattedValue = Array.isArray(value) ? value : [value]
-    //         } else if ((columnId === 'loadingDate' || columnId === 'createdAt') && value) {
-    //             formattedValue = {
-    //                 start: new Date(value.from.setHours(23, 59, 59, 999)).toISOString(),
-    //                 end: new Date(value.to.setHours(23, 59, 59, 999)).toISOString()
-    //             }
-    //         } else if (['number', 'fullPrice', 'comission', 'extraServicesPrice'].includes(columnId)) {
-    //             formattedValue = Number(value)
-    //         }
-
-    //         const newFilters = {
-    //             ...localFilters,
-    //             [columnId]: formattedValue
-    //         }
-
-    //         if (debounceRef.current) clearTimeout(debounceRef.current)
-    //         debounceRef.current = setTimeout(() => {
-    //             setLocalFilters(newFilters)
-    //             setFilters(newFilters)
-    //             refreshBids()
-    //         }, 500)
-    //     },
-    //     [localFilters, setFilters, refreshBids]
-    // )
+  
 
     return (
         <div className='flex h-screen overflow-hidden bg-secondary'>
-            {/* <FilterProvider onFiltersChange={setFilters}> */}
             <MobileSidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
             <Sidebar />
             <div className='flex w-0 flex-1 flex-col overflow-hidden'>
@@ -68,7 +29,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     {children}
                 </main>
             </div>
-            {/* </FilterProvider> */}
         </div>
     )
 }

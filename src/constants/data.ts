@@ -29,14 +29,14 @@ export type Employee = {
     email: string
     phone: string
     gender: string
-    date_of_birth: string // Consider using a proper date type if possible
+    date_of_birth: string 
     street: string
     city: string
     state: string
     country: string
     zipcode: string
-    longitude?: number // Optional field
-    latitude?: number // Optional field
+    longitude?: number 
+    latitude?: number 
     job: string
-    profile_picture?: string | null // Profile picture can be a string (URL) or null (if no picture)
+    profile_picture?: string | null 
 }

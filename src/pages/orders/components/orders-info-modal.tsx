@@ -7,23 +7,6 @@ import { OrderHeader } from './info-modal-details/order-header'
 import { OrderFinancial } from './info-modal-details/order-financial'
 import { OrderContacts } from './info-modal-details/order-contacts'
 
-// const statusTranslations = {
-//     new: 'Новый',
-//     canceledByCarrierWithPenalty: 'Отменяется перевозчиком (половина ГО)',
-//     canceledByCustomerWithPenalty: 'Отменяется заказчиком (половина ГО)',
-//     canceledByCarrier: 'Отменяется перевозчиком',
-//     canceledByCustomer: 'Отменяется заказчиком',
-//     failed: 'Сорван',
-//     failing: 'Срывается',
-//     completed: 'Выполнен',
-//     inTransit: 'Машина в пути',
-//     canceled: 'Отменен',
-//     headingToLoading: 'Еду на погрузку',
-//     loading: 'На погрузке',
-//     unloading: 'На выгрузке',
-//     delivered: 'Груз сдан'
-// }
-
 function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
     const { formatNumber } = useNumberFormatter()
     const [formData, setFormData] = useState({
@@ -34,8 +17,6 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
         const { name, value } = e.target
         setFormData(prev => ({ ...prev, [name]: value }))
     }
-
-    // console.log('selectedBid', selectedBid)
 
     return (
         <Dialog open={isModalOpen} onOpenChange={handleCloseModal}>

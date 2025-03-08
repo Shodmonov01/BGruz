@@ -28,12 +28,10 @@ export const useGetOrders = (size: number) => {
     const [hasMore, setHasMore] = useState<boolean>(true)
     const { filters } = useFilter()
 
-    // Рефы для отслеживания изменений фильтров
     const prevFiltersRef = useRef<OrderFilter>({})
     const filtersRef = useRef<OrderFilter>({})
     const isMounted = useRef(false)
 
-    // Функция загрузки данных
     const fetchOrders = useCallback(async (force = false) => {
         setLoading(true)
         setError(null)
@@ -41,11 +39,9 @@ export const useGetOrders = (size: number) => {
         try {
             const token = localStorage.getItem('authToken') || ''
 
-            // Проверка на изменение фильтров
             const currentFilters = filtersRef.current
             const isFiltersChanged = JSON.stringify(prevFiltersRef.current) !== JSON.stringify(currentFilters)
 
-            // Избежание лишних запросов
             if (!force && !isFiltersChanged) {
                 setLoading(false)
                 return
@@ -69,7 +65,6 @@ export const useGetOrders = (size: number) => {
         }
     }, [size])
 
-    // Хук для отслеживания изменения фильтров и размера
     useEffect(() => {
         filtersRef.current = filters
 
@@ -80,7 +75,6 @@ export const useGetOrders = (size: number) => {
         }
     }, [size, filters, fetchOrders])
 
-    // Принудительное обновление данных
     const refreshOrders = useCallback(() => {
         fetchOrders(true)
     }, [fetchOrders])

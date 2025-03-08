@@ -14,7 +14,6 @@ import Warehouses from './bid-form-detail/bid-warhouses'
 import TerminalTwo from './bid-form-detail/bid-terminal-two'
 import BidDescribe from './bid-form-detail/bid-describe'
 import { ChevronLeft, Loader2 } from 'lucide-react'
-// import { ChevronLeft } from 'lucide-react'
 
 interface BidFormData {
     client: string
@@ -124,7 +123,6 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
             requestPrice: false,
             extraServices: [],
             warehouses: [{ name: '', address: '' }],
-            //@ts-ignore
             recipientOrSender: '',
             vehicleCount: 1,
             cargoTitle: ''
@@ -144,7 +142,6 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
         getValues,
         formState: { errors }
     } = formMethods
-    // const { handleSubmit, setValue } = formMethods
 
     const handleClientChange = async (clientId: string, field: 'client' | 'recipientOrSender' | any) => {
         setValue(field, clientId)
@@ -170,7 +167,7 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
     const onSubmit: SubmitHandler<BidFormData> = async data => {
         setIsLoading(true)
         try {
-            setErrorMessage(null) // Очистка ошибки перед отправкой
+            setErrorMessage(null)
             const payload = {
                 cargoType: data.transportType,
                 loadingMode: data.loadingType,
@@ -178,17 +175,6 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                 startDate: getValues('startDate'),
                 slideDayTotal: 0,
                 customerId: Number(data.recipientOrSender),
-                // terminal1: {
-                //     cityId: data.terminal1Id,
-                //     cityName: data.terminal1Name,
-                //     address: data.terminal1Address
-                // },
-                // terminal2: {
-                //     cityId: data.terminal2Id,
-                //     cityName: data.terminal2Name,
-                //     address: data.terminal2Address
-                // },
-
                 warehouses: data.warehouses.map(warehouse => ({
                     cityId: warehouse.id,
                     cityName: warehouse.name,
@@ -231,8 +217,6 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
             // @ts-expect-error надо исправить
             const res = await postData('api/v1/bids', payload, token)
             modalClose()
-            // refreshBids()
-            // window.location.reload()
             // console.log('res', res)
         } catch (error: any) {
             console.error('Ошибка при создании заявки:', error)
@@ -269,7 +253,7 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                             <BidDetails
                                 filteredClients={clients}
                                 vehicleProfiles={vehicleProfiles}
-                                /* @ts-ignore */
+                                /* @ts-expect-error надо что то сделать */
                                 handleClientChange={handleClientChange}
                                 setOperationType={setOperationType}
                                 setTransportType={setTransportType}

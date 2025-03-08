@@ -41,7 +41,6 @@ function BidDescribe({ extraServices, isReadOnly }: BidDescribeProps) {
         }
     }, [extraServices])
 
-    // console.log('services:', services)
 
     useEffect(() => {
         if (extraServices.length > 0) {
@@ -56,13 +55,6 @@ function BidDescribe({ extraServices, isReadOnly }: BidDescribeProps) {
             )
         }
     }, [extraServices])
-
-    // const handleCountChange = (index, value) => {
-    //     const updatedServices = [...services]
-    //     updatedServices[index].count = value
-    //     setServices(updatedServices)
-    //     updateFormData(updatedServices)
-    // }
 
     const handleCountChange = (index: number, value: number) => {
         setServices(prevServices => {
@@ -259,7 +251,6 @@ function BidDescribe({ extraServices, isReadOnly }: BidDescribeProps) {
                             name='cargoTitle'
                             render={({ field }) => (
                                 <FormItem>
-                                    {/* <FormLabel className='text-base md:text-xl'>Груз</FormLabel> */}
                                     <FormControl>
                                         <Input
                                             disabled={isReadOnly}
@@ -284,7 +275,6 @@ function BidDescribe({ extraServices, isReadOnly }: BidDescribeProps) {
                                 <FormControl>
                                     <Textarea
                                         disabled={isReadOnly}
-                                        // className='min-w-full max-w-[300px] min-h-[40px] max-h-[300px] p-2 border rounded-md resize focus:outline-none focus:ring-2 focus:ring-blue-500'
                                         placeholder='Комментарии'
                                         {...field}
                                     />

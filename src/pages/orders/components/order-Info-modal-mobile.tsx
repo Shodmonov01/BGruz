@@ -13,7 +13,6 @@ interface ShippingOrderDialogProps {
 }
 
 export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleCloseModal }: ShippingOrderDialogProps) {
-    // console.log('selectedOrder', selectedOrder)
     const { formatNumber } = useNumberFormatter()
 
     const statusTranslations = {
@@ -40,7 +39,7 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                     <Button variant='ghost' size='icon' className='hover:bg-white/20' onClick={handleCloseModal}>
                         <ChevronLeft className='h-6 w-6' />
                     </Button>
-                    {/* @ts-ignore */}
+                    {/* @ts-expect-error надо что то сделать */}
                     <h2 className='text-lg font-medium'>Заказ № {selectedOrder?.id || '—'}</h2>
                 </div>
 
@@ -52,13 +51,13 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                         <div className='flex gap-6 items-center text-[18px] bg-[#E6E6E6] px-6 py-2 '>
                             <p className='text-gray-600'>Статус заказа</p>
                             <p className='font-bold text-[#1E293B]'>
-                                {/* @ts-ignore */}
+                                {/* @ts-expect-error надо что то сделать */}
                                 {statusTranslations[selectedOrder?.status] || selectedOrder?.status || '—'}
                             </p>
                         </div>
                         <div className='flex gap-6 items-center text-[18px]  px-6 py-2 '>
                             <p className='text-gray-600'>Автор статуса</p>
-                            {/* @ts-ignore */}
+                            {/* @ts-expect-error надо что то сделать */}
                             <p className='font-bold text-[#1E293B]'>{selectedOrder?.statusUpdatedUser?.fio || '—'}</p>
                         </div>
                         <div className='flex gap-6 items-center text-[18px] bg-[#E6E6E6] px-6 py-2 '>
@@ -77,9 +76,6 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
 
                     <div className='flex overflow-auto gap-6 items-center text-[18px] bg-[#E6E6E6] px-6 py-2 '>
                         <p className='text-gray-600'>Маршрут</p>
-                        {/* <p className='font-bold text-[#1E293B]'>
-                            {selectedOrder.buyBid?.terminal1?.cityName} - {selectedOrder.buyBid?.terminal2?.cityName}
-                        </p> */}
                     </div>
 
                     <div className='mt-4  space-y-2'>
@@ -95,7 +91,6 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                         <div className='border-b-2 border-[#E6E6E6]  px-6 py-2'>
                             <p className='text-gray-600'>Адрес погрузки:</p>
                             <p className='font-bold text-[18px] flex gap-1 items-center text-[#1E293B]'>
-                                {' '}
                                 <div>
                                     <MapPin className='max-h-[20px] min-h-[20px]' />
                                 </div>
@@ -144,17 +139,15 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                         </div>
                         <div className='flex gap-6 items-center text-[18px] px-6 py-2 '>
                             <p className='text-gray-600'>E-mail</p>
-                            {/* @ts-ignore */}
                             <p className='font-bold text-[#1E293B]'>
-                                {/* @ts-ignore */}
+                                {/* @ts-expect-error надо что то сделать */}
                                 {selectedOrder.driverUser ? selectedOrder.driverUser?.email : '-'}
                             </p>
                         </div>
                         <div className='flex gap-6 items-center text-[18px] px-6 py-2 '>
                             <p className='text-gray-600'>Телефон</p>
-                            {/* @ts-ignore */}
                             <p className='font-bold text-[#1E293B]'>
-                                {/* @ts-ignore */}
+                                {/* @ts-expect-error надо что то сделать */}
                                 {selectedOrder.driverUser ? selectedOrder.driverUser?.phone : '-'}
                             </p>
                         </div>
@@ -182,17 +175,7 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                                 <div className='text-right font-bold text-[#1E293B]'>
                                     {formatNumber(String(selectedOrder.price || '—'))}
                                 </div>
-                                {/* {selectedOrder?.extraServices?.map((service, index) => (
-                                    <React.Fragment key={index}>
-                                        <div>{service.name}</div>
-                                        <div className='text-center font-bold text-[#1E293B]'>
-                                            {formatNumber(String(service.count || '—'))}
-                                        </div>
-                                        <div className='text-right font-bold text-[#1E293B]'>
-                                            {formatNumber(String(service.totalPrice || '—'))}
-                                        </div>
-                                    </React.Fragment>
-                                ))} */}
+
                                 {selectedOrder?.extraServices?.map(service => (
                                     // @ts-expect-error надо что то сделать
                                     <React.Fragment key={service.id || `${service.name}-${index}`}>
@@ -210,14 +193,6 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                                 <div className='font-bold text-[#1E293B] text-right'>
                                     {formatNumber(String(selectedOrder.fullPrice || '—'))}
                                 </div>
-                                {/* <div className='col-span-2 text-[#1E293B]'>Цена с НДС</div>
-                                <div className='font-bold text-[#1E293B] text-right'>
-                                    {formatNumber(Number(selectedOrder.priceNds))}
-                                </div>
-                                <div className='col-span-2 text-[#1E293B]'>Цена без НДС</div>
-                                <div className='font-bold text-[#1E293B] text-right'>
-                                    {formatNumber(String(selectedOrder.price))}
-                                </div> */}
                             </div>
                         </div>
                     </div>
@@ -273,12 +248,11 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
 
                     <h3 className='font-medium bg-[#E6E6E6] px-6 py-2 text-[18px]'>Атрибуты договора:</h3>
                     <div className='flex gap-6 items-center text-[18px] px-6 py-2 '>
-                        {/* @ts-ignore */}
+                        {/* @ts-expect-error надо что то сделать */}
                         <p className='font-bold text-[#1E293B]'>Заказ № {selectedOrder.id || '—'}</p>
                     </div>
 
                     <div className='space-y-2 px-6'>
-                        {/* {selectedOrder?.documentOrderItems?.length > 0 && ( */}
                         <Button
                             className='w-full flex gap-2'
                             variant='outline'
@@ -294,7 +268,6 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                             <Download className='h-4 w-4' />
                             Скачать заказ (PDF)
                         </Button>
-                        {/* )} */}
                         <Button className='w-full' variant='outline' color='red'>
                             Отмена подачи
                         </Button>

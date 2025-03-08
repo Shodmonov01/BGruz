@@ -12,10 +12,6 @@ import { FilterProvider, useFilter } from '@/context/filter-context'
 export default function OrderPage() {
     const [searchParams] = useSearchParams()
     const [size, setSize] = useState(Number(searchParams.get('size')) || 500)
-    // const [localFilters, setLocalFilters] = useState<{ [key: string]: string }>({})
-
-    // const debounceRef = useRef<NodeJS.Timeout | null>(null)
-
     const { orders, hasMore, loading,  refreshOrders } = useGetOrders(size)
     const { setFilters } = useFilter()
 
@@ -24,25 +20,6 @@ export default function OrderPage() {
             setSize(prev => prev + 50)
         }
     }
-
-
-    // useEffect(() => {
-    //     const handleScroll = () => {
-    //         if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
-    //             if (hasMore && !loading) {
-    //                 loadMore()
-    //             }
-    //         }
-    //     }
-
-    //     window.addEventListener('scroll', handleScroll)
-    //     return () => window.removeEventListener('scroll', handleScroll)
-    // }, [hasMore, loading])
-
-    // useEffect(() => {
-    //     setFilters({});  // Очистить фильтры при загрузке страницы
-    //   }, [setFilters]);
-
       
     useWebSocket(() => {}, refreshOrders);
 
@@ -55,15 +32,13 @@ export default function OrderPage() {
                 <FilterProvider pageType="orders" onFiltersChange={setFilters}>
 
                 <div className='hidden md:block'>
-                    {/* @ts-ignore */}
+                    {/* @ts-expect-error надо что то сделать */}
                     <OrdersTable
                         orders={orders || []}
                         setFilters={setFilters}
-                        // handleFilterChange={handleFilterChange}
                         loadMore={loadMore}
                         hasMore={hasMore}
                         loading={loading}
-                        // localFilters={localFilters}
                     />
                 </div>
                 <div className='md:hidden'>

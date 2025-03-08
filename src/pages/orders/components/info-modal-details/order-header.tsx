@@ -29,7 +29,6 @@ interface OrderHeaderProps {
 export function OrderHeader({ formData, handleChange, setFormData }: OrderHeaderProps) {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [_, setIsChecked] = useState(!!formData.docSubmissionDate)
-    // console.log('formData', formData)
 
     useEffect(() => {
         setIsChecked(!!formData.docSubmissionDate)
@@ -67,7 +66,6 @@ export function OrderHeader({ formData, handleChange, setFormData }: OrderHeader
             }
 
             const responseData = await response.json()
-            // console.log('responseData', responseData)
 
             setFormData(prev => {
                 const { responseText } = responseData || {}
@@ -122,13 +120,6 @@ export function OrderHeader({ formData, handleChange, setFormData }: OrderHeader
                 <div className='flex justify-between px-10'>
                     <div className='flex justify-between items-center gap-4'>
                         <p className='font-bold'>Статус заказа:</p>
-                        {/* <input
-                            type='text'
-                            name='status'
-                            value={statusTranslations[formData.status] || formData.status || '—'}
-                            onChange={handleChange}
-                            className='border border-gray-300 rounded px-2 py-1'
-                        /> */}
                         <p>{statusTranslations[formData.status] || formData.status || '—'}</p>
                     </div>
                     <div className='flex justify-between items-center gap-4'>

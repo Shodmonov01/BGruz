@@ -42,20 +42,15 @@ interface BidsTableProps {
 
 function OrdersTable({
     orders,
-    // setFilters,
     loadMore,
     hasMore,
     loading
-    // localFilters
 }: BidsTableProps) {
     const [selectedBid, setSelectedBid] = useState<Partial<Bid> | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isShortTable, setIsShortTable] = useState(() => {
         return localStorage.getItem('isShortTable') === 'true'
     })
-    // const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
-    //     Object.entries(localFilters).map(([id, value]) => ({ id, value }))
-    // )
 
     const { filters, handleFilterChange } = useFilter()
 
@@ -145,12 +140,6 @@ function OrdersTable({
         enableColumnResizing: true,
         enableSorting: true
     })
-
-    // useEffect(() => {
-    //     const newColumnFilters = Object.entries(localFilters).map(([id, value]) => ({ id, value }))
-    //     setColumnFilters(newColumnFilters)
-    // }, [localFilters])
-
     return (
         <div>
             <OrdersHeader setIsShortTable={setIsShortTable} isShortTable={isShortTable} />
@@ -194,10 +183,10 @@ function OrdersTable({
                                         >
                                             <div className=''>
                                                 {
-                                                    //@ts-ignore
+                                                    // @ts-expect-error надо что то сделать
                                                     header.column.columnDef.filterType !== 'range' ? (
                                                         <div className='text-center'>
-                                                            {/* {renderFilterInput(header.column, handleFilterChange, orders)} */}
+                                                           
                                                             <FilterInput
                                                                 column={header.column}
                                                                 handleFilterChange={handleFilterChange}

@@ -21,7 +21,6 @@ import type { VehicleProfile } from '@/types'
 interface OrganizationData {
     terminals: { id: number; name: string; description: string }[]
     warehouses: { id: number; name: string; description: string }[]
-    // vehicleProfiles: { id: number; name: string }[];
     vehicleProfiles: Pick<VehicleProfile, 'id' | 'name'>[]
     extraServices: { id: number; name: string; description: string }[]
 }
@@ -81,7 +80,6 @@ const BidsInfoModal = ({
     const [warehouses, setWarehouses] = useState<{ id: number; name: string; description: string }[]>([])
     const [vehicleProfiles, setVehicleProfiles] = useState<{ id: number; name: string }[]>([])
     const [extraServices, setExtraServices] = useState<{ id: number; name: string; description: string }[]>([])
-    //@ts-ignore
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
     const [operationType, setOperationType] = useState('')
     const [transportType, setTransportType] = useState('')
@@ -89,12 +87,12 @@ const BidsInfoModal = ({
     const [isEdit, setIsEdit] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [isLoadingAdd, setIsLoadingAdd] = useState(false)
-    //@ts-ignore
+    //@ts-expect-error надо что то сделать
     const [originalData, setOriginalData] = useState({})
     const [isReadOnly, setIsReadOnly] = useState<boolean>(true)
-    //@ts-ignore
+    //@ts-expect-error надо что то сделать
     const [data, setData] = useState<OrganizationData | undefined>(undefined)
-    //@ts-ignore
+    //@ts-expect-error надо что то сделать
     const [isFetched, setIsFetched] = useState(true)
     const [formData, setFormData] = useState({ ...selectedBid })
 
@@ -123,13 +121,10 @@ const BidsInfoModal = ({
             warehouses: [{ name: '', address: '' }]
         }
     })
-    // console.log('selectedBid', selectedBid)
 
     const {
-        //@ts-ignore
         handleSubmit,
         setValue,
-        //@ts-ignore
         getValues,
         reset,
         formState: { errors }
@@ -230,7 +225,6 @@ const BidsInfoModal = ({
     console.log('selectedBid.terminal2:', selectedBid.terminal2)
     console.log('selectedBid.warehouses:', selectedBid.warehouses)
 
-    // console.log('terminals', terminals)
 
     const handleClientChange = async (clientId: string) => {
         setValue('client', clientId)
@@ -257,10 +251,6 @@ const BidsInfoModal = ({
     const handleSave = async () => {
         const token = localStorage.getItem('authToken')
         const currentFormValues = formMethods.getValues()
-
-        // console.log('currentFormValues.vehicleProfiles', currentFormValues.vehicleProfiles)
-
-        // Create updated fields object from form values
         const updatedFields = {
             client: { organizationId: Number.parseInt(currentFormValues.client) },
             loadingMode: currentFormValues.loadingType,
@@ -292,7 +282,7 @@ const BidsInfoModal = ({
             vehicleCount: currentFormValues.vehicleCount,
             extraServices: currentFormValues.extraServices.map(es => ({
                 id: es.id,
-                //@ts-ignore
+                //@ts-expect-error надо что то сделать
                 vehicleProfileId: es.vehicleProfileId,
                 count: es.count
             }))
@@ -310,7 +300,6 @@ const BidsInfoModal = ({
             setIsLoading(false)
         }
     }
-    // console.log(formData.client)
 
     const handleEdit = () => {
         if (formData.client?.organizationId) {
@@ -340,11 +329,10 @@ const BidsInfoModal = ({
     const onSubmit: SubmitHandler<BidFormData> = async data => {
         setIsLoadingAdd(true)
         try {
-            setErrorMessage(null) // Очистка ошибки перед отправкой
+            setErrorMessage(null)
             const payload = {
                 cargoType: data.transportType,
                 loadingMode: data.loadingType,
-                //@ts-ignore
                 clientId: Number(data.recipientOrSender),
                 startDate: getValues('startDate'),
                 slideDayTotal: 0,
@@ -371,13 +359,12 @@ const BidsInfoModal = ({
                 vehicleProfileId: Number(data.vehicleProfiles),
                 vehicleCount: getValues('vehicleCount'),
                 cargoTitle: data.cargoTitle,
-                //@ts-ignore
+                //@ts-expect-error надо что то сделать
                 loadingTime: getValues('submissionTime') || '09:00',
 
                 extraServices: data.extraServices || [],
                 description: data.description
             }
-            // console.log('Отправка данных:', payload)
             const token = localStorage.getItem('authToken')
             if (!token) {
                 console.error('Не найден токен авторизации')
@@ -386,8 +373,6 @@ const BidsInfoModal = ({
 
             const res = await postData('api/v1/bids', payload, token)
             handleCloseModal()
-            // refreshBids()
-            // window.location.reload()
             console.log('res', res)
         } catch (error: any) {
             console.error('Ошибка при создании заявки:', error)

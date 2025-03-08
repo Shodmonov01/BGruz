@@ -27,8 +27,8 @@ export default function PaginationSection({
     pageNumbers.push(i);
   }
 
-  const maxPageNum = 2; // Maximum page numbers to display at once
-  const pageNumLimit = Math.floor(maxPageNum / 2); // Current page should be in the middle if possible
+  const maxPageNum = 2;
+  const pageNumLimit = Math.floor(maxPageNum / 2);
 
   const activePages = pageNumbers.slice(
     Math.max(0, currentPage - 1 - pageNumLimit),
@@ -59,7 +59,6 @@ export default function PaginationSection({
     }
   };
 
-  // Function to render page numbers with ellipsis
   const renderPages = () => {
     const renderedPages = activePages.map((page, idx) => (
       <PaginationItem
@@ -72,7 +71,6 @@ export default function PaginationSection({
       </PaginationItem>
     ));
 
-    // Add ellipsis at the start if necessary
     if (activePages[0] > 1) {
       renderedPages.unshift(
         <PaginationEllipsis
@@ -82,7 +80,6 @@ export default function PaginationSection({
       );
     }
 
-    // Add ellipsis at the end if necessary
     if (activePages[activePages.length - 1] < pageNumbers.length) {
       renderedPages.push(
         <PaginationEllipsis

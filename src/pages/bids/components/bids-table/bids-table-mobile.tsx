@@ -15,26 +15,6 @@ const statusTranslations = {
     executed: 'Выполнена',
     canceled: 'Отменена'
 }
-// interface Bid {
-//     _id: string
-//     persistentId: string
-//     cargoTitle: string
-//     client: { organizationName: string }
-//     price: number | null
-//     status: string | null
-//     filingTime: string
-//     createdBy: string
-//     createdAt: string
-//     isPriceRequest?: boolean
-//     loadingDate: string
-//     customer?: { name: string }
-//     terminal1?: { cityName: string }
-//     terminal2?: { cityName: string }
-//     warehouses?: { cityName: string }[]
-//     vehicleProfile?: { name: string }
-//     [key: string]: unknown
-// }
-
 interface BidsTableMobileProps {
     bids: any[]
 }
@@ -118,7 +98,6 @@ function BidsTableMobile({ bids }: BidsTableMobileProps) {
                                         </div>
                                     </div>
                                     <div className='ml-auto flex flex-col'>
-                                        {/* <p className='text-green-600 font-semibold'>{bid.status}</p> */}
                                         <p className='text-green-600 font-semibold'>
                                             {statusTranslations[bid.status] || bid.status || '—'}
                                         </p>

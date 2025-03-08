@@ -1,6 +1,5 @@
 import { useFormContext, useWatch } from 'react-hook-form'
 import { FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
-// import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useEffect } from 'react'
 import DatePicker from '@/components/shared/date-picker'
@@ -10,12 +9,6 @@ function BidDate({ isReadOnly }: { isReadOnly?: boolean }) {
     const { control, setValue } = useFormContext()
     const startDate = useWatch({ control, name: 'startDate' })
     const enableEndDate = useWatch({ control, name: 'enableEndDate' })
-    // const [today, setToday] = useState('')
-
-    // useEffect(() => {
-    //     const todayDate = new Date().toISOString().split('T')[0]
-    //     setToday(todayDate)
-    // }, [])
 
     useEffect(() => {
         if (!enableEndDate) {

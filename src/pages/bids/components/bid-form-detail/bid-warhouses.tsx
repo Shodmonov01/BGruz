@@ -15,13 +15,6 @@ function Warehouses({ warehouses, isReadOnly }: { warehouses; isReadOnly?: boole
 
     const [search, setSearch] = useState('')
     const [isOpen, setIsOpen] = useState<Record<number, boolean>>({})
-    // console.log('fields', fields)
-    // console.log('warehouses', warehouses)
-
-    // const sortedWarehouses = [...warehouses]
-    //     .sort((a, b) => a.name.localeCompare(b.name)) // Сортировка по алфавиту
-    //     .filter(w => w.name.toLowerCase().includes(search.toLowerCase())) // Фильтрация
-
     const sortedWarehouses = warehouses
         ?.filter(
             t =>
@@ -35,23 +28,6 @@ function Warehouses({ warehouses, isReadOnly }: { warehouses; isReadOnly?: boole
             append({ name: '', address: '' })
         }
     }, [fields.length, append])
-
-    // useEffect(() => {
-    //     fields.forEach((field, index) => {
-    //         const selectedWarehouseId = watch(`warehouses.${index}.id`)
-    //         const selectedWarehouse = warehouses?.find(w => w.id === selectedWarehouseId)
-    //         console.log('selectedWarehouse', selectedWarehouse)
-    //         console.log('field.selectedWarehouseId', selectedWarehouseId)
-    //         console.log('selectedWarehouse.id', selectedWarehouse.id)
-
-    //         if (selectedWarehouse) {
-    //             setValue(`warehouses.${index}.id`, selectedWarehouse.id)
-    //             setValue(`warehouses.${index}.name`, selectedWarehouse.name)
-    //             setValue(`warehouses.${index}.address`, selectedWarehouse.description || '')
-    //         }
-    //     })
-    // }, [fields, warehouses, setValue, watch])
-
     const addWarehouse = () => append({ name: '', address: '' })
     const removeWarehouse = index => remove(index)
 
@@ -63,7 +39,6 @@ function Warehouses({ warehouses, isReadOnly }: { warehouses; isReadOnly?: boole
                     <FormField
                         control={control}
                         name={`warehouses.${index}.id`}
-                        // rules={{ required: 'Заполните это поле.' }}
                         render={({ field }) => (
                             <FormItem>
                                 <Select
@@ -71,7 +46,7 @@ function Warehouses({ warehouses, isReadOnly }: { warehouses; isReadOnly?: boole
                                     onValueChange={value => {
                                         const selectedWarehouse = warehouses.find(w => w.id === Number(value))
                                         if (selectedWarehouse) {
-                                            field.onChange(selectedWarehouse.id) // Сохраняем ID
+                                            field.onChange(selectedWarehouse.id) 
                                             setValue(`warehouses.${index}.name`, selectedWarehouse.name)
                                             setValue(`warehouses.${index}.address`, selectedWarehouse.description || '')
                                         }
@@ -87,20 +62,14 @@ function Warehouses({ warehouses, isReadOnly }: { warehouses; isReadOnly?: boole
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent
-                                        // onPointerDown={e => e.preventDefault()}
-                                        // onPointerDownOutside={e => e.preventDefault()}
-                                        // onCloseAutoFocus={e => e.preventDefault()}
                                     >
                                         <div className='p-2'>
                                             <Input
-                                                // autoFocus
                                                 placeholder='Поиск склада...'
                                                 value={search}
                                                 onChange={e => setSearch(e.target.value)}
                                                 onKeyDown={e => e.stopPropagation()}
-                                                // onFocus={() => setIsOpen(prev => ({ ...prev, [index]: true }))}
                                                 onFocus={() => {
-                                                    // Убедимся, что выпадающий список остается открытым
                                                     setTimeout(
                                                         () => setIsOpen(prev => ({ ...prev, [index]: true })),
                                                         300
@@ -110,7 +79,7 @@ function Warehouses({ warehouses, isReadOnly }: { warehouses; isReadOnly?: boole
                                                     setTimeout(
                                                         () => setIsOpen(prev => ({ ...prev, [index]: true })),
                                                         200
-                                                    ) // Добавьте задержку для onBlur
+                                                    )
                                                 }}
                                                 className='w-full px-3 py-2 border rounded-md'
                                             />
@@ -132,22 +101,6 @@ function Warehouses({ warehouses, isReadOnly }: { warehouses; isReadOnly?: boole
                     />
 
                     <div className='flex gap-1'>
-                        {/* <FormField
-                            control={control}
-                            name={`warehouses.${index}.address`}
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormControl>
-                                        <Input
-                                            placeholder='Адрес'
-                                            {...field}
-                                            className={`${fields.length > 1 ? 'w-[520px]' : 'w-[555px]'}`}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        /> */}
                         <FormField
                             control={control}
                             name={`warehouses.${index}.address`}

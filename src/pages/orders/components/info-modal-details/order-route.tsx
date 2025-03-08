@@ -97,12 +97,6 @@ export function OrderRoute({ formData }: OrderRouteProps) {
                     </div>
                     <div>
                         <Input value={formData.buyBid.warehouses[0].address || ''} className='mt-1' readOnly />
-                        {/* <div className='flex justify-between items-center text-[#A7A7A7]'>
-                            <p>Иванов Иван Иваныч</p>
-                            <a className='underline' href={`tel:+9991234536`}>
-                                + (999) 123-45-36
-                            </a>
-                        </div> */}
                     </div>
                 </div>
             </div>

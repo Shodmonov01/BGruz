@@ -15,7 +15,7 @@ export default function AppRouter() {
             path: '/',
             element: (
                 <PrivateRoute>
-                    {/* @ts-ignore */}
+                    {/* @ts-expect-error надо что то сделать */}
                     <FilterProvider>
                         <DashboardLayout>
                             <Suspense fallback={<div>Loading...</div>}>

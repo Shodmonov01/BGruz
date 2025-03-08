@@ -11,8 +11,8 @@ interface TimePickerProps {
 
 const generateTimeOptions = (): string[] => {
     const times: string[] = []
-    let current: Date = startOfDay(new Date()) // 00:00
-    const endTime: Date = endOfDay(new Date()) // 23:59
+    let current: Date = startOfDay(new Date())
+    const endTime: Date = endOfDay(new Date())
 
     while (current <= endTime) {
         times.push(format(current, 'HH:mm'))

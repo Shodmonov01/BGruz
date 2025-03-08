@@ -136,7 +136,6 @@ const SearchableSelect = ({ options, value, onChange }) => {
     const [open, setOpen] = React.useState(false)
     const inputRef = React.useRef<HTMLInputElement | null>(null)
 
-    // Фильтрация списка
     const filteredOptions = options.filter(option => option.label.toLowerCase().includes(search.toLowerCase()))
 
     return (
@@ -157,7 +156,7 @@ const SearchableSelect = ({ options, value, onChange }) => {
                     placeholder='Выберите значение'
                     onChange={e => setSearch(e.target.value)}
                     onFocus={() => setOpen(true)}
-                    onKeyDown={e => e.stopPropagation()} // Предотвращаем закрытие списка
+                    onKeyDown={e => e.stopPropagation()}
                     className='w-full bg-transparent border-none focus:ring-0'
                 />
                 <SelectValue />

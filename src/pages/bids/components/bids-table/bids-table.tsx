@@ -9,7 +9,6 @@ import {
 } from '@tanstack/react-table'
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-// import type { DateRange } from 'react-day-picker'
 import { useBidsTableColumns } from './bids-table-columns'
 import BidsInfoModal from '../bids-info-modal'
 import BidHeader from '../bids-header'
@@ -30,21 +29,17 @@ interface Bid {
 
 interface BidsTableProps {
     bids: Bid[] | any[]
-    // setFilters: (filters: Record<string, unknown>) => void
-    // handleFilterChange: (columnId: string, value: any) => void
     loadMore: () => void
     hasMore: boolean
     loading: boolean
-    // localFilters: Record<string, string | any[]>
 }
 function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
     const { filters, handleFilterChange } = useFilter()
 
     const [selectedBid, setSelectedBid] = useState<Partial<Bid> | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
-    // const [isShortTable, setIsShortTable] = useState(false)
     const [isShortTable, setIsShortTable] = useState(() => {
-        return localStorage.getItem('isShortTable') === 'true' // Получаем из localStorage
+        return localStorage.getItem('isShortTable') === 'true'
     })
     const scrollRef = useRef<HTMLDivElement | null>(null)
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
@@ -53,7 +48,7 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
     const [sorting, setSorting] = useState<SortingState>([])
 
     useEffect(() => {
-        localStorage.setItem('isShortTable', String(isShortTable)) // Сохраняем в localStorage при изменении
+        localStorage.setItem('isShortTable', String(isShortTable))
     }, [isShortTable])
 
     useEffect(() => {
@@ -112,8 +107,6 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
         isShortTable,
         onApprove: handleApprove,
         onDelete: handleDelete
-        // //@ts-ignore
-        // onOpenModal: handleOpenModal
     })
 
     const table = useReactTable({
@@ -259,7 +252,6 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
                     selectedBid={selectedBid}
                     handleCloseModal={handleCloseModal}
                     open={isModalOpen}
-                    // onOpenChange={setOpen}
                 />
             )}
         </div>

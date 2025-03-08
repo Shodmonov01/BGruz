@@ -11,10 +11,8 @@ export default function TableSearchInput({
   const [searchParams, setSearchParams] = useSearchParams();
   const country = searchParams.get('search') || '';
   const [searchTerm, setSearchTerm] = React.useState(country);
-  // debounce the search input
   const [debouncedValue] = useDebounce(searchTerm, 1000);
   const handleSettingSearchParams = useCallback((newSearchValue: string) => {
-    // Update the URL with the new search value
     if (
       newSearchValue === '' ||
       newSearchValue === undefined ||
@@ -26,8 +24,8 @@ export default function TableSearchInput({
     }
     setSearchParams({
       ...Object.fromEntries(searchParams),
-      page: '1', // Spread the existing search params
-      search: newSearchValue // Update the search value
+      page: '1',
+      search: newSearchValue
     });
   }, []);
 
