@@ -7,13 +7,15 @@ import {
     type SortingState,
     getSortedRowModel
 } from '@tanstack/react-table'
+
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { useBidsTableColumns } from './bids-table-columns'
 import BidsInfoModal from '../bids-info-modal'
 import BidHeader from '../bids-header'
 import { deleteData, postData2 } from '@/api/api'
-import loader from '../../../../../public/gear-spinner.svg'
+import { Loader2 } from 'lucide-react'
+
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
 import { useFilter } from '@/context/filter-context'
 import { FilterInput } from '@/components/shared/render-filter-input'
@@ -228,7 +230,7 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
                                 <TableRow>
                                     <TableCell colSpan={columns.length} className='text-center p-4'>
                                         <div className='flex items-center justify-center'>
-                                            <img src={loader} alt='Загрузка...' className='h-8 w-8' />
+                                            <Loader2 className='animate-spin mr-2 h-8 w-8' />
                                             <span className='ml-2 text-gray-500'>Загрузка данных...</span>
                                         </div>
                                     </TableCell>

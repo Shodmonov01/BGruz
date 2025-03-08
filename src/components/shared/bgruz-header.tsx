@@ -1,23 +1,23 @@
-import { useTotals } from "@/context/totals-context";
-import logo from "../../../public/logoRb.png";
-import CurrentTime from "./сurrent-time";
+import { useTotals } from '@/context/totals-context'
+
+import CurrentTime from './сurrent-time'
 
 function BgruzHeader() {
-    const { fullPrice, fullPriceNds, commission } = useTotals();
+    const { fullPrice, fullPriceNds, commission } = useTotals()
 
     return (
-        <div className="hidden md:flex items-center justify-between gap-2 pb-5">
-            <div className="flex gap-1 justify-center items-center md:text-2xl">
-                <img src={logo} alt="logo" className="h-20" />
-                <span className="text-[#03B4E0]">Биржа</span>
-                <span className="">Грузоперевозок</span>
+        <div className='hidden md:flex items-center justify-between gap-2 pb-5'>
+            <div className='flex gap-1 justify-center items-center md:text-2xl'>
+                <img src='/logoRb.png' alt='logo' className='h-20' />
+                <span className='text-[#03B4E0]'>Биржа</span>
+                <span className=''>Грузоперевозок</span>
             </div>
             <div>
                 <CurrentTime />
             </div>
 
             <div>
-                <ul className="text-[14px]">
+                <ul className='text-[14px]'>
                     <li>
                         Сумма заявок: <span>{fullPrice.toLocaleString()}</span>
                     </li>
@@ -30,7 +30,7 @@ function BgruzHeader() {
                 </ul>
             </div>
         </div>
-    );
+    )
 }
 
-export default BgruzHeader;
+export default BgruzHeader

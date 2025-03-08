@@ -12,7 +12,14 @@ const OrderPage = lazy(() => import('@/pages/orders'))
 
 import NotFound from '@/pages/not-found'
 
+import { Loader2 } from 'lucide-react'
+
 export default function AppRouter() {
+    const Loader = () => (
+        <div className="flex justify-center items-center h-screen">
+            <Loader2 className="animate-spin text-gray-500" size={48} />
+        </div>
+    );
     const dashboardRoutes = [
         {
             path: '/',
@@ -21,7 +28,7 @@ export default function AppRouter() {
                     {/* @ts-expect-error надо что то сделать */}
                     <FilterProvider>
                         <DashboardLayout>
-                            <Suspense fallback={<div>Loading...</div>}>
+                            <Suspense fallback={<Loader />}>
                                 <Outlet />
                             </Suspense>
                         </DashboardLayout>

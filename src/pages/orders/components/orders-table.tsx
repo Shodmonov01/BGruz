@@ -14,12 +14,11 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 
 import { deleteData, postData2 } from '@/api/api'
 
-import loader from '../../../../public/gear-spinner.svg'
 import { useOrdersTableColumns } from './use-orders-table-columns'
 import OrderInfoModal from './orders-info-modal'
 import OrdersHeader from './orders-header'
 import { FilterInput } from '@/components/shared/render-filter-input'
-import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
+import { ArrowDown, ArrowUp, ArrowUpDown, Loader2 } from 'lucide-react'
 import { useFilter } from '@/context/filter-context'
 
 interface Bid {
@@ -40,12 +39,7 @@ interface BidsTableProps {
     localFilters: Record<string, string | any[]>
 }
 
-function OrdersTable({
-    orders,
-    loadMore,
-    hasMore,
-    loading
-}: BidsTableProps) {
+function OrdersTable({ orders, loadMore, hasMore, loading }: BidsTableProps) {
     const [selectedBid, setSelectedBid] = useState<Partial<Bid> | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isShortTable, setIsShortTable] = useState(() => {
@@ -186,7 +180,6 @@ function OrdersTable({
                                                     // @ts-expect-error надо что то сделать
                                                     header.column.columnDef.filterType !== 'range' ? (
                                                         <div className='text-center'>
-                                                           
                                                             <FilterInput
                                                                 column={header.column}
                                                                 handleFilterChange={handleFilterChange}
@@ -248,7 +241,7 @@ function OrdersTable({
                                 <TableRow>
                                     <TableCell colSpan={columns.length} className='text-center p-4'>
                                         <div className='flex items-center justify-center'>
-                                            <img src={loader} alt='Загрузка...' className='h-8 w-8' />
+                                            <Loader2 className='animate-spin mr-2 h-8 w-8' />
                                             <span className='ml-2 text-gray-500'>Загрузка данных...</span>
                                         </div>
                                     </TableCell>

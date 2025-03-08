@@ -1,7 +1,6 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { useCallback, useMemo, useState } from 'react'
 import { ScrollArea } from '@radix-ui/react-scroll-area'
-import info from '../../../../public/info.svg'
 import { IOrder } from '@/types'
 import { ShippingOrderDialog } from './order-Info-modal-mobile'
 import useNumberFormatter from '@/hooks/use-format-number'
@@ -54,7 +53,7 @@ function OrderTableMobile({ orders }) {
                             <Card key={order._id} className='p-4 shadow-md rounded-lg cursor-pointer'>
                                 <CardContent className='w-full !p-0 flex items-center gap-2 '>
                                     <div onClick={() => handleOpenModal(order)}>
-                                        <img src={info || '/placeholder.svg'} alt='info' className='h-14' />
+                                        <img src='info.svg' alt='info' className='h-14' />
                                     </div>
                            
                                     <div className='flex flex-col justify-center gap-[1px] mt-6'>

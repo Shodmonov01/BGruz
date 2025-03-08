@@ -1,8 +1,7 @@
 import { useMemo } from 'react'
 import type { ColumnDef } from '@tanstack/react-table'
 import { Button } from '@/components/ui/button'
-import { Eye, Trash } from 'lucide-react'
-import loading from '../../../../../public/gear-spinner.svg'
+import { Eye, Loader2, Trash } from 'lucide-react'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import AuctionTimer from '@/hooks/use-action-timer'
@@ -210,7 +209,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                         <span>{statusMap[status] || status}</span>
                     ) : (
                         <div className='flex items-center justify-center'>
-                            <img src={loading || '/placeholder.svg'} alt='Загрузка...' />
+                            <Loader2 className='animate-spin mr-2 h-5 w-5' />
                         </div>
                     )
                 },

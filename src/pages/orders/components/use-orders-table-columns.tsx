@@ -6,7 +6,7 @@ import useNumberFormatter from '@/hooks/use-format-number'
 
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
-import loading from '../../../../public/gear-spinner.svg'
+import { Loader2 } from 'lucide-react'
 
 interface Bid {
     _id: string
@@ -251,7 +251,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                         <span>{statusMap[status] || status}</span>
                     ) : (
                         <div className='flex items-center justify-center'>
-                            <img src={loading || '/placeholder.svg'} alt='Загрузка...' />
+                            <Loader2 className='animate-spin mr-2 h-5 w-5' />
                         </div>
                     )
                 },

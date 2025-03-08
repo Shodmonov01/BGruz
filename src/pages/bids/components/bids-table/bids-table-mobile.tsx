@@ -1,7 +1,6 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { useCallback, useMemo, useState } from 'react'
 import { ScrollArea } from '@radix-ui/react-scroll-area'
-import info from '../../../../../public/info.svg'
 import useNumberFormatter from '@/hooks/use-format-number'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
@@ -62,7 +61,7 @@ function BidsTableMobile({ bids }: BidsTableMobileProps) {
                             <Card key={bid.persistentId} className='p-4 shadow-md rounded-lg'>
                                 <CardContent className='w-full !p-0 flex items-center gap-2'>
                                     <div onClick={() => handleOpenModal(bid)}>
-                                        <img src={info} alt='info' className='h-14' />
+                                        <img src='info.svg' alt='info' className='h-14' />
                                     </div>
                                     <div className='flex flex-col justify-center gap-[1px] mt-6'>
                                         <div className='flex items-center gap-2'>
