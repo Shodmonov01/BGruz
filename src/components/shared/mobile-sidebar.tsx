@@ -18,7 +18,7 @@ export default function MobileSidebar({ setSidebarOpen, sidebarOpen }: TMobileSi
                     <div className='space-y-4 py-4'>
                         <div className='space-y-4 px-3 py-2'>
                             <Link to='/' className='flex items-center gap-2 px-2 py-2 font-bold '>
-                                <img src={logo} alt='' className='h-12' />
+                                <img src={logo} alt='logo' className='h-12' />
                                 <span>
                                     <span className='text-[#03b4e0]'>Биржа</span> Грузоперевозок
                                 </span>

@@ -82,12 +82,12 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                         <FormItem className='flex items-center space-x-3 space-y-0 '>
                                             <FormLabel className='font-normal'>Погрузка</FormLabel>
                                             <FormControl>
-                                                <RadioGroupItem value='Погрузка' className=' size-8' />
+                                                <RadioGroupItem value='Погрузка' className='size-8' />
                                             </FormControl>
                                         </FormItem>
                                         <FormItem className='flex items-center space-x-3 space-y-0'>
                                             <FormControl>
-                                                <RadioGroupItem value='Выгрузка' className=' size-8' />
+                                                <RadioGroupItem value='Выгрузка' className='size-8' />
                                             </FormControl>
                                             <FormLabel className='font-normal'>Выгрузка</FormLabel>
                                         </FormItem>
@@ -127,12 +127,12 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                         <FormItem className='flex items-center space-x-3 space-y-0'>
                                             <FormLabel className='font-normal'>Контейнер</FormLabel>
                                             <FormControl>
-                                                <RadioGroupItem value='Контейнер' className=' size-8' />
+                                                <RadioGroupItem value='Контейнер' className='size-8' />
                                             </FormControl>
                                         </FormItem>
                                         <FormItem className='flex items-center space-x-3 space-y-0'>
                                             <FormControl>
-                                                <RadioGroupItem value='Вагон' className=' size-8' />
+                                                <RadioGroupItem value='Вагон' className='size-8' />
                                             </FormControl>
                                             <FormLabel className='font-normal'>Вагон</FormLabel>
                                         </FormItem>

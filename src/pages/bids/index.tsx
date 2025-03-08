@@ -1,16 +1,18 @@
-import { useState } from 'react'
+import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
-import { useSearchParams } from 'react-router-dom'
+import { FilterProvider, useFilter } from '@/context/filter-context';
+import { TotalsProvider } from '@/context/totals-context';
 
-import BgruzHeader from '@/components/shared/bgruz-header'
-import PageHead from '@/components/shared/page-head'
+import { useGetBids } from '@/api/use-get-bids';
+import { useWebSocket } from '@/api/use-websocket';
 
-import BidsTable from './components/bids-table/bids-table'
-import { useGetBids } from '@/api/use-get-bids'
-import { useWebSocket } from '@/api/use-websocket'
-import { TotalsProvider } from '@/context/totals-context'
-import BidsTableMobile from './components/bids-table/bids-table-mobile'
-import { FilterProvider, useFilter } from '@/context/filter-context'
+import { lazy } from 'react';
+
+const BgruzHeader = lazy(() => import('@/components/shared/bgruz-header'));
+const PageHead = lazy(() => import('@/components/shared/page-head'));
+const BidsTable = lazy(() => import('./components/bids-table/bids-table'));
+const BidsTableMobile = lazy(() => import('./components/bids-table/bids-table-mobile'));
 
 export default function BidsPage() {
     const [searchParams] = useSearchParams()

@@ -1,13 +1,18 @@
-import { useState } from 'react'
-import BgruzHeader from '@/components/shared/bgruz-header'
-import OrdersTable from './components/orders-table'
-import { useSearchParams } from 'react-router-dom'
-import OrderTableMobile from './components/orders-table-mobile'
-import { useWebSocket } from '@/api/use-websocket'
-import { useGetOrders } from '@/api/use-get-orders'
-import { TotalsProvider } from '@/context/totals-context'
-import PageHead from '@/components/shared/page-head'
-import { FilterProvider, useFilter } from '@/context/filter-context'
+import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+
+import { FilterProvider, useFilter } from '@/context/filter-context';
+import { TotalsProvider } from '@/context/totals-context';
+
+import { useWebSocket } from '@/api/use-websocket';
+import { useGetOrders } from '@/api/use-get-orders';
+
+import { lazy } from 'react';
+
+const BgruzHeader = lazy(() => import('@/components/shared/bgruz-header'));
+const PageHead = lazy(() => import('@/components/shared/page-head'));
+const OrdersTable = lazy(() => import('./components/orders-table'));
+const OrderTableMobile = lazy(() => import('./components/orders-table-mobile'));
 
 export default function OrderPage() {
     const [searchParams] = useSearchParams()

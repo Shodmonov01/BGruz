@@ -134,7 +134,6 @@ function BidDescribe({ extraServices, isReadOnly }: BidDescribeProps) {
                                             type='text'
                                             placeholder='Цена'
                                             {...field}
-                                            className=''
                                             value={requestPrice ? '' : formatNumber(field.value?.toString() || '')}
                                             onChange={e => {
                                                 const rawValue = e.target.value.replace(/\D/g, '')
@@ -241,7 +240,7 @@ function BidDescribe({ extraServices, isReadOnly }: BidDescribeProps) {
             </div>
 
             <div>
-                <div className=' md:py-0 py-2 mb-10'>
+                <div className='md:py-0 py-2 mb-10'>
                     <div className='bg-slate-300 text-center text-[26px]  my-3 py-3'>
                         <p>Груз</p>
                     </div>

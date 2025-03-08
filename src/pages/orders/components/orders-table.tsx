@@ -181,7 +181,7 @@ function OrdersTable({
                                             key={header.id}
                                             className='bg-[#EDEDED] border border-gray-300 whitespace-nowrap'
                                         >
-                                            <div className=''>
+                                            <div>
                                                 {
                                                     // @ts-expect-error надо что то сделать
                                                     header.column.columnDef.filterType !== 'range' ? (

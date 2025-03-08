@@ -54,7 +54,7 @@ function OrderTableMobile({ orders }) {
                             <Card key={order._id} className='p-4 shadow-md rounded-lg cursor-pointer'>
                                 <CardContent className='w-full !p-0 flex items-center gap-2 '>
                                     <div onClick={() => handleOpenModal(order)}>
-                                        <img src={info || '/placeholder.svg'} alt='' className='h-14' />
+                                        <img src={info || '/placeholder.svg'} alt='info' className='h-14' />
                                     </div>
                            
                                     <div className='flex flex-col justify-center gap-[1px] mt-6'>

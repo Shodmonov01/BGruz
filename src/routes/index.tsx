@@ -1,13 +1,16 @@
-import NotFound from '@/pages/not-found'
 import { Suspense, lazy } from 'react'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
+
 import PrivateRoute from './PrivateRoute'
-import BidsPage from '@/pages/bids'
-import OrderPage from '@/pages/orders'
+
 import { FilterProvider } from '@/context/filter-context'
 
 const DashboardLayout = lazy(() => import('@/components/layout/dashboard-layout'))
 const SignInPage = lazy(() => import('@/pages/auth/signin'))
+const BidsPage = lazy(() => import('@/pages/bids'))
+const OrderPage = lazy(() => import('@/pages/orders'))
+
+import NotFound from '@/pages/not-found'
 
 export default function AppRouter() {
     const dashboardRoutes = [
@@ -15,29 +18,30 @@ export default function AppRouter() {
             path: '/',
             element: (
                 <PrivateRoute>
-                    {/* @ts-expect-error надо что то сделать */}
-                    <FilterProvider>
-                        <DashboardLayout>
-                            <Suspense fallback={<div>Loading...</div>}>
-                                <Outlet />
-                            </Suspense>
-                        </DashboardLayout>
-                    </FilterProvider>
+                    <DashboardLayout>
+                        <Suspense fallback={<div>Loading...</div>}>
+                            <Outlet />
+                        </Suspense>
+                    </DashboardLayout>
                 </PrivateRoute>
             ),
             children: [
-                {
-                    index: true,
-                    element: <Navigate to='bids' replace />
-                },
+                { index: true, element: <Navigate to='bids' replace /> },
                 {
                     path: 'bids',
-                    element: <BidsPage />,
-                    index: true
+                    element: (
+                        <FilterProvider pageType='bids'>
+                            <BidsPage />
+                        </FilterProvider>
+                    )
                 },
                 {
                     path: 'orders',
-                    element: <OrderPage />
+                    element: (
+                        <FilterProvider pageType='orders'>
+                            <OrderPage />
+                        </FilterProvider>
+                    )
                 }
             ]
         }

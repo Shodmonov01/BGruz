@@ -62,7 +62,7 @@ function BidsTableMobile({ bids }: BidsTableMobileProps) {
                             <Card key={bid.persistentId} className='p-4 shadow-md rounded-lg'>
                                 <CardContent className='w-full !p-0 flex items-center gap-2'>
                                     <div onClick={() => handleOpenModal(bid)}>
-                                        <img src={info} alt='' className='h-14' />
+                                        <img src={info} alt='info' className='h-14' />
                                     </div>
                                     <div className='flex flex-col justify-center gap-[1px] mt-6'>
                                         <div className='flex items-center gap-2'>

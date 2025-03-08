@@ -149,7 +149,7 @@ export function OrderRoute({ formData }: OrderRouteProps) {
                     </div>
                 </div>
                 <div>
-                    <img src='/map.png' alt='' />
+                    <img src='/map.png' alt='map' />
                 </div>
 
                 <div className='space-y-2'>

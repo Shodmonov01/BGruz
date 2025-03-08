@@ -95,7 +95,7 @@ function TerminalTwo({ terminals, isReadOnly }: { terminals; isReadOnly?: boolea
                     render={({ field }) => (
                         <FormItem>
                             <FormControl>
-                                <Input disabled={isReadOnly} placeholder='Адрес' {...field} className='' readOnly />
+                                <Input disabled={isReadOnly} placeholder='Адрес' {...field} readOnly />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
