@@ -18,35 +18,33 @@ export default function AppRouter() {
             path: '/',
             element: (
                 <PrivateRoute>
-                    <DashboardLayout>
-                        <Suspense fallback={<div>Loading...</div>}>
-                            <Outlet />
-                        </Suspense>
-                    </DashboardLayout>
+                    {/* @ts-expect-error надо что то сделать */}
+                    <FilterProvider>
+                        <DashboardLayout>
+                            <Suspense fallback={<div>Loading...</div>}>
+                                <Outlet />
+                            </Suspense>
+                        </DashboardLayout>
+                    </FilterProvider>
                 </PrivateRoute>
             ),
             children: [
-                { index: true, element: <Navigate to='bids' replace /> },
+                {
+                    index: true,
+                    element: <Navigate to='bids' replace />
+                },
                 {
                     path: 'bids',
-                    element: (
-                        <FilterProvider pageType='bids'>
-                            <BidsPage />
-                        </FilterProvider>
-                    )
+                    element: <BidsPage />,
+                    index: true
                 },
                 {
                     path: 'orders',
-                    element: (
-                        <FilterProvider pageType='orders'>
-                            <OrderPage />
-                        </FilterProvider>
-                    )
+                    element: <OrderPage />
                 }
             ]
         }
     ]
-
     const publicRoutes = [
         {
             path: '/login',
