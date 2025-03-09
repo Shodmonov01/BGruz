@@ -74,7 +74,7 @@ interface OrderContactsProps {
         <div className="flex gap-10 px-3 border-b-2 border-[#03B4E0] mx-7 pb-4">
           <div className="space-y-2 flex-1">
             <div className="flex items-center justify-between">
-              <p className="font-bold min-w-[120px]">Заказчик</p>
+              <p className="font-bold min-w-[120px]">Перевозчик</p>
               <input
                 type="text"
                 value={formData.carrier.organizationName}

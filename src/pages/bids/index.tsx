@@ -30,7 +30,7 @@ export default function BidsPage() {
 
     // ! если что тут надо попробовать добавить ScrollArea
     return (
-        <div className='py-4 md:px-4'>
+        <div className='px-0 md:px-4'>
             <PageHead title='Заявки' />
             <TotalsProvider data={bids}>
                 <BgruzHeader />

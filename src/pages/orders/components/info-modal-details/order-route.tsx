@@ -1,7 +1,5 @@
 import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 
@@ -185,20 +183,6 @@ export function OrderRoute({ formData }: OrderRouteProps) {
                                 Ссылка на файл
                             </a>
                         </button>
-                    </div>
-                </div>
-            </div>
-
-            <div className='px-10'>
-                <div className='pt-6'>
-                    <div className='grid gap-2'>
-                        <Label className='font-bold text-[20px]'>Комментарии</Label>
-                        <Textarea
-                            readOnly
-                            className='h-[148px]'
-                            placeholder='Комментарии к грузу'
-                            value={formData.buyBid.description || ''}
-                        />
                     </div>
                 </div>
             </div>

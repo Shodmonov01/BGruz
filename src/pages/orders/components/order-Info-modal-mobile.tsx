@@ -4,6 +4,8 @@ import { ChevronLeft, Download, MapPin } from 'lucide-react'
 import { IOrder } from '@/types'
 import React from 'react'
 import useNumberFormatter from '@/hooks/use-format-number'
+import { format } from 'date-fns'
+import { ru } from 'date-fns/locale'
 
 interface ShippingOrderDialogProps {
     open: boolean
@@ -108,11 +110,22 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                             </p>
                         </div>
                     </div>
-
                     <div>
                         <div className='flex gap-6 items-center text-[18px]  px-6 py-2 '>
                             <p className='text-gray-600'>Время подачи</p>
-                            <p className='font-bold text-[#1E293B]'>{selectedOrder.buyBid?.loadingDate || '—'}</p>
+                            {/* <p className='font-bold text-[#1E293B]'>{selectedOrder.buyBid?.loadingDate || '—'}</p> */}
+                            <p className='font-bold text-[#1E293B]'>
+                                {selectedOrder.buyBid?.loadingTime
+                                    ? (() => {
+                                          const [hours, minutes] = selectedOrder.buyBid.loadingTime
+                                              .split(':')
+                                              .map(Number)
+                                          const date = new Date()
+                                          date.setHours(hours, minutes, 0, 0)
+                                          return format(date, 'HH:mm', { locale: ru })
+                                      })()
+                                    : '—'}
+                            </p>
                         </div>
                         <div className='flex gap-6 items-center text-[18px] bg-[#E6E6E6] px-6 py-2 '>
                             <p className='text-gray-600'>Транспорт</p>
@@ -199,6 +212,27 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
 
                     <h3 className='font-medium bg-[#E6E6E6] px-6 py-2 text-[18px]'>Контакты сторон:</h3>
                     <div className='mt-4 space-y-2'>
+
+                        <div className='flex gap-6 items-center text-[18px] border-b-2  border-[#E6E6E6] px-6 py-2 '>
+                            <p className='text-gray-600'>Заказчик</p>
+                            <p className='font-bold text-[#1E293B]'>{selectedOrder?.customer?.organizationName}</p>
+                        </div>
+                        <div className='flex gap-6 items-center text-[18px] border-b-2  border-[#E6E6E6] px-6 py-2 '>
+                            <p className='text-gray-600'>ИНН</p>
+                            <p className='font-bold text-[#1E293B]'>{selectedOrder?.customer?.inn}</p>
+                        </div>
+                        <div className='flex gap-6 items-center text-[18px] border-b-2  border-[#E6E6E6] px-6 py-2 '>
+                            <p className='text-gray-600'>Ответственный</p>
+                            <p className='font-bold text-[#1E293B]'>{selectedOrder.customer?.fio}</p>
+                        </div>
+                        <div className='flex gap-6 items-center text-[18px] border-b-2  border-[#E6E6E6] px-6 py-2 '>
+                            <p className='text-gray-600'>Раб. телефон</p>
+                            <p className='font-bold text-[#1E293B]'>{selectedOrder.customer?.phone}</p>
+                        </div>
+                        <div className='flex gap-6 items-center text-[18px] border-b-2  border-[#E6E6E6] px-6 py-2 '>
+                            <p className='text-gray-600'>Почта</p>
+                            <p className='font-bold text-[#1E293B]'>{selectedOrder.customer?.email}</p>
+                        </div>
                         <div className='flex gap-6 items-center text-[18px] border-b-2  border-[#E6E6E6] px-6 py-2 '>
                             <p className='text-gray-600'>Перевозчик</p>
                             <p className='font-bold text-[#1E293B]'>{selectedOrder.carrier?.organizationName || '—'}</p>
@@ -223,26 +257,6 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                         <div className='flex gap-6 items-center text-[18px] border-b-2  border-[#E6E6E6] px-6 py-2 '>
                             <p className='text-gray-600'>Почта</p>
                             <p className='font-bold text-[#1E293B]'>{selectedOrder?.carrier?.email || '—'}</p>
-                        </div>
-                        <div className='flex gap-6 items-center text-[18px] border-b-2  border-[#E6E6E6] px-6 py-2 '>
-                            <p className='text-gray-600'>Заказчик</p>
-                            <p className='font-bold text-[#1E293B]'>{selectedOrder?.customer?.organizationName}</p>
-                        </div>
-                        <div className='flex gap-6 items-center text-[18px] border-b-2  border-[#E6E6E6] px-6 py-2 '>
-                            <p className='text-gray-600'>ИНН</p>
-                            <p className='font-bold text-[#1E293B]'>{selectedOrder?.customer?.inn}</p>
-                        </div>
-                        <div className='flex gap-6 items-center text-[18px] border-b-2  border-[#E6E6E6] px-6 py-2 '>
-                            <p className='text-gray-600'>Ответственный</p>
-                            <p className='font-bold text-[#1E293B]'>{selectedOrder.customer?.fio}</p>
-                        </div>
-                        <div className='flex gap-6 items-center text-[18px] border-b-2  border-[#E6E6E6] px-6 py-2 '>
-                            <p className='text-gray-600'>Раб. телефон</p>
-                            <p className='font-bold text-[#1E293B]'>{selectedOrder.customer?.phone}</p>
-                        </div>
-                        <div className='flex gap-6 items-center text-[18px] border-b-2  border-[#E6E6E6] px-6 py-2 '>
-                            <p className='text-gray-600'>Почта</p>
-                            <p className='font-bold text-[#1E293B]'>{selectedOrder.customer?.email}</p>
                         </div>
                     </div>
 

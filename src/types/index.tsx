@@ -105,6 +105,7 @@ export interface IOrder {
         loadingMode?: string
         cargoType?: string
         loadingDate: string
+        loadingTime: string
         description: string
         cargoTitle: string
         terminal1: {

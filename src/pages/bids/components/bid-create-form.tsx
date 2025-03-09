@@ -65,6 +65,7 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
     const [isClientSelected, setIsClientSelected] = useState(false)
     const hideTerminal1 = operationType === 'loading' && transportType === 'Вагон'
     const hideTerminal2 = operationType === 'unloading' && transportType === 'Вагон'
+    const hideWarehouses = operationType === 'moving'
     const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
@@ -175,11 +176,11 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                 startDate: getValues('startDate'),
                 slideDayTotal: 0,
                 customerId: Number(data.recipientOrSender),
-                warehouses: data.warehouses.map(warehouse => ({
-                    cityId: warehouse.id,
-                    cityName: warehouse.name,
-                    address: warehouse.address
-                })),
+                // warehouses: data.warehouses.map(warehouse => ({
+                //     cityId: warehouse.id,
+                //     cityName: warehouse.name,
+                //     address: warehouse.address
+                // })),
 
                 isPriceRequest: data.requestPrice,
                 price: data.price || 0,
@@ -198,6 +199,14 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                     cityName: data.terminal1Name,
                     address: data.terminal1Address
                 }
+            }
+            if (!hideWarehouses) {
+                // @ts-expect-error надо настроить
+                payload.warehouses = data.warehouses.map(warehouse => ({
+                    cityId: warehouse.id,
+                    cityName: warehouse.name,
+                    address: warehouse.address
+                }))
             }
 
             if (!hideTerminal2) {
@@ -265,7 +274,7 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                             </div>
                             <div className='px-4 md:px-0 flex flex-col gap-6'>
                                 {!hideTerminal1 && <TerminalOne terminals={terminals} />}
-                                <Warehouses warehouses={warehouses} />
+                                {!hideWarehouses && <Warehouses warehouses={warehouses} />}
                                 {!hideTerminal2 && <TerminalTwo terminals={terminals} />}
                             </div>
                             <BidDate />

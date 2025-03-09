@@ -52,8 +52,8 @@ const BidDetails: React.FC<BidDetailsProps> = ({
 
     return (
         <div>
-            <div className='flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-16 mt-20 mb-6 md:my-6 md:px-0 px-4'>
-                <h1 className='font-bold whitespace-nowrap'>Тип перевозки</h1>
+            <h1 className='font-bold whitespace-nowrap mt-20 md:mt-0'>Тип перевозки</h1>
+            <div className='flex justify-around flex-row items-start md:items-center gap-0 md:gap-16  mb-6 md:my-6 md:px-0 px-4'>
                 <div className='w-full md-w-auto flex justify-center md:block'>
                     <FormField
                         control={control}
@@ -65,31 +65,44 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                     <RadioGroup
                                         disabled={isReadOnly}
                                         onValueChange={value => {
-                                            const mappedValue = value === 'Погрузка' ? 'loading' : 'unloading'
+                                            const mappedValue =
+                                                value === 'Погрузка'
+                                                    ? 'loading'
+                                                    : value === 'Выгрузка'
+                                                      ? 'unloading'
+                                                      : 'moving'
                                             field.onChange(mappedValue)
                                             setOperationType(mappedValue)
                                         }}
                                         value={
-                                            field.value
-                                                ? field.value === 'loading'
-                                                    ? 'Погрузка'
-                                                    : 'Выгрузка'
-                                                : undefined
+                                            field.value === 'loading'
+                                                ? 'Погрузка'
+                                                : field.value === 'unloading'
+                                                  ? 'Выгрузка'
+                                                  : field.value === 'moving'
+                                                    ? 'Перемещение'
+                                                    : undefined
                                         }
                                         defaultValue={field.value}
-                                        className='flex md:gap-6 ml-8 gap-12 md:ml-auto '
+                                        className='flex flex-col md:flex-row md:gap-6 ml-8 gap-12 md:ml-auto '
                                     >
-                                        <FormItem className='flex items-center space-x-3 space-y-0 '>
+                                        <FormItem className='flex items-center justify-end md:justify-normal space-x-3 space-y-0 '>
                                             <FormLabel className='font-normal'>Погрузка</FormLabel>
                                             <FormControl>
                                                 <RadioGroupItem value='Погрузка' className='size-8' />
                                             </FormControl>
                                         </FormItem>
-                                        <FormItem className='flex items-center space-x-3 space-y-0'>
+                                        <FormItem className='flex flex-row-reverse md:flex-row items-center gap-3 md:gap-0 space-x-3 space-y-0'>
                                             <FormControl>
                                                 <RadioGroupItem value='Выгрузка' className='size-8' />
                                             </FormControl>
                                             <FormLabel className='font-normal'>Выгрузка</FormLabel>
+                                        </FormItem>
+                                        <FormItem className='flex flex-row-reverse md:flex-row items-center gap-3 md:gap-0 space-x-3 space-y-0'>
+                                            <FormControl>
+                                                <RadioGroupItem value='Перемещение' className='size-8' />
+                                            </FormControl>
+                                            <FormLabel className='font-normal'>Перемещение</FormLabel>
                                         </FormItem>
                                     </RadioGroup>
                                 </FormControl>
@@ -99,7 +112,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                     />
                 </div>
 
-                <div className='min-w-full flex justify-center md:block'>
+                <div className='w-full flex justify-center md:block'>
                     <FormField
                         control={control}
                         name='transportType'
@@ -122,12 +135,12 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                                 : undefined
                                         }
                                         defaultValue={field.value}
-                                        className='flex md:gap-6 gap-12  '
+                                        className='flex flex-col md:flex-row md:gap-6 gap-12  '
                                     >
-                                        <FormItem className='flex items-center space-x-3 space-y-0'>
+                                        <FormItem className='flex flex-row-reverse md:flex-row items-center gap-3 space-x-3 space-y-0'>
                                             <FormLabel className='font-normal'>Контейнер</FormLabel>
                                             <FormControl>
-                                                <RadioGroupItem value='Контейнер' className='size-8' />
+                                                <RadioGroupItem value='Контейнер' className='size-8 !m-0' />
                                             </FormControl>
                                         </FormItem>
                                         <FormItem className='flex items-center space-x-3 space-y-0'>
