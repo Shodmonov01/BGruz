@@ -1,18 +1,18 @@
-import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
-import { FilterProvider, useFilter } from '@/context/filter-context';
-import { TotalsProvider } from '@/context/totals-context';
+import { FilterProvider, useFilter } from '@/context/filter-context'
+import { TotalsProvider } from '@/context/totals-context'
 
-import { useGetBids } from '@/api/use-get-bids';
-import { useWebSocket } from '@/api/use-websocket';
+import { useGetBids } from '@/api/use-get-bids'
+import { useWebSocket } from '@/api/use-websocket'
 
-import { lazy } from 'react';
+import { lazy } from 'react'
 
-const BgruzHeader = lazy(() => import('@/components/shared/bgruz-header'));
-const PageHead = lazy(() => import('@/components/shared/page-head'));
-const BidsTable = lazy(() => import('./components/bids-table/bids-table'));
-const BidsTableMobile = lazy(() => import('./components/bids-table/bids-table-mobile'));
+const BgruzHeader = lazy(() => import('@/components/shared/bgruz-header'))
+const PageHead = lazy(() => import('@/components/shared/page-head'))
+const BidsTable = lazy(() => import('./components/bids-table/bids-table'))
+const BidsTableMobile = lazy(() => import('./components/bids-table/bids-table-mobile'))
 
 export default function BidsPage() {
     const [searchParams] = useSearchParams()
@@ -34,7 +34,7 @@ export default function BidsPage() {
             <PageHead title='Заявки' />
             <TotalsProvider data={bids}>
                 <BgruzHeader />
-                <FilterProvider pageType='bids' onFiltersChange={setFilters}>
+                <FilterProvider onFiltersChange={setFilters}>
                     <div>
                         <div className='hidden md:block'>
                             <BidsTable bids={bids || []} loading={loading} loadMore={loadMore} hasMore={hasMore} />
