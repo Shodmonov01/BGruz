@@ -25,7 +25,7 @@ interface Bid {
     loadingDate: number
     activationTime: string
     cargoType?: 'wagon' | 'container'
-    loadingMode?: 'loading' | 'unloading'
+    loadingMode?: 'loading' | 'unloading' | 'moving'
     auction?: number
     bestSalePrice?: number
     extraServicesPrice?: number
@@ -104,20 +104,24 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 size: 200,
                 accessorFn: row => {
                     let loadingModeLabel = ''
+
                     if (row.loadingMode === 'loading') {
                         loadingModeLabel = 'Погрузка'
+                    } else if (row.loadingMode === 'moving') {
+                        loadingModeLabel = 'Перемещение'
                     } else {
                         loadingModeLabel = 'Выгрузка'
                     }
 
-                    return `${loadingModeLabel}`
+                    return loadingModeLabel
                 },
                 searchable: true,
                 filterType: 'select',
                 filterOptions: [
-                    { value: ['loading', 'unloading'], label: 'Все' },
+                    { value: ['loading', 'unloading', 'moving'], label: 'Все' },
                     { value: 'loading', label: 'Погрузка' },
-                    { value: 'unloading', label: 'Выгрузка' }
+                    { value: 'unloading', label: 'Выгрузка' },
+                    { value: 'moving', label: 'Перемещение' }
                 ]
             },
             {

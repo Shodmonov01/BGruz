@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect } from 'react'
 import { DateRangePicker } from './range-picker'
 import { Input } from '../ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -29,7 +29,7 @@ export function FilterInput({ column, handleFilterChange }) {
                         'delivered'
                     ]
                 case 'loadingMode':
-                    return ['loading', 'unloading']
+                    return ['loading', 'unloading', 'moving']
                 default:
                     return []
             }
@@ -40,7 +40,7 @@ export function FilterInput({ column, handleFilterChange }) {
                 case 'status':
                     return ['active', 'waiting']
                 case 'loadingMode':
-                    return ['loading', 'unloading']
+                    return ['loading', 'unloading', 'moving']
                 default:
                     return []
             }
@@ -57,7 +57,7 @@ export function FilterInput({ column, handleFilterChange }) {
                 handleFilterChange(column.id, defaultValue)
             }
         }
-    }, [column, handleFilterChange, pageType]) 
+    }, [column, handleFilterChange, pageType])
 
     const handleChange = value => {
         column.setFilterValue(value)
@@ -133,6 +133,3 @@ export function FilterInput({ column, handleFilterChange }) {
             return null
     }
 }
-
-
-
