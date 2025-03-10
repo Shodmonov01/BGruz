@@ -183,9 +183,9 @@ function BidsTableMobile({ bids }: BidsTableMobileProps) {
                             </Button>
                             <Button
                                 onClick={() => {
-                                    if (selectedBid?.persistentId) {
-                                        handleApprove(selectedBid.persistentId)
-                                    }
+                                    if (selectedBid?.id) {
+                                        handleApprove(selectedBid.id)
+                                    }   
                                     handleConfirmClose()
                                 }}
                             >
