@@ -126,11 +126,11 @@ const getDefaultFilters = (pageType: 'orders' | 'bids') => {
             'unloading',
             'delivered'
         ]
-        defaults.loadingMode = ['loading', 'unloading']
+        defaults.loadingMode = ['loading', 'unloading', 'moving']
     } else if (pageType === 'bids') {
         defaults.cargoType = ['wagon', 'container']
         defaults.status = ['active', 'waiting']
-        defaults.loadingMode = ['loading', 'unloading']
+        defaults.loadingMode = ['loading', 'unloading', 'moving']
     }
 
     return defaults
