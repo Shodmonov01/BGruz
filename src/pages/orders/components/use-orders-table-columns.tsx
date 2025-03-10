@@ -162,9 +162,10 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 searchable: true,
                 filterType: 'select',
                 filterOptions: [
-                    { value: ['loading', 'unloading'], label: 'Все' },
+                    { value: ['loading', 'unloading', 'moving'], label: 'Все' },
                     { value: 'loading', label: 'Погрузка' },
-                    { value: 'unloading', label: 'Выгрузка' }
+                    { value: 'unloading', label: 'Выгрузка' },
+                    { value: 'moving', label: 'Перемещение ' }
                 ]
             },
             {
@@ -237,7 +238,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                         canceledByCarrier: 'Отменяется перевозчиком',
                         failed: 'Сорван',
                         failing: 'Срывается',
-                        inTransit: 'Выполнен',
+                        inTransit: 'Машина в пути',
                         headingToLoading: 'Еду на погрузку',
                         loading: 'На погрузке',
                         unloading: 'На выгрузке',

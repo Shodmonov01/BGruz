@@ -105,16 +105,8 @@ export function OrderFinancial({ formData, formatNumber, setFormData }: OrderFin
                             <div>
                                 <p className='text-[20px] font-bold mb-3'>Перевозка</p>
                             </div>
-                            {/* <div>
-                                <p className='text-[20px] font-bold mb-3'>Цена с НДС</p>
-                                <Input
-                                    className='text-right'
-                                    value={formatNumber(String(formData.priceNds.toFixed(2)))}
-                                    placeholder='Цена с НДС'
-                                />
-                            </div> */}
+                         
                             <div>
-                                {/* <p className='text-[20px] font-bold mb-3'>Цена без НДС</p> */}
                                 <Input
                                     className='text-right'
                                     value={formatNumber(String(formData.price.toFixed(2)))}
@@ -196,23 +188,6 @@ export function OrderFinancial({ formData, formatNumber, setFormData }: OrderFin
                 </div>
             </div>
             <div className='px-10'>
-                {/* <div className='grid grid-cols-2 gap-4'>
-                    <div>
-                    </div>
-                    <div>
-                        <p className='font-bold text-[20px]'>Стоимость груза</p>
-                        <Input
-                            className='mt-1 text-right'
-                            name='price'
-                            value={formData.cargoCost ? formatNumber(String(formData.cargoCost)) : '-'}
-                            onChange={e => handleCargoCostChange(Number.parseFloat(e.target.value) || 0)}
-                        />
-                    </div>
-                </div>
-                <div className='w-full flex justify-end mt-3'>
-                    <button className='bg-tertiary text-white py-1 px-4 rounded-sm'>Сохранить</button>
-                </div> */}
-
                 <div>
                     <p className='font-bold text-[20px]'>Груз</p>
                     <Input

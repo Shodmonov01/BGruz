@@ -52,8 +52,9 @@ const BidDetails: React.FC<BidDetailsProps> = ({
 
     return (
         <div>
-            <h1 className='font-bold whitespace-nowrap mt-20 md:mt-0'>Тип перевозки</h1>
+            <h1 className='font-bold whitespace-nowrap mt-20 mb-5 md:mt-0 md:hidden block md:px-0 px-6'>Тип перевозки</h1>
             <div className='flex justify-around flex-row items-start md:items-center gap-0 md:gap-16  mb-6 md:my-6 md:px-0 px-4'>
+            <h1 className='font-bold whitespace-nowrap mt-20 md:mt-0 hidden md:block'>Тип перевозки</h1>
                 <div className='w-full md-w-auto flex justify-center md:block'>
                     <FormField
                         control={control}
@@ -84,13 +85,13 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                                     : undefined
                                         }
                                         defaultValue={field.value}
-                                        className='flex flex-col md:flex-row md:gap-6 ml-8 gap-12 md:ml-auto '
+                                        className='flex flex-col md:flex-row md:gap-6 ml-0 gap-4 md:ml-auto '
                                     >
-                                        <FormItem className='flex items-center justify-end md:justify-normal space-x-3 space-y-0 '>
-                                            <FormLabel className='font-normal'>Погрузка</FormLabel>
+                                        <FormItem className='flex flex-row-reverse md:flex-row items-center gap-3 md:gap-0 md:justify-normal space-x-3 space-y-0 '>
                                             <FormControl>
                                                 <RadioGroupItem value='Погрузка' className='size-8' />
                                             </FormControl>
+                                            <FormLabel className='font-normal'>Погрузка</FormLabel>
                                         </FormItem>
                                         <FormItem className='flex flex-row-reverse md:flex-row items-center gap-3 md:gap-0 space-x-3 space-y-0'>
                                             <FormControl>
@@ -135,13 +136,13 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                                 : undefined
                                         }
                                         defaultValue={field.value}
-                                        className='flex flex-col md:flex-row md:gap-6 gap-12  '
+                                        className='flex flex-col md:flex-row md:gap-6 gap-4'
                                     >
-                                        <FormItem className='flex flex-row-reverse md:flex-row items-center gap-3 space-x-3 space-y-0'>
-                                            <FormLabel className='font-normal'>Контейнер</FormLabel>
+                                        <FormItem className='flex flex-row items-center gap-0 space-x-3 space-y-0'>
                                             <FormControl>
                                                 <RadioGroupItem value='Контейнер' className='size-8 !m-0' />
                                             </FormControl>
+                                            <FormLabel className='font-normal'>Контейнер</FormLabel>
                                         </FormItem>
                                         <FormItem className='flex items-center space-x-3 space-y-0'>
                                             <FormControl>
