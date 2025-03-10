@@ -161,38 +161,59 @@ export function OrderRoute({ formData }: OrderRouteProps) {
                 </div>
 
                 <div className='space-y-2'>
-                    <div className='flex items-center justify-between'>
+                    {/* <div className='flex items-center justify-between'>
                         <p className='font-bold'>Файлы</p>
                         <button value='Ссылка на файл'>
                             <a
-                                href={`mailto:${formData.customer.email}`}
+                                href={`mailto:${formData.customer.assignedDriverFiles}`}
                                 className='border ml-3 border-gray-300 w-[185px] rounded px-2 py-1 text-sm flex justify-center text-primary underline'
                             >
                                 Ссылка на файл
                             </a>
                         </button>
+                    </div> */}
+                    <div className='flex flex-col md:flex-row gap-2 items-center'>
+                        <p className='font-bold mb-2'>Файлы</p>
+                        {formData.assignedDriverFiles?.map(file => (
+                            <a
+                                key={file.id}
+                                href={file.link}
+                                target='_blank'
+                                rel='noopener noreferrer'
+                                className='border border-gray-300 rounded px-2 py-1 text-sm text-primary underline mb-1'
+                            >
+                                {file.name}
+                            </a>
+                        ))}
                     </div>
-                    <div className='flex items-center justify-between'>
-                        <p className='font-bold'>Файлы</p>
-                        <button value='Ссылка на файл'>
+
+                    <div className='flex flex-col md:flex-row gap-2 items-center'>
+                        <p className='font-bold mb-2'>Файлы</p>
+                        {formData.assignedTrailerFiles?.map(file => (
                             <a
-                                href={`mailto:${formData.customer.email}`}
-                                className='border ml-3 border-gray-300 w-[185px] rounded px-2 py-1 text-sm flex justify-center text-primary underline'
+                                key={file.id}
+                                href={file.link}
+                                target='_blank'
+                                rel='noopener noreferrer'
+                                className='border border-gray-300 rounded px-2 py-1 text-sm text-primary underline mb-1'
                             >
-                                Ссылка на файл
+                                {file.name}
                             </a>
-                        </button>
+                        ))}
                     </div>
-                    <div className='flex items-center justify-between'>
-                        <p className='font-bold'>Файлы</p>
-                        <button value='Ссылка на файл'>
+                    <div className='flex flex-col md:flex-row gap-2 items-center'>
+                        <p className='font-bold mb-2'>Файлы</p>
+                        {formData.assignedVehicleFiles?.map(file => (
                             <a
-                                href={`mailto:${formData.customer.email}`}
-                                className='border ml-3 border-gray-300 w-[185px] rounded px-2 py-1 text-sm flex justify-center text-primary underline'
+                                key={file.id}
+                                href={file.link}
+                                target='_blank'
+                                rel='noopener noreferrer'
+                                className='border border-gray-300 rounded px-2 py-1 text-sm text-primary underline mb-1'
                             >
-                                Ссылка на файл
+                                {file.name}
                             </a>
-                        </button>
+                        ))}
                     </div>
                 </div>
             </div>
