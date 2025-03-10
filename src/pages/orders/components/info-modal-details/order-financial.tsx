@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { postData2 } from '@/api/api'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { Button } from '@/components/ui/button'
 
 interface OrderFinancialProps {
     formData: any
@@ -101,11 +102,11 @@ export function OrderFinancial({ formData, formatNumber, setFormData }: OrderFin
             <div className='shadow-none border-0 px-10'>
                 <div className='grid gap-4 pt-6'>
                     <div className='grid gap-4'>
-                        <div className='grid grid-cols-2 '>
+                        <div className='grid grid-cols-2'>
                             <div>
                                 <p className='text-[20px] font-bold mb-3'>Перевозка</p>
                             </div>
-                         
+
                             <div>
                                 <Input
                                     className='text-right'
@@ -115,18 +116,17 @@ export function OrderFinancial({ formData, formatNumber, setFormData }: OrderFin
                                 />
                             </div>
                         </div>
-                     
                     </div>
                 </div>
             </div>
 
             <div className='space-y-2 px-10'>
                 <div className='space-y-2'>
-                <p className='text-[20px] font-bold mb-3'>Доп услуги</p>
+                    <p className='text-[20px] font-bold mb-3'>Доп услуги</p>
 
                     {formData.extraServices.map((service, index) => (
                         <div className='grid grid-cols-2'>
-                            <div className='flex items-center'>
+                            <div className='flex items-center gap-2'>
                                 <Checkbox
                                     className='font-bold'
                                     id={`service-${index}`}
@@ -158,8 +158,11 @@ export function OrderFinancial({ formData, formatNumber, setFormData }: OrderFin
                     ))}
                     {/* <p className='font-bold w-full min-w-[350px] text-[20px]'>Полная стоимость рейса без НДС</p> */}
                     <div className='w-full flex justify-end'>
-                                    <button className='bg-tertiary text-white py-1 px-4 rounded-sm'>Сохранить</button>
-                                </div>
+                        {/* <button className='bg-tertiary text-white py-1 px-4 rounded-sm'>Сохранить</button> */}
+                        <Button variant='tertiary' className='!py-4'>
+                            Сохранить
+                        </Button>
+                    </div>
                 </div>
                 <div className='flex items-center gap-2'>
                     <p className='font-bold w-full min-w-[350px] text-[20px]'>Полная стоимость рейса без НДС</p>
@@ -187,7 +190,8 @@ export function OrderFinancial({ formData, formatNumber, setFormData }: OrderFin
                     />
                 </div>
             </div>
-            <div className='px-10'>
+
+            <div className='px-10 space-y-3'>
                 <div>
                     <p className='font-bold text-[20px]'>Груз</p>
                     <Input
@@ -196,6 +200,21 @@ export function OrderFinancial({ formData, formatNumber, setFormData }: OrderFin
                         value={formData.buyBid.cargoTitle || ''}
                         readOnly
                     />
+                </div>
+
+                <div className='grid gap-2 grid-cols-2 items-center'>
+                    <Label className='font-bold text-[20px]'>Стоимость груза</Label>
+                    <Input
+                        className='mt-1'
+                        placeholder='Стоимость груза'
+                        value={formData.buyBid.cargoCost || ''}
+                        readOnly
+                    />
+                </div>
+                <div className='w-full flex gap-2 items-center justify-end'>
+                    <Button variant='tertiary' className='!py-4'>
+                        Сохранить
+                    </Button>
                 </div>
 
                 <div className='grid gap-2'>

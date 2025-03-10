@@ -55,7 +55,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
             <h1 className='font-bold whitespace-nowrap mt-20 mb-5 md:mt-0 md:hidden block md:px-0 px-6'>Тип перевозки</h1>
             <div className='flex justify-around flex-row items-start md:items-center gap-0 md:gap-16  mb-6 md:my-6 md:px-0 px-4'>
             <h1 className='font-bold whitespace-nowrap mt-20 md:mt-0 hidden md:block'>Тип перевозки</h1>
-                <div className='w-full md-w-auto flex justify-center md:block'>
+                <div className='w-full md-w-auto flex justify-center md:block border p-4 rounded-lg'>
                     <FormField
                         control={control}
                         name='loadingType'
@@ -113,7 +113,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                     />
                 </div>
 
-                <div className='w-full flex justify-center md:block'>
+                <div className='w-full flex justify-center md:block border p-4 rounded-lg'>
                     <FormField
                         control={control}
                         name='transportType'
