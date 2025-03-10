@@ -137,7 +137,7 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
             <ScrollArea>
                 <div className='h-[calc(98vh-200px)] relative !scrollbar-thin !scrollbar-thumb-gray-400 !scrollbar-track-gray-100'>
                     <Table
-                        style={{ overflow: 'visible', display: 'block' }}
+                        style={{ overflow: 'visible' }}
                         className='min-w-[1000px] border  border-gray-300 relative'
                     >
                         

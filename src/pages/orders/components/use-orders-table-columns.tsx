@@ -431,7 +431,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
             },
 
             {
-                accessorKey: 'buyBid.client.fio',
+                accessorKey: 'clientName',
                 header: 'Клиент',
                 accessorFn: (row: Bid) => row.buyBid?.client?.organizationName ?? '—',
                 size: 120,
@@ -440,7 +440,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 filterType: 'fuzzy'
             },
             {
-                accessorKey: 'customer.organizationName',
+                accessorKey: 'customerName',
                 header: 'Заказчик',
                 size: 150,
                 searchable: true,
@@ -448,7 +448,7 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 filterType: 'fuzzy'
             },
             {
-                accessorKey: 'carrier.organizationName',
+                accessorKey: 'carrierName',
                 header: 'Перевозчик',
                 size: 150,
                 searchable: true,
