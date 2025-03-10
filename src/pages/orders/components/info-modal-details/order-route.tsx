@@ -41,7 +41,11 @@ export function OrderRoute({ formData }: OrderRouteProps) {
                         />
                     </p>
                     <p className='flex items-center gap-2'>
-                        {formData.buyBid.loadingMode === 'loading' ? 'Погрузка' : 'Выгрузка'}
+                        {formData.buyBid?.loadingMode === 'loading'
+                            ? 'Погрузка'
+                            : formData.buyBid?.loadingMode === 'moving'
+                              ? 'Перемещение'
+                              : 'Выгрузка'}
                         <RadioGroupItem
                             className='size-8'
                             value='loadingMode'
@@ -93,10 +97,10 @@ export function OrderRoute({ formData }: OrderRouteProps) {
                 <p className='text-[20px] font-bold'>Склад клиента</p>
                 <div className='grid grid-cols-2 gap-16'>
                     <div>
-                        <Input value={formData.buyBid.warehouses[0].cityName || ''} className='mt-1' readOnly />
+                        <Input value={formData.buyBid?.warehouses?.[0]?.cityName || ''} className='mt-1' readOnly />
                     </div>
                     <div>
-                        <Input value={formData.buyBid.warehouses[0].address || ''} className='mt-1' readOnly />
+                        <Input value={formData.buyBid?.warehouses?.[0]?.address || ''} className='mt-1' readOnly />
                     </div>
                 </div>
             </div>
@@ -106,7 +110,7 @@ export function OrderRoute({ formData }: OrderRouteProps) {
                 <div className='grid grid-cols-2 gap-16'>
                     <div>
                         <Input
-                            value={formData.buyBid.terminal2 ? formData.buyBid.terminal2.cityName : ''}
+                            value={formData.buyBid.terminal2 ? formData.buyBid?.terminal2?.cityName : ''}
                             className='mt-1'
                             readOnly
                         />
