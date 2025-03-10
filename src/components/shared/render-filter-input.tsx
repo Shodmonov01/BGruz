@@ -1,63 +1,11 @@
-import { useEffect } from 'react';
+// import { useEffect } from 'react'
 import { DateRangePicker } from './range-picker'
 import { Input } from '../ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { useFilter } from '@/context/filter-context'
+// import { useFilter } from '@/context/filter-context'
 
 export function FilterInput({ column, handleFilterChange }) {
-    const { pageType } = useFilter()
-
-    const getDefaultValue = columnId => {
-        if (pageType === 'orders') {
-            switch (columnId) {
-                case 'cargoType':
-                    return ['wagon', 'container']
-                case 'status':
-                    return [
-                        'new',
-                        'inTransit',
-                        'completed',
-                        'failing',
-                        'failed',
-                        'canceledByCustomer',
-                        'canceledByCarrier',
-                        'canceledByCustomerWithPenalty',
-                        'canceledByCarrierWithPenalty',
-                        'headingToLoading',
-                        'loading',
-                        'unloading',
-                        'delivered'
-                    ]
-                case 'loadingMode':
-                    return ['loading', 'unloading']
-                default:
-                    return []
-            }
-        } else if (pageType === 'bids') {
-            switch (columnId) {
-                case 'cargoType':
-                    return ['wagon', 'container']
-                case 'status':
-                    return ['active', 'waiting']
-                case 'loadingMode':
-                    return ['loading', 'unloading']
-                default:
-                    return []
-            }
-        }
-        return []
-    }
-
-    useEffect(() => {
-        const currentValue = column.getFilterValue()
-        if (!currentValue) {
-            const defaultValue = getDefaultValue(column.id)
-            if (defaultValue.length > 0) {
-                column.setFilterValue(defaultValue)
-                handleFilterChange(column.id, defaultValue)
-            }
-        }
-    }, [column, handleFilterChange, pageType]) 
+    // const { pageType } = useFilter()
 
     const handleChange = value => {
         column.setFilterValue(value)
@@ -89,7 +37,7 @@ export function FilterInput({ column, handleFilterChange }) {
                         const selectedOption = column.columnDef.filterOptions?.find(option =>
                             Array.isArray(option.value) ? option.value.join(',') === value : option.value === value
                         )
-                        const newValue = selectedOption ? selectedOption.value : getDefaultValue(column.id)
+                        const newValue = selectedOption ? selectedOption.value : []
                         column.setFilterValue(newValue)
                         handleFilterChange(column.id, newValue)
                     }}
@@ -133,6 +81,3 @@ export function FilterInput({ column, handleFilterChange }) {
             return null
     }
 }
-
-
-

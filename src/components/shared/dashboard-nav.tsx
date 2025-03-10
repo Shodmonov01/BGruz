@@ -22,18 +22,18 @@ export default function DashboardNav({ items, setOpen, isMobileNav = false }: Da
     }
 
     return (
-        <nav className='grid items-start gap-2'>
+        <nav className='grid items-start relative z-[999] gap-2'>
             <TooltipProvider>
                 {items.map((item, index) => {
                     const Icon = Icons[item.icon || 'arrowRight']
                     return (
                         item.href && (
                             <Tooltip key={index}>
-                                <TooltipTrigger asChild>
+                                <TooltipTrigger asChild className='relative z-50'>
                                     <Link
                                         to={item.disabled ? '/' : item.href}
                                         className={cn(
-                                            'flex items-center gap-2 overflow-hidden rounded-md py-2 text-sm font-medium hover:text-muted-foreground',
+                                            'flex items-center relative  !z-50 gap-2  rounded-md py-2 text-sm font-medium hover:text-muted-foreground',
                                             path === item.href ? 'bg-white text-black hover:text-black' : 'transparent',
                                             item.disabled && 'cursor-not-allowed opacity-80'
                                         )}
@@ -45,14 +45,14 @@ export default function DashboardNav({ items, setOpen, isMobileNav = false }: Da
                                         }}
                                     >
                                         <Icon className={`ml-2.5 size-5`} />
-                                        <span className='hidden md:block'>
+                                        <span className='hidden md:block  relative !z-50'>
                                             {isMobileNav || (!isMinimized && !isMobileNav) ? (
                                                 <span className='mr-2 truncate'>{item.title}</span>
                                             ) : (
                                                 ''
                                             )}
                                         </span>
-                                        <span className='block md:hidden'>
+                                        <span className='block md:hidden relative !z-50'>
                                             <span className='mr-2 truncate'>{item.title}</span>
                                         </span>
                                     </Link>
@@ -61,7 +61,7 @@ export default function DashboardNav({ items, setOpen, isMobileNav = false }: Da
                                     align='center'
                                     side='right'
                                     sideOffset={8}
-                                    className={!isMinimized ? 'hidden' : 'inline-block'}
+                                    className={` !z-50 relative ${!isMinimized ? 'hidden' : 'inline-block'}`}
                                 >
                                     {item.title}
                                 </TooltipContent>

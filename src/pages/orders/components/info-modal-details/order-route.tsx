@@ -12,6 +12,8 @@ interface OrderRouteProps {
 export function OrderRoute({ formData }: OrderRouteProps) {
     console.log('loadingTime:', formData.buyBid?.loadingTime)
 
+    console.log('formData', formData)
+
     return (
         <>
             <div className='bg-cyan-500 text-[20px] flex py-2 px-6 text-white justify-between'>
@@ -105,10 +107,18 @@ export function OrderRoute({ formData }: OrderRouteProps) {
                 <p className='text-[20px] font-bold'>Терминал 2</p>
                 <div className='grid grid-cols-2 gap-16'>
                     <div>
-                        <Input value={formData.buyBid.terminal2.cityName || ''} className='mt-1' readOnly />
+                        <Input
+                            value={formData.buyBid.terminal2 ? formData.buyBid.terminal2.cityName : ''}
+                            className='mt-1'
+                            readOnly
+                        />
                     </div>
                     <div>
-                        <Input value={formData.buyBid.terminal2.address || ''} className='mt-1' readOnly />
+                        <Input
+                            value={formData.buyBid.terminal2 ? formData.buyBid.terminal2.address : ''}
+                            className='mt-1'
+                            readOnly
+                        />
                     </div>
                 </div>
             </div>
