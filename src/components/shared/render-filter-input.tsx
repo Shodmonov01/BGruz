@@ -30,6 +30,7 @@ export function FilterInput({ column, handleFilterChange, sortingState }: Filter
         if (newDirection) {
             const sortParams = {
                 filterFieldName: column.id,
+                // @ts-ignore
                 direction: newDirection === 'asc' ? 'ascending' : 'descending' || currentDirection
 
                 // startFrom: {
