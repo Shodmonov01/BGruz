@@ -98,6 +98,8 @@ const BidsInfoModal = ({
 
     const hideTerminal1 = operationType === 'loading' && transportType === 'Вагон'
     const hideTerminal2 = operationType === 'unloading' && transportType === 'Вагон'
+    const hideWarehouses = operationType === 'moving'
+
     console.log('selectedBid', selectedBid)
 
     const formMethods = useForm<BidFormData>({
@@ -150,13 +152,13 @@ const BidsInfoModal = ({
             setFormData({ ...selectedBid })
             setIsReadOnly(true)
 
-            if (selectedBid.client?.organizationId) {
-                setValue('client', selectedBid.client.organizationId.toString())
-                handleClientChange(selectedBid.client.organizationId.toString())
+            if (selectedBid.customer?.organizationId) {
+                setValue('recipientOrSender', selectedBid.customer.organizationId.toString())
+                handleClientChange(selectedBid.customer.organizationId.toString())
             }
 
-            if (selectedBid.customer) {
-                setValue('recipientOrSender', selectedBid.customer.organizationId.toString())
+            if (selectedBid.client) {
+                setValue('client', selectedBid.client.organizationId.toString())
             }
 
             setValue('loadingType', selectedBid.loadingMode || '')
@@ -224,7 +226,6 @@ const BidsInfoModal = ({
     console.log('selectedBid.terminal1:', selectedBid.terminal1)
     console.log('selectedBid.terminal2:', selectedBid.terminal2)
     console.log('selectedBid.warehouses:', selectedBid.warehouses)
-
 
     const handleClientChange = async (clientId: string) => {
         setValue('client', clientId)
@@ -333,26 +334,26 @@ const BidsInfoModal = ({
             const payload = {
                 cargoType: data.transportType,
                 loadingMode: data.loadingType,
-                clientId: Number(data.recipientOrSender),
+                clientId: Number(data.client),
                 startDate: getValues('startDate'),
                 slideDayTotal: 0,
-                customerId: Number(data.client),
-                terminal1: {
-                    cityId: data.terminal1Id,
-                    cityName: data.terminal1Name,
-                    address: data.terminal1Address
-                },
-                terminal2: {
-                    cityId: data.terminal2Id,
-                    cityName: data.terminal2Name,
-                    address: data.terminal2Address
-                },
+                customerId: Number(data.recipientOrSender),
+                // terminal1: {
+                //     cityId: data.terminal1Id,
+                //     cityName: data.terminal1Name,
+                //     address: data.terminal1Address
+                // },
+                // terminal2: {
+                //     cityId: data.terminal2Id,
+                //     cityName: data.terminal2Name,
+                //     address: data.terminal2Address
+                // },
 
-                warehouses: data.warehouses.map(warehouse => ({
-                    cityId: warehouse.id,
-                    cityName: warehouse.name,
-                    address: warehouse.address
-                })),
+                // warehouses: data.warehouses.map(warehouse => ({
+                //     cityId: warehouse.id,
+                //     cityName: warehouse.name,
+                //     address: warehouse.address
+                // })),
 
                 isPriceRequest: data.requestPrice,
                 price: data.price || 0,
@@ -364,6 +365,31 @@ const BidsInfoModal = ({
 
                 extraServices: data.extraServices || [],
                 description: data.description
+            }
+            if (!hideTerminal1) {
+                // @ts-expect-error надо настроить
+                payload.terminal1 = {
+                    cityId: data.terminal1Id,
+                    cityName: data.terminal1Name,
+                    address: data.terminal1Address
+                }
+            }
+            if (!hideWarehouses) {
+                // @ts-expect-error надо настроить
+                payload.warehouses = data.warehouses.map(warehouse => ({
+                    cityId: warehouse.id,
+                    cityName: warehouse.name,
+                    address: warehouse.address
+                }))
+            }
+
+            if (!hideTerminal2) {
+                // @ts-expect-error надо настроить
+                payload.terminal2 = {
+                    cityId: data.terminal2Id,
+                    cityName: data.terminal2Name,
+                    address: data.terminal2Address
+                }
             }
             const token = localStorage.getItem('authToken')
             if (!token) {
@@ -408,7 +434,12 @@ const BidsInfoModal = ({
                             className='hidden md:block space-y-2 py-0 md:py-4 text-center text-[#fff]'
                         />
                         <div className='flex md:hidden items-center gap-2 bg-primary text-white p-4'>
-                            <Button variant='ghost' size='icon' className='hover:bg-white/20' onClick={handleCloseModal}>
+                            <Button
+                                variant='ghost'
+                                size='icon'
+                                className='hover:bg-white/20'
+                                onClick={handleCloseModal}
+                            >
                                 <ChevronLeft className='h-6 w-6' />
                             </Button>
                             <h2 className='text-lg font-medium'>
@@ -436,7 +467,8 @@ const BidsInfoModal = ({
                                         {!hideTerminal1 && (
                                             <TerminalOne terminals={terminals} isReadOnly={isReadOnly} />
                                         )}
-                                        <Warehouses warehouses={warehouses} isReadOnly={isReadOnly} />
+                                        {!hideWarehouses && <Warehouses warehouses={warehouses} isReadOnly={isReadOnly}/>}
+
                                         {!hideTerminal2 && (
                                             <TerminalTwo terminals={terminals} isReadOnly={isReadOnly} />
                                         )}
