@@ -129,6 +129,7 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
         const newColumnFilters = Object.entries(filters).map(([id, value]) => ({ id, value }))
         setColumnFilters(newColumnFilters)
     }, [filters])
+    console.log('table', table.getHeaderGroups())
 
     return (
         <div>
@@ -136,11 +137,7 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
 
             <ScrollArea>
                 <div className='h-[calc(98vh-200px)] relative !scrollbar-thin !scrollbar-thumb-gray-400 !scrollbar-track-gray-100'>
-                    <Table
-                        style={{ overflow: 'visible' }}
-                        className='min-w-[1000px] border  border-gray-300 relative'
-                    >
-                        
+                    <Table style={{ overflow: 'visible' }} className='min-w-[1000px] border  border-gray-300 relative'>
                         <TableHeader className='!sticky !top-0 z-50 '>
                             {table.getHeaderGroups().map(headerGroup => (
                                 <TableRow key={headerGroup.id}>
@@ -171,6 +168,7 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
                                                             <FilterInput
                                                                 column={header.column}
                                                                 handleFilterChange={handleFilterChange}
+                                                                sortingState={header.column.getIsSorted()}
                                                             />
                                                         </div>
                                                     ) : (
@@ -250,11 +248,7 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
             </ScrollArea>
 
             {selectedBid && (
-                <BidsInfoModal
-                    selectedBid={selectedBid}
-                    handleCloseModal={handleCloseModal}
-                    open={isModalOpen}
-                />
+                <BidsInfoModal selectedBid={selectedBid} handleCloseModal={handleCloseModal} open={isModalOpen} />
             )}
         </div>
     )
