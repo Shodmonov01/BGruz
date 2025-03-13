@@ -57,14 +57,17 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
         let isFetching = false
 
         const handleScroll = () => {
+            console.log(scrollRef, isFetching)
             if (!scrollRef.current || isFetching) return
 
             const { scrollTop, scrollHeight, clientHeight } = scrollRef.current
             const isBottom = scrollTop + clientHeight >= scrollHeight - 50
+            console.log(isBottom)
 
             if (isBottom && hasMore && !loading) {
                 isFetching = true
                 loadMore()
+                console.log('loadmore')
                 setTimeout(() => {
                     isFetching = false
                 }, 500)
@@ -72,6 +75,7 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
         }
 
         const currentScroll = scrollRef.current
+        console.log(currentScroll)
         if (currentScroll) {
             currentScroll.addEventListener('scroll', handleScroll)
         }
@@ -129,15 +133,20 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
         const newColumnFilters = Object.entries(filters).map(([id, value]) => ({ id, value }))
         setColumnFilters(newColumnFilters)
     }, [filters])
-    console.log('table', table.getHeaderGroups())
 
     return (
         <div>
             <BidHeader setIsShortTable={setIsShortTable} isShortTable={isShortTable} />
 
             <ScrollArea>
-                <div className='h-[calc(98vh-200px)] relative !scrollbar-thin !scrollbar-thumb-gray-400 !scrollbar-track-gray-100'>
-                    <Table style={{ overflow: 'visible' }} className='min-w-[1000px] border  border-gray-300 relative'>
+                <div
+                    ref={scrollRef}
+                    className='h-[calc(98vh-200px)] overflow-y-scroll relative !scrollbar-thin !scrollbar-thumb-gray-400 !scrollbar-track-gray-100'>
+                    <Table
+                        style={{ overflow: 'visible' }}
+                        className='min-w-[1000px] border  border-gray-300 relative'
+                    >
+
                         <TableHeader className='!sticky !top-0 z-50 '>
                             {table.getHeaderGroups().map(headerGroup => (
                                 <TableRow key={headerGroup.id}>
@@ -168,7 +177,6 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
                                                             <FilterInput
                                                                 column={header.column}
                                                                 handleFilterChange={handleFilterChange}
-                                                                sortingState={header.column.getIsSorted()}
                                                             />
                                                         </div>
                                                     ) : (
@@ -206,13 +214,12 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
                                 <TableRow
                                     onDoubleClick={() => handleOpenModal(row.original)}
                                     key={row.id}
-                                    className={`cursor-pointer text-[16px] hover:bg-gray-100 ${
-                                        row.original.status === 'canceled'
-                                            ? 'bg-gray-50 opacity-50 line-through'
-                                            : index % 2 === 0
-                                              ? 'bg-gray-100'
-                                              : ''
-                                    }`}
+                                    className={`cursor-pointer text-[16px] hover:bg-gray-100 ${row.original.status === 'canceled'
+                                        ? 'bg-gray-50 opacity-50 line-through'
+                                        : index % 2 === 0
+                                            ? 'bg-gray-100'
+                                            : ''
+                                        }`}
                                 >
                                     {row.getVisibleCells().map(cell => (
                                         <TableCell
@@ -248,7 +255,11 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
             </ScrollArea>
 
             {selectedBid && (
-                <BidsInfoModal selectedBid={selectedBid} handleCloseModal={handleCloseModal} open={isModalOpen} />
+                <BidsInfoModal
+                    selectedBid={selectedBid}
+                    handleCloseModal={handleCloseModal}
+                    open={isModalOpen}
+                />
             )}
         </div>
     )

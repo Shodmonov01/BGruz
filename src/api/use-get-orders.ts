@@ -21,7 +21,7 @@ interface Orders {
     terminal2: { cityName: string; address: string }
 }
 
-export const useGetOrders = (size: number) => {
+export const useGetOrders = (size: number, sendRequest: boolean = true) => {
     const [orders, setOrders] = useState<Orders[] | null>(null)
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
@@ -32,43 +32,46 @@ export const useGetOrders = (size: number) => {
     const filtersRef = useRef<OrderFilter>({})
     const isMounted = useRef(false)
 
-    const fetchOrders = useCallback(async (force = false) => {
-        setLoading(true)
-        setError(null)
+    const fetchOrders = useCallback(
+        async (force = false) => {
+            setLoading(true)
+            setError(null)
 
-        try {
-            const token = localStorage.getItem('authToken') || ''
+            try {
+                const token = localStorage.getItem('authToken') || ''
 
-            const currentFilters = filtersRef.current
-            const isFiltersChanged = JSON.stringify(prevFiltersRef.current) !== JSON.stringify(currentFilters)
+                const currentFilters = filtersRef.current
+                const isFiltersChanged = JSON.stringify(prevFiltersRef.current) !== JSON.stringify(currentFilters)
 
-            if (!force && !isFiltersChanged) {
+                if (!force && !isFiltersChanged) {
+                    setLoading(false)
+                    return
+                }
+
+                prevFiltersRef.current = currentFilters
+
+                const response = await postData2<{ items: Orders[]; total: number }>(
+                    'api/v1/orders/getbatch',
+                    { size, filter: currentFilters },
+                    token
+                )
+
+                setOrders(response.items)
+                setHasMore(response.items.length < response.total)
+            } catch (err) {
+                console.error('Ошибка при загрузке заявок:', err)
+                setError('Не удалось загрузить заявки. Попробуйте позже.')
+            } finally {
                 setLoading(false)
-                return
             }
-
-            prevFiltersRef.current = currentFilters
-
-            const response = await postData2<{ items: Orders[]; total: number }>(
-                'api/v1/orders/getbatch',
-                { size, filter: currentFilters },
-                token
-            )
-
-            setOrders(response.items)
-            setHasMore(response.items.length < response.total)
-        } catch (err) {
-            console.error('Ошибка при загрузке заявок:', err)
-            setError('Не удалось загрузить заявки. Попробуйте позже.')
-        } finally {
-            setLoading(false)
-        }
-    }, [size])
+        },
+        [size]
+    )
 
     useEffect(() => {
         filtersRef.current = filters
 
-        if (isMounted.current) {
+        if (isMounted.current && sendRequest) {
             fetchOrders()
         } else {
             isMounted.current = true

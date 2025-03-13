@@ -185,10 +185,7 @@ export function FilterProvider({ children, onFiltersChange }: FilterProviderProp
     const handleFilterChange = useCallback(
         (columnId: string, value: any) => {
             const pageType = getPageTypeFromPathname(pathname)
-            console.log('columnId', columnId)
-
             let formattedValue = value
-            console.log('value.sort', value)
 
             if (columnId === 'loadingMode' || columnId === 'cargoType' || columnId === 'status') {
                 formattedValue = Array.isArray(value) ? value : [value]

@@ -25,10 +25,7 @@ export function DateRangePicker({ onChange, placeholder = 'Выберите да
                     <Button
                         id='date'
                         variant={'outlineSecondary'}
-                        className={cn(
-                            'w-full justify-start border-0 text-left px-3 py-5 md:px-3 !md:py-6 text-base md:text-xl font-normal',
-                            !date && 'text-muted-foreground'
-                        )}
+                        className={cn('w-full justify-start text-left px-3 py-5 md:px-3 !md:py-6 text-base md:text-xl font-normal', !date && 'text-muted-foreground')}
                     >
                         <CalendarIcon className='mr-2 h-4 w-4' />
                         {date?.from ? (

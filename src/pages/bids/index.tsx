@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 import { FilterProvider, useFilter } from '@/context/filter-context'
@@ -16,9 +16,10 @@ const BidsTableMobile = lazy(() => import('./components/bids-table/bids-table-mo
 
 export default function BidsPage() {
     const [searchParams] = useSearchParams()
-    const [size, setSize] = useState(Number(searchParams.get('size')) || 500)
+    const [size, setSize] = useState(Number(searchParams.get('size')) || 20)
+    const isMobile = useMemo(() => window.innerWidth <= 768, [])
 
-    const { bids, hasMore, loading, refreshBids } = useGetBids(size)
+    const { bids, hasMore, loading, refreshBids } = useGetBids(size, !isMobile)
     const { setFilters } = useFilter()
 
     const loadMore = () => {
@@ -26,7 +27,7 @@ export default function BidsPage() {
             setSize(prev => prev + 50)
         }
     }
-    useWebSocket(refreshBids, () => {})
+    useWebSocket(refreshBids, () => { })
 
     // ! если что тут надо попробовать добавить ScrollArea
     return (

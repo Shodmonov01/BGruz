@@ -33,8 +33,8 @@ export function RenderFilterMobile() {
         return null
     }, [location.pathname])
 
-    const { loading: loadingBids, refreshBids } = useGetBids(size)
-    const { loading: loadingOrders, refreshOrders } = useGetOrders(size)
+    const { loading: loadingBids, refreshBids } = useGetBids(size, pageType !== 'orders' && isMobile)
+    const { loading: loadingOrders, refreshOrders } = useGetOrders(size, pageType === 'orders' && isMobile)
 
     const loading = pageType === 'orders' ? loadingOrders : loadingBids
     const refreshData = pageType === 'orders' ? refreshOrders : refreshBids
@@ -61,23 +61,24 @@ export function RenderFilterMobile() {
     }, [localFilters, refreshData, handleFilterChange])
 
     const resetFilters = useCallback(() => {
-        const emptyFilters = {}
-        setLocalFilters(emptyFilters)
+        const emptyFilters = {};
+        setLocalFilters(emptyFilters);
 
-        Object.keys(filters).forEach(key => {
-            handleFilterChange(key, undefined)
-        })
+        Object.keys(filters).forEach((key) => {
+            handleFilterChange(key, undefined);
+        });
 
-        refreshData()
-        setIsOpen(false)
-    }, [filters, refreshData, handleFilterChange])
+        refreshData();
+        setIsOpen(false);
+    }, [filters, refreshData, handleFilterChange]);
+
 
     const ordersColumns = useOrdersTableColumns({
         onApprove: applyFilters,
         isMobile: true,
         isShortTable: false,
-        onDelete: () => {},
-        onOpenModal: () => {}
+        onDelete: () => { },
+        onOpenModal: () => { }
     })
 
     const bidsColumns = useBidsTableColumns({
@@ -87,44 +88,12 @@ export function RenderFilterMobile() {
 
     const originalColumns = pageType === 'orders' ? ordersColumns : bidsColumns
 
-    // const memoizedColumns = useMemo(() => {
-    //     return (
-    //         originalColumns
-    //             // @ts-expect-error надо что то сделать
-    //             .filter(column => column.isMobile === true)
-    //             .map(column => ({
-    //                 ...column, // Сохраняем методы оригинального столбца
-
-    //                 // @ts-expect-error надо что то сделать
-    //                 id: column.accessorKey,
-    //                 columnDef: {
-    //                     // @ts-expect-error надо что то сделать
-    //                     filterType: column.filterType,
-    //                     // @ts-expect-error надо что то сделать
-    //                     filterOptions: column.filterOptions,
-    //                     header: column.header
-    //                 },
-    //                 // @ts-expect-error надо что то сделать
-    //                 getFilterValue: () => localFilters[column.accessorKey] || null,
-    //                 setFilterValue: (value: any) => {
-    //                     setLocalFilters(prev => ({
-    //                         ...prev,
-    //                         // @ts-expect-error надо что то сделать
-    //                         [column.accessorKey]: value
-    //                     }))
-
-    //                 }
-    //             }))
-    //     )
-    // }, [originalColumns, localFilters])
-
     const memoizedColumns = useMemo(() => {
         return (
             originalColumns
                 // @ts-expect-error надо что то сделать
                 .filter(column => column.isMobile === true)
                 .map(column => ({
-                    ...column, // Сохраняем методы оригинального столбца
                     // @ts-expect-error надо что то сделать
                     id: column.accessorKey,
                     columnDef: {
@@ -142,11 +111,7 @@ export function RenderFilterMobile() {
                             // @ts-expect-error надо что то сделать
                             [column.accessorKey]: value
                         }))
-                    },
-                    // @ts-expect-error надо что то сделать
-                    getIsSorted: column.getIsSorted ? () => column.getIsSorted() : () => false,
-                    // @ts-expect-error надо что то сделать
-                    getCanSort: column.getCanSort ? () => column.getCanSort() : () => false // Добавляем getCanSort
+                    }
                 }))
         )
     }, [originalColumns, localFilters])
@@ -168,12 +133,7 @@ export function RenderFilterMobile() {
                                 {/* @ts-expect-error надо что то сделать */}
                                 <label className='text-xs font-medium'>{column.columnDef.header}</label>
                                 <div>
-                                    <FilterInput
-                                        column={column}
-                                        handleFilterChange={handleFilterChange}
-                                        //@ts-expect-error надо что то сделать
-                                        sortingState={column.columnDef?.sortingState ?? false}
-                                    />
+                                    <FilterInput column={column} handleFilterChange={handleFilterChange} />
                                 </div>
                             </div>
                         ))}

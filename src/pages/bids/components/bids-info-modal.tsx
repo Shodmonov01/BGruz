@@ -100,7 +100,7 @@ const BidsInfoModal = ({
     const hideTerminal2 = operationType === 'unloading' && transportType === 'Вагон'
     const hideWarehouses = operationType === 'moving'
 
-    // console.log('selectedBid', selectedBid)
+    console.log('selectedBid', selectedBid)
 
     const formMethods = useForm<BidFormData>({
         defaultValues: {
@@ -223,9 +223,9 @@ const BidsInfoModal = ({
         }
     }, [selectedBid, reset, setValue])
 
-    // console.log('selectedBid.terminal1:', selectedBid.terminal1)
-    // console.log('selectedBid.terminal2:', selectedBid.terminal2)
-    // console.log('selectedBid.warehouses:', selectedBid.warehouses)
+    console.log('selectedBid.terminal1:', selectedBid.terminal1)
+    console.log('selectedBid.terminal2:', selectedBid.terminal2)
+    console.log('selectedBid.warehouses:', selectedBid.warehouses)
 
     const handleClientChange = async (clientId: string) => {
         setValue('client', clientId)
@@ -235,7 +235,7 @@ const BidsInfoModal = ({
                 `api/v1/organization/?organization_id=${clientId}`,
                 token
             )
-            // console.log('data.extraServices', data.extraServices)
+            console.log('data.extraServices', data.extraServices)
 
             setTerminals(data.terminals || [])
             setWarehouses(data.warehouses || [])
@@ -247,7 +247,7 @@ const BidsInfoModal = ({
         }
     }
 
-    // console.log('formMethods.getValues()', formMethods.getValues())
+    console.log('formMethods.getValues()', formMethods.getValues())
 
     const handleSave = async () => {
         const token = localStorage.getItem('authToken')
