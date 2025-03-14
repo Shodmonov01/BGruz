@@ -20,8 +20,9 @@ import OrdersHeader from './orders-header'
 import { FilterInput } from '@/components/shared/render-filter-input'
 import { ArrowDown, ArrowUp, ArrowUpDown, Loader2 } from 'lucide-react'
 import { useFilter } from '@/context/filter-context'
+import useInfiniteScroll from '@/hooks/use-infinity-scroll'
 
-interface Bid {
+interface Order {
     _id?: string
     client: { organizationName: string }
     cargoTitle: string
@@ -29,18 +30,17 @@ interface Bid {
     status: string | null
 }
 
-interface BidsTableProps {
-    orders: Bid[] | any[]
-    setFilters: (filters: Record<string, unknown>) => void
-    handleFilterChange: (columnId: string, value: any) => void
+interface OrdersTableProps {
+    orders: Order[] | any[]
     loadMore: () => void
     hasMore: boolean
     loading: boolean
     localFilters: Record<string, string | any[]>
 }
 
-function OrdersTable({ orders, loadMore, hasMore, loading }: BidsTableProps) {
-    const [selectedBid, setSelectedBid] = useState<Partial<Bid> | null>(null)
+function OrdersTable({ orders, loadMore, hasMore, loading }: OrdersTableProps) {
+    const [selectedBid, setSelectedBid] = useState<Partial<Order> | null>(null)
+    const sentinelRef = useInfiniteScroll(loadMore, hasMore, loading)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isShortTable, setIsShortTable] = useState(() => {
         return localStorage.getItem('isShortTable') === 'true'
@@ -90,7 +90,7 @@ function OrdersTable({ orders, loadMore, hasMore, loading }: BidsTableProps) {
         }
     }, [hasMore, loading, loadMore])
 
-    const handleOpenModal = useCallback((bid: Bid) => {
+    const handleOpenModal = useCallback((bid: Order) => {
         setSelectedBid(bid)
         setIsModalOpen(true)
     }, [])
@@ -180,10 +180,9 @@ function OrdersTable({ orders, loadMore, hasMore, loading }: BidsTableProps) {
                                                     // @ts-expect-error надо что то сделать
                                                     header.column.columnDef.filterType !== 'range' ? (
                                                         <div className='text-center'>
-                                                             <FilterInput
+                                                            <FilterInput
                                                                 column={header.column}
                                                                 handleFilterChange={handleFilterChange}
-                                                                sortingState={header.column.getIsSorted()}
                                                             />
                                                         </div>
                                                     ) : (
@@ -215,6 +214,57 @@ function OrdersTable({ orders, loadMore, hasMore, loading }: BidsTableProps) {
                                 </TableRow>
                             ))}
                         </TableHeader>
+                        {/* <TableBody>
+                            {table.getRowModel().rows.map((row, index) => (
+                                <TableRow
+                                    onDoubleClick={() => handleOpenModal(row.original)}
+                                    key={row.id}
+                                    className={`cursor-pointer text-[16px] hover:bg-gray-100 !py-2 ${
+                                        row.original.ownState === 'canceled'
+                                            ? 'bg-gray-50 opacity-50 line-through'
+                                            : index % 2 === 0
+                                              ? 'bg-gray-100'
+                                              : ''
+                                    }`}
+                                >
+                                    {row.getVisibleCells().map(cell => (
+                                        <TableCell
+                                            key={cell.id}
+                                            className='border border-gray-300 text-center whitespace-nowrap  !px-1 '
+                                        >
+                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            ))}
+                            <TableRow ref={sentinelRef}>
+                                <TableCell colSpan={3} className='text-center py-4'>
+                                    {loading
+                                        ? 'Загрузка...'
+                                        : hasMore
+                                          ? 'Прокрутите вниз для загрузки'
+                                          : 'Нет больше данных'}
+                                </TableCell>
+                            </TableRow>
+                            {loading && (
+                                <TableRow>
+                                    <TableCell colSpan={columns.length} className='text-center p-4'>
+                                        <div className='flex items-center justify-center'>
+                                            <Loader2 className='animate-spin mr-2 h-8 w-8' />
+                                            <span className='ml-2 text-gray-500'>Загрузка данных...</span>
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                            {!loading && !orders.length && (
+                                <TableRow>
+                                    <TableCell colSpan={columns.length} className='text-center p-4'>
+                                        <span className='text-gray-500'>Нет данных для отображения</span>
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                        </TableBody> */}
+
                         <TableBody>
                             {table.getRowModel().rows.map((row, index) => (
                                 <TableRow
@@ -238,20 +288,33 @@ function OrdersTable({ orders, loadMore, hasMore, loading }: BidsTableProps) {
                                     ))}
                                 </TableRow>
                             ))}
-                            {loading && (
+
+                            {/* Если данных вообще нет, показываем "Нет данных для отображения" */}
+                            {!loading && orders.length === 0 && (
+                                <TableRow>
+                                    <TableCell colSpan={columns.length} className='text-center p-4'>
+                                        <span className='text-gray-500'>Нет данных для отображения</span>
+                                    </TableCell>
+                                </TableRow>
+                            )}
+
+                            {/* Infinity Scroll — показываем индикатор загрузки только если уже есть данные */}
+                            {orders.length > 0 && (
+                                <TableRow ref={sentinelRef}>
+                                    <TableCell colSpan={columns.length} className='text-center py-4'>
+                                        {loading ? 'Загрузка...' : hasMore ? 'Прокрутите вниз для загрузки' : ''}
+                                    </TableCell>
+                                </TableRow>
+                            )}
+
+                            {/* Дополнительный индикатор загрузки */}
+                            {loading && orders.length > 0 && (
                                 <TableRow>
                                     <TableCell colSpan={columns.length} className='text-center p-4'>
                                         <div className='flex items-center justify-center'>
                                             <Loader2 className='animate-spin mr-2 h-8 w-8' />
                                             <span className='ml-2 text-gray-500'>Загрузка данных...</span>
                                         </div>
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                            {!loading && !orders.length && (
-                                <TableRow>
-                                    <TableCell colSpan={columns.length} className='text-center p-4'>
-                                        <span className='text-gray-500'>Нет данных для отображения</span>
                                     </TableCell>
                                 </TableRow>
                             )}

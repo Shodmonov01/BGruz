@@ -38,7 +38,7 @@ export default function OrderPage() {
                         {/* @ts-expect-error надо что то сделать */}
                         <OrdersTable
                             orders={orders || []}
-                            setFilters={setFilters}
+                            // setFilters={setFilters}
                             loadMore={loadMore}
                             hasMore={hasMore}
                             loading={loading}
