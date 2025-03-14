@@ -180,9 +180,10 @@ function OrdersTable({ orders, loadMore, hasMore, loading }: BidsTableProps) {
                                                     // @ts-expect-error надо что то сделать
                                                     header.column.columnDef.filterType !== 'range' ? (
                                                         <div className='text-center'>
-                                                            <FilterInput
+                                                             <FilterInput
                                                                 column={header.column}
                                                                 handleFilterChange={handleFilterChange}
+                                                                sortingState={header.column.getIsSorted()}
                                                             />
                                                         </div>
                                                     ) : (

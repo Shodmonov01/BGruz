@@ -177,6 +177,7 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
                                                             <FilterInput
                                                                 column={header.column}
                                                                 handleFilterChange={handleFilterChange}
+                                                                sortingState={header.column.getIsSorted()}
                                                             />
                                                         </div>
                                                     ) : (

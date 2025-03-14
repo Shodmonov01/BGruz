@@ -88,33 +88,57 @@ export function RenderFilterMobile() {
 
     const originalColumns = pageType === 'orders' ? ordersColumns : bidsColumns
 
+    // const memoizedColumns = useMemo(() => {
+    //     return (
+    //         originalColumns
+    //             // @ts-expect-error надо что то сделать
+    //             .filter(column => column.isMobile === true)
+    //             .map(column => ({
+    //                 // @ts-expect-error надо что то сделать
+    //                 id: column.accessorKey,
+    //                 columnDef: {
+    //                     // @ts-expect-error надо что то сделать
+    //                     filterType: column.filterType,
+    //                     // @ts-expect-error надо что то сделать
+    //                     filterOptions: column.filterOptions,
+    //                     header: column.header
+    //                 },
+    //                 // @ts-expect-error надо что то сделать
+    //                 getFilterValue: () => localFilters[column.accessorKey] || null,
+    //                 setFilterValue: (value: any) => {
+    //                     setLocalFilters(prev => ({
+    //                         ...prev,
+    //                         // @ts-expect-error надо что то сделать
+    //                         [column.accessorKey]: value
+    //                     }))
+    //                 }
+    //             }))
+    //     )
+    // }, [originalColumns, localFilters])
+
     const memoizedColumns = useMemo(() => {
-        return (
-            originalColumns
-                // @ts-expect-error надо что то сделать
-                .filter(column => column.isMobile === true)
-                .map(column => ({
-                    // @ts-expect-error надо что то сделать
-                    id: column.accessorKey,
-                    columnDef: {
-                        // @ts-expect-error надо что то сделать
-                        filterType: column.filterType,
-                        // @ts-expect-error надо что то сделать
-                        filterOptions: column.filterOptions,
-                        header: column.header
-                    },
-                    // @ts-expect-error надо что то сделать
-                    getFilterValue: () => localFilters[column.accessorKey] || null,
-                    setFilterValue: (value: any) => {
-                        setLocalFilters(prev => ({
-                            ...prev,
-                            // @ts-expect-error надо что то сделать
-                            [column.accessorKey]: value
-                        }))
-                    }
-                }))
-        )
+        return originalColumns
+            .filter(column => column.isMobile === true)
+            .map(column => ({
+                ...column, // Сохраняем методы оригинального столбца
+                id: column.accessorKey,
+                columnDef: {
+                    filterType: column.filterType,
+                    filterOptions: column.filterOptions,
+                    header: column.header
+                },
+                getFilterValue: () => localFilters[column.accessorKey] || null,
+                setFilterValue: (value: any) => {
+                    setLocalFilters(prev => ({
+                        ...prev,
+                        [column.accessorKey]: value
+                    }))
+                },
+                getIsSorted: column.getIsSorted ? () => column.getIsSorted() : () => false,
+                getCanSort: column.getCanSort ? () => column.getCanSort() : () => false // Добавляем getCanSort
+            }))
     }, [originalColumns, localFilters])
+    
 
     if (!isMobile) return null
 
