@@ -81,3 +81,4 @@ export function FilterInput({ column, handleFilterChange }) {
             return null
     }
 }
+
