@@ -156,3 +156,4 @@ export function FilterInput({ column, handleFilterChange, sortingState }: Filter
             return null
     }
 }
+
