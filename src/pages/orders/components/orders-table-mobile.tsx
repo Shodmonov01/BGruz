@@ -12,20 +12,20 @@ const statusTranslations = {
     // waiting: 'На ожидании',
     // executed: 'Выполнена',
     // canceled: 'Отменена'
-    new:  'Новый' ,
-    canceledByCarrierWithPenalty:  'Отменяется перевозчиком (половина ГО)' ,
-    canceledByCustomerWithPenalty:  'Отменяется заказчиком (половина ГО)' ,
-    canceledByCarrier:  'Отменяется перевозчиком' ,
-    canceledByCustomer:  'Отменяется заказчиком' ,
-    failed:  'Сорван' ,
-    failing:  'Срывается' ,
-    completed:  'Выполнен' ,
-    inTransit:  'Машина в пути' ,
-    canceled:  'Отменен' ,
-    headingToLoading:  'Еду на погрузку' ,
-    loading:  'На погрузке' ,
-    unloading: 'На выгрузке' ,
-    delivered:  'Груз сдан' 
+    new: 'Новый',
+    canceledByCarrierWithPenalty: 'Отменяется перевозчиком (половина ГО)',
+    canceledByCustomerWithPenalty: 'Отменяется заказчиком (половина ГО)',
+    canceledByCarrier: 'Отменяется перевозчиком',
+    canceledByCustomer: 'Отменяется заказчиком',
+    failed: 'Сорван',
+    failing: 'Срывается',
+    completed: 'Выполнен',
+    inTransit: 'Машина в пути',
+    canceled: 'Отменен',
+    headingToLoading: 'Еду на погрузку',
+    loading: 'На погрузке',
+    unloading: 'На выгрузке',
+    delivered: 'Груз сдан'
 }
 
 function OrderTableMobile({ orders }) {
@@ -114,19 +114,19 @@ function OrderTableMobile({ orders }) {
                                             </span>
                                         </div>
                                     </div>
-                                   <div className='flex flex-col ml-auto'>
-                                   <div className=''>
-                                        <span className='text-green-600 font-semibold'>
-                                            {order.price ? `${formatNumber(order.price)} ₽` : '—'}
-                                        </span>
+                                    <div className='flex flex-col ml-auto'>
+                                        <div className=''>
+                                            <span className='text-green-600 font-semibold'>
+                                                {order.price ? `${formatNumber(order.price)} ₽` : '—'}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <p className='text-green-600 font-semibold'>
+                                                {/* @ts-expect-error исправить */}
+                                                {statusTranslations[order.status] || bid.status || '—'}
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div >
-                                        <p className='text-green-600 font-semibold'>
-                                            {/* @ts-expect-error исправить */}
-                                            {statusTranslations[order.status] || bid.status || '—'}
-                                        </p>
-                                    </div>
-                                   </div>
                                 </CardContent>
                             </Card>
                         ))}
