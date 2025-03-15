@@ -1,11 +1,121 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
+import { useBidContext, Bid } from "@/context/bid-context";
+import { fetchPrivateData } from "@/api/api";
+import { useFilter } from '@/context/filter-context';
 
 const ws = { current: null as WebSocket | null };
 const reconnectTimeout = { current: null as NodeJS.Timeout | null };
 const heartbeat = { current: null as NodeJS.Timeout | null };
 const pongTimeout = { current: null as NodeJS.Timeout | null };
 
-export function useWebSocket(refreshBids: () => void = () => {}, refreshOrders: () => void = () => {}) {
+const processedUpdates = new Set<string>();
+// Clear old processed messages periodically (every 5 minutes
+setInterval(() => {
+    processedUpdates.clear();
+}, 5 * 60 * 1000);
+
+export function useWebSocket(refreshBids: (forceIgnoreLocks?: boolean) => void = () => {}, refreshOrders: () => void = () => {}) {
+    const { newBidAdded, isLocked, setCreatedBid } = useBidContext();
+    const { filters } = useFilter();
+    
+    const lastFilterChangeRef = useRef<number>(0);
+    const lastUpdateTimeRef = useRef<number>(0);
+    const prevFiltersRef = useRef(filters);
+    
+    useEffect(() => {
+        const now = Date.now();
+        // Only update if it's a real filter change, not initial mount
+        if (prevFiltersRef.current !== filters && Object.keys(prevFiltersRef.current).length > 0) {
+            console.log("WebSocket: Detected filter change, tracking timestamp");
+            lastFilterChangeRef.current = now;
+        }
+        prevFiltersRef.current = filters;
+    }, [filters]);
+    
+    const isStatusAllowed = useCallback((status: string) => {
+        if (!filters.status || 
+            !Array.isArray(filters.status) || 
+            filters.status.length === 0 || 
+            filters.status.includes('all')) {
+            return true;
+        }
+        
+        return filters.status.includes(status);
+    }, [filters]);
+    
+    const fetchSingleBid = useCallback(async (bidId: string, status?: string, timestamp?: string) => {
+        const now = Date.now();
+        
+        const updateId = `${bidId}_${timestamp || now}`;
+        if (processedUpdates.has(updateId)) {
+            console.log(`WebSocket: Skipping already processed update for bid ${bidId}`);
+            return;
+        }
+        
+        if (now - lastUpdateTimeRef.current < 300) {
+            console.log(`WebSocket: Throttling update for bid ${bidId}, too soon after last update`);
+            return;
+        }
+        
+        const recentFilterChange = now - lastFilterChangeRef.current < 5000;
+        if (recentFilterChange) {
+            console.log(`WebSocket: Skipping update for bid ${bidId} due to recent filter change`);
+            return;
+        }
+        
+        lastUpdateTimeRef.current = now;
+        processedUpdates.add(updateId);
+                
+        if (status === 'canceled' && !isStatusAllowed('canceled')) {
+            console.log("WebSocket: Skipping fetch for canceled bid as it's filtered out");
+            const minimalBid: Bid = {
+                id: bidId,
+                _id: bidId,
+                status: 'canceled',
+                client: { organizationName: '' },
+                cargoTitle: '',
+                price: null
+            };
+            setCreatedBid(minimalBid);
+            return;
+        }
+        
+        try {
+            const token = localStorage.getItem('authToken') || '';
+            const bidDetails = await fetchPrivateData<Bid>(`api/v1/bids/${bidId}`, token);
+            console.log("WebSocket: Got bid details:", bidDetails);
+            
+            if (!bidDetails) {
+                console.log("WebSocket: No bid details received");
+                return;
+            }
+            
+            const transformedBid: Bid = { 
+                ...bidDetails,
+                client: bidDetails.client || { 
+                    organizationName: bidDetails.clientName || `Client ${bidDetails.clientId}` || 'Unknown Client'
+                },
+                cargoTitle: bidDetails.cargoTitle || bidDetails.cargoType || 'Unspecified',
+                price: bidDetails.price === undefined ? null : bidDetails.price,
+                status: bidDetails.status || 'waiting'
+            };
+            
+            if (transformedBid.id && !transformedBid._id) {
+                transformedBid._id = transformedBid.id;
+            } else if (transformedBid._id && !transformedBid.id) {
+                transformedBid.id = transformedBid._id;
+            } else if (!transformedBid.id && !transformedBid._id) {
+                transformedBid.id = bidId;
+                transformedBid._id = bidId;
+            }
+            
+            setCreatedBid(transformedBid);
+            
+        } catch (error) {
+            console.error("WebSocket: Error fetching bid:", error);
+        }
+    }, [setCreatedBid, isStatusAllowed]);
+    
     const connect = () => {
         if (ws.current) return;
 
@@ -19,24 +129,53 @@ export function useWebSocket(refreshBids: () => void = () => {}, refreshOrders: 
             startHeartbeat();
         };
 
-
-
         ws.current.onmessage = (event) => {
             try {
                 const data = JSON.parse(event.data);
-                // console.log("📩 WebSocket message received:", data);
-                if (data.type === "bid_update") {
-                    // console.log("🔄 Refreshing bids...");
-                    refreshBids();
+                const now = Date.now();
+                
+                // Check if we've had recent filter changes (within last 5 seconds)
+                const recentFilterChange = now - lastFilterChangeRef.current < 5000;
+                
+                console.log("WebSocket message received:", data, 
+                           "isLocked:", isLocked, 
+                           "newBidAdded:", newBidAdded, 
+                           "recentFilterChange:", recentFilterChange);
+                
+                if (data.type === "bid_update" && data.payload && data.payload.id) {
+                    const bidId = data.payload.id;
+                    const status = data.payload.status;
+                    const timestamp = data.timestamp;
+                    
+                    console.log(`WebSocket: Received bid update for id ${bidId} with status ${status}`);
+                    
+                    // Skip WebSocket update if:
+                    // 1. Operations are locked, or
+                    // 2. A new bid was just added, or
+                    // 3. Filters were recently changed
+                    if (isLocked || newBidAdded || recentFilterChange) {
+                        console.log(`WebSocket: Skipping bid refresh for id ${bidId} - locked:${isLocked}, newBid:${newBidAdded}, recentFilter:${recentFilterChange}`);
+                        return;
+                    }
+                    
+                    console.log(`WebSocket: Fetching updated bid with id ${bidId}`);
+                    // Pass the status and timestamp from the WebSocket message for better tracking
+                    fetchSingleBid(bidId, status, timestamp);
                 }
-                if (data.type === "order_update") refreshOrders();
-                if (data.type === "ping" && pongTimeout.current) clearTimeout(pongTimeout.current);
+                
+                if (data.type === "order_update") {
+                    console.log("WebSocket: Triggering order refresh");
+                    refreshOrders();
+                }
+                
+                if (data.type === "ping" && pongTimeout.current) {
+                    clearTimeout(pongTimeout.current);
+                }
             } catch (error) {
-                // console.error("❌ Ошибка обработки сообщения WebSocket:", error);
+                console.error("Error processing WebSocket message:", error);
             }
         };
         
-
         ws.current.onerror = (error) => {
             // console.error("⚠️ WebSocket ошибка:", error);
         };

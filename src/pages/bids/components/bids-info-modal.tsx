@@ -5,6 +5,7 @@ import Heading from '@/components/shared/heading'
 import { Button } from '@/components/ui/button'
 
 import { fetchPrivateData, postData, postData2 } from '@/api/api'
+import { useGetBid } from '@/api/use-get-bids'
 
 import BidDetails from './bid-form-detail/bid-details'
 import BidDate from './bid-form-detail/bid-date'
@@ -75,6 +76,8 @@ const BidsInfoModal = ({
     selectedBid
     onOpenChange?: any
 }) => {
+    // @ts-expect-error пересмотреть
+    const { bid, loading: bidLoading, error: bidError } = useGetBid(selectedBid?.id)
     const [clients, setClients] = useState<{ organizationId: number; organizationName: string }[]>([])
     const [terminals, setTerminals] = useState<{ id: number; name: string; description: string }[]>([])
     const [warehouses, setWarehouses] = useState<{ id: number; name: string; description: string }[]>([])
@@ -94,7 +97,8 @@ const BidsInfoModal = ({
     const [data, setData] = useState<OrganizationData | undefined>(undefined)
     //@ts-expect-error надо что то сделать
     const [isFetched, setIsFetched] = useState(true)
-    const [formData, setFormData] = useState({ ...selectedBid })
+    // Use the fetched bid data if available, otherwise use selectedBid
+    const [formData, setFormData] = useState({ ...(bid || selectedBid) })
 
     const hideTerminal1 = operationType === 'loading' && transportType === 'Вагон'
     const hideTerminal2 = operationType === 'unloading' && transportType === 'Вагон'
@@ -418,6 +422,13 @@ const BidsInfoModal = ({
         setIsEdit(false)
         handleSubmit(onSubmit)
     }
+
+    // Update formData when bid is fetched
+    useEffect(() => {
+        if (bid) {
+            setFormData({ ...bid })
+        }
+    }, [bid])
 
     return (
         <Modal

@@ -20,6 +20,24 @@ interface BidsTableMobileProps {
     bids: any[]
 }
 
+// Generate a unique key for each bid based on its properties
+const getBidKey = (bid: any) => {
+    // Use the bid's unique identifiers in this order of preference
+    if (bid.id) return `bid-${bid.id}`;
+    if (bid._id) return `bid-${bid._id}`;
+    if (bid.persistentId) return `bid-${bid.persistentId}`;
+    
+    // If no ID is available, create a hash from bid properties
+    const keyProps = [
+        bid.client?.organizationName,
+        bid.cargoTitle,
+        bid.status,
+        bid.createdAt
+    ].filter(Boolean).join('-');
+    
+    return `bid-${keyProps}-${Math.random().toString(36).substr(2, 9)}`;
+};
+
 function BidsTableMobile({ bids }: BidsTableMobileProps) {
     const [selectedBid, setSelectedBid] = useState<any>(null)
 
@@ -70,16 +88,19 @@ function BidsTableMobile({ bids }: BidsTableMobileProps) {
     return (
         <div className='flex flex-col gap-4 bg-secondary'>
             <ScrollArea className='flex flex-col gap-4 max-h-[87vh] w-full overflow-auto rounded-md border'>
-                {groupedBids.map(([date, bids]) => (
+                {groupedBids.map(([date, dateBids]) => (
                     <div key={date} className='flex flex-col gap-2'>
                         <h2 className='text-lg font-semibold p-2'>{date}</h2>
                         {/* @ts-expect-error надо разобраться */}
-                        {bids.map(bid => {
+                        {dateBids.map(bid => {
                             const isDisabled =
                                 !bid.bestSalePrice || bid.status === 'canceled' || bid.ownState === 'approved'
 
+                            // Generate a truly unique key for each bid
+                            const bidKey = getBidKey(bid);
+                            
                             return (
-                                <div key={bid.persistentId} className='p-2 shadow-md rounded-lg bg-white'>
+                                <div key={bidKey} className='p-2 shadow-md rounded-lg bg-white'>
                                     <div onClick={() => handleOpenModal(bid)} className='w-full !p-0 flex items-center flex-row-reverse gap-2'>
                                         <div  className='w-1/2'>
                                             <div className='ml-auto flex flex-col'>

@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
 
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form'
+import { useBidContext, Bid } from '@/context/bid-context'
 
 import Heading from '@/components/shared/heading'
 import { Button } from '@/components/ui/button'
+import { ChevronLeft, Loader2 } from 'lucide-react'
 
 import { fetchPrivateData, postData } from '@/api/api'
 
@@ -13,7 +15,6 @@ import TerminalOne from './bid-form-detail/bid-terminal-one'
 import Warehouses from './bid-form-detail/bid-warhouses'
 import TerminalTwo from './bid-form-detail/bid-terminal-two'
 import BidDescribe from './bid-form-detail/bid-describe'
-import { ChevronLeft, Loader2 } from 'lucide-react'
 
 interface BidFormData {
     client: string
@@ -67,6 +68,7 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
     const hideTerminal2 = operationType === 'unloading' && transportType === 'Вагон'
     const hideWarehouses = operationType === 'moving'
     const [isLoading, setIsLoading] = useState(false)
+    const { setNewBidAdded, setNewBidId, lockBatchOperations, setCreatedBid, unlockBatchOperations } = useBidContext()
 
     useEffect(() => {
         const loadClients = async () => {
@@ -168,6 +170,9 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
     const onSubmit: SubmitHandler<BidFormData> = async data => {
         setIsLoading(true)
         try {
+            // Lock batch operations immediately when starting to create a bid
+            lockBatchOperations();
+            
             setErrorMessage(null)
             const payload = {
                 cargoType: data.transportType,
@@ -223,10 +228,59 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                 console.error('Не найден токен авторизации')
                 return
             }
-            // @ts-expect-error надо исправить
+            
             const res = await postData('api/v1/bids', payload, token)
-            modalClose()
-            // console.log('res', res)
+            console.log('API response:', res);
+            
+            // Get the bid ID and immediately fetch and add to table
+            const bidId = res?.id || res?._id;
+            if (bidId) {
+                try {
+                    // Mark that we've added a new bid
+                    setNewBidAdded(true);
+                    setNewBidId(bidId);
+                    
+                    // Fetch the bid details to check its status
+                    const bidDetails = await fetchPrivateData(`api/v1/bids/${bidId}`, token) as Bid;
+                    console.log('Bid verification - fetched details:', bidDetails);
+                    
+                    // Always add the bid to the context to trigger UI update
+                    // The filtering logic in useGetBids will handle whether to display it
+                    if (bidDetails) {
+                        // Ensure the bid has both ID formats for consistency
+                        const transformedBid = { ...bidDetails };
+                        
+                        // Make sure both ID formats exist
+                        if (transformedBid.id && !transformedBid._id) {
+                            transformedBid._id = transformedBid.id;
+                        } else if (transformedBid._id && !transformedBid.id) {
+                            transformedBid.id = transformedBid._id;
+                        } else if (!transformedBid.id && !transformedBid._id) {
+                            // If no ID format exists, use the bidId we got from the response
+                            transformedBid.id = bidId;
+                            transformedBid._id = bidId;
+                        }
+                        
+                        console.log(`Adding bid ${bidId} directly to table`);
+                        setCreatedBid(transformedBid);
+                        
+                        // Make sure to unlock batch operations to prevent issues with future updates
+                        setTimeout(() => {
+                            console.log("Unlocking batch operations after bid creation");
+                            unlockBatchOperations();
+                        }, 2000);
+                    }
+                    
+                    // Close the modal regardless of status
+                    modalClose();
+                } catch (bidError) {
+                    console.error('Error fetching bid details for verification:', bidError)
+                    modalClose()
+                }
+            } else {
+                console.error('No bid ID found in response:', res)
+                modalClose()
+            }
         } catch (error: any) {
             console.error('Ошибка при создании заявки:', error)
 
