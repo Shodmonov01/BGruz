@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form'
 
 import Heading from '@/components/shared/heading'
 import { Button } from '@/components/ui/button'
 
-import { fetchPrivateData, postData, postData2 } from '@/api/api'
+import { deleteData, fetchPrivateData, postData, postData2 } from '@/api/api'
 import { useGetBid } from '@/api/use-get-bids'
 
 import BidDetails from './bid-form-detail/bid-details'
@@ -99,6 +99,7 @@ const BidsInfoModal = ({
     const [isFetched, setIsFetched] = useState(true)
     // Use the fetched bid data if available, otherwise use selectedBid
     const [formData, setFormData] = useState({ ...(bid || selectedBid) })
+    const [isEditMode, setIsEditMode] = useState(false)
 
     const hideTerminal1 = operationType === 'loading' && transportType === 'Вагон'
     const hideTerminal2 = operationType === 'unloading' && transportType === 'Вагон'
@@ -155,6 +156,7 @@ const BidsInfoModal = ({
             setOriginalData({ ...selectedBid })
             setFormData({ ...selectedBid })
             setIsReadOnly(true)
+            setIsEditMode(false)
 
             if (selectedBid.customer?.organizationId) {
                 setValue('recipientOrSender', selectedBid.customer.organizationId.toString())
@@ -312,7 +314,22 @@ const BidsInfoModal = ({
         }
         setIsFetched(false)
         setIsReadOnly(false)
+        setIsEditMode(true)
     }
+
+    // const handleCancel = () => {
+    //     setIsReadOnly(true)
+    //     setIsEditMode(false)
+    //     // Возвращаем исходные данные формы
+    //     reset(originalData)
+    // }
+
+    const handleDelete = useCallback(async (bidId: string) => {
+        if (window.confirm(`Удалить заявку ${bidId}?`)) {
+            const token = localStorage.getItem('authToken')
+            await deleteData(`api/v1/bids/${bidId}`, token)
+        }
+    }, [])
 
     useEffect(() => {
         if (data) {
@@ -444,7 +461,7 @@ const BidsInfoModal = ({
                             description={''}
                             className='hidden md:block space-y-2 py-0 md:py-4 text-center text-[#fff]'
                         />
-                        <div className='flex md:hidden items-center gap-2 bg-primary text-white p-4'>
+                        <div className='fixed w-full top-0 z-10 flex md:hidden items-center gap-2 bg-primary text-white p-4'>
                             <Button
                                 variant='ghost'
                                 size='icon'
@@ -478,7 +495,9 @@ const BidsInfoModal = ({
                                         {!hideTerminal1 && (
                                             <TerminalOne terminals={terminals} isReadOnly={isReadOnly} />
                                         )}
-                                        {!hideWarehouses && <Warehouses warehouses={warehouses} isReadOnly={isReadOnly}/>}
+                                        {!hideWarehouses && (
+                                            <Warehouses warehouses={warehouses} isReadOnly={isReadOnly} />
+                                        )}
 
                                         {!hideTerminal2 && (
                                             <TerminalTwo terminals={terminals} isReadOnly={isReadOnly} />
@@ -494,7 +513,7 @@ const BidsInfoModal = ({
                             {Object.keys(errors).length > 0 && (
                                 <div className='text-red-500 text-center py-2'>Заполните все обязательные поля</div>
                             )}
-                            <div className='flex justify-center h-full md:flex-row flex-col gap-4 px-6 md:px-0 py-6'>
+                            {/* <div className='flex justify-center h-full md:flex-row flex-col gap-4 px-6 md:px-0 py-6'>
                                 <Button
                                     disabled={isReadOnly || isLoading}
                                     onClick={handleSave}
@@ -521,6 +540,68 @@ const BidsInfoModal = ({
                                 >
                                     Редактировать
                                 </Button>
+                                <Button
+                                    variant='destructive'
+                                    onClick={handleEdit}
+                                    disabled={isLoading}
+                                    className='block md:hidden'
+                                >
+                                    Отменить
+                                </Button>
+                            </div> */}
+                            <div className='flex justify-center h-full md:flex-row flex-col gap-4 px-6 md:px-0 py-6'>
+                                {isEditMode ? (
+                                    // Кнопки, которые показываются только в режиме редактирования
+                                    <>
+                                        <Button
+                                            disabled={isLoading}
+                                            onClick={handleSave}
+                                            type='button'
+                                            className='bg-orange-500 hover:bg-orange-600 text-white'
+                                        >
+                                            {isLoading ? <Loader2 className='mr-2 h-4 w-4 animate-spin' /> : null}
+                                            Сохранить изменения
+                                        </Button>
+                                        <Button
+                                            type='submit'
+                                            disabled={isLoading}
+                                            onClick={saveAsNew}
+                                            className='bg-orange-500 hover:bg-orange-600 text-white'
+                                        >
+                                            {isLoadingAdd ? <Loader2 className='mr-2 h-4 w-4 animate-spin' /> : null}
+                                            Сохранить заявку как новую
+                                        </Button>
+                                        <Button
+                                            type='button'
+                                            variant='secondary'
+                                            size='lg'
+                                            onClick={handleCloseModal}
+                                            disabled={isLoading}
+                                        >
+                                            Закрыть
+                                        </Button>
+                                    </>
+                                ) : (
+                                    // Кнопка, которая показывается, когда НЕ в режиме редактирования
+                                    <>
+                                        <Button
+                                            type='button'
+                                            onClick={handleEdit}
+                                            disabled={isLoading}
+                                            className='bg-orange-500 hover:bg-orange-600 text-white'
+                                        >
+                                            Редактировать
+                                        </Button>
+                                        <Button
+                                            variant='destructive'
+                                            onClick={() => handleDelete?.(selectedBid.id)}
+                                            disabled={isLoading}
+                                            className='block md:hidden'
+                                        >
+                                            Отменить
+                                        </Button>
+                                    </>
+                                )}
                             </div>
                         </form>
                     </div>

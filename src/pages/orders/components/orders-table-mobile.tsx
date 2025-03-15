@@ -7,6 +7,27 @@ import useNumberFormatter from '@/hooks/use-format-number'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 
+const statusTranslations = {
+    // active: 'Активна',
+    // waiting: 'На ожидании',
+    // executed: 'Выполнена',
+    // canceled: 'Отменена'
+    new:  'Новый' ,
+    canceledByCarrierWithPenalty:  'Отменяется перевозчиком (половина ГО)' ,
+    canceledByCustomerWithPenalty:  'Отменяется заказчиком (половина ГО)' ,
+    canceledByCarrier:  'Отменяется перевозчиком' ,
+    canceledByCustomer:  'Отменяется заказчиком' ,
+    failed:  'Сорван' ,
+    failing:  'Срывается' ,
+    completed:  'Выполнен' ,
+    inTransit:  'Машина в пути' ,
+    canceled:  'Отменен' ,
+    headingToLoading:  'Еду на погрузку' ,
+    loading:  'На погрузке' ,
+    unloading: 'На выгрузке' ,
+    delivered:  'Груз сдан' 
+}
+
 function OrderTableMobile({ orders }) {
     const [selectedOrder, setSelectedOrder] = useState<IOrder | null>(null)
     const [_, setIsModalOpen] = useState(false)
@@ -55,7 +76,7 @@ function OrderTableMobile({ orders }) {
                                     <div onClick={() => handleOpenModal(order)}>
                                         <img src='info.svg' alt='info' className='h-14' />
                                     </div>
-                           
+
                                     <div className='flex flex-col justify-center gap-[1px] mt-6'>
                                         <div className='flex items-center gap-2'>
                                             <span className='w-2 h-2 bg-blue-500 rounded-full'></span>
@@ -75,13 +96,13 @@ function OrderTableMobile({ orders }) {
                                                 {order.buyBid.vehicleProfile?.name || '—'}
                                             </span>
                                         </div>
-                                      
+
                                         <div className='flex justify-between'>
                                             <span className='font-semibold'>
                                                 {order.buyBid.terminal1?.cityName || '—'}
                                             </span>
                                         </div>
-                                      
+
                                         <div className='flex justify-between'>
                                             <span className='font-semibold'>
                                                 {order.buyBid.warehouses?.[0]?.cityName || '—'}
@@ -93,11 +114,19 @@ function OrderTableMobile({ orders }) {
                                             </span>
                                         </div>
                                     </div>
-                                    <div className='ml-auto'>
+                                   <div className='flex flex-col ml-auto'>
+                                   <div className=''>
                                         <span className='text-green-600 font-semibold'>
                                             {order.price ? `${formatNumber(order.price)} ₽` : '—'}
                                         </span>
                                     </div>
+                                    <div >
+                                        <p className='text-green-600 font-semibold'>
+                                            {/* @ts-expect-error исправить */}
+                                            {statusTranslations[order.status] || bid.status || '—'}
+                                        </p>
+                                    </div>
+                                   </div>
                                 </CardContent>
                             </Card>
                         ))}

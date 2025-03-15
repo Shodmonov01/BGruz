@@ -47,8 +47,23 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
 
                 <div className='overflow-y-auto flex-1'>
                     <div className='flex flex-col'>
-                        <div className='text-center bg-gray-100 p-2'>
-                            <h3 className='font-bold text-[#1E293B] text-[22px] '>Контейнер Погрузка</h3>
+                        <div className='flex items-center justify-center gap-5 bg-gray-100 p-2'>
+                            <h3 className='font-bold text-[#1E293B] text-[22px]'>
+                                {selectedOrder?.buyBid?.loadingMode === 'loading'
+                                    ? 'Погрузка'
+                                    : selectedOrder?.buyBid?.loadingMode === 'unloading'
+                                      ? 'Выгрузка'
+                                      : selectedOrder?.buyBid?.loadingMode === 'moving'
+                                        ? 'Перемещение'
+                                        : '—'}
+                            </h3>
+                            <h3 className='font-bold text-[#1E293B] text-[22px]'>
+                                {selectedOrder?.buyBid?.cargoType === 'container'
+                                    ? 'Контейнер'
+                                    : selectedOrder?.buyBid?.cargoType === 'vagon'
+                                      ? 'Вагон'
+                                      : '—'}
+                            </h3>
                         </div>
                         <div className='flex gap-6 items-center text-[18px] bg-[#E6E6E6] px-6 py-2 '>
                             <p className='text-gray-600'>Статус заказа</p>
@@ -212,7 +227,6 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
 
                     <h3 className='font-medium bg-[#E6E6E6] px-6 py-2 text-[18px]'>Контакты сторон:</h3>
                     <div className='mt-4 space-y-2'>
-
                         <div className='flex gap-6 items-center text-[18px] border-b-2  border-[#E6E6E6] px-6 py-2 '>
                             <p className='text-gray-600'>Заказчик</p>
                             <p className='font-bold text-[#1E293B]'>{selectedOrder?.customer?.organizationName}</p>
