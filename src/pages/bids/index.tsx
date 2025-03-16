@@ -42,7 +42,7 @@ export default function BidsPage() {
                         </div>
 
                         <div className='md:hidden'>
-                            <BidsTableMobile bids={bids || []} />
+                            <BidsTableMobile bids={bids || []} loading={loading} loadMore={loadMore} hasMore={hasMore}/>
                         </div>
                     </div>
                 </FilterProvider>

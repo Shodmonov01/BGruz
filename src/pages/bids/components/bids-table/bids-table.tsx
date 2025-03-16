@@ -307,6 +307,8 @@ import { Loader2 } from 'lucide-react'
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
 import { useFilter } from '@/context/filter-context'
 import { FilterInput } from '@/components/shared/render-filter-input'
+import useInfiniteScroll from '@/hooks/use-infinity-scroll'
+
 
 interface Bid {
     id?: string
@@ -325,7 +327,7 @@ interface BidsTableProps {
 }
 function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
     const { filters, handleFilterChange } = useFilter()
-
+    const sentinelRef = useInfiniteScroll(loadMore, hasMore, loading)
     const [selectedBid, setSelectedBid] = useState<Partial<Bid> | null>(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isShortTable, setIsShortTable] = useState(() => {
@@ -536,7 +538,7 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
                                     ))}
                                 </TableRow>
                             ))}
-                            {loading && (
+                            {/* {loading && (
                                 <TableRow>
                                     <TableCell colSpan={columns.length} className='text-center p-4'>
                                         <div className='flex items-center justify-center'>
@@ -550,6 +552,34 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
                                 <TableRow>
                                     <TableCell colSpan={columns.length} className='text-center p-4'>
                                         <span className='text-gray-500'>Нет данных для отображения</span>
+                                    </TableCell>
+                                </TableRow>
+                            )} */}
+                                    {!loading && bids.length === 0 && (
+                                <TableRow>
+                                    <TableCell colSpan={columns.length} className='text-center p-4'>
+                                        <span className='text-gray-500'>Нет данных для отображения</span>
+                                    </TableCell>
+                                </TableRow>
+                            )}
+
+                            {/* Infinity Scroll — показываем индикатор загрузки только если уже есть данные */}
+                            {bids.length > 0 && (
+                                <TableRow ref={sentinelRef}>
+                                    <TableCell colSpan={columns.length} className='text-center py-4'>
+                                        {loading ? 'Загрузка...' : hasMore ? 'Прокрутите вниз для загрузки' : ''}
+                                    </TableCell>
+                                </TableRow>
+                            )}
+
+                            {/* Дополнительный индикатор загрузки */}
+                            {loading && bids.length > 0 && (
+                                <TableRow>
+                                    <TableCell colSpan={columns.length} className='text-center p-4'>
+                                        <div className='flex items-center justify-center'>
+                                            <Loader2 className='animate-spin mr-2 h-8 w-8' />
+                                            <span className='ml-2 text-gray-500'>Загрузка данных...</span>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             )}
