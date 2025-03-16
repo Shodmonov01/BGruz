@@ -10,6 +10,7 @@ import PopupModal from '@/components/shared/popup-modal'
 import { Button } from '@/components/ui/button'
 import { Modal } from '@/components/ui/modal'
 import { postData2 } from '@/api/api'
+import { Loader2 } from 'lucide-react'
 const statusTranslations = {
     active: 'Активна',
     waiting: 'На ожидании',
@@ -23,26 +24,22 @@ interface BidsTableMobileProps {
 // Generate a unique key for each bid based on its properties
 const getBidKey = (bid: any) => {
     // Use the bid's unique identifiers in this order of preference
-    if (bid.id) return `bid-${bid.id}`;
-    if (bid._id) return `bid-${bid._id}`;
-    if (bid.persistentId) return `bid-${bid.persistentId}`;
-    
+    if (bid.id) return `bid-${bid.id}`
+    if (bid._id) return `bid-${bid._id}`
+    if (bid.persistentId) return `bid-${bid.persistentId}`
+
     // If no ID is available, create a hash from bid properties
-    const keyProps = [
-        bid.client?.organizationName,
-        bid.cargoTitle,
-        bid.status,
-        bid.createdAt
-    ].filter(Boolean).join('-');
-    
-    return `bid-${keyProps}-${Math.random().toString(36).substr(2, 9)}`;
-};
+    const keyProps = [bid.client?.organizationName, bid.cargoTitle, bid.status, bid.createdAt].filter(Boolean).join('-')
+
+    return `bid-${keyProps}-${Math.random().toString(36).substr(2, 9)}`
+}
 
 function BidsTableMobile({ bids }: BidsTableMobileProps) {
     const [selectedBid, setSelectedBid] = useState<any>(null)
 
     const [open, setOpen] = useState(false)
     const [confirmOpen, setConfirmOpen] = useState(false)
+    const [loadingBidId, setLoadingBidId] = useState<number | null>(null)
 
     const handleCloseModal = useCallback(() => {
         setOpen(false)
@@ -97,12 +94,15 @@ function BidsTableMobile({ bids }: BidsTableMobileProps) {
                                 !bid.bestSalePrice || bid.status === 'canceled' || bid.ownState === 'approved'
 
                             // Generate a truly unique key for each bid
-                            const bidKey = getBidKey(bid);
-                            
+                            const bidKey = getBidKey(bid)
+
                             return (
                                 <div key={bidKey} className='p-2 shadow-md rounded-lg bg-white'>
-                                    <div onClick={() => handleOpenModal(bid)} className='w-full !p-0 flex items-center flex-row-reverse gap-2'>
-                                        <div  className='w-1/2'>
+                                    <div
+                                        onClick={() => handleOpenModal(bid)}
+                                        className='w-full !p-0 flex items-center flex-row-reverse gap-2'
+                                    >
+                                        <div className='w-1/2'>
                                             <div className='ml-auto flex flex-col'>
                                                 <p className='font-semibold'>
                                                     Предложение{' '}
@@ -164,7 +164,7 @@ function BidsTableMobile({ bids }: BidsTableMobileProps) {
                                             </div>
                                         </div>
                                     </div>
-                                    <Button
+                                    {/* <Button
                                         disabled={isDisabled}
                                         className={isDisabled ? 'bg-gray-400 text-white w-full' : 'w-full'}
                                         onClick={() => {
@@ -173,6 +173,24 @@ function BidsTableMobile({ bids }: BidsTableMobileProps) {
                                         }}
                                     >
                                         Согласовать
+                                    </Button> */}
+                                    <Button
+                                        disabled={isDisabled || loadingBidId === bid.id}
+                                        className={`w-full ${isDisabled ? 'bg-gray-400 text-white' : ''}`}
+                                        onClick={() => {
+                                            setLoadingBidId(bid.id)
+                                            setTimeout(() => {
+                                                setLoadingBidId(null)
+                                                setSelectedBid(bid)
+                                                handleConfirmOpen()
+                                            }, 3000)
+                                        }}
+                                    >
+                                        {loadingBidId === bid.id ? (
+                                            <Loader2 className='animate-spin h-4 w-4' />
+                                        ) : (
+                                            'Согласовать'
+                                        )}
                                     </Button>
                                 </div>
                             )
@@ -206,7 +224,7 @@ function BidsTableMobile({ bids }: BidsTableMobileProps) {
                                 onClick={() => {
                                     if (selectedBid?.id) {
                                         handleApprove(selectedBid.id)
-                                    }   
+                                    }
                                     handleConfirmClose()
                                 }}
                             >

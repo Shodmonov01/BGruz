@@ -44,7 +44,33 @@ interface ColumnsProps {
 }
 
 export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenModal, isMobile }: ColumnsProps) => {
-    const [isClicked, setIsClicked] = useState(false)
+    // const [isClicked, setIsClicked] = useState(false)
+    const ApproveButton = ({ row }: { row: any }) => {
+        const { bestSalePrice, status, ownState } = row.original;
+        const [isLoading, setIsLoading] = useState(false);
+        const [isApproved, setIsApproved] = useState(false);
+    
+        const isDisabled = !bestSalePrice || status === 'canceled' || ownState === 'approved' || isApproved;
+    
+        const handleClick = () => {
+            setIsLoading(true);
+            setTimeout(() => {
+                setIsLoading(false);
+                setIsApproved(true);
+                onApprove?.(row.original.id);
+            }, 1000);
+        };
+    
+        return (
+            <Button
+                onClick={handleClick}
+                disabled={isDisabled}
+                className={`flex items-center gap-2 ${isDisabled ? 'bg-gray-400 text-white' : ''}`}
+            >
+                {isLoading ? <Loader2 className="animate-spin  h-4" /> : 'Согласовать'}
+            </Button>
+        );
+    };
     const formatNumber = (value: string) => {
         const num = value.replace(/\D/g, '')
         return num ? new Intl.NumberFormat('ru-RU').format(Number(num)) : ''
@@ -359,43 +385,39 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 searchable: true,
                 filterType: 'fuzzy'
             },
+            // {
+            //     accessorKey: 'isPriceRequest',
+            //     header: 'Согласовано',
+            //     size: 150,
+            //     cell: ({ row }) => {
+            //         const { bestSalePrice, status, ownState } = row.original
+            //         const isDisabled = !bestSalePrice || status === 'canceled' || ownState === 'approved'
+            //         const handleClick = () => {
+            //             setIsClicked(true)
+            //             onApprove?.(row.original.id)
+            //         }
+
+            //         return (
+            //             <Button
+            //                 onClick={() => onApprove?.(row.original.id)}
+            //                 disabled={isDisabled}
+            //                 className={isDisabled ? 'bg-gray-400 text-white' : ''}
+            //             >
+            //                 Согласовать
+            //             </Button>
+            //         )
+            //     },
+            //     isShortVersion: true
+            // }
+            
             {
                 accessorKey: 'isPriceRequest',
                 header: 'Согласовано',
                 size: 150,
-                cell: ({ row }) => {
-                    const { bestSalePrice, status, ownState } = row.original
-                    const isDisabled = !bestSalePrice || status === 'canceled' || ownState === 'approved'
-                    const handleClick = () => {
-                        setIsClicked(true)
-                        onApprove?.(row.original.id)
-                    }
-
-                    return (
-                        // <Button
-                        //     onClick={() => onApprove?.(row.original.id)}
-                        //     disabled={isDisabled}
-                        //     className={isDisabled ? 'bg-gray-400 text-white' : ''}
-                        // >
-                        //     Согласовать
-                        // </Button>
-                        <Button
-                            onClick={handleClick}
-                            disabled={isDisabled}
-                            className={
-                                isClicked
-                                    ? 'bg-green-500 text-white hover:bg-green-600'
-                                    : isDisabled
-                                      ? 'bg-gray-400 text-white'
-                                      : ''
-                            }
-                        >
-                            Согласовать
-                        </Button>
-                    )
-                },
+                cell: ({ row }) => <ApproveButton row={row} />,
                 isShortVersion: true
-            },
+            }
+            ,
 
             {
                 header: 'Действия',
