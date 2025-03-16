@@ -42,7 +42,7 @@
 //     if (bid.id) return `bid-${bid.id}`;
 //     if (bid._id) return `bid-${bid._id}`;
 //     if (bid.persistentId) return `bid-${bid.persistentId}`;
-    
+
 //     // If no ID is available, create a hash from bid properties
 //     const keyProps = [
 //         bid.client?.organizationName,
@@ -50,7 +50,7 @@
 //         bid.status,
 //         bid.createdAt
 //     ].filter(Boolean).join('-');
-    
+
 //     return `bid-${keyProps}-${Math.random().toString(36).substr(2, 9)}`;
 // };
 
@@ -286,8 +286,6 @@
 
 // export default BidsTable
 
-
-
 import { useState, useCallback, useRef, useEffect } from 'react'
 import {
     useReactTable,
@@ -431,12 +429,9 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
             <ScrollArea>
                 <div
                     ref={scrollRef}
-                    className='h-[calc(98vh-200px)] overflow-y-scroll relative !scrollbar-thin !scrollbar-thumb-gray-400 !scrollbar-track-gray-100'>
-                    <Table
-                        style={{ overflow: 'visible' }}
-                        className='min-w-[1000px] border  border-gray-300 relative'
-                    >
-
+                    className='h-[calc(98vh-200px)] overflow-y-scroll relative !scrollbar-thin !scrollbar-thumb-gray-400 !scrollbar-track-gray-100'
+                >
+                    <Table style={{ overflow: 'visible' }} className='min-w-[1000px] border  border-gray-300 relative'>
                         <TableHeader className='!sticky !top-0 z-50 '>
                             {table.getHeaderGroups().map(headerGroup => (
                                 <TableRow key={headerGroup.id}>
@@ -448,6 +443,24 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
                                             <div className='text-center'>
                                                 {flexRender(header.column.columnDef.header, header.getContext())}
                                             </div>
+                                            {/* <div
+                                                className='flex justify-between  items-center gap-1 cursor-pointer px-3 py-5 md:px-3 md:py-2 text-base md:text-xl'
+                                                onClick={header.column.getToggleSortingHandler()}
+                                            >
+                                                <div className='text-center'>
+                                                    {flexRender(header.column.columnDef.header, header.getContext())}
+                                                </div>
+
+                                                {header.column.getIsSorted() ? (
+                                                    header.column.getIsSorted() === 'asc' ? (
+                                                        <ArrowUp className='h-4 w-4' />
+                                                    ) : (
+                                                        <ArrowDown className='h-4 w-4' />
+                                                    )
+                                                ) : (
+                                                    <ArrowUpDown className='h-4 w-4 opacity-50' />
+                                                )}
+                                            </div> */}
                                         </TableHead>
                                     ))}
                                 </TableRow>
@@ -505,12 +518,13 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
                                 <TableRow
                                     onDoubleClick={() => handleOpenModal(row.original)}
                                     key={row.id}
-                                    className={`cursor-pointer text-[16px] hover:bg-gray-100 ${row.original.status === 'canceled'
-                                        ? 'bg-gray-50 opacity-50 line-through'
-                                        : index % 2 === 0
-                                            ? 'bg-gray-100'
-                                            : ''
-                                        }`}
+                                    className={`cursor-pointer text-[16px] hover:bg-gray-100 ${
+                                        row.original.status === 'canceled'
+                                            ? 'bg-gray-50 opacity-50 line-through'
+                                            : index % 2 === 0
+                                              ? 'bg-gray-100'
+                                              : ''
+                                    }`}
                                 >
                                     {row.getVisibleCells().map(cell => (
                                         <TableCell
@@ -546,11 +560,7 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
             </ScrollArea>
 
             {selectedBid && (
-                <BidsInfoModal
-                    selectedBid={selectedBid}
-                    handleCloseModal={handleCloseModal}
-                    open={isModalOpen}
-                />
+                <BidsInfoModal selectedBid={selectedBid} handleCloseModal={handleCloseModal} open={isModalOpen} />
             )}
         </div>
     )
