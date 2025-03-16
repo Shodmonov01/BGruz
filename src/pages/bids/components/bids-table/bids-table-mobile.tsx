@@ -120,7 +120,7 @@ function BidsTableMobile({ bids, loadMore, hasMore, loading }: BidsTableMobilePr
                                                 <p className='font-semibold'>
                                                     Моя цена{' '}
                                                     <span className='text-green-600'>
-                                                        {bid.price ? `${formatNumber(bid.price)} ₽` : '—'}
+                                                        {bid.price ? `${formatNumber(bid.price)} ₽` : 'Запрос'}
                                                     </span>
                                                 </p>
                                                 <div className='flex gap-2'>
