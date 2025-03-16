@@ -23,15 +23,20 @@ interface BidsTableMobileProps {
 // Generate a unique key for each bid based on its properties
 const getBidKey = (bid: any) => {
     // Use the bid's unique identifiers in this order of preference
-    if (bid.id) return `bid-${bid.id}`
-    if (bid._id) return `bid-${bid._id}`
-    if (bid.persistentId) return `bid-${bid.persistentId}`
-
+    if (bid.id) return `bid-${bid.id}`;
+    if (bid._id) return `bid-${bid._id}`;
+    if (bid.persistentId) return `bid-${bid.persistentId}`;
+    
     // If no ID is available, create a hash from bid properties
-    const keyProps = [bid.client?.organizationName, bid.cargoTitle, bid.status, bid.createdAt].filter(Boolean).join('-')
-
-    return `bid-${keyProps}-${Math.random().toString(36).substr(2, 9)}`
-}
+    const keyProps = [
+        bid.client?.organizationName,
+        bid.cargoTitle,
+        bid.status,
+        bid.createdAt
+    ].filter(Boolean).join('-');
+    
+    return `bid-${keyProps}-${Math.random().toString(36).substr(2, 9)}`;
+};
 
 function BidsTableMobile({ bids }: BidsTableMobileProps) {
     const [selectedBid, setSelectedBid] = useState<any>(null)
@@ -88,15 +93,16 @@ function BidsTableMobile({ bids }: BidsTableMobileProps) {
                         <h2 className='text-lg font-semibold p-2'>{date}</h2>
                         {/* @ts-expect-error надо разобраться */}
                         {dateBids.map(bid => {
-                            const bidKey = getBidKey(bid)
+                            const isDisabled =
+                                !bid.bestSalePrice || bid.status === 'canceled' || bid.ownState === 'approved'
 
+                            // Generate a truly unique key for each bid
+                            const bidKey = getBidKey(bid);
+                            
                             return (
                                 <div key={bidKey} className='p-2 shadow-md rounded-lg bg-white'>
-                                    <div
-                                        onClick={() => handleOpenModal(bid)}
-                                        className='w-full !p-0 flex items-center flex-row-reverse gap-2'
-                                    >
-                                        <div className='w-1/2'>
+                                    <div onClick={() => handleOpenModal(bid)} className='w-full !p-0 flex items-center flex-row-reverse gap-2'>
+                                        <div  className='w-1/2'>
                                             <div className='ml-auto flex flex-col'>
                                                 <p className='font-semibold'>
                                                     Предложение{' '}
@@ -159,10 +165,8 @@ function BidsTableMobile({ bids }: BidsTableMobileProps) {
                                         </div>
                                     </div>
                                     <Button
-                                        disabled={bid.status !== 'waiting'}
-                                        className={
-                                            bid.status !== 'waiting' ? 'bg-gray-400 text-white w-full' : 'w-full'
-                                        }
+                                        disabled={isDisabled}
+                                        className={isDisabled ? 'bg-gray-400 text-white w-full' : 'w-full'}
                                         onClick={() => {
                                             setSelectedBid(bid)
                                             handleConfirmOpen()
@@ -202,7 +206,7 @@ function BidsTableMobile({ bids }: BidsTableMobileProps) {
                                 onClick={() => {
                                     if (selectedBid?.id) {
                                         handleApprove(selectedBid.id)
-                                    }
+                                    }   
                                     handleConfirmClose()
                                 }}
                             >

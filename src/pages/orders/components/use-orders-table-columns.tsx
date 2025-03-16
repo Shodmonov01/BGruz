@@ -150,14 +150,13 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 minSize: 100,
                 maxSize: 500,
                 accessorFn: row => {
-                    let loadingModeLabel = ''
-                    if (row.loadingMode === 'loading') {
-                        loadingModeLabel = 'Погрузка'
-                    } else {
-                        loadingModeLabel = 'Выгрузка'
+                    const modeLabels = {
+                        loading: 'Погрузка',
+                        unloading: 'Выгрузка',
+                        moving: 'Перемещение'
                     }
-
-                    return `${loadingModeLabel}`
+                    // @ts-ignore
+                    return modeLabels[row.buyBid.loadingMode] || 'Неизвестно'
                 },
                 searchable: true,
                 filterType: 'select',
@@ -165,9 +164,10 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                     { value: ['loading', 'unloading', 'moving'], label: 'Все' },
                     { value: 'loading', label: 'Погрузка' },
                     { value: 'unloading', label: 'Выгрузка' },
-                    { value: 'moving', label: 'Перемещение ' }
+                    { value: 'moving', label: 'Перемещение' }
                 ]
             },
+
             {
                 accessorKey: 'loadingDate',
                 header: 'Дата подачи',

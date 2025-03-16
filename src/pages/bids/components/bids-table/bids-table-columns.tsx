@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import type { ColumnDef } from '@tanstack/react-table'
 import { Button } from '@/components/ui/button'
 import { Eye, Loader2, Trash } from 'lucide-react'
@@ -44,6 +44,7 @@ interface ColumnsProps {
 }
 
 export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenModal, isMobile }: ColumnsProps) => {
+    const [isClicked, setIsClicked] = useState(false)
     const formatNumber = (value: string) => {
         const num = value.replace(/\D/g, '')
         return num ? new Intl.NumberFormat('ru-RU').format(Number(num)) : ''
@@ -358,39 +359,36 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 searchable: true,
                 filterType: 'fuzzy'
             },
-            // {
-            //     accessorKey: 'isPriceRequest',
-            //     header: 'Согласовано',
-            //     size: 150,
-            //     cell: ({ row }) => {
-            //         const { bestSalePrice, status, ownState } = row.original
-            //         const isDisabled = !bestSalePrice || status === 'canceled' || ownState === 'approved'
-
-            //         return (
-            //             <Button
-            //                 onClick={() => onApprove?.(row.original.id)}
-            //                 disabled={isDisabled}
-            //                 className={isDisabled ? 'bg-gray-400 text-white' : ''}
-            //             >
-            //                 Согласовать
-            //             </Button>
-            //         )
-            //     },
-            //     isShortVersion: true
-            // }
             {
                 accessorKey: 'isPriceRequest',
                 header: 'Согласовано',
                 size: 150,
                 cell: ({ row }) => {
-                    const { status } = row.original
-                    const isDisabled = status !== 'waiting'
-            
+                    const { bestSalePrice, status, ownState } = row.original
+                    const isDisabled = !bestSalePrice || status === 'canceled' || ownState === 'approved'
+                    const handleClick = () => {
+                        setIsClicked(true)
+                        onApprove?.(row.original.id)
+                    }
+
                     return (
+                        // <Button
+                        //     onClick={() => onApprove?.(row.original.id)}
+                        //     disabled={isDisabled}
+                        //     className={isDisabled ? 'bg-gray-400 text-white' : ''}
+                        // >
+                        //     Согласовать
+                        // </Button>
                         <Button
-                            onClick={() => onApprove?.(row.original.id)}
+                            onClick={handleClick}
                             disabled={isDisabled}
-                            className={isDisabled ? 'bg-gray-400 text-white' : ''}
+                            className={
+                                isClicked
+                                    ? 'bg-green-500 text-white hover:bg-green-600'
+                                    : isDisabled
+                                      ? 'bg-gray-400 text-white'
+                                      : ''
+                            }
                         >
                             Согласовать
                         </Button>
