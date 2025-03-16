@@ -2,6 +2,7 @@ import type React from 'react'
 import { DialogHeader } from '@/components/ui/dialog'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useEffect, useState } from 'react'
+import { postData } from '@/api/api'
 
 const statusTranslations = {
     new: 'Новый',
@@ -34,56 +35,96 @@ export function OrderHeader({ formData, handleChange, setFormData }: OrderHeader
         setIsChecked(!!formData.docSubmissionDate)
     }, [formData.docSubmissionDate])
 
+    // const handleDocSubmissionChange = async (checked: boolean) => {
+    //     if (isSubmitting) return
+
+    //     setIsChecked(checked)
+
+    //     try {
+    //         setIsSubmitting(true)
+    //         console.log('Submitting document status change:', checked)
+
+    //         const token = localStorage.getItem('authToken')
+    //         if (!token) {
+    //             console.error('Не найден токен авторизации')
+    //             setIsChecked(!checked)
+    //             return
+    //         }
+
+    //         const response = await fetch(
+    //             `https://portal.bgruz.com/api/v1/orders/${formData.id}/doc_submission_status?doc_submitted=${checked}`,
+    //             {
+    //                 method: 'POST',
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                     Authorization: `Bearer ${token}`
+    //                 }
+    //             }
+    //         )
+
+    //         if (!response.ok) {
+    //             throw new Error(`Failed to update document submission status: ${response.status}`)
+    //         }
+
+    //         const responseData = await response.json()
+
+    //         setFormData(prev => {
+    //             const { responseText } = responseData || {}
+    //             const newState = {
+    //                 ...prev,
+    //                 docSubmissionDate: responseText?.docSubmissionDate ?? prev.docSubmissionDate,
+    //                 docSubmissionUser: responseText?.fio ?? prev.docSubmissionUser
+    //             }
+    //             console.log('Updated form data:', newState)
+    //             return newState
+    //         })
+    //     } catch (error) {
+    //         console.error('Error updating document submission:', error)
+    //         setIsChecked(!checked)
+    //     } finally {
+    //         setIsSubmitting(false)
+    //     }
+    // }
+
     const handleDocSubmissionChange = async (checked: boolean) => {
-        if (isSubmitting) return
-
-        setIsChecked(checked)
-
+        if (isSubmitting) return;
+    
+        setIsChecked(checked);
+    
         try {
-            setIsSubmitting(true)
-            console.log('Submitting document status change:', checked)
-
-            const token = localStorage.getItem('authToken')
+            setIsSubmitting(true);
+            console.log('Submitting document status change:', checked);
+    
+            const token = localStorage.getItem('authToken');
             if (!token) {
-                console.error('Не найден токен авторизации')
-                setIsChecked(!checked)
-                return
+                console.error('Не найден токен авторизации');
+                setIsChecked(!checked);
+                return;
             }
-
-            const response = await fetch(
-                `https://portal.bgruz.com/api/v1/orders/${formData.id}/doc_submission_status?doc_submitted=${checked}`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            )
-
-            if (!response.ok) {
-                throw new Error(`Failed to update document submission status: ${response.status}`)
-            }
-
-            const responseData = await response.json()
-
+    
+            const endpoint = `api/v1/orders/${formData.id}/doc_submission_status`;
+            const data = { doc_submitted: checked };
+    
+            const responseData = await postData(endpoint, data, token);
+    
             setFormData(prev => {
-                const { responseText } = responseData || {}
+                const { responseText } = responseData || {};
                 const newState = {
                     ...prev,
                     docSubmissionDate: responseText?.docSubmissionDate ?? prev.docSubmissionDate,
                     docSubmissionUser: responseText?.fio ?? prev.docSubmissionUser
-                }
-                console.log('Updated form data:', newState)
-                return newState
-            })
+                };
+                console.log('Updated form data:', newState);
+                return newState;
+            });
         } catch (error) {
-            console.error('Error updating document submission:', error)
-            setIsChecked(!checked)
+            console.error('Error updating document submission:', error);
+            setIsChecked(!checked);
         } finally {
-            setIsSubmitting(false)
+            setIsSubmitting(false);
         }
-    }
+    };
+    
 
     return (
         <>

@@ -3,7 +3,7 @@ import type React from 'react'
 import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useState } from 'react'
-import { postData2 } from '@/api/api'
+import { postData, postData2 } from '@/api/api'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
@@ -100,35 +100,27 @@ export function OrderFinancial({ formData, formatNumber, setFormData }: OrderFin
 
     const handleSaveCargoCost = async () => {
         try {
-            setLoading(true)
-            const token = localStorage.getItem('authToken')
+            setLoading(true);
+            const token = localStorage.getItem('authToken');
+    
             if (!token) {
-                console.error('Не найден токен авторизации')
-                return
+                console.error('Не найден токен авторизации');
+                return;
             }
-
-            const response = await fetch(
-                `https://portal.bgruz.com/api/v1/orders/${formData.id}/cargo_cost?cost=${formData.buyBid.cargoCost}`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            )
-
-            if (!response.ok) {
-                throw new Error('Ошибка при обновлении стоимости груза')
-            }
-
-            console.log('Стоимость груза успешно обновлена')
+    
+            const endpoint = `api/v1/orders/${formData.id}/cargo_cost`;
+            const data = { cost: formData.buyBid.cargoCost };
+    
+            await postData(endpoint, data, token);
+            
+            console.log('Стоимость груза успешно обновлена');
         } catch (error) {
-            console.error('Ошибка:', error)
+            console.error('Ошибка при обновлении стоимости груза:', error);
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
+    };
+    
 
     const handleCountChange = (index: number, value: number) => {
         setFormData(prev => ({

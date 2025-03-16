@@ -191,7 +191,7 @@ export function FilterProvider({ children, onFiltersChange }: FilterProviderProp
                 formattedValue = Array.isArray(value) ? value : [value]
             } else if ((columnId === 'loadingDate' || columnId === 'createdAt') && value) {
                 formattedValue = {
-                    start: new Date(value.from.setHours(23, 59, 59, 999)).toISOString(),
+                    start: new Date(value.from.setHours(0, 0, 0, 0)).toISOString(),
                     end: new Date(value.to.setHours(23, 59, 59, 999)).toISOString()
                 }
             } else if (['number', 'fullPrice', 'comission', 'extraServicesPrice'].includes(columnId)) {

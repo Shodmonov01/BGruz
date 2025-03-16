@@ -538,23 +538,6 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
                                     ))}
                                 </TableRow>
                             ))}
-                            {/* {loading && (
-                                <TableRow>
-                                    <TableCell colSpan={columns.length} className='text-center p-4'>
-                                        <div className='flex items-center justify-center'>
-                                            <Loader2 className='animate-spin mr-2 h-8 w-8' />
-                                            <span className='ml-2 text-gray-500'>Загрузка данных...</span>
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                            {!loading && !bids.length && (
-                                <TableRow>
-                                    <TableCell colSpan={columns.length} className='text-center p-4'>
-                                        <span className='text-gray-500'>Нет данных для отображения</span>
-                                    </TableCell>
-                                </TableRow>
-                            )} */}
                                     {!loading && bids.length === 0 && (
                                 <TableRow>
                                     <TableCell colSpan={columns.length} className='text-center p-4'>
