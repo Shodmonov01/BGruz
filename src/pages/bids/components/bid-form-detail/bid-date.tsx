@@ -33,9 +33,7 @@ function BidDate({ isReadOnly }: { isReadOnly?: boolean }) {
                                 <FormControl>
                                     <DatePicker
                                         disabled={isReadOnly}
-                                        // @ts-expect-error надо имправить
                                         value={field.value ? new Date(field.value) : undefined}
-                                        // @ts-expect-error надо имправить
                                         onChange={date => field.onChange(date?.toISOString().split('T')[0])}
                                         minDate={new Date(new Date().setHours(0, 0, 0, 0))}
                                     />
@@ -70,9 +68,7 @@ function BidDate({ isReadOnly }: { isReadOnly?: boolean }) {
                             <FormItem className='md:w-[285px] w-full'>
                                 <FormControl>
                                     <DatePicker
-                                        // @ts-expect-error надо имправить
                                         value={field.value ? new Date(field.value) : undefined}
-                                        // @ts-expect-error надо имправить
                                         onChange={date => field.onChange(date?.toISOString().split('T')[0])}
                                         minDate={
                                             startDate
@@ -118,9 +114,7 @@ function BidDate({ isReadOnly }: { isReadOnly?: boolean }) {
                                 <FormItem className='md:w-60 w-full'>
                                     <FormControl>
                                         <DatePicker
-                                            // @ts-expect-error надо имправить
                                             value={field.value ? new Date(field.value) : undefined}
-                                            // @ts-expect-error надо имправить
                                             onChange={date => field.onChange(date?.toISOString().split('T')[0])}
                                             minDate={new Date(new Date().setHours(0, 0, 0, 0))}
                                             disabled

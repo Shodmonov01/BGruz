@@ -358,14 +358,34 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 searchable: true,
                 filterType: 'fuzzy'
             },
+            // {
+            //     accessorKey: 'isPriceRequest',
+            //     header: 'Согласовано',
+            //     size: 150,
+            //     cell: ({ row }) => {
+            //         const { bestSalePrice, status, ownState } = row.original
+            //         const isDisabled = !bestSalePrice || status === 'canceled' || ownState === 'approved'
+
+            //         return (
+            //             <Button
+            //                 onClick={() => onApprove?.(row.original.id)}
+            //                 disabled={isDisabled}
+            //                 className={isDisabled ? 'bg-gray-400 text-white' : ''}
+            //             >
+            //                 Согласовать
+            //             </Button>
+            //         )
+            //     },
+            //     isShortVersion: true
+            // }
             {
                 accessorKey: 'isPriceRequest',
                 header: 'Согласовано',
                 size: 150,
                 cell: ({ row }) => {
-                    const { bestSalePrice, status, ownState } = row.original
-                    const isDisabled = !bestSalePrice || status === 'canceled' || ownState === 'approved'
-
+                    const { status } = row.original
+                    const isDisabled = status !== 'waiting'
+            
                     return (
                         <Button
                             onClick={() => onApprove?.(row.original.id)}
