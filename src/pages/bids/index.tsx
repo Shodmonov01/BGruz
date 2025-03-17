@@ -31,7 +31,6 @@ export default function BidsPage() {
         checkMobile()
         window.addEventListener('resize', checkMobile)
         
-        // Component mount bo'lganda ma'lumotlarni yuklaymiz
         refreshBids(true)
 
         return () => window.removeEventListener('resize', checkMobile)
