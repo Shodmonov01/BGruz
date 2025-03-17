@@ -111,9 +111,9 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                                 <div>
                                     <MapPin className='max-h-[20px] min-h-[20px]' />
                                 </div>
-                                {selectedOrder?.buyBid?.warehouses[0]?.cityName || '—'},{' '}
-                                {selectedOrder?.buyBid?.warehouses[0]?.address || 'Адрес не указан'}
-                            </p>
+                                {selectedOrder?.buyBid?.warehouses?.[0]?.cityName || '—'}, {' '}
+                                {selectedOrder?.buyBid?.warehouses?.[0]?.address || 'Адрес не указан'}
+                                </p>
                         </div>
                         <div className='border-b-2 border-[#E6E6E6]  px-6 py-2'>
                             <p className='text-gray-600'>Сдать контейнер:</p>
