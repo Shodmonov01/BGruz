@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Modal } from '@/components/ui/modal'
 import { postData2 } from '@/api/api'
 import useInfiniteScroll from '@/hooks/use-infinity-scroll'
-import { Input } from '@/components/ui/input'
+// import { Input } from '@/components/ui/input'
 import { MobileFilters } from './mobile-filters'
 import { Loader2 } from 'lucide-react'
 // import { useFilter } from '@/context/filter-context'
@@ -58,7 +58,7 @@ function BidsTableMobile({ bids: initialBids, loadMore, hasMore, loading }: Bids
     const sentinelRef = useInfiniteScroll(loadMore, hasMore, loading)
     const [open, setOpen] = useState(false)
     const [confirmOpen, setConfirmOpen] = useState(false)
-    const [searchQuery, setSearchQuery] = useState('')
+    // const [searchQuery, setSearchQuery] = useState('')
     // const { filters } = useFilter()
 
     useEffect(() => {
@@ -141,12 +141,12 @@ function BidsTableMobile({ bids: initialBids, loadMore, hasMore, loading }: Bids
         <div className="space-y-4">
             <div className="sticky top-0 z-10 bg-background p-4 border-b">
                 <div className="flex items-center gap-2">
-                    <Input
+                    {/* <Input
                         placeholder="Поиск..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="flex-1"
-                    />
+                    /> */}
                     {/* @ts-expect-error надо разобраться */}
                     <MobileFilters />
                 </div>
