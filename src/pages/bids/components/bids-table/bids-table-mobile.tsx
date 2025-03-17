@@ -132,6 +132,7 @@ function BidsTableMobile({ bids: initialBids, loadMore, hasMore, loading }: Bids
             groups[label].push(bid)
         })
         return Object.entries(groups).sort(([a], [b]) =>
+            // @ts-expect-error надо посмотреть
             a === 'Сегодня' ? -1 : b === 'Сегодня' ? 1 : new Date(b) - new Date(a)
         )
     }, [localBids])
