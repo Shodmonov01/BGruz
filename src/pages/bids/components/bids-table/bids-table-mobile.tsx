@@ -15,12 +15,16 @@ import { Input } from '@/components/ui/input'
 import { MobileFilters } from './mobile-filters'
 import { Loader2 } from 'lucide-react'
 import { useFilter } from '@/context/filter-context'
+import { useWebSocket } from '@/api/use-websocket'
+import { useBidContext } from '@/context/bid-context'
+
 const statusTranslations = {
     active: 'Активна',
     waiting: 'На ожидании',
     executed: 'Выполнена',
     canceled: 'Отменена'
 }
+
 interface BidsTableMobileProps {
     bids: any[]
     loading: boolean
@@ -46,7 +50,9 @@ const getBidKey = (bid: any) => {
     return `bid-${keyProps}-${Math.random().toString(36).substr(2, 9)}`;
 };
 
-function BidsTableMobile({ bids, loadMore, hasMore, loading }: BidsTableMobileProps) {
+function BidsTableMobile({ bids: initialBids, loadMore, hasMore, loading }: BidsTableMobileProps) {
+    const { bids, setBids, newBidId, setNewBidId } = useBidContext();
+    const [localBids, setLocalBids] = useState(initialBids);
     const [selectedBid, setSelectedBid] = useState<any>(null)
     const sentinelRef = useInfiniteScroll(loadMore, hasMore, loading)
     const [open, setOpen] = useState(false)
@@ -55,10 +61,39 @@ function BidsTableMobile({ bids, loadMore, hasMore, loading }: BidsTableMobilePr
     const { filters } = useFilter()
 
     useEffect(() => {
-        if (!bids || bids.length === 0) {
-            loadMore()
+        setLocalBids(initialBids);
+    }, [initialBids]);
+
+    useEffect(() => {
+        if (newBidId) {
+            loadMore();
+            setNewBidId(null);
         }
-    }, [bids, loadMore])
+    }, [newBidId, loadMore, setNewBidId]);
+
+    const handleBidUpdate = useCallback((updatedBid) => {
+        setLocalBids(currentBids => 
+            currentBids.map(bid => 
+                bid.persistentId === updatedBid.persistentId 
+                    ? { ...bid, bestSalePrice: updatedBid.bestSalePrice }
+                    : bid
+            )
+        );
+    }, []);
+
+    const handleWebSocketMessage = (data) => {
+        if (data.type === 'bid_best_price_update') {
+            setLocalBids(currentBids => 
+                currentBids.map(bid => 
+                    bid.id === data.payload.id 
+                        ? { ...bid, status: data.payload.status }
+                        : bid
+                )
+            );
+        }
+    };
+
+    useWebSocket(handleWebSocketMessage);
 
     const handleCloseModal = useCallback(() => {
         setOpen(false)
@@ -87,7 +122,7 @@ function BidsTableMobile({ bids, loadMore, hasMore, loading }: BidsTableMobilePr
         const groups = {}
         const today = format(new Date(), 'dd.MM.yyyy', { locale: ru })
 
-        bids.forEach(bid => {
+        localBids.forEach(bid => {
             const date = format(new Date(bid.loadingDate), 'dd.MM.yyyy', { locale: ru })
             const label = date === today ? 'Сегодня' : date
             if (!groups[label]) {
@@ -96,10 +131,9 @@ function BidsTableMobile({ bids, loadMore, hasMore, loading }: BidsTableMobilePr
             groups[label].push(bid)
         })
         return Object.entries(groups).sort(([a], [b]) =>
-            //@ts-expect-error надо разобраться
             a === 'Сегодня' ? -1 : b === 'Сегодня' ? 1 : new Date(b) - new Date(a)
         )
-    }, [bids])
+    }, [localBids])
 
     return (
         <div className="space-y-4">
@@ -115,12 +149,12 @@ function BidsTableMobile({ bids, loadMore, hasMore, loading }: BidsTableMobilePr
                 </div>
             </div>
 
-            {loading && !bids ? (
+            {loading && !localBids ? (
                 <div className="flex justify-center items-center p-8">
                     <Loader2 className="h-6 w-6 animate-spin" />
                     <span className="ml-2">Загрузка заявок...</span>
                 </div>
-            ) : bids && bids.length > 0 ? (
+            ) : localBids && localBids.length > 0 ? (
                 <div className='flex flex-col gap-4 bg-secondary'>
                     <ScrollArea className='flex flex-col gap-4 max-h-[87vh] w-full overflow-auto rounded-md border'>
                         {groupedBids.map(([date, dateBids]) => (
