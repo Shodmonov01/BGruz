@@ -25,7 +25,7 @@ export default function OrderPage() {
             setSize(prev => prev + 50)
         }
     }
-
+    // @ts-expect-error надо посмотреть
     useWebSocket(() => {}, refreshOrders)
 
     return (

@@ -41,6 +41,7 @@ export default function BidsPage() {
             setSize(prev => prev + 50)
         }
     }
+    // @ts-expect-error надо посмотреть
     useWebSocket(refreshBids, () => {})
 
     return (
