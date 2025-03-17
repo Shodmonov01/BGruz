@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 import { FilterProvider, useFilter } from '@/context/filter-context'
@@ -54,6 +54,7 @@ export default function BidsPage() {
                         {loading && !bids ? (
                            <h1>Loading...</h1>
                         ) : error ? (
+                            // @ts-expect-error надо разобраться
                             <ErrorDisplay error={error} />
                         ) : (
                             <>

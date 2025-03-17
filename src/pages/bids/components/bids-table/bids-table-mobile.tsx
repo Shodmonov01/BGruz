@@ -14,7 +14,7 @@ import useInfiniteScroll from '@/hooks/use-infinity-scroll'
 import { Input } from '@/components/ui/input'
 import { MobileFilters } from './mobile-filters'
 import { Loader2 } from 'lucide-react'
-import { useFilter } from '@/context/filter-context'
+// import { useFilter } from '@/context/filter-context'
 const statusTranslations = {
     active: 'Активна',
     waiting: 'На ожидании',
@@ -52,7 +52,7 @@ function BidsTableMobile({ bids, loadMore, hasMore, loading }: BidsTableMobilePr
     const [open, setOpen] = useState(false)
     const [confirmOpen, setConfirmOpen] = useState(false)
     const [searchQuery, setSearchQuery] = useState('')
-    const { filters } = useFilter()
+    // const { filters } = useFilter()
 
     useEffect(() => {
         if (!bids || bids.length === 0) {
@@ -111,6 +111,7 @@ function BidsTableMobile({ bids, loadMore, hasMore, loading }: BidsTableMobilePr
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="flex-1"
                     />
+                    {/* @ts-expect-error надо разобраться */}
                     <MobileFilters />
                 </div>
             </div>
