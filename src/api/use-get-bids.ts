@@ -239,7 +239,6 @@ export const useGetBids = (size: number, sendRequest: boolean = true) => {
         if (!isMounted.current) {
             isMounted.current = true;
             
-            // Agar status bo'sh bo'lsa, active_waiting ni o'rnatamiz
             if (!filters.status || filters.status.length === 0) {
                 handleFilterChange('status', ['active_waiting']);
             }
