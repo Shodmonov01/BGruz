@@ -52,8 +52,7 @@ const getBidKey = (bid: any) => {
 
 function BidsTableMobile({ bids: initialBids, loadMore, hasMore, loading }: BidsTableMobileProps) {
     // @ts-expect-error надо посмотреть
-    const { bids, setBids, newBidId, setNewBidId, setLocalBids } = useBidContext();
-    // @ts-expect-error надо посмотреть
+    const { bids, setBids, newBidId, setNewBidId } = useBidContext();
     const [localBids, setLocalBids] = useState(initialBids);
     const [selectedBid, setSelectedBid] = useState<any>(null)
     const sentinelRef = useInfiniteScroll(loadMore, hasMore, loading)
