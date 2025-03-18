@@ -42,25 +42,58 @@ function BidDescribe({ extraServices, isReadOnly }: BidDescribeProps) {
     }, [extraServices])
 
 
-    useEffect(() => {
-        if (extraServices.length > 0) {
-            const uniqueServices = Array.from(new Map(extraServices.map(service => [service.id, service])).values())
+    // useEffect(() => {
+    //     if (extraServices.length > 0) {
+    //         const uniqueServices = Array.from(new Map(extraServices.map(service => [service.id, service])).values())
 
-            setServices(
-                uniqueServices.map(service => ({
-                    ...service,
-                    count: 1,
-                    checked: false
-                }))
-            )
-        }
-    }, [extraServices])
+    //         setServices(
+    //             uniqueServices.map(service => ({
+    //                 ...service,
+    //                 count: 1,
+    //                 checked: false
+    //             }))
+    //         )
+    //     }
+    // }, [extraServices])
+
+    // BidDescribe.tsx
+useEffect(() => {
+    if (extraServices.length > 0) {
+        const formExtraServices = watch('extraServices') || [];
+        const uniqueServices = Array.from(
+            new Map(extraServices.map(service => [service.id, service])).values()
+        );
+
+        const initialServices = uniqueServices.map(service => {
+            const existing = formExtraServices.find((es: any) => es.id === service.id);
+            return {
+                ...service,
+                // count: existing?.count || service.countIncluded || 1,
+                count: existing?.count,
+                checked: !!existing
+            };
+        });
+
+        setServices(initialServices);
+    }
+}, [extraServices, watch('extraServices')]);
+
+    // const handleCountChange = (index: number, value: number) => {
+    //     setServices(prevServices => {
+    //         return prevServices.map((service, i) => (i === index ? { ...service, count: value } : service))
+    //     })
+    // }
 
     const handleCountChange = (index: number, value: number) => {
         setServices(prevServices => {
-            return prevServices.map((service, i) => (i === index ? { ...service, count: value } : service))
+            const updatedServices = prevServices.map((service, i) =>
+                i === index ? { ...service, count: value } : service
+            )
+            updateFormData(updatedServices)
+            return updatedServices
         })
     }
+    
 
     const handleCheckboxChange = (index: number) => {
         const updatedServices = [...services]
@@ -172,6 +205,7 @@ function BidDescribe({ extraServices, isReadOnly }: BidDescribeProps) {
                                     </div>
                                     <div className='flex gap-0 md:gap-7 w-[70%] md:w-full justify-end items-center'>
                                         <div
+                                        
                                             className={`md:px-0 px-4 ${!service.checked ? 'disabled' : ''}`}
                                             aria-disabled={!service.checked}
                                         >
@@ -194,7 +228,8 @@ function BidDescribe({ extraServices, isReadOnly }: BidDescribeProps) {
                                                                 )
                                                             )
                                                         }
-                                                        disabled={!service.checked}
+                                                        // disabled={!service.checked}
+                                                        disabled={isReadOnly}
                                                     >
                                                         <Plus size={14} className='text-green-500' />
                                                     </button>
@@ -204,7 +239,8 @@ function BidDescribe({ extraServices, isReadOnly }: BidDescribeProps) {
                                                         onClick={() =>
                                                             handleCountChange(index, Math.max(1, service.count - 1))
                                                         }
-                                                        disabled={!service.checked}
+                                                        // disabled={!service.checked}
+                                                        disabled={isReadOnly}
                                                     >
                                                         <Minus size={14} className='text-yellow-500' />
                                                     </button>
