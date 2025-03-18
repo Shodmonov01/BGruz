@@ -69,7 +69,7 @@ useEffect(() => {
             return {
                 ...service,
                 // count: existing?.count || service.countIncluded || 1,
-                count: existing?.count,
+                count: existing?.count || 0,
                 checked: !!existing
             };
         });
