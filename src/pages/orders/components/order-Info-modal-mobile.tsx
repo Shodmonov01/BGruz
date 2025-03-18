@@ -19,8 +19,8 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
 
     const statusTranslations = {
         new: 'Новый',
-        canceledByCarrierWithPenalty: 'Отменяется перевозчиком (половина ГО)',
-        canceledByCustomerWithPenalty: 'Отменяется заказчиком (половина ГО)',
+        canceledByCarrierWithPenalty: 'Отменяется пер (-1/2 ГО)',
+        canceledByCustomerWithPenalty: 'Отменяется зак (-1/2 ГО)',
         canceledByCarrier: 'Отменяется перевозчиком',
         canceledByCustomer: 'Отменяется заказчиком',
         failed: 'Сорван',
