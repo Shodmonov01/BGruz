@@ -181,12 +181,6 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                 startDate: getValues('startDate'),
                 slideDayTotal: 0,
                 customerId: Number(data.recipientOrSender),
-                // warehouses: data.warehouses.map(warehouse => ({
-                //     cityId: warehouse.id,
-                //     cityName: warehouse.name,
-                //     address: warehouse.address
-                // })),
-
                 isPriceRequest: data.requestPrice,
                 price: data.price || 0,
                 vehicleProfileId: Number(data.vehicleProfiles),

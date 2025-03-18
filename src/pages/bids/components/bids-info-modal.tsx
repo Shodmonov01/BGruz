@@ -101,9 +101,12 @@ const BidsInfoModal = ({
     const [formData, setFormData] = useState({ ...(bid || selectedBid) })
     const [isEditMode, setIsEditMode] = useState(false)
 
-    const hideTerminal1 = operationType === 'loading' && transportType === 'Вагон'
-    const hideTerminal2 = operationType === 'unloading' && transportType === 'Вагон'
+    const hideTerminal1 = operationType === 'loading' && transportType === 'wagon'
+    const hideTerminal2 = operationType === 'unloading' && transportType === 'wagon'
     const hideWarehouses = operationType === 'moving'
+
+    console.log('operationType:', operationType)
+    console.log('transportType:', transportType)
 
     console.log('selectedBid', selectedBid)
 

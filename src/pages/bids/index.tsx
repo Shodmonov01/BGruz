@@ -8,6 +8,7 @@ import { useGetBids } from '@/api/use-get-bids'
 import { useWebSocket } from '@/api/use-websocket'
 
 import { lazy } from 'react'
+import { Loader2 } from 'lucide-react'
 
 const BgruzHeader = lazy(() => import('@/components/shared/bgruz-header'))
 const PageHead = lazy(() => import('@/components/shared/page-head'))
@@ -27,10 +28,10 @@ export default function BidsPage() {
         const checkMobile = () => {
             setIsMobile(window.innerWidth <= 768)
         }
-        
+
         checkMobile()
         window.addEventListener('resize', checkMobile)
-        
+
         refreshBids(true)
 
         return () => window.removeEventListener('resize', checkMobile)
@@ -52,7 +53,9 @@ export default function BidsPage() {
                 <FilterProvider onFiltersChange={setFilters}>
                     <div>
                         {loading && !bids ? (
-                           <h1>Loading...</h1>
+                            <div className='flex justify-center items-center h-screen'>
+                                <Loader2 className='animate-spin text-gray-500' size={48} />
+                            </div>
                         ) : error ? (
                             // @ts-expect-error надо разобраться
                             <ErrorDisplay error={error} />
@@ -66,7 +69,12 @@ export default function BidsPage() {
                                         loading={loading}
                                     />
                                 ) : (
-                                    <BidsTable bids={bids || []} loading={loading} loadMore={loadMore} hasMore={hasMore} />
+                                    <BidsTable
+                                        bids={bids || []}
+                                        loading={loading}
+                                        loadMore={loadMore}
+                                        hasMore={hasMore}
+                                    />
                                 )}
                             </>
                         )}
