@@ -213,7 +213,7 @@ export function OrderFinancial({ formData, formatNumber, setFormData }: OrderFin
                                 </div>
                                 <Input
                                     className='text-right'
-                                    value={formatNumber(String((service.price * service.count).toFixed(3)))}
+                                    value={formatNumber(String((service.price * service.count).toFixed(2)))}
                                     readOnly
                                 />
                             </div>
