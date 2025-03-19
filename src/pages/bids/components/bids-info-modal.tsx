@@ -163,7 +163,9 @@ const BidsInfoModal = ({
 
             if (selectedBid.customer?.organizationId) {
                 setValue('recipientOrSender', selectedBid.customer.organizationId.toString())
-                handleClientChange(selectedBid.customer.organizationId.toString())
+                // handleClientChange(selectedBid.customer.organizationId.toString())
+
+                handleClientChange(selectedBid.customer.organizationId.toString(), 'recipientOrSender')
             }
 
             if (selectedBid.client) {
@@ -236,23 +238,24 @@ const BidsInfoModal = ({
     console.log('selectedBid.terminal2:', selectedBid.terminal2)
     console.log('selectedBid.warehouses:', selectedBid.warehouses)
 
-    const handleClientChange = async (clientId: string) => {
-        setValue('client', clientId)
-        try {
-            const token = localStorage.getItem('authToken') || ''
-            const data = await fetchPrivateData<OrganizationData>(
-                `api/v1/organization/?organization_id=${clientId}`,
-                token
-            )
-            console.log('data.extraServices', data.extraServices)
+    const handleClientChange = async (clientId: string, field: 'client' | 'recipientOrSender' | any) => {
+        setValue(field, clientId)
+        if (field === 'recipientOrSender') {
+            try {
+                const token = localStorage.getItem('authToken') || ''
+                const data = await fetchPrivateData<OrganizationData>(
+                    `api/v1/organization/?organization_id=${clientId}`,
+                    token
+                )
 
-            setTerminals(data.terminals || [])
-            setWarehouses(data.warehouses || [])
-            setVehicleProfiles(data.vehicleProfiles || [])
-            setExtraServices(data.extraServices || [])
-            setIsClientSelected(true)
-        } catch (error) {
-            console.error('Ошибка при загрузке данных организации:', error)
+                setTerminals(data.terminals || [])
+                setWarehouses(data.warehouses || [])
+                setVehicleProfiles(data.vehicleProfiles || [])
+                setExtraServices(data.extraServices || [])
+                setIsClientSelected(true)
+            } catch (error) {
+                console.error('Ошибка при загрузке данных организации:', error)
+            }
         }
     }
 
@@ -313,7 +316,7 @@ const BidsInfoModal = ({
 
     const handleEdit = () => {
         if (formData.client?.organizationId) {
-            handleClientChange(formData.client.organizationId.toString())
+            handleClientChange(formData.client.organizationId.toString(), 'recipientOrSender')
         }
         setIsFetched(false)
         setIsReadOnly(false)
@@ -484,6 +487,7 @@ const BidsInfoModal = ({
                                     <BidDetails
                                         filteredClients={clients}
                                         vehicleProfiles={vehicleProfiles}
+                                        // @ts-expect-error надо что то сделать 
                                         handleClientChange={handleClientChange}
                                         setOperationType={setOperationType}
                                         setTransportType={setTransportType}

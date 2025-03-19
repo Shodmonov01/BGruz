@@ -20,6 +20,7 @@ interface VehicleProfile {
 interface BidDetailsProps {
     filteredClients: Client[]
     vehicleProfiles: VehicleProfile[]
+    // @ts-ignore
     handleClientChange: (value: string) => void
     setOperationType: (value: string) => void
     setTransportType: (value: string) => void
