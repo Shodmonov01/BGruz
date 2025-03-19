@@ -40,21 +40,37 @@ const BidDetails: React.FC<BidDetailsProps> = ({
     const [searchClient, setSearchClient] = useState('')
     const [searchRecipient, setSearchRecipient] = useState('')
 
-    const filteredClientList = filteredClients.filter(client =>
-        client.organizationName.toLowerCase().includes(searchClient.toLowerCase())
-    )
+    // const filteredClientList = filteredClients.filter(client =>
+    //     client.organizationName.toLowerCase().includes(searchClient.toLowerCase())
+    // )
 
-    const filteredRecipientList = filteredClients.filter(client =>
-        client.organizationName.toLowerCase().includes(searchRecipient.toLowerCase())
+    // const filteredRecipientList = filteredClients.filter(client =>
+    //     client.organizationName.toLowerCase().includes(searchRecipient.toLowerCase())
+    // )
+    const normalizeText = (text: string) =>
+        text.toLowerCase().replace(/\s+/g, '')
+
+    const sortedFilteredClients = filteredClients
+    .filter(client =>
+        normalizeText(client.organizationName).includes(normalizeText(searchClient))
     )
+    .sort((a, b) => a.organizationName.localeCompare(b.organizationName, 'ru'))
+
+const sortedFilteredRecipients = filteredClients
+    .filter(client =>
+        normalizeText(client.organizationName).includes(normalizeText(searchRecipient))
+    )
+    .sort((a, b) => a.organizationName.localeCompare(b.organizationName, 'ru'))
 
     const operationType = useWatch({ control, name: 'loadingType' })
 
     return (
         <div>
-            <h1 className='font-bold whitespace-nowrap mt-20 mb-5 md:mt-0 md:hidden block md:px-0 px-6'>Тип перевозки</h1>
+            <h1 className='font-bold whitespace-nowrap mt-20 mb-5 md:mt-0 md:hidden block md:px-0 px-6'>
+                Тип перевозки
+            </h1>
             <div className='flex justify-around flex-row items-start md:items-center gap-0 md:gap-16  mb-6 md:my-6 md:px-0 px-4'>
-            <h1 className='font-bold whitespace-nowrap mt-20 md:mt-0 hidden md:block'>Тип перевозки</h1>
+                <h1 className='font-bold whitespace-nowrap mt-20 md:mt-0 hidden md:block'>Тип перевозки</h1>
                 <div className='w-full md-w-auto flex justify-center md:block border p-4 rounded-lg'>
                     <FormField
                         control={control}
@@ -186,7 +202,7 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                         <SelectValue placeholder='Выберите клиента' />
                                     </SelectTrigger>
                                 </FormControl>
-                                <SelectContent>
+                                <SelectContent >
                                     <div className='p-2'>
                                         <Input
                                             placeholder='Поиск...'
@@ -195,13 +211,13 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                             onFocus={() => {
                                                 setTimeout(() => setOpenRecipient(true), 300)
                                             }}
-                                            onBlur={() => {
-                                                setTimeout(() => setOpenRecipient(false), 200)
-                                            }}
+                                            // onBlur={() => {
+                                            //     setTimeout(() => setOpenRecipient(false), 20000)
+                                            // }}
                                             onKeyDown={e => e.stopPropagation()}
                                         />
                                     </div>
-                                    {filteredClientList.map(client => (
+                                    {sortedFilteredRecipients.map(client => (
                                         <SelectItem
                                             key={client.organizationId}
                                             value={client.organizationId.toString()}
@@ -253,18 +269,18 @@ const BidDetails: React.FC<BidDetailsProps> = ({
                                         <div className='p-2'>
                                             <Input
                                                 placeholder='Поиск...'
-                                                value={searchRecipient}
+                                                value={searchClient}
                                                 onChange={e => setSearchClient(e.target.value)}
                                                 onFocus={() => {
                                                     setTimeout(() => setOpenClient(true), 300)
                                                 }}
-                                                onBlur={() => {
-                                                    setTimeout(() => setOpenClient(false), 200)
-                                                }}
+                                                // onBlur={() => {
+                                                //     setTimeout(() => setOpenClient(false), 200)
+                                                // }}
                                                 onKeyDown={e => e.stopPropagation()}
                                             />
                                         </div>
-                                        {filteredRecipientList.map(client => (
+                                        {sortedFilteredClients.map(client => (
                                             <SelectItem
                                                 key={client.organizationId}
                                                 value={client.organizationId.toString()}
