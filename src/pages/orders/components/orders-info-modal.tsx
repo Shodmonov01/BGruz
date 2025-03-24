@@ -32,7 +32,7 @@ function OrderInfoModal({ isModalOpen, handleCloseModal, selectedBid }) {
                     <OrderContacts formData={formData} />
 
                     <div className='flex justify-center gap-4 py-6'>
-                        <Button className='bg-orange-500 hover:bg-orange-600 text-white' onClick={handleCloseModal}>
+                        <Button variant='destructive' onClick={handleCloseModal}>
                             Закрыть
                         </Button>
                     </div>

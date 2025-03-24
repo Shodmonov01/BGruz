@@ -7,72 +7,73 @@ import useNumberFormatter from '@/hooks/use-format-number'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import { Loader2 } from 'lucide-react'
+import { Bid } from '@/types'
 
-interface Bid {
-    _id: string
-    persistentId: string
-    cargoTitle: string
-    clientName: { organizationName: string }
-    price: number | null
-    status: string | null
-    filingTime: string
-    createdBy: string
-    createdAt: string
-    isPriceRequest?: boolean
-    customerName?: { organizationName: string }
-    carrier?: { organizationName: string }
-    terminal1?: { cityName: string }
-    terminal2?: { cityName: string }
-    warehouses?: { cityName: string }[]
-    vehicleProfile?: { name: string }
-    loadingDate: number
-    activationTime: string
-    cargoType?: 'wagon' | 'container'
-    loadingMode?: 'loading' | 'unloading'
-    auction?: number
-    bestSalePrice?: number
-    extraServicesPrice?: number
-    fullPrice?: number
-    commission?: number
-    buyBid?: {
-        persistentId?: string
-        loadingMode: string
-        cargoType: string
-        loadingDate: number
-        terminal1: { cityName: string }
-        terminal2: { cityName: string }
-        warehouses: Array<{ cityName: string }>
-        vehicleProfile: { name: string }
-        filingTime: string
-        customer?: { organizationName: string }
-        author?: { fio: string }
-        client: { organizationName: string }
-    }
-    saleBid?: {
-        author?: { fio: string }
-    }
-    driverUser?: {
-        fio: string
-    }
-    assignedVehicle?: {
-        docModel: string
-        plateNum: string
-    }
-    assignedTrailer?: {
-        docModel?: string
-        plateNum: string
-    }
-    statusUpdatedUser?: {
-        username: string
-        fio: string
-    }
-    docSubmissionUser?: {
-        fio: string
-    }
-    docSubmissionDate?: string
+// interface Bid {
+//     _id: string
+//     persistentId: string
+//     cargoTitle: string
+//     clientName: { organizationName: string }
+//     price: number | null
+//     status: string | null
+//     filingTime: string
+//     createdBy: string
+//     createdAt: string
+//     isPriceRequest?: boolean
+//     customerName?: { organizationName: string }
+//     carrier?: { organizationName: string }
+//     terminal1?: { cityName: string }
+//     terminal2?: { cityName: string }
+//     warehouses?: { cityName: string }[]
+//     vehicleProfile?: { name: string }
+//     loadingDate: number
+//     activationTime: string
+//     cargoType?: 'wagon' | 'container'
+//     loadingMode?: 'loading' | 'unloading'
+//     auction?: number
+//     bestSalePrice?: number
+//     extraServicesPrice?: number
+//     fullPrice?: number
+//     commission?: number
+//     buyBid?: {
+//         persistentId?: string
+//         loadingMode: string
+//         cargoType: string
+//         loadingDate: number
+//         terminal1: { cityName: string }
+//         terminal2: { cityName: string }
+//         warehouses: Array<{ cityName: string }>
+//         vehicleProfile: { name: string }
+//         filingTime: string
+//         customer?: { organizationName: string }
+//         author?: { fio: string }
+//         client: { organizationName: string }
+//     }
+//     saleBid?: {
+//         author?: { fio: string }
+//     }
+//     driverUser?: {
+//         fio: string
+//     }
+//     assignedVehicle?: {
+//         docModel: string
+//         plateNum: string
+//     }
+//     assignedTrailer?: {
+//         docModel?: string
+//         plateNum: string
+//     }
+//     statusUpdatedUser?: {
+//         username: string
+//         fio: string
+//     }
+//     docSubmissionUser?: {
+//         fio: string
+//     }
+//     docSubmissionDate?: string
 
-    [key: string]: unknown
-}
+//     [key: string]: unknown
+// }
 
 interface ColumnsProps {
     isMobile?: boolean
@@ -155,7 +156,6 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                         unloading: 'Выгрузка',
                         moving: 'Перемещение'
                     }
-                    // @ts-ignore
                     return modeLabels[row.buyBid.loadingMode] || 'Неизвестно'
                 },
                 searchable: true,

@@ -11,12 +11,11 @@ import { Button } from '@/components/ui/button'
 import { Modal } from '@/components/ui/modal'
 import { postData2 } from '@/api/api'
 import useInfiniteScroll from '@/hooks/use-infinity-scroll'
-// import { Input } from '@/components/ui/input'
 import { MobileFilters } from './mobile-filters'
 import { Loader2 } from 'lucide-react'
-// import { useFilter } from '@/context/filter-context'
 import { useWebSocket } from '@/api/use-websocket'
 import { useBidContext } from '@/context/bid-context'
+import { BidsTableProps } from '@/types'
 
 const statusTranslations = {
     active: 'Активна',
@@ -25,76 +24,53 @@ const statusTranslations = {
     canceled: 'Отменена'
 }
 
-interface BidsTableMobileProps {
-    bids: any[]
-    loading: boolean
-    loadMore: () => void
-    hasMore: boolean
+const getBidKey = (bid: any) => {
+    if (bid.id) return `bid-${bid.id}`
+    if (bid._id) return `bid-${bid._id}`
+    if (bid.persistentId) return `bid-${bid.persistentId}`
+
+    const keyProps = [bid.client?.organizationName, bid.cargoTitle, bid.status, bid.createdAt].filter(Boolean).join('-')
+
+    return `bid-${keyProps}-${Math.random().toString(36).substr(2, 9)}`
 }
 
-// Generate a unique key for each bid based on its properties
-const getBidKey = (bid: any) => {
-    // Use the bid's unique identifiers in this order of preference
-    if (bid.id) return `bid-${bid.id}`;
-    if (bid._id) return `bid-${bid._id}`;
-    if (bid.persistentId) return `bid-${bid.persistentId}`;
-    
-    // If no ID is available, create a hash from bid properties
-    const keyProps = [
-        bid.client?.organizationName,
-        bid.cargoTitle,
-        bid.status,
-        bid.createdAt
-    ].filter(Boolean).join('-');
-    
-    return `bid-${keyProps}-${Math.random().toString(36).substr(2, 9)}`;
-};
-
-function BidsTableMobile({ bids: initialBids, loadMore, hasMore, loading }: BidsTableMobileProps) {
+function BidsTableMobile({ bids: initialBids, loadMore, hasMore, loading }: BidsTableProps) {
     // @ts-expect-error надо посмотреть
-    const { bids, setBids, newBidId, setNewBidId } = useBidContext();
-    const [localBids, setLocalBids] = useState(initialBids);
+    const { bids, setBids, newBidId, setNewBidId } = useBidContext()
+    const [localBids, setLocalBids] = useState(initialBids)
     const [selectedBid, setSelectedBid] = useState<any>(null)
     const sentinelRef = useInfiniteScroll(loadMore, hasMore, loading)
     const [open, setOpen] = useState(false)
     const [confirmOpen, setConfirmOpen] = useState(false)
-    // const [searchQuery, setSearchQuery] = useState('')
-    // const { filters } = useFilter()
 
     useEffect(() => {
-        setLocalBids(initialBids);
-    }, [initialBids]);
+        setLocalBids(initialBids)
+    }, [initialBids])
 
     useEffect(() => {
         if (newBidId) {
-            loadMore();
-            setNewBidId(null);
+            loadMore()
+            setNewBidId(null)
         }
-    }, [newBidId, loadMore, setNewBidId]);
-// @ts-expect-error надо посмотреть
-    const handleBidUpdate = useCallback((updatedBid) => {
-        setLocalBids(currentBids => 
-            currentBids.map(bid => 
-                bid.persistentId === updatedBid.persistentId 
-                    ? { ...bid, bestSalePrice: updatedBid.bestSalePrice }
-                    : bid
+    }, [newBidId, loadMore, setNewBidId])
+    // @ts-expect-error надо посмотреть
+    const handleBidUpdate = useCallback(updatedBid => {
+        setLocalBids(currentBids =>
+            currentBids.map(bid =>
+                bid.persistentId === updatedBid.persistentId ? { ...bid, bestSalePrice: updatedBid.bestSalePrice } : bid
             )
-        );
-    }, []);
+        )
+    }, [])
 
-    const handleWebSocketMessage = (data) => {
+    const handleWebSocketMessage = data => {
         if (data.type === 'bid_best_price_update') {
-            setLocalBids(currentBids => 
-                currentBids.map(bid => 
-                    bid.id === data.payload.id 
-                        ? { ...bid, status: data.payload.status }
-                        : bid
-                )
-            );
+            setLocalBids(currentBids =>
+                currentBids.map(bid => (bid.id === data.payload.id ? { ...bid, status: data.payload.status } : bid))
+            )
         }
-    };
+    }
 
-    useWebSocket(handleWebSocketMessage);
+    useWebSocket(handleWebSocketMessage)
 
     const handleCloseModal = useCallback(() => {
         setOpen(false)
@@ -138,24 +114,18 @@ function BidsTableMobile({ bids: initialBids, loadMore, hasMore, loading }: Bids
     }, [localBids])
 
     return (
-        <div className="space-y-4">
-            <div className="sticky top-0 z-10 bg-background p-4 border-b">
-                <div className="flex items-center gap-2">
-                    {/* <Input
-                        placeholder="Поиск..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="flex-1"
-                    /> */}
+        <div className='space-y-4'>
+            <div className='sticky top-0 z-10 bg-background p-4 border-b'>
+                <div className='flex items-center gap-2'>
                     {/* @ts-expect-error надо разобраться */}
                     <MobileFilters />
                 </div>
             </div>
 
             {loading && !localBids ? (
-                <div className="flex justify-center items-center p-8">
-                    <Loader2 className="h-6 w-6 animate-spin" />
-                    <span className="ml-2">Загрузка заявок...</span>
+                <div className='flex justify-center items-center p-8'>
+                    <Loader2 className='h-6 w-6 animate-spin' />
+                    <span className='ml-2'>Загрузка заявок...</span>
                 </div>
             ) : localBids && localBids.length > 0 ? (
                 <div className='flex flex-col gap-4 bg-secondary'>
@@ -167,14 +137,15 @@ function BidsTableMobile({ bids: initialBids, loadMore, hasMore, loading }: Bids
                                 {dateBids.map(bid => {
                                     const isDisabled =
                                         !bid.bestSalePrice || bid.status === 'canceled' || bid.ownState === 'approved'
+                                    const bidKey = getBidKey(bid)
 
-                                    // Generate a truly unique key for each bid
-                                    const bidKey = getBidKey(bid);
-                                    
                                     return (
                                         <div key={bidKey} className='p-2 shadow-md rounded-lg bg-white'>
-                                            <div onClick={() => handleOpenModal(bid)} className='w-full !p-0 flex items-center flex-row-reverse gap-2'>
-                                                <div  className='w-1/2'>
+                                            <div
+                                                onClick={() => handleOpenModal(bid)}
+                                                className='w-full !p-0 flex items-center flex-row-reverse gap-2'
+                                            >
+                                                <div className='w-1/2'>
                                                     <div className='ml-auto flex flex-col'>
                                                         <p className='font-semibold'>
                                                             Предложение{' '}
@@ -278,7 +249,7 @@ function BidsTableMobile({ bids: initialBids, loadMore, hasMore, loading }: Bids
                                         onClick={() => {
                                             if (selectedBid?.id) {
                                                 handleApprove(selectedBid.id)
-                                            }   
+                                            }
                                             handleConfirmClose()
                                         }}
                                     >
@@ -290,7 +261,7 @@ function BidsTableMobile({ bids: initialBids, loadMore, hasMore, loading }: Bids
                     )}
                 </div>
             ) : (
-                <div className="text-center p-8">
+                <div className='text-center p-8'>
                     <p>Нет доступных заявок</p>
                 </div>
             )}

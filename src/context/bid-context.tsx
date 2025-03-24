@@ -1,18 +1,5 @@
+import { Bid } from '@/types';
 import React, { createContext, useContext, useState, ReactNode, useEffect, useRef, useCallback } from 'react';
-
-// Export the Bid interface
-export interface Bid {
-  id?: string;
-  _id?: string;
-  client?: { organizationName: string };
-  clientId?: number;
-  clientName?: string;
-  cargoTitle?: string;
-  cargoType?: string;
-  price?: number | null;
-  status?: string | null;
-  [key: string]: any;  // Allow other properties
-}
 
 export interface BidContextType {
   newBidAdded: boolean;

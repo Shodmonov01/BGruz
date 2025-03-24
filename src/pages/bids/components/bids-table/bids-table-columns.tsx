@@ -5,35 +5,8 @@ import { Eye, Loader2, Trash } from 'lucide-react'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import AuctionTimer from '@/hooks/use-action-timer'
+import { Bid } from '@/types'
 
-interface Bid {
-    id: string
-    persistentId: string
-    cargoTitle: string
-    client: { organizationName: string }
-    price: number | null
-    status: string | null
-    filingTime: string
-    createdBy: string
-    createdAt: string
-    isPriceRequest?: boolean
-    customer?: { organizationName: string }
-    terminal1?: { cityName: string }
-    terminal2?: { cityName: string }
-    warehouses?: { cityName: string }[]
-    vehicleProfile?: { name: string }
-    loadingDate: number
-    activationTime: string
-    cargoType?: 'wagon' | 'container'
-    loadingMode?: 'loading' | 'unloading' | 'moving'
-    auction?: number
-    bestSalePrice?: number
-    extraServicesPrice?: number
-    fullPrice?: number
-    commission?: number
-    fullPriceNDS?: number
-    [key: string]: unknown
-}
 
 interface ColumnsProps {
     isMobile?: boolean
@@ -384,32 +357,7 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 accessorFn: (row: Bid) => row.customer?.organizationName ?? '—',
                 searchable: true,
                 filterType: 'fuzzy'
-            },
-            // {
-            //     accessorKey: 'isPriceRequest',
-            //     header: 'Согласовано',
-            //     size: 150,
-            //     cell: ({ row }) => {
-            //         const { bestSalePrice, status, ownState } = row.original
-            //         const isDisabled = !bestSalePrice || status === 'canceled' || ownState === 'approved'
-            //         const handleClick = () => {
-            //             setIsClicked(true)
-            //             onApprove?.(row.original.id)
-            //         }
-
-            //         return (
-            //             <Button
-            //                 onClick={() => onApprove?.(row.original.id)}
-            //                 disabled={isDisabled}
-            //                 className={isDisabled ? 'bg-gray-400 text-white' : ''}
-            //             >
-            //                 Согласовать
-            //             </Button>
-            //         )
-            //     },
-            //     isShortVersion: true
-            // }
-            
+            },            
             {
                 accessorKey: 'isPriceRequest',
                 header: 'Согласовано',

@@ -8,10 +8,6 @@ import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 
 const statusTranslations = {
-    // active: 'Активна',
-    // waiting: 'На ожидании',
-    // executed: 'Выполнена',
-    // canceled: 'Отменена'
     new: 'Новый',
     canceledByCarrierWithPenalty: 'Отменяется пер (-1/2 ГО)',
     canceledByCustomerWithPenalty: 'Отменяется зак (-1/2 ГО)',

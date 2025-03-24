@@ -5,26 +5,11 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { useEffect, useState } from 'react'
 import { Textarea } from '@/components/ui/textarea'
 import { Minus, Plus } from 'lucide-react'
+import { Bid, Service } from '@/types'
 
-interface ExtraService {
-    id: number
-    name: string
-    price: number
-    countIncluded?: number
-    maxCount?: number
-}
 
-interface Service extends ExtraService {
-    count: number
-    checked: boolean
-}
 
-interface BidDescribeProps {
-    extraServices: ExtraService[]
-    isReadOnly?: boolean
-}
-
-function BidDescribe({ extraServices, isReadOnly }: BidDescribeProps) {
+function BidDescribe({ extraServices, isReadOnly }: Bid) {
     const { control, setValue, watch } = useFormContext()
     const [services, setServices] = useState<Service[]>([])
     const requestPrice = useWatch({ control, name: 'requestPrice' })
@@ -41,48 +26,23 @@ function BidDescribe({ extraServices, isReadOnly }: BidDescribeProps) {
         }
     }, [extraServices])
 
+    useEffect(() => {
+        if (extraServices.length > 0) {
+            const formExtraServices = watch('extraServices') || []
+            const uniqueServices = Array.from(new Map(extraServices.map(service => [service.id, service])).values())
 
-    // useEffect(() => {
-    //     if (extraServices.length > 0) {
-    //         const uniqueServices = Array.from(new Map(extraServices.map(service => [service.id, service])).values())
+            const initialServices = uniqueServices.map(service => {
+                const existing = formExtraServices.find((es: any) => es.id === service.id)
+                return {
+                    ...service,
+                    count: existing?.count || 0,
+                    checked: !!existing
+                }
+            })
 
-    //         setServices(
-    //             uniqueServices.map(service => ({
-    //                 ...service,
-    //                 count: 1,
-    //                 checked: false
-    //             }))
-    //         )
-    //     }
-    // }, [extraServices])
-
-    // BidDescribe.tsx
-useEffect(() => {
-    if (extraServices.length > 0) {
-        const formExtraServices = watch('extraServices') || [];
-        const uniqueServices = Array.from(
-            new Map(extraServices.map(service => [service.id, service])).values()
-        );
-
-        const initialServices = uniqueServices.map(service => {
-            const existing = formExtraServices.find((es: any) => es.id === service.id);
-            return {
-                ...service,
-                // count: existing?.count || service.countIncluded || 1,
-                count: existing?.count || 0,
-                checked: !!existing
-            };
-        });
-
-        setServices(initialServices);
-    }
-}, [extraServices, watch('extraServices')]);
-
-    // const handleCountChange = (index: number, value: number) => {
-    //     setServices(prevServices => {
-    //         return prevServices.map((service, i) => (i === index ? { ...service, count: value } : service))
-    //     })
-    // }
+            setServices(initialServices)
+        }
+    }, [extraServices, watch('extraServices')])
 
     const handleCountChange = (index: number, value: number) => {
         setServices(prevServices => {
@@ -93,7 +53,6 @@ useEffect(() => {
             return updatedServices
         })
     }
-    
 
     const handleCheckboxChange = (index: number) => {
         const updatedServices = [...services]
@@ -205,7 +164,6 @@ useEffect(() => {
                                     </div>
                                     <div className='flex gap-0 md:gap-7 w-[70%] md:w-full justify-end items-center'>
                                         <div
-                                        
                                             className={`md:px-0 px-4 ${!service.checked ? 'disabled' : ''}`}
                                             aria-disabled={!service.checked}
                                         >
@@ -308,11 +266,7 @@ useEffect(() => {
                             <FormItem>
                                 <FormLabel className='text-base md:text-xl'>Комментарии</FormLabel>
                                 <FormControl>
-                                    <Textarea
-                                        disabled={isReadOnly}
-                                        placeholder='Комментарии'
-                                        {...field}
-                                    />
+                                    <Textarea disabled={isReadOnly} placeholder='Комментарии' {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>

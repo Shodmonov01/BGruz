@@ -57,12 +57,12 @@ export interface Direction {
 }
 
 export interface VehicleProfile {
-    id: number
+    id: number 
     name: string
-    downloadTypeId: number
-    tonnageId: number
-    vehicleTypeId: number
-    sortOrder: number
+    downloadTypeId?: number
+    tonnageId?: number
+    vehicleTypeId?: number
+    sortOrder?: number
 }
 
 export interface UserContext {
@@ -217,17 +217,17 @@ export interface IOrder {
 }
 
 export interface Bid {
-    _id: string
+    id: string
     persistentId: string
     cargoTitle: string
-    clientName: { organizationName: string }
+    client: Client
     price: number | null
     status: string | null
     filingTime: string
     createdBy: string
     createdAt: string
     isPriceRequest?: boolean
-    customerName?: { organizationName: string }
+    customer?: Client
     terminal1?: { cityName: string }
     terminal2?: { cityName: string }
     warehouses?: { cityName: string }[]
@@ -235,13 +235,67 @@ export interface Bid {
     loadingDate: number
     activationTime: string
     cargoType?: 'wagon' | 'container'
-    loadingMode?: 'loading' | 'unloading'
+    loadingMode?: 'loading' | 'unloading' | 'moving'
     auction?: number
     bestSalePrice?: number
     extraServicesPrice?: number
+    extraServices: ExtraService[]
     fullPrice?: number
     commission?: number
     fullPriceNDS?: number
     accessorKey: string
     [key: string]: unknown
+    isReadOnly?: boolean
+    filteredClients: Client[]
+    vehicleProfiles: VehicleProfile[]
+    handleClientChange: (value: string) => void
+    setOperationType: (value: string) => void
+    setTransportType: (value: string) => void
+}
+
+export interface Service extends ExtraService {
+    count: number
+    checked: boolean
+}
+
+export interface Client {
+    organizationId: number
+    organizationName: string
+}
+
+
+export interface BidsTableProps {
+    bids: Bid[] | any[]
+    loadMore: () => void
+    hasMore: boolean
+    loading: boolean
+}
+
+
+export interface BidFormData {
+    client: string
+    loadingType: string
+    transportType: string
+    recipientOrSender: string
+    startDate: string
+    endDate: string
+    terminal1Id: number | null
+    terminal1Name: string
+    terminal1Address: string
+    terminal2Id: number | null
+    terminal2Name: string
+    terminal2Address: string
+    warehouseName: string
+    warehouses: any
+    warehouseAddress: string
+    vehicleProfiles: string | number
+    price: number
+    description: string
+    requestPrice: boolean
+    cargoTitle: string
+    vehicleCount: number
+    submissionTime: string
+    priceNds: number
+    filingTime: string
+    extraServices: Array<{ id: number; count: number }>
 }

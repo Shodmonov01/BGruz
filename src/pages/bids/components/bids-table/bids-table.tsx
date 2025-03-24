@@ -308,23 +308,9 @@ import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
 import { useFilter } from '@/context/filter-context'
 import { FilterInput } from '@/components/shared/render-filter-input'
 import useInfiniteScroll from '@/hooks/use-infinity-scroll'
+import { Bid, BidsTableProps } from '@/types'
 
 
-interface Bid {
-    id?: string
-    client: { organizationName: string }
-    cargoTitle: string
-    price: number | null
-    status: string | null
-    columns: string
-}
-
-interface BidsTableProps {
-    bids: Bid[] | any[]
-    loadMore: () => void
-    hasMore: boolean
-    loading: boolean
-}
 function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
     const { filters, handleFilterChange } = useFilter()
     const sentinelRef = useInfiniteScroll(loadMore, hasMore, loading)

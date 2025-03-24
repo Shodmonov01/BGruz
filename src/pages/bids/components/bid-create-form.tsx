@@ -15,37 +15,7 @@ import TerminalOne from './bid-form-detail/bid-terminal-one'
 import Warehouses from './bid-form-detail/bid-warhouses'
 import TerminalTwo from './bid-form-detail/bid-terminal-two'
 import BidDescribe from './bid-form-detail/bid-describe'
-
-interface BidFormData {
-    client: string
-    loadingType: string
-    transportType: string
-    recipientOrSender: string
-    startDate: string
-    endDate: string
-    terminal1Id: number | null
-    terminal1Name: string
-    terminal1Address: string
-    terminal2Id: number | null
-    terminal2Name: string
-    terminal2Address: string
-    warehouseName: string
-    warehouses: any
-    warehouseAddress: string
-    vehicleProfiles: string | number
-    price: number
-    description: string
-    requestPrice: boolean
-    cargoTitle: string
-    vehicleCount: number
-    submissionTime: string
-    extraServices: Array<{ id: number; count: number }>
-}
-
-interface ClientData {
-    organizationId: number
-    organizationName: string
-}
+import { BidFormData, Client } from '@/types'
 
 interface OrganizationData {
     terminals: { id: number; name: string; description: string }[]
@@ -74,7 +44,7 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
         const loadClients = async () => {
             try {
                 const token = localStorage.getItem('authToken') || ''
-                const data = await fetchPrivateData<ClientData[]>('api/v1/organization/clients', token)
+                const data = await fetchPrivateData<Client[]>('api/v1/organization/clients', token)
                 setClients(data)
             } catch (error) {
                 console.error('Ошибка при загрузке клиентов:', error)

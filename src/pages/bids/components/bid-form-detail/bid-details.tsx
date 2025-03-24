@@ -6,28 +6,13 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { Minus, Plus } from 'lucide-react'
+import { Bid } from '@/types'
 
-interface Client {
-    organizationId: number
-    organizationName: string
-}
 
-interface VehicleProfile {
-    id: number
-    name: string
-}
 
-interface BidDetailsProps {
-    filteredClients: Client[]
-    vehicleProfiles: VehicleProfile[]
-    // @ts-ignore
-    handleClientChange: (value: string) => void
-    setOperationType: (value: string) => void
-    setTransportType: (value: string) => void
-    isReadOnly?: boolean
-}
 
-const BidDetails: React.FC<BidDetailsProps> = ({
+
+const BidDetails: React.FC<Bid> = ({
     filteredClients,
     vehicleProfiles,
     handleClientChange,
@@ -40,14 +25,6 @@ const BidDetails: React.FC<BidDetailsProps> = ({
     const [openRecipient, setOpenRecipient] = useState(false)
     const [searchClient, setSearchClient] = useState('')
     const [searchRecipient, setSearchRecipient] = useState('')
-
-    // const filteredClientList = filteredClients.filter(client =>
-    //     client.organizationName.toLowerCase().includes(searchClient.toLowerCase())
-    // )
-
-    // const filteredRecipientList = filteredClients.filter(client =>
-    //     client.organizationName.toLowerCase().includes(searchRecipient.toLowerCase())
-    // )
     const normalizeText = (text: string) =>
         text.toLowerCase().replace(/\s+/g, '')
 

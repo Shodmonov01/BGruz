@@ -17,51 +17,12 @@ import { ChevronLeft, Loader2 } from 'lucide-react'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Modal } from '@/components/ui/modal'
 
-import type { VehicleProfile } from '@/types'
+import type { BidFormData, Client, VehicleProfile } from '@/types'
 
 interface OrganizationData {
     terminals: { id: number; name: string; description: string }[]
     warehouses: { id: number; name: string; description: string }[]
     vehicleProfiles: Pick<VehicleProfile, 'id' | 'name'>[]
-    extraServices: { id: number; name: string; description: string }[]
-}
-
-interface BidFormData {
-    client: string
-    loadingType: string
-    transportType: string
-    startDate: string
-    endDate: string
-    terminal1Id: number | null
-    terminal1Name: string
-    terminal1Address: string
-    terminal2Id: number | null
-    terminal2Name: string
-    terminal2Address: string
-    warehouseName: string
-    warehouses: any
-    warehouseAddress: string
-    vehicleProfiles: string | number
-    price: number
-    description: string
-    requestPrice: boolean
-    cargoTitle: string
-    vehicleCount: number
-    extraServices: Array<{ id: number; count: number }>
-    filingTime: string
-    priceNds: number
-    recipientOrSender: string
-}
-
-interface ClientData {
-    organizationId: number
-    organizationName: string
-}
-
-interface OrganizationData {
-    terminals: { id: number; name: string; description: string }[]
-    warehouses: { id: number; name: string; description: string }[]
-    vehicleProfiles: { id: number; name: string }[]
     extraServices: { id: number; name: string; description: string }[]
 }
 
@@ -144,7 +105,7 @@ const BidsInfoModal = ({
         const loadClients = async () => {
             try {
                 const token = localStorage.getItem('authToken') || ''
-                const data = await fetchPrivateData<ClientData[]>('api/v1/organization/clients', token)
+                const data = await fetchPrivateData<Client[]>('api/v1/organization/clients', token)
                 setClients(data)
             } catch (error) {
                 console.error('Ошибка при загрузке клиентов:', error)
@@ -365,29 +326,11 @@ const BidsInfoModal = ({
                 startDate: getValues('startDate'),
                 slideDayTotal: 0,
                 customerId: Number(data.recipientOrSender),
-                // terminal1: {
-                //     cityId: data.terminal1Id,
-                //     cityName: data.terminal1Name,
-                //     address: data.terminal1Address
-                // },
-                // terminal2: {
-                //     cityId: data.terminal2Id,
-                //     cityName: data.terminal2Name,
-                //     address: data.terminal2Address
-                // },
-
-                // warehouses: data.warehouses.map(warehouse => ({
-                //     cityId: warehouse.id,
-                //     cityName: warehouse.name,
-                //     address: warehouse.address
-                // })),
-
                 isPriceRequest: data.requestPrice,
                 price: data.price || 0,
                 vehicleProfileId: Number(data.vehicleProfiles),
                 vehicleCount: getValues('vehicleCount'),
                 cargoTitle: data.cargoTitle,
-                //@ts-expect-error надо что то сделать
                 loadingTime: getValues('submissionTime') || '09:00',
 
                 extraServices: data.extraServices || [],
@@ -446,7 +389,6 @@ const BidsInfoModal = ({
         handleSubmit(onSubmit)
     }
 
-    // Update formData when bid is fetched
     useEffect(() => {
         if (bid) {
             setFormData({ ...bid })
@@ -520,45 +462,8 @@ const BidsInfoModal = ({
                             {Object.keys(errors).length > 0 && (
                                 <div className='text-red-500 text-center py-2'>Заполните все обязательные поля</div>
                             )}
-                            {/* <div className='flex justify-center h-full md:flex-row flex-col gap-4 px-6 md:px-0 py-6'>
-                                <Button
-                                    disabled={isReadOnly || isLoading}
-                                    onClick={handleSave}
-                                    type='button'
-                                    className='bg-orange-500 hover:bg-orange-600 text-white'
-                                >
-                                    {isLoading ? <Loader2 className='mr-2 h-4 w-4 animate-spin' /> : null}
-                                    Сохранить изменения
-                                </Button>
-                                <Button
-                                    type='submit'
-                                    disabled={isReadOnly || isLoading}
-                                    onClick={saveAsNew}
-                                    className='bg-orange-500 hover:bg-orange-600 text-white'
-                                >
-                                    {isLoadingAdd ? <Loader2 className='mr-2 h-4 w-4 animate-spin' /> : null}
-                                    Сохранить заявку как новую
-                                </Button>
-                                <Button
-                                    type='button'
-                                    onClick={handleEdit}
-                                    disabled={isLoading}
-                                    className='bg-orange-500 hover:bg-orange-600 text-white'
-                                >
-                                    Редактировать
-                                </Button>
-                                <Button
-                                    variant='destructive'
-                                    onClick={handleEdit}
-                                    disabled={isLoading}
-                                    className='block md:hidden'
-                                >
-                                    Отменить
-                                </Button>
-                            </div> */}
                             <div className='flex justify-center h-full md:flex-row flex-col gap-4 px-6 md:px-0 py-6'>
                                 {isEditMode ? (
-                                    // Кнопки, которые показываются только в режиме редактирования
                                     <>
                                         <Button
                                             disabled={isLoading}
@@ -589,7 +494,6 @@ const BidsInfoModal = ({
                                         </Button>
                                     </>
                                 ) : (
-                                    // Кнопка, которая показывается, когда НЕ в режиме редактирования
                                     <>
                                         <Button
                                             type='button'
