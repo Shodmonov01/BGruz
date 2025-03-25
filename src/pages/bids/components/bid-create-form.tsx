@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form'
 import { useBidContext, Bid } from '@/context/bid-context'
+import { setNewBidAdded, setNewBidId, lockBatchOperations, unlockBatchOperations, setCreatedBid } from '@/store/bidSlice'
+import { RootState } from '@/store/store'
 
 import Heading from '@/components/shared/heading'
 import { Button } from '@/components/ui/button'
@@ -25,6 +29,8 @@ interface OrganizationData {
 }
 
 const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
+    const dispatch = useDispatch()
+    const { newBidAdded, newBidId, isLocked, createdBid } = useSelector((state: RootState) => state.bids)
     const [clients, setClients] = useState<{ organizationId: number; organizationName: string }[]>([])
     const [terminals, setTerminals] = useState<{ id: number; name: string; description: string }[]>([])
     const [warehouses, setWarehouses] = useState<{ id: number; name: string; description: string }[]>([])
@@ -38,7 +44,6 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
     const hideTerminal2 = operationType === 'unloading' && transportType === 'Вагон'
     const hideWarehouses = operationType === 'moving'
     const [isLoading, setIsLoading] = useState(false)
-    const { setNewBidAdded, setNewBidId, lockBatchOperations, setCreatedBid, unlockBatchOperations } = useBidContext()
 
     useEffect(() => {
         const loadClients = async () => {
@@ -140,9 +145,7 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
     const onSubmit: SubmitHandler<BidFormData> = async data => {
         setIsLoading(true)
         try {
-            // Lock batch operations immediately when starting to create a bid
-            lockBatchOperations();
-            
+            dispatch(lockBatchOperations())
             setErrorMessage(null)
             const payload = {
                 cargoType: data.transportType,
@@ -200,9 +203,8 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
             const bidId = res?.id || res?._id;
             if (bidId) {
                 try {
-                    // Mark that we've added a new bid
-                    setNewBidAdded(true);
-                    setNewBidId(bidId);
+                    dispatch(setNewBidAdded(true))
+                    dispatch(setNewBidId(bidId))
                     
                     // Fetch the bid details to check its status
                     const bidDetails = await fetchPrivateData(`api/v1/bids/${bidId}`, token) as Bid;
@@ -226,12 +228,12 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                         }
                         
                         console.log(`Adding bid ${bidId} directly to table`);
-                        setCreatedBid(transformedBid);
+                        dispatch(setCreatedBid(transformedBid))
                         
                         // Make sure to unlock batch operations to prevent issues with future updates
                         setTimeout(() => {
                             console.log("Unlocking batch operations after bid creation");
-                            unlockBatchOperations();
+                            dispatch(unlockBatchOperations())
                         }, 2000);
                     }
                     

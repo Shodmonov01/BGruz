@@ -1,27 +1,14 @@
-import React, { createContext, useContext, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleSidebar } from '@/store/sidebarSlice'; // Import the toggle action
+import { RootState } from '@/store/store';
 
-const SidebarContext = createContext<{
-  isMinimized: boolean;
-  toggle: () => void;
-}>({
-  isMinimized: false,
-  toggle: () => {}
-});
+export const useSidebar = () => {
+    const dispatch = useDispatch();
+    const isMinimized = useSelector((state: RootState) => state.sidebar.isMinimized); // Get sidebar state from Redux
 
-export const useSidebar = () => useContext(SidebarContext);
+    const toggle = () => {
+        dispatch(toggleSidebar()); // Dispatch action to toggle sidebar state
+    };
 
-export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({
-  children
-}) => {
-  const [isMinimized, setIsMinimized] = useState(true);
-
-  const toggle = () => {
-    setIsMinimized(!isMinimized);
-  };
-
-  return (
-    <SidebarContext.Provider value={{ isMinimized, toggle }}>
-      {children}
-    </SidebarContext.Provider>
-  );
+    return { isMinimized, toggle }; // Return the state and toggle function
 };
