@@ -7,7 +7,6 @@ import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter } from 'react-router-dom';
 import ThemeProvider from './theme-provider';
-import { SidebarProvider } from '@/hooks/use-sidebar';
 import { BidProvider } from '@/context/bid-context';
 
 export const queryClient = new QueryClient();
@@ -16,7 +15,7 @@ const ErrorFallback = ({ error }: FallbackProps) => {
   const router = useRouter();
   return (
     <div
-      className="flex h-screen w-screen flex-col items-center  justify-center text-red-500"
+      className="flex h-screen w-screen flex-col items-center justify-center text-red-500"
       role="alert"
     >
       <h2 className="text-2xl font-semibold">
@@ -44,11 +43,9 @@ export default function AppProvider({
             <QueryClientProvider client={queryClient}>
               <ReactQueryDevtools />
               <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-                <SidebarProvider>
-                  <BidProvider>
-                    {children}
-                  </BidProvider>
-                </SidebarProvider>
+                <BidProvider>
+                  {children}
+                </BidProvider>
               </ThemeProvider>
             </QueryClientProvider>
           </ErrorBoundary>

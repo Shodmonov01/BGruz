@@ -1,34 +1,17 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setTheme } from '@/store/themeSlice'; // Import the setTheme action
+import { RootState } from '@/store/store';
 
 type Theme = 'dark' | 'light' | 'system';
 
 type ThemeProviderProps = {
   children: React.ReactNode;
-  defaultTheme?: Theme;
-  storageKey?: string;
 };
 
-type ThemeProviderState = {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
-};
-
-const initialState: ThemeProviderState = {
-  theme: 'system',
-  setTheme: () => null
-};
-
-const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
-
-export default function ThemeProvider({
-  children,
-  defaultTheme = 'light',
-  storageKey = 'vite-ui-theme',
-  ...props
-}: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
-  );
+export default function ThemeProvider({ children }: ThemeProviderProps) {
+  const dispatch = useDispatch();
+  const theme = useSelector((state: RootState) => state.theme.theme); // Get theme from Redux
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -36,11 +19,7 @@ export default function ThemeProvider({
     root.classList.remove('light', 'dark');
 
     if (theme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
-        .matches
-        ? 'dark'
-        : 'light';
-
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       root.classList.add(systemTheme);
       return;
     }
@@ -48,26 +27,29 @@ export default function ThemeProvider({
     root.classList.add(theme);
   }, [theme]);
 
-  const value = {
-    theme,
-    setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme);
-      setTheme(theme);
-    }
+  const changeTheme = (newTheme: Theme) => {
+    dispatch(setTheme(newTheme)); // Dispatch action to update theme
   };
 
   return (
-    <ThemeProviderContext.Provider {...props} value={value}>
+    <div>
       {children}
-    </ThemeProviderContext.Provider>
+      {/* You can add a button or toggle to change the theme */}
+      <button onClick={() => changeTheme('light')}>Light Mode</button>
+      <button onClick={() => changeTheme('dark')}>Dark Mode</button>
+      <button onClick={() => changeTheme('system')}>System Mode</button>
+    </div>
   );
 }
 
+// Define and export the useTheme hook
 export const useTheme = () => {
-  const context = useContext(ThemeProviderContext);
+  const context = useSelector((state: RootState) => state.theme.theme);
+  const dispatch = useDispatch();
 
-  if (context === undefined)
-    throw new Error('useTheme must be used within a ThemeProvider');
+  const setThemeValue = (theme: Theme) => {
+    dispatch(setTheme(theme));
+  };
 
-  return context;
+  return { theme: context, setTheme: setThemeValue };
 };
