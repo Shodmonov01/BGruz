@@ -145,7 +145,7 @@ export function OrderHeader({ formData, handleChange, setFormData }: OrderHeader
                 <div className='flex justify-between px-10'>
                     <div className='flex justify-between items-center gap-4'>
                         <p className='font-bold'>Статус заказа:</p>
-                        <p>{statusTranslations[formData.status] || formData.status || '—'}</p>
+                        <p>{orderStatusTranslations[formData.status] || formData.status || '—'}</p>
                     </div>
                     <div className='flex justify-between items-center gap-4'>
                         <p className='font-bold'>Изменено</p>
