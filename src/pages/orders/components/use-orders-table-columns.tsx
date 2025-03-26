@@ -9,6 +9,7 @@ import { ru } from 'date-fns/locale'
 import { Loader2 } from 'lucide-react'
 import { Bid } from '@/types/server'
 import { orderStatusTranslations } from '@/constants/status-translations'
+import { BidUI } from '@/types/client'
 
 // interface Bid {
 //     _id: string

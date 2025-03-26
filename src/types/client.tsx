@@ -1,4 +1,5 @@
 import { Icons } from '@/components/ui/icons'
+import { Bid } from './server'
 
 export interface NavItem {
     title: string
