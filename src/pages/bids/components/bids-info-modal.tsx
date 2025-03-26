@@ -17,7 +17,7 @@ import { ChevronLeft, Loader2 } from 'lucide-react'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Modal } from '@/components/ui/modal'
 
-import type { BidFormData, Client, VehicleProfile } from '@/types'
+import type { BidFormData, Client, VehicleProfile } from '@/types/server'
 
 interface OrganizationData {
     terminals: { id: number; name: string; description: string }[]
@@ -429,7 +429,7 @@ const BidsInfoModal = ({
                                     <BidDetails
                                         filteredClients={clients}
                                         vehicleProfiles={vehicleProfiles}
-                                        // @ts-expect-error надо что то сделать 
+                                        // @ts-expect-error надо что то сделать
                                         handleClientChange={handleClientChange}
                                         setOperationType={setOperationType}
                                         setTransportType={setTransportType}

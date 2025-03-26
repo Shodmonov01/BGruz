@@ -7,7 +7,7 @@ import useNumberFormatter from '@/hooks/use-format-number'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import { Loader2 } from 'lucide-react'
-import { Bid } from '@/types'
+import { Bid } from '@/types/server'
 
 // interface Bid {
 //     _id: string

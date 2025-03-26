@@ -1,11 +1,11 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { useCallback, useMemo, useState } from 'react'
 import { ScrollArea } from '@radix-ui/react-scroll-area'
-import { IOrder } from '@/types'
 import { ShippingOrderDialog } from './order-Info-modal-mobile'
 import useNumberFormatter from '@/hooks/use-format-number'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
+import { Order } from '@/types/server'
 
 const statusTranslations = {
     new: 'Новый',
@@ -25,7 +25,7 @@ const statusTranslations = {
 }
 
 function OrderTableMobile({ orders }) {
-    const [selectedOrder, setSelectedOrder] = useState<IOrder | null>(null)
+    const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
     const [_, setIsModalOpen] = useState(false)
     const [open, setOpen] = useState(false)
 
@@ -34,7 +34,7 @@ function OrderTableMobile({ orders }) {
         setOpen(false)
     }, [])
 
-    const handleOpenModal = useCallback((order: IOrder) => {
+    const handleOpenModal = useCallback((order: Order) => {
         setSelectedOrder(order)
         setOpen(true)
     }, [])

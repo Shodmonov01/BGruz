@@ -1,24 +1,24 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IOrder } from '@/types';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { Order } from '@/types/server'
 
 interface OrderState {
-    createdOrder: IOrder | null;
+    createdOrder: Order | null
 }
 
 const initialState: OrderState = {
-    createdOrder: null,
-};
+    createdOrder: null
+}
 
 const orderSlice = createSlice({
     name: 'orders',
     initialState,
     reducers: {
-        setCreatedOrder(state, action: PayloadAction<IOrder | null>) {
-            state.createdOrder = action.payload;
-        },
-    },
-});
+        setCreatedOrder(state, action: PayloadAction<Order | null>) {
+            state.createdOrder = action.payload
+        }
+    }
+})
 
-export const { setCreatedOrder } = orderSlice.actions;
+export const { setCreatedOrder } = orderSlice.actions
 
-export default orderSlice.reducer; 
+export default orderSlice.reducer

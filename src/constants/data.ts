@@ -1,4 +1,4 @@
-import { NavItem } from "@/types/index2"
+import { NavItem } from '@/types/client'
 
 export const navItems: NavItem[] = [
     {
@@ -21,7 +21,6 @@ export const navItems: NavItem[] = [
     }
 ]
 
-
 export type Employee = {
     id: number
     first_name: string
@@ -29,14 +28,14 @@ export type Employee = {
     email: string
     phone: string
     gender: string
-    date_of_birth: string 
+    date_of_birth: string
     street: string
     city: string
     state: string
     country: string
     zipcode: string
-    longitude?: number 
-    latitude?: number 
+    longitude?: number
+    latitude?: number
     job: string
-    profile_picture?: string | null 
+    profile_picture?: string | null
 }

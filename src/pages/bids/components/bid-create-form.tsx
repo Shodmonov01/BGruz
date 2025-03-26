@@ -1,10 +1,14 @@
 import { useCallback, useEffect, useState } from 'react'
-import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form'
-import { useBidContext, Bid } from '@/context/bid-context'
-import { setNewBidAdded, setNewBidId, lockBatchOperations, unlockBatchOperations, setCreatedBid } from '@/store/bidSlice'
+import {
+    setNewBidAdded,
+    setNewBidId,
+    lockBatchOperations,
+    unlockBatchOperations,
+    setCreatedBid
+} from '@/store/bidSlice'
 import { RootState } from '@/store/store'
 
 import Heading from '@/components/shared/heading'
@@ -19,7 +23,7 @@ import TerminalOne from './bid-form-detail/bid-terminal-one'
 import Warehouses from './bid-form-detail/bid-warhouses'
 import TerminalTwo from './bid-form-detail/bid-terminal-two'
 import BidDescribe from './bid-form-detail/bid-describe'
-import { BidFormData, Client } from '@/types'
+import { BidCreate, Client } from '@/types/server'
 
 interface OrganizationData {
     terminals: { id: number; name: string; description: string }[]
@@ -58,7 +62,7 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
         loadClients()
     }, [])
 
-    const formMethods = useForm<BidFormData>({
+    const formMethods = useForm<BidCreate>({
         defaultValues: {
             client: '',
             loadingType: '',
@@ -142,7 +146,7 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
         }
     }
 
-    const onSubmit: SubmitHandler<BidFormData> = async data => {
+    const onSubmit: SubmitHandler<BidCreate> = async data => {
         setIsLoading(true)
         try {
             dispatch(lockBatchOperations())
@@ -195,50 +199,50 @@ const BidCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                 console.error('Не найден токен авторизации')
                 return
             }
-            
+
             const res = await postData('api/v1/bids', payload, token)
-            console.log('API response:', res);
-            
+            console.log('API response:', res)
+
             // Get the bid ID and immediately fetch and add to table
-            const bidId = res?.id || res?._id;
+            const bidId = res?.id || res?._id
             if (bidId) {
                 try {
                     dispatch(setNewBidAdded(true))
                     dispatch(setNewBidId(bidId))
-                    
+
                     // Fetch the bid details to check its status
-                    const bidDetails = await fetchPrivateData(`api/v1/bids/${bidId}`, token) as Bid;
-                    console.log('Bid verification - fetched details:', bidDetails);
-                    
+                    const bidDetails = (await fetchPrivateData(`api/v1/bids/${bidId}`, token)) as Bid
+                    console.log('Bid verification - fetched details:', bidDetails)
+
                     // Always add the bid to the context to trigger UI update
                     // The filtering logic in useGetBids will handle whether to display it
                     if (bidDetails) {
                         // Ensure the bid has both ID formats for consistency
-                        const transformedBid = { ...bidDetails };
-                        
+                        const transformedBid = { ...bidDetails }
+
                         // Make sure both ID formats exist
                         if (transformedBid.id && !transformedBid._id) {
-                            transformedBid._id = transformedBid.id;
+                            transformedBid._id = transformedBid.id
                         } else if (transformedBid._id && !transformedBid.id) {
-                            transformedBid.id = transformedBid._id;
+                            transformedBid.id = transformedBid._id
                         } else if (!transformedBid.id && !transformedBid._id) {
                             // If no ID format exists, use the bidId we got from the response
-                            transformedBid.id = bidId;
-                            transformedBid._id = bidId;
+                            transformedBid.id = bidId
+                            transformedBid._id = bidId
                         }
-                        
-                        console.log(`Adding bid ${bidId} directly to table`);
+
+                        console.log(`Adding bid ${bidId} directly to table`)
                         dispatch(setCreatedBid(transformedBid))
-                        
+
                         // Make sure to unlock batch operations to prevent issues with future updates
                         setTimeout(() => {
-                            console.log("Unlocking batch operations after bid creation");
+                            console.log('Unlocking batch operations after bid creation')
                             dispatch(unlockBatchOperations())
-                        }, 2000);
+                        }, 2000)
                     }
-                    
+
                     // Close the modal regardless of status
-                    modalClose();
+                    modalClose()
                 } catch (bidError) {
                     console.error('Error fetching bid details for verification:', bidError)
                     modalClose()

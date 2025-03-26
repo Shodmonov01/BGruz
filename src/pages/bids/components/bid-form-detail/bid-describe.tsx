@@ -5,9 +5,8 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { useEffect, useState } from 'react'
 import { Textarea } from '@/components/ui/textarea'
 import { Minus, Plus } from 'lucide-react'
-import { Bid, Service } from '@/types'
-
-
+import { Service } from '@/types/client'
+import { Bid } from '@/types/server'
 
 function BidDescribe({ extraServices, isReadOnly }: Bid) {
     const { control, setValue, watch } = useFormContext()

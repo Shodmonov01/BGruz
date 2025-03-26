@@ -5,8 +5,7 @@ import { Eye, Loader2, Trash } from 'lucide-react'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import AuctionTimer from '@/hooks/use-action-timer'
-import { Bid } from '@/types'
-
+import { Bid } from '@/types/server'
 
 interface ColumnsProps {
     isMobile?: boolean
@@ -19,31 +18,31 @@ interface ColumnsProps {
 export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenModal, isMobile }: ColumnsProps) => {
     // const [isClicked, setIsClicked] = useState(false)
     const ApproveButton = ({ row }: { row: any }) => {
-        const { bestSalePrice, status, ownState } = row.original;
-        const [isLoading, setIsLoading] = useState(false);
-        const [isApproved, setIsApproved] = useState(false);
-    
-        const isDisabled = !bestSalePrice || status === 'canceled' || ownState === 'approved' || isApproved;
-    
+        const { bestSalePrice, status, ownState } = row.original
+        const [isLoading, setIsLoading] = useState(false)
+        const [isApproved, setIsApproved] = useState(false)
+
+        const isDisabled = !bestSalePrice || status === 'canceled' || ownState === 'approved' || isApproved
+
         const handleClick = () => {
-            setIsLoading(true);
+            setIsLoading(true)
             setTimeout(() => {
-                setIsLoading(false);
-                setIsApproved(true);
-                onApprove?.(row.original.id);
-            }, 1000);
-        };
-    
+                setIsLoading(false)
+                setIsApproved(true)
+                onApprove?.(row.original.id)
+            }, 1000)
+        }
+
         return (
             <Button
                 onClick={handleClick}
                 disabled={isDisabled}
                 className={`flex items-center gap-2 ${isDisabled ? 'bg-gray-400 text-white' : ''}`}
             >
-                {isLoading ? <Loader2 className="animate-spin  h-4" /> : 'Согласовать'}
+                {isLoading ? <Loader2 className='animate-spin  h-4' /> : 'Согласовать'}
             </Button>
-        );
-    };
+        )
+    }
     const formatNumber = (value: string) => {
         const num = value.replace(/\D/g, '')
         return num ? new Intl.NumberFormat('ru-RU').format(Number(num)) : ''
@@ -357,15 +356,14 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 accessorFn: (row: Bid) => row.customer?.organizationName ?? '—',
                 searchable: true,
                 filterType: 'fuzzy'
-            },            
+            },
             {
                 accessorKey: 'isPriceRequest',
                 header: 'Согласовано',
                 size: 150,
                 cell: ({ row }) => <ApproveButton row={row} />,
                 isShortVersion: true
-            }
-            ,
+            },
 
             {
                 header: 'Действия',

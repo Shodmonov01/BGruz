@@ -308,8 +308,8 @@ import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
 import { useFilter } from '@/context/filter-context'
 import { FilterInput } from '@/components/shared/render-filter-input'
 import useInfiniteScroll from '@/hooks/use-infinity-scroll'
-import { Bid, BidsTableProps } from '@/types'
-
+import { BidsTableProps } from '@/types/client'
+import { Bid } from '@/types/server'
 
 function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
     const { filters, handleFilterChange } = useFilter()
@@ -524,7 +524,7 @@ function BidsTable({ bids, loadMore, hasMore, loading }: BidsTableProps) {
                                     ))}
                                 </TableRow>
                             ))}
-                                    {!loading && bids.length === 0 && (
+                            {!loading && bids.length === 0 && (
                                 <TableRow>
                                     <TableCell colSpan={columns.length} className='text-center p-4'>
                                         <span className='text-gray-500'>Нет данных для отображения</span>

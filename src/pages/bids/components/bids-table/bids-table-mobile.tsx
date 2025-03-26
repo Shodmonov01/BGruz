@@ -15,7 +15,7 @@ import { MobileFilters } from './mobile-filters'
 import { Loader2 } from 'lucide-react'
 import { useWebSocket } from '@/api/use-websocket'
 import { useBidContext } from '@/context/bid-context'
-import { BidsTableProps } from '@/types'
+import { BidsTableProps } from '@/types/client'
 
 const statusTranslations = {
     active: 'Активна',

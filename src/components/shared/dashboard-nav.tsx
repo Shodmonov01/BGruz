@@ -1,11 +1,11 @@
 import { Icons } from '@/components/ui/icons'
 import { cn } from '@/lib/utils'
-import { NavItem } from '@/types'
 import { Dispatch, SetStateAction } from 'react'
 import { useSidebar } from '@/hooks/use-sidebar'
 import { Tooltip, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { usePathname } from '@/routes/hooks'
 import { Link } from 'react-router-dom'
+import { NavItem } from '@/types/client'
 
 interface DashboardNavProps {
     items: NavItem[]

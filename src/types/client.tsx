@@ -216,7 +216,7 @@ export interface IOrder {
     documentOrderItems?: any[]
 }
 
-export interface Bid {
+export interface BidUI {
     id: string
     persistentId: string
     cargoTitle: string

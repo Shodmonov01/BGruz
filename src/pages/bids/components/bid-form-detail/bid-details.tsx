@@ -6,13 +6,10 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { Minus, Plus } from 'lucide-react'
-import { Bid } from '@/types'
+import { Bid } from '@/types/server'
+import { BidUI } from '@/types/client'
 
-
-
-
-
-const BidDetails: React.FC<Bid> = ({
+const BidDetails: React.FC<Bid & BidUI> = ({
     filteredClients,
     vehicleProfiles,
     handleClientChange,
@@ -25,20 +22,15 @@ const BidDetails: React.FC<Bid> = ({
     const [openRecipient, setOpenRecipient] = useState(false)
     const [searchClient, setSearchClient] = useState('')
     const [searchRecipient, setSearchRecipient] = useState('')
-    const normalizeText = (text: string) =>
-        text.toLowerCase().replace(/\s+/g, '')
+    const normalizeText = (text: string) => text.toLowerCase().replace(/\s+/g, '')
 
     const sortedFilteredClients = filteredClients
-    .filter(client =>
-        normalizeText(client.organizationName).includes(normalizeText(searchClient))
-    )
-    .sort((a, b) => a.organizationName.localeCompare(b.organizationName, 'ru'))
+        .filter(client => normalizeText(client.organizationName).includes(normalizeText(searchClient)))
+        .sort((a, b) => a.organizationName.localeCompare(b.organizationName, 'ru'))
 
-const sortedFilteredRecipients = filteredClients
-    .filter(client =>
-        normalizeText(client.organizationName).includes(normalizeText(searchRecipient))
-    )
-    .sort((a, b) => a.organizationName.localeCompare(b.organizationName, 'ru'))
+    const sortedFilteredRecipients = filteredClients
+        .filter(client => normalizeText(client.organizationName).includes(normalizeText(searchRecipient)))
+        .sort((a, b) => a.organizationName.localeCompare(b.organizationName, 'ru'))
 
     const operationType = useWatch({ control, name: 'loadingType' })
 
@@ -180,7 +172,7 @@ const sortedFilteredRecipients = filteredClients
                                         <SelectValue placeholder='Выберите клиента' />
                                     </SelectTrigger>
                                 </FormControl>
-                                <SelectContent >
+                                <SelectContent>
                                     <div className='p-2'>
                                         <Input
                                             placeholder='Поиск...'
