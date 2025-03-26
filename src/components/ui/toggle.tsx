@@ -1,7 +1,9 @@
 import * as React from 'react';
 import * as TogglePrimitive from '@radix-ui/react-toggle';
 import { cva, type VariantProps } from 'class-variance-authority';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { setToggleState } from '@/store/toggleSlice';
+import { RootState } from '@/store/store';
 import { cn } from '@/lib/utils';
 
 const toggleVariants = cva(
@@ -29,14 +31,34 @@ const toggleVariants = cva(
 const Toggle = React.forwardRef<
   React.ElementRef<typeof TogglePrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root> &
-    VariantProps<typeof toggleVariants>
->(({ className, variant, size, ...props }, ref) => (
-  <TogglePrimitive.Root
-    ref={ref}
-    className={cn(toggleVariants({ variant, size, className }))}
-    {...props}
-  />
-));
+    VariantProps<typeof toggleVariants> & {
+      toggleKey?: string; // Добавляем ключ для идентификации в Redux
+    }
+>(({ className, variant, size, toggleKey, ...props }, ref) => {
+  const dispatch = useDispatch();
+  const toggleState = useSelector((state: RootState) => 
+    toggleKey ? state.toggle[toggleKey] : undefined
+  );
+
+  const handleToggle = (pressed: boolean) => {
+    if (toggleKey) {
+      dispatch(setToggleState(toggleKey));
+    }
+    if (props.onPressedChange) {
+      props.onPressedChange(pressed);
+    }
+  };
+
+  return (
+    <TogglePrimitive.Root
+      ref={ref}
+      className={cn(toggleVariants({ variant, size, className }))}
+      pressed={toggleKey ? toggleState : props.pressed}
+      onPressedChange={toggleKey ? handleToggle : props.onPressedChange}
+      {...props}
+    />
+  );
+});
 
 Toggle.displayName = TogglePrimitive.Root.displayName;
 

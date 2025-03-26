@@ -4,11 +4,9 @@ import filterReducer from './filterSlice';
 import orderReducer from './orderSlice';
 import serverTimeReducer from './serverTimeSlice';
 import totalsReducer from './totalsSlice';
-import carouselReducer from './carouselSlice';
 import formReducer from './formSlice';
 import otpReducer from './otpSlice';
 import toggleReducer from './toggleSlice';
-import themeReducer from './themeSlice';
 import sidebarReducer from './sidebarSlice';
 
 const store = configureStore({
@@ -18,11 +16,9 @@ const store = configureStore({
         orders: orderReducer,
         serverTime: serverTimeReducer,
         totals: totalsReducer,
-        carousel: carouselReducer,
         form: formReducer,
         otp: otpReducer,
         toggle: toggleReducer,
-        theme: themeReducer,
         sidebar: sidebarReducer,
     },
 });
