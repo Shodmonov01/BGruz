@@ -6,23 +6,7 @@ import useNumberFormatter from '@/hooks/use-format-number'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import { Order } from '@/types/server'
-
-const statusTranslations = {
-    new: 'Новый',
-    canceledByCarrierWithPenalty: 'Отменяется пер (-1/2 ГО)',
-    canceledByCustomerWithPenalty: 'Отменяется зак (-1/2 ГО)',
-    canceledByCarrier: 'Отменяется перевозчиком',
-    canceledByCustomer: 'Отменяется заказчиком',
-    failed: 'Сорван',
-    failing: 'Срывается',
-    completed: 'Выполнен',
-    inTransit: 'Машина в пути',
-    canceled: 'Отменен',
-    headingToLoading: 'Еду на погрузку',
-    loading: 'На погрузке',
-    unloading: 'На выгрузке',
-    delivered: 'Груз сдан'
-}
+import { orderStatusTranslations } from '@/constants/status-translations'
 
 function OrderTableMobile({ orders }) {
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
@@ -119,7 +103,7 @@ function OrderTableMobile({ orders }) {
                                         <div>
                                             <p className='text-green-600 font-semibold'>
                                                 {/* @ts-expect-error исправить */}
-                                                {statusTranslations[order.status] || bid.status || '—'}
+                                                {orderStatusTranslations[order.status] || bid.status || '—'}
                                             </p>
                                         </div>
                                     </div>

@@ -8,6 +8,7 @@ import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import { Loader2 } from 'lucide-react'
 import { Bid } from '@/types/server'
+import { orderStatusTranslations } from '@/constants/status-translations'
 
 // interface Bid {
 //     _id: string
@@ -228,28 +229,12 @@ export const useOrdersTableColumns = ({ isShortTable, onApprove, onDelete, onOpe
                 size: 100,
                 accessorFn: row => row.status ?? null,
                 cell: ({ row }) => {
-                    const statusMap = {
-                        cancelledByCustomer: 'Отменено клиентом',
-                        new: 'Новый',
-                        executed: 'Выполнена',
-                        canceled: 'Отменена',
-                        canceledByCarrierWithPenalty: 'Отменяется пер (-1/2 ГО)',
-                        canceledByCustomerWithPenalty: 'Отменяется зак (-1/2 ГО)',
-                        canceledByCarrier: 'Отменяется перевозчиком',
-                        failed: 'Сорван',
-                        failing: 'Срывается',
-                        inTransit: 'Машина в пути',
-                        headingToLoading: 'Еду на погрузку',
-                        loading: 'На погрузке',
-                        unloading: 'На выгрузке',
-                        delivered: 'Груз сдан',
-                        completed: 'Выполнен'
-                    }
+  
 
                     const status = row.original.status
 
                     return status ? (
-                        <span>{statusMap[status] || status}</span>
+                        <span>{orderStatusTranslations[status] || status}</span>
                     ) : (
                         <div className='flex items-center justify-center'>
                             <Loader2 className='animate-spin mr-2 h-5 w-5' />

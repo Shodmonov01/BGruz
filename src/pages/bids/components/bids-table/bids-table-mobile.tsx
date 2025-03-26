@@ -16,13 +16,9 @@ import { Loader2 } from 'lucide-react'
 import { useWebSocket } from '@/api/use-websocket'
 import { useBidContext } from '@/context/bid-context'
 import { BidsTableProps } from '@/types/client'
+import { bidStatusTranslations } from '@/constants/status-translations'
 
-const statusTranslations = {
-    active: 'Активна',
-    waiting: 'На ожидании',
-    executed: 'Выполнена',
-    canceled: 'Отменена'
-}
+
 
 const getBidKey = (bid: any) => {
     if (bid.id) return `bid-${bid.id}`
@@ -163,7 +159,7 @@ function BidsTableMobile({ bids: initialBids, loadMore, hasMore, loading }: Bids
                                                         </p>
                                                         <div className='flex gap-2'>
                                                             <p className='text-green-600 font-semibold'>
-                                                                {statusTranslations[bid.status] || bid.status || '—'}
+                                                                {bidStatusTranslations[bid.status] || bid.status || '—'}
                                                             </p>
                                                         </div>
                                                         <AuctionTimer activationTime={bid.activationTime} />

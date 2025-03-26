@@ -6,6 +6,7 @@ import useNumberFormatter from '@/hooks/use-format-number'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import { Order } from '@/types/server'
+import { orderStatusTranslations } from '@/constants/status-translations'
 
 interface ShippingOrderDialogProps {
     open: boolean
@@ -16,23 +17,6 @@ interface ShippingOrderDialogProps {
 
 export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleCloseModal }: ShippingOrderDialogProps) {
     const { formatNumber } = useNumberFormatter()
-
-    const statusTranslations = {
-        new: 'Новый',
-        canceledByCarrierWithPenalty: 'Отменяется пер (-1/2 ГО)',
-        canceledByCustomerWithPenalty: 'Отменяется зак (-1/2 ГО)',
-        canceledByCarrier: 'Отменяется перевозчиком',
-        canceledByCustomer: 'Отменяется заказчиком',
-        failed: 'Сорван',
-        failing: 'Срывается',
-        completed: 'Выполнен',
-        inTransit: 'Машина в пути',
-        canceled: 'Отменен',
-        headingToLoading: 'Еду на погрузку',
-        loading: 'На погрузке',
-        unloading: 'На выгрузке',
-        delivered: 'Груз сдан'
-    }
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -67,7 +51,7 @@ export function ShippingOrderDialog({ open, onOpenChange, selectedOrder, handleC
                         <div className='flex gap-6 items-center text-[18px] bg-[#E6E6E6] px-6 py-2 '>
                             <p className='text-gray-600'>Статус заказа</p>
                             <p className='font-bold text-[#1E293B]'>
-                                {statusTranslations[selectedOrder?.status] || selectedOrder?.status || '—'}
+                                {orderStatusTranslations[selectedOrder?.status] || selectedOrder?.status || '—'}
                             </p>
                         </div>
                         <div className='flex gap-6 items-center text-[18px]  px-6 py-2 '>

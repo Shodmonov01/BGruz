@@ -3,23 +3,7 @@ import { DialogHeader } from '@/components/ui/dialog'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useEffect, useState } from 'react'
 import { postData } from '@/api/api'
-
-const statusTranslations = {
-    new: 'Новый',
-    canceledByCarrierWithPenalty: 'Отменяется пер (-1/2 ГО)',
-    canceledByCustomerWithPenalty: 'Отменяется зак (-1/2 ГО)',
-    canceledByCarrier: 'Отменяется перевозчиком',
-    canceledByCustomer: 'Отменяется заказчиком',
-    failed: 'Сорван',
-    failing: 'Срывается',
-    completed: 'Выполнен',
-    inTransit: 'Машина в пути',
-    canceled: 'Отменен',
-    headingToLoading: 'Еду на погрузку',
-    loading: 'На погрузке',
-    unloading: 'На выгрузке',
-    delivered: 'Груз сдан'
-}
+import { orderStatusTranslations } from '@/constants/status-translations'
 
 interface OrderHeaderProps {
     formData: any
@@ -132,7 +116,7 @@ export function OrderHeader({ formData, handleChange, setFormData }: OrderHeader
                 <div>
                     <div className='mb-6 mt-3 px-6'>
                         <span className='rounded bg-orange-500 px-4 py-2 text-sm text-white mt-3'>
-                            {statusTranslations[formData.status] || formData.status || '—'}
+                            {orderStatusTranslations[formData.status] || formData.status || '—'}
                         </span>
                     </div>
                     <div className='flex justify-center items-center w-full'>

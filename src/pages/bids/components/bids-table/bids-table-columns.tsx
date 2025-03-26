@@ -6,6 +6,7 @@ import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import AuctionTimer from '@/hooks/use-action-timer'
 import { Bid } from '@/types/server'
+import { bidStatusTranslations } from '@/constants/status-translations'
 
 interface ColumnsProps {
     isMobile?: boolean
@@ -199,17 +200,10 @@ export const useBidsTableColumns = ({ isShortTable, onApprove, onDelete, onOpenM
                 size: 100,
                 accessorFn: row => row.status ?? null,
                 cell: ({ row }) => {
-                    const statusMap = {
-                        active: 'Активна',
-                        waiting: 'На ожидании',
-                        executed: 'Выполнена',
-                        canceled: 'Отменена'
-                    }
-
                     const status = row.original.status
 
                     return status ? (
-                        <span>{statusMap[status] || status}</span>
+                        <span>{bidStatusTranslations[status] || status}</span>
                     ) : (
                         <div className='flex items-center justify-center'>
                             <Loader2 className='animate-spin mr-2 h-5 w-5' />
