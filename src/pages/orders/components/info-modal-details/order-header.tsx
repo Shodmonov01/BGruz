@@ -19,57 +19,6 @@ export function OrderHeader({ formData, handleChange, setFormData }: OrderHeader
         setIsChecked(!!formData.docSubmissionDate)
     }, [formData.docSubmissionDate])
 
-    // const handleDocSubmissionChange = async (checked: boolean) => {
-    //     if (isSubmitting) return
-
-    //     setIsChecked(checked)
-
-    //     try {
-    //         setIsSubmitting(true)
-    //         console.log('Submitting document status change:', checked)
-
-    //         const token = localStorage.getItem('authToken')
-    //         if (!token) {
-    //             console.error('Не найден токен авторизации')
-    //             setIsChecked(!checked)
-    //             return
-    //         }
-
-    //         const response = await fetch(
-    //             `https://portal.bgruz.com/api/v1/orders/${formData.id}/doc_submission_status?doc_submitted=${checked}`,
-    //             {
-    //                 method: 'POST',
-    //                 headers: {
-    //                     'Content-Type': 'application/json',
-    //                     Authorization: `Bearer ${token}`
-    //                 }
-    //             }
-    //         )
-
-    //         if (!response.ok) {
-    //             throw new Error(`Failed to update document submission status: ${response.status}`)
-    //         }
-
-    //         const responseData = await response.json()
-
-    //         setFormData(prev => {
-    //             const { responseText } = responseData || {}
-    //             const newState = {
-    //                 ...prev,
-    //                 docSubmissionDate: responseText?.docSubmissionDate ?? prev.docSubmissionDate,
-    //                 docSubmissionUser: responseText?.fio ?? prev.docSubmissionUser
-    //             }
-    //             console.log('Updated form data:', newState)
-    //             return newState
-    //         })
-    //     } catch (error) {
-    //         console.error('Error updating document submission:', error)
-    //         setIsChecked(!checked)
-    //     } finally {
-    //         setIsSubmitting(false)
-    //     }
-    // }
-
     const handleDocSubmissionChange = async (checked: boolean) => {
         if (isSubmitting) return;
     
@@ -145,7 +94,7 @@ export function OrderHeader({ formData, handleChange, setFormData }: OrderHeader
                 <div className='flex justify-between px-10'>
                     <div className='flex justify-between items-center gap-4'>
                         <p className='font-bold'>Статус заказа:</p>
-                        <p>{statusTranslations[formData.status] || formData.status || '—'}</p>
+                        <p>{orderStatusTranslations[formData.status] || formData.status || '—'}</p>
                     </div>
                     <div className='flex justify-between items-center gap-4'>
                         <p className='font-bold'>Изменено</p>
